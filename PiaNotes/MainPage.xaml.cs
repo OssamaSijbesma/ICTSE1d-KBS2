@@ -44,6 +44,8 @@ namespace PiaNotes
                 new MidiDeviceWatcher(MidiOutPort.GetDeviceSelector(), midiOutPortListBox, Dispatcher);
 
             outputDeviceWatcher.StartWatcher();
+
+            
         }
 
         private async void midiInPortListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
