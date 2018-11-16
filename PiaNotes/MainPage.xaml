@@ -9,12 +9,34 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid>
-        <ListBox x:Name="midiInPortListBox" SelectionChanged="midiInPortListBox_SelectionChanged" HorizontalAlignment="Stretch" Margin="0,0,961,500" VerticalAlignment="Stretch"/>
-        <ListBox x:Name="midiOutPortListBox" SelectionChanged="midiOutPortListBox_SelectionChanged" HorizontalAlignment="Stretch" Margin="940,0,0,500" VerticalAlignment="Stretch"/>
-        <Button Content="Button" HorizontalAlignment="Left" Margin="432,707,0,0" VerticalAlignment="Top" Click="Button_Click"/>
-        <Button Content="Button" HorizontalAlignment="Left" Margin="465,903,0,0" VerticalAlignment="Top" Click="Button_Click_1"/>
-        <Button Content="Button" HorizontalAlignment="Left" Margin="577,778,0,0" VerticalAlignment="Top" Click="Button_Click_2"/>
-        <Button Content="Button" HorizontalAlignment="Left" Margin="788,865,0,0" VerticalAlignment="Top" Click="Button_Click_3"/>
-        <Button Content="Button" HorizontalAlignment="Left" Margin="900,740,0,0" VerticalAlignment="Top" Click="Button_Click_4"/>
+        <ListBox x:Name="midiInPortListBox" SelectionChanged="midiInPortListBox_SelectionChanged" Margin="252,250,709,250" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+        <ListBox x:Name="midiOutPortListBox" SelectionChanged="midiOutPortListBox_SelectionChanged" Margin="796,250,144,250" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+
+        <RelativePanel Background="White">
+            <Rectangle x:Name="Sidebar" Fill="White" Stroke="Black" StrokeThickness="5" 
+                       MinHeight="30" MinWidth="250"
+                       RelativePanel.AlignLeftWithPanel="True"
+                       RelativePanel.AlignTopWithPanel="True"
+                       RelativePanel.AlignBottomWithPanel="True"
+                       />
+            <Rectangle x:Name="Progress" Fill="White" Stroke="Black" StrokeThickness="5" 
+                       MinHeight="30"
+                       RelativePanel.RightOf="Sidebar"
+                       RelativePanel.AlignRightWithPanel="True"
+                       RelativePanel.AlignTopWith="Keyboard" HorizontalAlignment="Stretch" Margin="0,-30,0,50" VerticalAlignment="Stretch"/>
+
+            <Rectangle x:Name="Keyboard" Stroke="Black"
+                       MinHeight="200" MinWidth="50"
+                       RelativePanel.RightOf="Sidebar"
+                       RelativePanel.AlignRightWithPanel="True"
+                       RelativePanel.AlignBottomWithPanel="True"/>
+            <Button x:Name="C1" Content="C1" Height="200" Width="40"
+                    RelativePanel.RightOf="Sidebar"
+                    RelativePanel.AlignRightWithPanel="True"
+                    RelativePanel.AlignBottomWithPanel="True"/>
+
+
+
+        </RelativePanel>
     </Grid>
 </Page>
