@@ -97,17 +97,11 @@ namespace PiaNotes
         {
             var deviceInformationCollection = outputDeviceWatcher.DeviceInformationCollection;
 
-            if (deviceInformationCollection == null)
-            {
-                return;
-            }
+            if (deviceInformationCollection == null) return;
 
             DeviceInformation devInfo = deviceInformationCollection[midiOutPortListBox.SelectedIndex];
 
-            if (devInfo == null)
-            {
-                return;
-            }
+            if (devInfo == null) return;
 
             midiOutPort = await MidiOutPort.FromIdAsync(devInfo.Id);
 
@@ -116,7 +110,6 @@ namespace PiaNotes
                 System.Diagnostics.Debug.WriteLine("Unable to create MidiOutPort from output device");
                 return;
             }
-
         }
 
         private async Task EnumerateMidiInputDevices()
@@ -145,7 +138,6 @@ namespace PiaNotes
 
         private async Task EnumerateMidiOutputDevices()
         {
-
             // Find all output MIDI devices
             string midiOutportQueryString = MidiOutPort.GetDeviceSelector();
             DeviceInformationCollection midiOutputDevices = await DeviceInformation.FindAllAsync(midiOutportQueryString);

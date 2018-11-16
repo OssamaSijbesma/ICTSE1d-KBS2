@@ -7,7 +7,6 @@ using Windows.Devices.Enumeration;
 using Windows.UI.Core;
 using Windows.UI.Xaml.Controls;
 using Windows.Devices.Midi;
-using System.Threading.Tasks;
 
 namespace PiaNotes
 {
@@ -23,6 +22,7 @@ namespace PiaNotes
 
         public MidiDeviceWatcher(string midiDeviceSelectorString, ListBox midiDeviceListBox, CoreDispatcher dispatcher)
         {
+            //MIDI devices in a list (listbox)
             deviceListBox = midiDeviceListBox;
             coreDispatcher = dispatcher;
 
