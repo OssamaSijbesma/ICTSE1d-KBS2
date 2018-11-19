@@ -99,7 +99,7 @@ namespace PiaNotes
 
             if (devInfo == null) return;
 
-            Settings.midiOutPort = (MidiOutPort)await MidiOutPort.FromIdAsync(devInfo.Id);
+            Settings.midiOutPort = await MidiOutPort.FromIdAsync(devInfo.Id);
 
             if (Settings.midiOutPort == null)
             {

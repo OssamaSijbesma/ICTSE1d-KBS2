@@ -76,27 +76,29 @@ namespace PiaNotes
                 Window.Current.Activate();
             }
 
-            GetMidiOutputDevicesAsync();
-
+            GetMidiDevicesAsync();
         }
 
-        private async void GetMidiOutputDevicesAsync()
+        private async void GetMidiDevicesAsync()
         {
-            await EnumerateMidiOutputDevices();
+            await EnumerateMidiDevices();
         }
 
-        private async Task EnumerateMidiOutputDevices()
+        private async Task EnumerateMidiDevices()
         {
             // Create the query string for finding all MIDI output devices using MidiOutPort.GetDeviceSelector()
-            string midiOutportQueryString = MidiOutPort.GetDeviceSelector();
+            string midiOutQueryString = MidiOutPort.GetDeviceSelector();
+            string midiInQueryString = MidiInPort.GetDeviceSelector();
 
             // Find all MIDI output devices and collect it in a DeviceInformationCollection using FindAllAsync
-            DeviceInformationCollection midiOutputDevices = await DeviceInformation.FindAllAsync(midiOutportQueryString);
+            DeviceInformationCollection midiOutDevices = await DeviceInformation.FindAllAsync(midiOutQueryString);
+            DeviceInformationCollection midiInDevices = await DeviceInformation.FindAllAsync(midiInQueryString);
 
-            DeviceInformation devInfo = midiOutputDevices[0];
+            DeviceInformation devInfoMidiOutDevice = midiOutDevices[0];
+            DeviceInformation devInfoMidiInDevice = midiInDevices[0];
 
-            Settings.midiOutPort = await MidiOutPort.FromIdAsync(devInfo.Id);
-
+            Settings.midiOutPort = await MidiOutPort.FromIdAsync(devInfoMidiOutDevice.Id);
+            Settings.midiInPort = await MidiInPort.FromIdAsync(devInfoMidiInDevice.Id);
         }
 
         /// <summary>
