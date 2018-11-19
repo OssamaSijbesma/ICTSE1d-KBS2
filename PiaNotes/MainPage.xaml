@@ -9,8 +9,6 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid>
-        <ListBox x:Name="midiInPortListBox" SelectionChanged="midiInPortListBox_SelectionChanged" HorizontalAlignment="Stretch" Margin="0,0,961,500" VerticalAlignment="Stretch"/>
-        <ListBox x:Name="midiOutPortListBox" SelectionChanged="midiOutPortListBox_SelectionChanged" HorizontalAlignment="Stretch" Margin="940,0,0,500" VerticalAlignment="Stretch"/>
         <Button Content="Button" HorizontalAlignment="Left" Margin="432,707,0,0" VerticalAlignment="Top" Click="Button_Click"/>
         <Button Content="Button" HorizontalAlignment="Left" Margin="465,903,0,0" VerticalAlignment="Top" Click="Button_Click_1"/>
         <Button Content="Button" HorizontalAlignment="Left" Margin="577,778,0,0" VerticalAlignment="Top" Click="Button_Click_2"/>

@@ -8,5 +8,6 @@ namespace PiaNotes
 {
     class Settings
     {
+
     }
 }
