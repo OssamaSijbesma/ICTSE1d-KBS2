@@ -6,20 +6,20 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" MinWidth="1280" MinHeight="720" RequestedTheme="Dark">
 
     <Grid>
         <ListBox x:Name="midiInPortListBox" SelectionChanged="midiInPortListBox_SelectionChanged" Margin="252,250,709,250" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
         <ListBox x:Name="midiOutPortListBox" SelectionChanged="midiOutPortListBox_SelectionChanged" Margin="796,250,144,250" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
 
-        <RelativePanel Background="White">
-            <Rectangle x:Name="Sidebar" Fill="White" Stroke="Black" StrokeThickness="5" 
+        <RelativePanel Background="#162632">
+            <Rectangle x:Name="Sidebar" Fill="#2b3c49"
                        MinHeight="30" MinWidth="250"
                        RelativePanel.AlignLeftWithPanel="True"
                        RelativePanel.AlignTopWithPanel="True"
                        RelativePanel.AlignBottomWithPanel="True"
                        />
-            <Rectangle x:Name="Progress" Fill="White" Stroke="Black" StrokeThickness="5" 
+            <Rectangle x:Name="Progress" Fill="#2b3c49"
                        MinHeight="30"
                        RelativePanel.RightOf="Sidebar"
                        RelativePanel.AlignRightWithPanel="True"
@@ -31,40 +31,11 @@
                        RelativePanel.AlignRightWithPanel="True"
                        RelativePanel.AlignBottomWithPanel="True"/>
 
-            <Button x:Name="C1" Content="C1" Height="200" Width="40"
-                    Foreground="Black" BorderBrush="Black" Background="White"
+            <Rectangle x:Name="C1" Fill="White" Stroke="Black" StrokeThickness="5"
+                    Height="200" Width="40"
                     RelativePanel.RightOf="Sidebar"
                     RelativePanel.AlignBottomWithPanel="True"/>
 
-            <Button x:Name="D1" Content="D1" Height="200" Width="40"
-                    Foreground="Black" BorderBrush="Black" Background="White"
-                    RelativePanel.RightOf="C1"
-                    RelativePanel.AlignBottomWithPanel="True"/>
-            
-            <Button x:Name="E1" Content="E1" Height="200" Width="40"
-                    Foreground="Black" BorderBrush="Black" Background="White"
-                    RelativePanel.RightOf="D1"
-                    RelativePanel.AlignBottomWithPanel="True"/>
-
-            <Button x:Name="F1" Content="F1" Height="200" Width="40"
-                    Foreground="Black" BorderBrush="Black" Background="White"
-                    RelativePanel.RightOf="E1"
-                    RelativePanel.AlignBottomWithPanel="True"/>
-            
-            <Button x:Name="G1" Content="G1" Height="200" Width="40"
-                    Foreground="Black" BorderBrush="Black" Background="White"
-                    RelativePanel.RightOf="F1"
-                    RelativePanel.AlignBottomWithPanel="True"/>
-            
-            <Button x:Name="A1" Content="A1" Height="200" Width="40"
-                    Foreground="Black" BorderBrush="Black" Background="White"
-                    RelativePanel.RightOf="G1"
-                    RelativePanel.AlignBottomWithPanel="True"/>
-
-            <Button x:Name="B1" Content="B1" Height="200" Width="40"
-                    Foreground="Black" BorderBrush="Black" Background="White"
-                    RelativePanel.RightOf="A1"
-                    RelativePanel.AlignBottomWithPanel="True"/>
 
 
 

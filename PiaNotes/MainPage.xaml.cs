@@ -15,6 +15,9 @@ using Windows.Devices.Enumeration;
 using Windows.Devices.Midi;
 using System.Threading.Tasks;
 using Windows.UI.Xaml.Navigation;
+using Windows.ApplicationModel.Core;
+using Windows.UI.ViewManagement;
+using Windows.UI;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
@@ -45,8 +48,11 @@ namespace PiaNotes
 
             outputDeviceWatcher.StartWatcher();
 
-            
+            var coreTitleBar = CoreApplication.GetCurrentView().TitleBar;
+            coreTitleBar.ExtendViewIntoTitleBar = false;
+
         }
+            
 
         private async void midiInPortListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
