@@ -36,10 +36,6 @@ namespace PiaNotes
             deviceWatcher.EnumerationCompleted += DeviceWatcher_EnumerationCompleted;
         }
 
-        public MidiDeviceWatcher(string midiDeviceSelectorString, CoreDispatcher dispatcher) {
-
-        }
-
         ~MidiDeviceWatcher()
         {
             // Destructor to unregister the watcher event handlers and set the device watcher to null
