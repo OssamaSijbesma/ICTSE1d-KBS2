@@ -65,28 +65,6 @@ namespace PiaNotes
                 System.Diagnostics.Debug.WriteLine("Unable to create MidiInPort from input device");
                 return;
             }
-            Settings.midiInPort.MessageReceived += MidiInPort_MessageReceived;
-        }
-
-        private void MidiInPort_MessageReceived(MidiInPort sender, MidiMessageReceivedEventArgs args)
-        {
-            IMidiMessage receivedMidiMessage = args.Message;
-
-            System.Diagnostics.Debug.WriteLine(receivedMidiMessage.Timestamp.ToString());
-
-            if (receivedMidiMessage.Type == MidiMessageType.NoteOn)
-            {
-                System.Diagnostics.Debug.WriteLine(((MidiNoteOnMessage)receivedMidiMessage).Channel);
-                System.Diagnostics.Debug.WriteLine(((MidiNoteOnMessage)receivedMidiMessage).Note);
-                System.Diagnostics.Debug.WriteLine(((MidiNoteOnMessage)receivedMidiMessage).Velocity);
-
-                byte channel = ((MidiNoteOnMessage)receivedMidiMessage).Channel;
-                byte note = ((MidiNoteOnMessage)receivedMidiMessage).Note;
-                byte velocity = ((MidiNoteOnMessage)receivedMidiMessage).Velocity;
-                IMidiMessage midiMessageToSend = new MidiNoteOnMessage(channel, note, velocity);
-
-                Settings.midiOutPort.SendMessage(midiMessageToSend);
-            }
         }
 
         private async void midiOutPortListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
