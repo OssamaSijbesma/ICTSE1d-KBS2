@@ -28,6 +28,8 @@ namespace PiaNotes
     /// </summary>
     public sealed partial class MainPage : Page
     {
+        public bool SidebarIsOpen { get; set; } = true;
+
         MidiDeviceWatcher inputDeviceWatcher;
         MidiDeviceWatcher outputDeviceWatcher;
 
@@ -48,11 +50,35 @@ namespace PiaNotes
 
             outputDeviceWatcher.StartWatcher();
 
+            // Titlebar
             var coreTitleBar = CoreApplication.GetCurrentView().TitleBar;
             coreTitleBar.ExtendViewIntoTitleBar = false;
+            
 
         }
+        
+        // Menu Items
+        private void ViewSidebar(object sender, RoutedEventArgs e)
+        {
             
+            if (SidebarIsOpen)
+            {
+                Sidebar.MinWidth = 0;
+                SidebarIsOpen = false;
+                
+            }
+            else
+            {
+                Sidebar.MinWidth = 250;
+                SidebarIsOpen = true;
+                
+                Keyboard.UpdateLayout();
+            }
+                
+            
+            
+        }
+
 
         private async void midiInPortListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -225,5 +251,8 @@ namespace PiaNotes
 
             midiOutPort.SendMessage(midiMessageToSend);
         }
+
+        
+
     }
 }
