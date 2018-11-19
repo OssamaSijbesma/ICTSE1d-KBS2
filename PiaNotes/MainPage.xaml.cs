@@ -18,6 +18,7 @@ using Windows.UI.Xaml.Navigation;
 using Windows.ApplicationModel.Core;
 using Windows.UI.ViewManagement;
 using Windows.UI;
+using Windows.UI.Xaml.Shapes;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
@@ -63,11 +64,20 @@ namespace PiaNotes
             
             if (SidebarIsOpen)
             {
-                
                 Sidebar.MinWidth = 0;
                 SidebarIsOpen = false;
 
-                int keyboardWidth = Convert.ToInt32(KeyboardBG.Width);
+                /* thinking emoji
+                Style style = new Style
+                {
+                    TargetType = typeof(Rectangle)
+                };
+
+                style.Setters.Add(new Setter(Rectangle.WidthProperty, 20));
+
+                Application.Current.Resources["keyboardStyle"] = style;
+                */
+
             }
             else
             {
@@ -76,8 +86,6 @@ namespace PiaNotes
                 
             }
                 
-            
-            
         }
 
 

@@ -9,7 +9,7 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" MinWidth="1280" MinHeight="720" RequestedTheme="Dark">
 
     <Page.Resources>
-        <Style x:Name="keyboardStyle" x:Key="keyboardStyle" TargetType="Rectangle">
+        <Style x:Key="keyboardStyle" TargetType="Rectangle">
             <Setter Property="Fill" Value="White" />
             <Setter Property="Stroke" Value="Black" />
             <Setter Property="StrokeThickness" Value="3" />
@@ -27,14 +27,17 @@
         <RelativePanel Background="#162632">
 
             <Rectangle x:Name="KeyboardBG" Stroke="Black" StrokeThickness="5"
-                       MinHeight="200" MinWidth="50"
+                       MinHeight="200"
                        RelativePanel.RightOf="Sidebar"
                        RelativePanel.AlignRightWithPanel="True"
                        RelativePanel.AlignBottomWithPanel="True"/>
 
             <StackPanel Orientation="Horizontal" RelativePanel.RightOf="Sidebar" RelativePanel.AlignBottomWithPanel="True">
                 <Rectangle Name="C1" Style="{StaticResource keyboardStyle}"/>
-                <Rectangle Name="D2" Style="{StaticResource keyboardStyle}"/>
+                <Rectangle Name="D1" Style="{StaticResource keyboardStyle}"/>
+                <Rectangle Name="E1" Style="{StaticResource keyboardStyle}"/>
+                <Rectangle Name="F1" Style="{StaticResource keyboardStyle}"/>
+                <Rectangle Name="G1" Style="{StaticResource keyboardStyle}"/>
             </StackPanel>
 
 
