@@ -31,7 +31,7 @@ namespace PiaNotes
     {
         public bool SidebarIsOpen { get; set; } = true;
         public bool KeyboardIsOpen { get; set; } = true;
-        public int OctavesAmount { get; set; } = 2;
+        public int OctavesAmount { get; set; } = 3;
         
         MidiDeviceWatcher inputDeviceWatcher;
         MidiDeviceWatcher outputDeviceWatcher;
@@ -70,7 +70,6 @@ namespace PiaNotes
         public void ToggleKeyboard()
         {
             // Iterate through all keyboard items to hide/show them.
-            int NewMinHeight;
             if (KeyboardIsOpen)
             {
                 foreach (Rectangle key in KeysWhite.Children)

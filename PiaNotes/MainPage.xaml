@@ -21,12 +21,9 @@
             <Setter Property="Height" Value="150" />
             <Setter Property="Width" Value="30" />
         </Style>
-        
     </Page.Resources>
 
     <Grid>
-
-
         <ListBox x:Name="midiInPortListBox" SelectionChanged="midiInPortListBox_SelectionChanged" Margin="252,250,709,250" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
         <ListBox x:Name="midiOutPortListBox" SelectionChanged="midiOutPortListBox_SelectionChanged" Margin="796,250,144,250" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
 
@@ -101,7 +98,6 @@
                 
             </StackPanel>
 
-
             <Rectangle x:Name="Sidebar" Fill="#2b3c49"
                        MinHeight="30" MinWidth="250"
                        RelativePanel.AlignLeftWithPanel="True"
@@ -112,7 +108,7 @@
                        MinHeight="30"
                        RelativePanel.RightOf="Sidebar"
                        RelativePanel.AlignRightWithPanel="True"
-                       RelativePanel.AlignTopWith="KeyboardBG" HorizontalAlignment="Stretch" Margin="0,-30,0,50" VerticalAlignment="Stretch"/>
+                       RelativePanel.Above="KeyboardBG" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
 
             <Rectangle x:Name="MenuStrip" Fill="#253847"
                        MinHeight="35" MinWidth="250"
