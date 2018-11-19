@@ -30,7 +30,9 @@ namespace PiaNotes
     public sealed partial class MainPage : Page
     {
         public bool SidebarIsOpen { get; set; } = true;
-
+        public bool KeyboardIsOpen { get; set; } = true;
+        public int OctavesAmount { get; set; } = 2;
+        
         MidiDeviceWatcher inputDeviceWatcher;
         MidiDeviceWatcher outputDeviceWatcher;
 
@@ -40,7 +42,8 @@ namespace PiaNotes
         public MainPage()
         {
             this.InitializeComponent();
-
+            
+            // MIDI zooi
             inputDeviceWatcher =
                 new MidiDeviceWatcher(MidiInPort.GetDeviceSelector(), midiInPortListBox, Dispatcher);
 
@@ -55,40 +58,136 @@ namespace PiaNotes
             var coreTitleBar = CoreApplication.GetCurrentView().TitleBar;
             coreTitleBar.ExtendViewIntoTitleBar = false;
             
-
+            CreateKeyboard();
         }
         
-        // Menu Items
+        // Menustrip: ViewKeyboard
+        private void ViewKeyboard(object sender, RoutedEventArgs e)
+        {
+            ToggleKeyboard();
+        }
+
+        public void ToggleKeyboard()
+        {
+            // Iterate through all keyboard items to hide/show them.
+            int NewMinHeight;
+            if (KeyboardIsOpen)
+            {
+                foreach (Rectangle key in KeysWhite.Children)
+                {
+                    key.Width = 0;
+                }
+                foreach (Rectangle key in KeysBlack.Children)
+                {
+                    key.Width = 0;
+                }
+                KeyboardBG.MinHeight = 0;
+            }
+            else
+            {
+                CreateKeyboard();
+                KeyboardBG.MinHeight = 200;
+            }
+            
+            KeyboardIsOpen = !KeyboardIsOpen;
+        }
+
+        // Menustrip: ViewSidebar
         private void ViewSidebar(object sender, RoutedEventArgs e)
         {
-            
+            ToggleSidebar();
+            if (KeyboardIsOpen)
+            {
+                CreateKeyboard();
+            }
+        }
+        
+        public void ToggleSidebar()
+        {
             if (SidebarIsOpen)
             {
                 Sidebar.MinWidth = 0;
-                SidebarIsOpen = false;
-
-                /* thinking emoji
-                Style style = new Style
-                {
-                    TargetType = typeof(Rectangle)
-                };
-
-                style.Setters.Add(new Setter(Rectangle.WidthProperty, 20));
-
-                Application.Current.Resources["keyboardStyle"] = style;
-                */
-
             }
             else
             {
                 Sidebar.MinWidth = 250;
-                SidebarIsOpen = true;
-                
             }
-                
+            SidebarIsOpen = !SidebarIsOpen;
         }
 
+        public void CreateKeyboard()
+        {
+            int windowWidth = Convert.ToInt32(Window.Current.Bounds.Width);
+            
+            // Count keys
+            int keyWhiteAmount = 7 * OctavesAmount;
+            
+            // Set width for white keys.
+            foreach (Rectangle key in KeysWhite.Children)
+            {
+                try
+                {
+                    key.Width = (windowWidth - Sidebar.MinWidth) / keyWhiteAmount;
+                }
+                catch (Exception)
+                {
+                    key.Width = 40;
+                }
+            }
 
+            // Set width and location for black keys.
+            bool initialCsharp = true;
+            foreach (Rectangle key in KeysBlack.Children)
+            {
+                double keyWhiteWidth;
+                try
+                {
+                    keyWhiteWidth = (windowWidth - Sidebar.MinWidth) / keyWhiteAmount;
+
+                    key.Width = keyWhiteWidth / 100 * 60;         
+                }
+                catch (Exception)
+                {
+                    keyWhiteWidth = 40;
+                    key.Width = keyWhiteWidth / 100 * 60;
+                }
+                
+                if (key.Name.Contains("Csharp"))
+                {
+                    if (initialCsharp)
+                    {
+                        double location = keyWhiteWidth - (key.Width / 2);
+                        key.Margin = new Thickness(location, 0, 0, 50);
+                        initialCsharp = false;
+                    }
+                    else
+                    {
+                        double location = keyWhiteWidth * 2 - key.Width;
+                        key.Margin = new Thickness(location, 0, 0, 50);
+                    }
+                }
+                else if (key.Name.Contains("Dsharp") || key.Name.Contains("Gsharp") || key.Name.Contains("Asharp"))
+                {
+                    double location = keyWhiteWidth - key.Width;
+                    key.Margin = new Thickness(location, 0, 0, 50);
+                }
+                else if (key.Name.Contains("Fsharp"))
+                {
+                    double location = keyWhiteWidth * 2 - key.Width;
+                    key.Margin = new Thickness(location, 0, 0, 50);
+                }
+            }
+        }
+
+        // Is executed when the window is resized.
+        private void Page_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            if (KeyboardIsOpen)
+            {
+                CreateKeyboard();
+            }
+        }
+        
         private async void midiInPortListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var deviceInformationCollection = inputDeviceWatcher.DeviceInformationCollection;
@@ -260,8 +359,6 @@ namespace PiaNotes
 
             midiOutPort.SendMessage(midiMessageToSend);
         }
-
-        
 
     }
 }
