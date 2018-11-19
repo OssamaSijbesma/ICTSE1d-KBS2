@@ -11,5 +11,6 @@
     <Grid>
         <ListBox x:Name="midiInPortListBox" SelectionChanged="midiInPortListBox_SelectionChanged" HorizontalAlignment="Stretch" Margin="0,0,961,500" VerticalAlignment="Stretch"/>
         <ListBox x:Name="midiOutPortListBox" SelectionChanged="midiOutPortListBox_SelectionChanged" HorizontalAlignment="Stretch" Margin="940,0,0,500" VerticalAlignment="Stretch"/>
+        <Button Content="Button" HorizontalAlignment="Left" Margin="696,178,0,0" VerticalAlignment="Top" Click="Button_Click"/>
     </Grid>
 </Page>
