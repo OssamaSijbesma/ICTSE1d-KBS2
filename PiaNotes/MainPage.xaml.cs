@@ -63,16 +63,17 @@ namespace PiaNotes
             
             if (SidebarIsOpen)
             {
+                
                 Sidebar.MinWidth = 0;
                 SidebarIsOpen = false;
-                
+
+                int keyboardWidth = Convert.ToInt32(KeyboardBG.Width);
             }
             else
             {
                 Sidebar.MinWidth = 250;
                 SidebarIsOpen = true;
                 
-                Keyboard.UpdateLayout();
             }
                 
             
