@@ -9,8 +9,10 @@ namespace PiaNotes
 {
     public static class Settings
     {
-        static MidiInPort midiInPort;
-        static MidiOutPort midiOutPort;
+        public static MidiInPort midiInPort;
+        public static MidiOutPort midiOutPort;
+
+        public static int velocity = 0;
 
     }
 }

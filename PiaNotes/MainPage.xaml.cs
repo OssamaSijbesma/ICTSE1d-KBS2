@@ -40,7 +40,7 @@ namespace PiaNotes
             byte velocity = 127;
             IMidiMessage midiMessageToSend = new MidiNoteOnMessage(channel, note, velocity);
 
-            midiOutPort.SendMessage(midiMessageToSend);
+            Settings.midiOutPort.SendMessage(midiMessageToSend);
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
@@ -50,7 +50,7 @@ namespace PiaNotes
             byte velocity = 127;
             IMidiMessage midiMessageToSend = new MidiNoteOnMessage(channel, note, velocity);
 
-            midiOutPort.SendMessage(midiMessageToSend);
+            Settings.midiOutPort.SendMessage(midiMessageToSend);
         }
 
         private void Button_Click_2(object sender, RoutedEventArgs e)
@@ -60,7 +60,7 @@ namespace PiaNotes
             byte velocity = 127;
             IMidiMessage midiMessageToSend = new MidiNoteOnMessage(channel, note, velocity);
 
-            midiOutPort.SendMessage(midiMessageToSend);
+            Settings.midiOutPort.SendMessage(midiMessageToSend);
         }
 
         private void Button_Click_3(object sender, RoutedEventArgs e)
@@ -70,7 +70,7 @@ namespace PiaNotes
             byte velocity = 127;
             IMidiMessage midiMessageToSend = new MidiNoteOnMessage(channel, note, velocity);
 
-            midiOutPort.SendMessage(midiMessageToSend);
+            Settings.midiOutPort.SendMessage(midiMessageToSend);
         }
 
         private void Button_Click_4(object sender, RoutedEventArgs e)
@@ -80,7 +80,7 @@ namespace PiaNotes
             byte velocity = 127;
             IMidiMessage midiMessageToSend = new MidiNoteOnMessage(channel, note, velocity);
 
-            midiOutPort.SendMessage(midiMessageToSend);
+            Settings.midiOutPort.SendMessage(midiMessageToSend);
         }
     }
 }

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
+using Windows.Devices.Midi;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
@@ -14,6 +15,8 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using Windows.Devices.Enumeration;
+using System.Threading.Tasks;
 
 namespace PiaNotes
 {
@@ -22,6 +25,10 @@ namespace PiaNotes
     /// </summary>
     sealed partial class App : Application
     {
+
+        MidiDeviceWatcher inputDeviceWatcher;
+        MidiDeviceWatcher outputDeviceWatcher;
+
         /// <summary>
         /// Initializes the singleton application object.  This is the first line of authored code
         /// executed, and as such is the logical equivalent of main() or WinMain().
@@ -71,6 +78,18 @@ namespace PiaNotes
                 // Ensure the current window is active
                 Window.Current.Activate();
             }
+
+
+            inputDeviceWatcher =
+                new MidiDeviceWatcher(MidiInPort.GetDeviceSelector(), Dispatcher);
+
+            inputDeviceWatcher.StartWatcher();
+
+            outputDeviceWatcher =
+                new MidiDeviceWatcher(MidiOutPort.GetDeviceSelector(), Dispatcher);
+
+            outputDeviceWatcher.StartWatcher();
+
         }
 
         /// <summary>

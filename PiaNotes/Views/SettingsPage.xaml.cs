@@ -31,8 +31,6 @@ namespace PiaNotes
         MidiDeviceWatcher inputDeviceWatcher;
         MidiDeviceWatcher outputDeviceWatcher;
 
-        Settings MidiSettings = new Settings();
-
         public SettingsPage()
         {
             this.InitializeComponent();
