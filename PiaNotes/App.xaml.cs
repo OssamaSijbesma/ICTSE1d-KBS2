@@ -43,6 +43,9 @@ namespace PiaNotes
         /// <param name="e">Details about the launch request and process.</param>
         protected override void OnLaunched(LaunchActivatedEventArgs e)
         {
+            // Get and set automatic the first MIDI device.
+            EnumerateMidiDevices();
+
             Frame rootFrame = Window.Current.Content as Frame;
 
             // Do not repeat app initialization when the Window already has content,
@@ -76,29 +79,23 @@ namespace PiaNotes
                 Window.Current.Activate();
             }
 
-            GetMidiDevicesAsync();
         }
 
-        private async void GetMidiDevicesAsync()
+        private async void EnumerateMidiDevices()
         {
-            await EnumerateMidiDevices();
-        }
+            string midiOutputQueryString = MidiOutPort.GetDeviceSelector();
+            string midiInputQueryString = MidiInPort.GetDeviceSelector();
 
-        private async Task EnumerateMidiDevices()
-        {
-            // Create the query string for finding all MIDI output devices using MidiOutPort.GetDeviceSelector()
-            string midiOutQueryString = MidiOutPort.GetDeviceSelector();
-            string midiInQueryString = MidiInPort.GetDeviceSelector();
+            // Find all MIDI output and input devices and collect it
+            DeviceInformationCollection midiOutDevices = await DeviceInformation.FindAllAsync(midiOutputQueryString);
+            DeviceInformationCollection midiInDevices = await DeviceInformation.FindAllAsync(midiInputQueryString);
 
-            // Find all MIDI output devices and collect it in a DeviceInformationCollection using FindAllAsync
-            DeviceInformationCollection midiOutDevices = await DeviceInformation.FindAllAsync(midiOutQueryString);
-            DeviceInformationCollection midiInDevices = await DeviceInformation.FindAllAsync(midiInQueryString);
+            // Set the MIDI device from the found MIDI devices
+            if(midiInDevices.Count > 0)
+                Settings.midiInPort = await MidiInPort.FromIdAsync(midiInDevices[0].Id);
 
-            DeviceInformation devInfoMidiOutDevice = midiOutDevices[0];
-            DeviceInformation devInfoMidiInDevice = midiInDevices[0];
-
-            Settings.midiOutPort = await MidiOutPort.FromIdAsync(devInfoMidiOutDevice.Id);
-            Settings.midiInPort = await MidiInPort.FromIdAsync(devInfoMidiInDevice.Id);
+            if(midiOutDevices.Count > 0)
+                Settings.midiOutPort = await MidiOutPort.FromIdAsync(midiOutDevices[0].Id);
         }
 
         /// <summary>

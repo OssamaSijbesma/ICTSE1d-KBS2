@@ -18,7 +18,7 @@ using System.Threading.Tasks;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
-namespace PiaNotes
+namespace PiaNotes.Views
 {
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
@@ -42,6 +42,7 @@ namespace PiaNotes
 
             outputDeviceWatcher.StartWatcher();
         }
+
         private async void midiInPortListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var deviceInformationCollection = inputDeviceWatcher.DeviceInformationCollection;
