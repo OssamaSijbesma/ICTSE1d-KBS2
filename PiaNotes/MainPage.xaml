@@ -31,11 +31,10 @@
                        RelativePanel.AlignRightWithPanel="True"
                        RelativePanel.AlignBottomWithPanel="True"/>
 
-            <Rectangle x:Name="C1" Fill="White" Stroke="Black" StrokeThickness="5"
-                    Height="200" Width="40"
-                    RelativePanel.RightOf="Sidebar"
-                    RelativePanel.AlignBottomWithPanel="True"/>
-
+            <StackPanel Orientation="Horizontal" RelativePanel.RightOf="Sidebar" RelativePanel.AlignBottomWithPanel="True">
+                <Rectangle Name="C1" Fill="White" Height="200" Width="40" Stroke="Black" StrokeThickness="3"/>
+                <Rectangle Name="D2" Fill="White" Height="200" Width="40" Stroke="Black" StrokeThickness="3"/>
+            </StackPanel>
 
 
 
