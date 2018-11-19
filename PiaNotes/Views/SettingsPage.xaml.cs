@@ -25,9 +25,6 @@ namespace PiaNotes
     /// </summary>
     public sealed partial class SettingsPage : Page
     {
-        MidiInPort midiInPort;
-        IMidiOutPort midiOutPort;
-
         MidiDeviceWatcher inputDeviceWatcher;
         MidiDeviceWatcher outputDeviceWatcher;
 
@@ -61,14 +58,14 @@ namespace PiaNotes
                 return;
             }
 
-            midiInPort = await MidiInPort.FromIdAsync(devInfo.Id);
+            Settings.midiInPort = await MidiInPort.FromIdAsync(devInfo.Id);
 
-            if (midiInPort == null)
+            if (Settings.midiInPort == null)
             {
                 System.Diagnostics.Debug.WriteLine("Unable to create MidiInPort from input device");
                 return;
             }
-            midiInPort.MessageReceived += MidiInPort_MessageReceived;
+            Settings.midiInPort.MessageReceived += MidiInPort_MessageReceived;
         }
 
         private void MidiInPort_MessageReceived(MidiInPort sender, MidiMessageReceivedEventArgs args)
@@ -88,7 +85,7 @@ namespace PiaNotes
                 byte velocity = ((MidiNoteOnMessage)receivedMidiMessage).Velocity;
                 IMidiMessage midiMessageToSend = new MidiNoteOnMessage(channel, note, velocity);
 
-                midiOutPort.SendMessage(midiMessageToSend);
+                Settings.midiOutPort.SendMessage(midiMessageToSend);
             }
         }
 
@@ -102,9 +99,9 @@ namespace PiaNotes
 
             if (devInfo == null) return;
 
-            midiOutPort = await MidiOutPort.FromIdAsync(devInfo.Id);
+            Settings.midiOutPort = (MidiOutPort)await MidiOutPort.FromIdAsync(devInfo.Id);
 
-            if (midiOutPort == null)
+            if (Settings.midiOutPort == null)
             {
                 System.Diagnostics.Debug.WriteLine("Unable to create MidiOutPort from output device");
                 return;

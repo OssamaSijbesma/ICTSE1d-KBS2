@@ -26,9 +26,6 @@ namespace PiaNotes
     sealed partial class App : Application
     {
 
-        MidiDeviceWatcher inputDeviceWatcher;
-        MidiDeviceWatcher outputDeviceWatcher;
-
         /// <summary>
         /// Initializes the singleton application object.  This is the first line of authored code
         /// executed, and as such is the logical equivalent of main() or WinMain().
@@ -79,16 +76,26 @@ namespace PiaNotes
                 Window.Current.Activate();
             }
 
+            GetMidiOutputDevicesAsync();
 
-            inputDeviceWatcher =
-                new MidiDeviceWatcher(MidiInPort.GetDeviceSelector(), Dispatcher);
+        }
 
-            inputDeviceWatcher.StartWatcher();
+        private async void GetMidiOutputDevicesAsync()
+        {
+            await EnumerateMidiOutputDevices();
+        }
 
-            outputDeviceWatcher =
-                new MidiDeviceWatcher(MidiOutPort.GetDeviceSelector(), Dispatcher);
+        private async Task EnumerateMidiOutputDevices()
+        {
+            // Create the query string for finding all MIDI output devices using MidiOutPort.GetDeviceSelector()
+            string midiOutportQueryString = MidiOutPort.GetDeviceSelector();
 
-            outputDeviceWatcher.StartWatcher();
+            // Find all MIDI output devices and collect it in a DeviceInformationCollection using FindAllAsync
+            DeviceInformationCollection midiOutputDevices = await DeviceInformation.FindAllAsync(midiOutportQueryString);
+
+            DeviceInformation devInfo = midiOutputDevices[0];
+
+            Settings.midiOutPort = await MidiOutPort.FromIdAsync(devInfo.Id);
 
         }
 
