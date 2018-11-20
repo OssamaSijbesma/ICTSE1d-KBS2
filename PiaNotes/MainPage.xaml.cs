@@ -30,6 +30,8 @@ namespace PiaNotes
         public MainPage()
         {
             this.InitializeComponent();
+            var db = new Databaser();
+            db.Connect();
         }
 
         private void Navigation_Click(object sender, RoutedEventArgs e)
