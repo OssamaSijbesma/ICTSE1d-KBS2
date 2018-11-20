@@ -27,11 +27,13 @@ namespace PiaNotes.Views
         {
             this.InitializeComponent();
 
+            // Register a handler for the MessageReceived event
             Settings.midiInPort.MessageReceived += MidiInPort_MessageReceived;
         }
 
         private void MidiInPort_MessageReceived(MidiInPort sender, MidiMessageReceivedEventArgs args)
         {
+            // Recieved message
             IMidiMessage receivedMidiMessage = args.Message;
 
             System.Diagnostics.Debug.WriteLine(receivedMidiMessage.Timestamp.ToString());
@@ -42,6 +44,7 @@ namespace PiaNotes.Views
                 System.Diagnostics.Debug.WriteLine(((MidiNoteOnMessage)receivedMidiMessage).Note);
                 System.Diagnostics.Debug.WriteLine(((MidiNoteOnMessage)receivedMidiMessage).Velocity);
 
+                // Play the note
                 byte channel = ((MidiNoteOnMessage)receivedMidiMessage).Channel;
                 byte note = ((MidiNoteOnMessage)receivedMidiMessage).Note;
                 byte velocity = ((MidiNoteOnMessage)receivedMidiMessage).Velocity;

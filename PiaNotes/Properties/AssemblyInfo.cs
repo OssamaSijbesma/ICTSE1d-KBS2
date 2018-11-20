@@ -6,9 +6,9 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("PiaNotes")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Pianotes is a virtual piano practice program.")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("Reformed Interactive")]
 [assembly: AssemblyProduct("PiaNotes")]
 [assembly: AssemblyCopyright("Copyright ©  2018")]
 [assembly: AssemblyTrademark("")]
