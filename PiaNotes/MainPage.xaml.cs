@@ -156,7 +156,7 @@ namespace PiaNotes
         {
             for (int i = 0; i < OctavesAmount; i++)
             {
-                for (int j = 0; j < 6; j++)
+                for (int j = 0; j < 7; j++)
                 {
                     Rectangle keyWhiteRect = new Rectangle();
                     keyWhiteRect.Name = $"{((PianoKey)j).ToString()}{i}";
@@ -176,13 +176,18 @@ namespace PiaNotes
                     KeysBlackSP.Children.Add(keyBlackRect);
                 }
             }
+            UpdateKeyboard();
+        }
+
+        public void UpdateKeyboard()
+        {
 
             int windowWidth = Convert.ToInt32(Window.Current.Bounds.Width);
-            
+
             // Count keys
             int keyWhiteAmount = 7 * OctavesAmount;
 
-            
+
             // Set width for white keys.
             foreach (Rectangle key in KeysWhiteSP.Children)
             {
@@ -195,7 +200,7 @@ namespace PiaNotes
                     key.Width = 40;
                 }
             }
-                
+
             // Set width and location for black keys.
             bool initialCsharp = true;
             foreach (Rectangle key in KeysBlackSP.Children)
@@ -243,7 +248,6 @@ namespace PiaNotes
         public void CreateSidebar()
         {
             int windowHeight = Convert.ToInt32(Window.Current.Bounds.Height);
-            
             int amount = (windowHeight - 30) / (50 + 20);
             
             SidebarSP.Children.Clear();
@@ -257,10 +261,37 @@ namespace PiaNotes
                 musicSheetRectangle.Height = 50;
                 musicSheetRectangle.Width = 230;
                 musicSheetRectangle.Margin =  new Thickness(0, 10, 0, 10);
-                SidebarSP.Children.Add(musicSheetRectangle);
-            }
 
-            
+                /* crashes:
+                TextBlock musicSheetTextBlock = new TextBlock();
+                musicSheetTextBlock.Text = "Test";
+                musicSheetTextBlock.Height = 25;
+                */
+                //SidebarSP.Children.Add(musicSheetTextBlock);
+                SidebarSP.Children.Add(musicSheetRectangle);
+
+            }
+            UpdateSidebar();
+        }
+
+        public void UpdateSidebar()
+        {
+            int windowHeight = Convert.ToInt32(Window.Current.Bounds.Height);
+            int amount = (windowHeight - 30) / (50 + 20);
+            int count = 0;
+            foreach (Rectangle musicSheetRectangle in SidebarSP.Children)
+            {
+                count++;
+                if (count <= amount)
+                { 
+                    musicSheetRectangle.Stroke = new SolidColorBrush(Colors.White);
+                }
+                else
+                {
+                    musicSheetRectangle.Stroke = new SolidColorBrush(Colors.Transparent);
+                }
+
+            }
         }
 
         // Is executed when the window is resized.
@@ -268,14 +299,14 @@ namespace PiaNotes
         {
             if (KeyboardIsOpen)
             {
-                CreateKeyboard();
+                UpdateKeyboard();
             }
-
+            
             if (SidebarIsOpen)
             {
-                CreateSidebar();
+                UpdateSidebar();
             }
-
+            
 
         }
         
