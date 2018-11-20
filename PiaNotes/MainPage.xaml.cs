@@ -32,7 +32,10 @@ namespace PiaNotes
         public bool SidebarIsOpen { get; set; } = true;
         public bool KeyboardIsOpen { get; set; } = true;
         public int OctavesAmount { get; set; } = 3;
-        
+
+        private List<Rectangle> keysWhite = new List<Rectangle>();
+        private List<Rectangle> keysBlack = new List<Rectangle>();
+
         MidiDeviceWatcher inputDeviceWatcher;
         MidiDeviceWatcher outputDeviceWatcher;
 
@@ -72,11 +75,11 @@ namespace PiaNotes
             // Iterate through all keyboard items to hide/show them.
             if (KeyboardIsOpen)
             {
-                foreach (Rectangle key in KeysWhite.Children)
+                foreach (Rectangle key in keysWhite)
                 {
                     key.Width = 0;
                 }
-                foreach (Rectangle key in KeysBlack.Children)
+                foreach (Rectangle key in keysBlack)
                 {
                     key.Width = 0;
                 }
@@ -114,15 +117,44 @@ namespace PiaNotes
             SidebarIsOpen = !SidebarIsOpen;
         }
 
+        enum PianoKey { C, D, E, F, G, A, B };
+        enum PianoKeySharp { Csharp, Dsharp, Fsharp, Gsharp, Asharp };
+
         public void CreateKeyboard()
         {
+            for (int i = 0; i < OctavesAmount; i++)
+            {
+                
+
+                for (int j = 0; j < 6; j++)
+                {
+                    Rectangle keyWhiteRect = new Rectangle();
+                    keyWhiteRect.Name = $"{((PianoKey)j).ToString()}{i}";
+                    keyWhiteRect.Stroke = new SolidColorBrush(Colors.Black);
+                    keyWhiteRect.Fill = new SolidColorBrush(Colors.White);
+                    keyWhiteRect.StrokeThickness = 4;
+                    keyWhiteRect.Height = 200;
+                    KeysWhiteSP.Children.Add(keyWhiteRect);
+                }
+
+                for (int j = 0; j < 5; j++)
+                {
+                    Rectangle keyBlackRect = new Rectangle();
+                    keyBlackRect.Name = $"{((PianoKeySharp)j).ToString()}{i}";
+                    keyBlackRect.Fill = new SolidColorBrush(Colors.Black);
+                    keyBlackRect.Height = 150;
+                    KeysBlackSP.Children.Add(keyBlackRect);
+                }
+            }
+
             int windowWidth = Convert.ToInt32(Window.Current.Bounds.Width);
             
             // Count keys
             int keyWhiteAmount = 7 * OctavesAmount;
+
             
             // Set width for white keys.
-            foreach (Rectangle key in KeysWhite.Children)
+            foreach (Rectangle key in KeysWhiteSP.Children)
             {
                 try
                 {
@@ -133,37 +165,37 @@ namespace PiaNotes
                     key.Width = 40;
                 }
             }
-
+                
             // Set width and location for black keys.
             bool initialCsharp = true;
-            foreach (Rectangle key in KeysBlack.Children)
+            foreach (Rectangle key in KeysBlackSP.Children)
             {
                 double keyWhiteWidth;
                 try
                 {
                     keyWhiteWidth = (windowWidth - Sidebar.MinWidth) / keyWhiteAmount;
 
-                    key.Width = keyWhiteWidth / 100 * 60;         
+                    key.Width = keyWhiteWidth / 100 * 60;
                 }
                 catch (Exception)
                 {
                     keyWhiteWidth = 40;
                     key.Width = keyWhiteWidth / 100 * 60;
                 }
-                
+
                 if (key.Name.Contains("Csharp"))
                 {
+                    double location;
                     if (initialCsharp)
                     {
-                        double location = keyWhiteWidth - (key.Width / 2);
-                        key.Margin = new Thickness(location, 0, 0, 50);
+                        location = keyWhiteWidth - (key.Width / 2);
                         initialCsharp = false;
                     }
                     else
                     {
-                        double location = keyWhiteWidth * 2 - key.Width;
-                        key.Margin = new Thickness(location, 0, 0, 50);
+                        location = (keyWhiteWidth - (key.Width / 2)) * 2;
                     }
+                    key.Margin = new Thickness(location, 0, 0, 50);
                 }
                 else if (key.Name.Contains("Dsharp") || key.Name.Contains("Gsharp") || key.Name.Contains("Asharp"))
                 {
