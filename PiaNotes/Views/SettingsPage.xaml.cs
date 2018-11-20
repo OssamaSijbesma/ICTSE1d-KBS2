@@ -41,6 +41,17 @@ namespace PiaNotes.Views
                 new MidiDeviceWatcher(MidiOutPort.GetDeviceSelector(), midiOutPortListBox, Dispatcher);
 
             outputDeviceWatcher.StartWatcher();
+
+            if (Settings.feedback == true)
+            {
+                volumeSlider.IsEnabled = true;
+                velocitySlider.IsEnabled = false;
+            } else
+            {
+                Feedback.IsChecked = true;
+                volumeSlider.IsEnabled = false;
+                velocitySlider.IsEnabled = true;
+            }
         }
 
         private async void midiInPortListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -66,6 +77,16 @@ namespace PiaNotes.Views
                 System.Diagnostics.Debug.WriteLine("Unable to create MidiInPort from input device");
                 return;
             }
+        }
+
+        private void Velocity_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
+        {
+            Settings.velocity = e.NewValue; 
+        }
+
+        private void Volume_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
+        {
+            Settings.velocity = e.NewValue;
         }
 
         private async void midiOutPortListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -138,6 +159,21 @@ namespace PiaNotes.Views
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             this.Frame.Navigate(typeof(MainPage));
+        }
+
+        private void Velocity_Checked(object sender, RoutedEventArgs e)
+        {
+            if(Settings.feedback == true)
+            {
+                Settings.feedback = false;
+                volumeSlider.IsEnabled = false;
+                velocitySlider.IsEnabled = true;
+            } else
+            {
+                Settings.feedback = true;
+                volumeSlider.IsEnabled = true;
+                velocitySlider.IsEnabled = false;
+            }
         }
     }
 }

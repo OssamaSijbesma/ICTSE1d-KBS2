@@ -12,7 +12,9 @@ namespace PiaNotes
         public static MidiInPort midiInPort;
         public static IMidiOutPort midiOutPort;
 
-        public static int velocity = 0;
+        public static Boolean feedback = true;
+        public static double volume = 50;
+        public static double velocity = 0;
 
     }
 }

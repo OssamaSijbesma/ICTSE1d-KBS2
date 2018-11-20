@@ -47,7 +47,20 @@ namespace PiaNotes.Views
 
                 byte channel = ((MidiNoteOnMessage)receivedMidiMessage).Channel;
                 byte note = ((MidiNoteOnMessage)receivedMidiMessage).Note;
-                byte velocity = ((MidiNoteOnMessage)receivedMidiMessage).Velocity;
+                //If the player releases the key there should be no sound else their should be more sound
+                byte velocity;
+                if (((MidiNoteOnMessage)receivedMidiMessage).Velocity != 0)
+                {
+                    if (Settings.feedback == true)
+                    {
+                        //Use the input from the keyboard the see what the normal velocity is and then add the volume the user chose
+                        velocity = ((MidiNoteOnMessage)receivedMidiMessage).Velocity;
+                        velocity += DoubleToByte(Settings.volume);
+                        //Else use the static velocity the user chose
+                    } else velocity = DoubleToByte(Settings.velocity);
+                    //Else do not produce any sound, when the input is 0
+                } else velocity = ((MidiNoteOnMessage)receivedMidiMessage).Velocity;
+
                 IMidiMessage midiMessageToSend = new MidiNoteOnMessage(channel, note, velocity);
 
                 Settings.midiOutPort.SendMessage(midiMessageToSend);
@@ -68,6 +81,27 @@ namespace PiaNotes.Views
         {
             Settings.midiInPort.MessageReceived -= MidiInPort_MessageReceived;
             this.Frame.Navigate(typeof(MainPage));
+        }
+
+        public static byte DoubleToByte(double doubleVal)
+        {
+            byte byteVal = 0;
+
+            // Double to byte conversion can overflow.
+            try
+            {
+                byteVal = System.Convert.ToByte(doubleVal);
+                return byteVal;
+            }
+            catch (System.OverflowException)
+            {
+                System.Console.WriteLine(
+                    "Overflow in double-to-byte conversion.");
+            }
+
+            // Byte to double conversion cannot overflow.
+            doubleVal = System.Convert.ToDouble(byteVal);
+            return byteVal;
         }
     }
 }
