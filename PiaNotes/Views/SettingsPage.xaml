@@ -8,9 +8,11 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <Grid>
-        <ListBox x:Name="midiInPortListBox" SelectionChanged="midiInPortListBox_SelectionChanged" HorizontalAlignment="Stretch" Margin="0,0,961,500" VerticalAlignment="Stretch"/>
-        <ListBox x:Name="midiOutPortListBox" SelectionChanged="midiOutPortListBox_SelectionChanged" HorizontalAlignment="Stretch" Margin="940,0,0,500" VerticalAlignment="Stretch"/>
-        <Button Content="Button" HorizontalAlignment="Left" Margin="696,178,0,0" VerticalAlignment="Top" Click="Button_Click"/>
+    <Grid HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Stretch">
+        <TextBlock Text="Input devices:" Style="{StaticResource TitleTextBlockStyle}" Margin="200,0,0,600" VerticalAlignment="Bottom" HorizontalAlignment="Left"/>
+        <TextBlock Text="Output devices:" Style="{StaticResource TitleTextBlockStyle}" Margin="200,0,0,400" VerticalAlignment="Bottom" HorizontalAlignment="Left"/>
+        <ListBox x:Name="midiInPortListBox" SelectionChanged="midiInPortListBox_SelectionChanged" Margin="375,54,0,566" HorizontalAlignment="Left" Width="914" Height="100" VerticalAlignment="Stretch"/>
+        <ListBox x:Name="midiOutPortListBox" SelectionChanged="midiOutPortListBox_SelectionChanged" Margin="375,260,0,360" HorizontalAlignment="Left" Height="100" VerticalAlignment="Stretch"/>
+        <Button Content="Return to main menu" HorizontalAlignment="Center" Margin="0,600,0,0" VerticalAlignment="Top" Click="Button_Click"/>
     </Grid>
 </Page>
