@@ -7,22 +7,23 @@ using Windows.Devices.Enumeration;
 using Windows.UI.Core;
 using Windows.UI.Xaml.Controls;
 using Windows.Devices.Midi;
+using System.Threading.Tasks;
 
 namespace PiaNotes
 {
 
     class MidiDeviceWatcher 
     {
-        DeviceWatcher deviceWatcher;
-        string deviceSelectorString;
-        ListBox deviceListBox;
-        CoreDispatcher coreDispatcher;
+        private DeviceWatcher deviceWatcher;
+        private string deviceSelectorString;
+        private ListBox deviceListBox;
+        private CoreDispatcher coreDispatcher;
 
         public DeviceInformationCollection DeviceInformationCollection { get; set; }
 
         public MidiDeviceWatcher(string midiDeviceSelectorString, ListBox midiDeviceListBox, CoreDispatcher dispatcher)
         {
-            //MIDI devices in a list (listbox)
+            // Constructor
             deviceListBox = midiDeviceListBox;
             coreDispatcher = dispatcher;
 
@@ -35,26 +36,31 @@ namespace PiaNotes
             deviceWatcher.EnumerationCompleted += DeviceWatcher_EnumerationCompleted;
         }
 
-        private async void DeviceWatcher_Removed(DeviceWatcher sender, DeviceInformationUpdate args)
+        ~MidiDeviceWatcher()
         {
-            await coreDispatcher.RunAsync(CoreDispatcherPriority.High, () =>
-            {
-                // Update the device list
-                UpdateDevices();
-            });
+            // Destructor to unregister the watcher event handlers and set the device watcher to null
+            deviceWatcher.Added -= DeviceWatcher_Added;
+            deviceWatcher.Removed -= DeviceWatcher_Removed;
+            deviceWatcher.Updated -= DeviceWatcher_Updated;
+            deviceWatcher.EnumerationCompleted -= DeviceWatcher_EnumerationCompleted;
+            deviceWatcher = null;
+        }
+
+        public void StartWatcher()
+        {
+            // Start the watcher
+            deviceWatcher.Start();
+        }
+
+        public void StopWatcher()
+        {
+            // Stop the watcher
+            deviceWatcher.Stop();
         }
 
         private async void DeviceWatcher_Added(DeviceWatcher sender, DeviceInformation args)
         {
-            await coreDispatcher.RunAsync(CoreDispatcherPriority.High, () =>
-            {
-                // Update the device list
-                UpdateDevices();
-            });
-        }
-
-        private async void DeviceWatcher_EnumerationCompleted(DeviceWatcher sender, object args)
-        {
+            // Event which is raised when a device is added
             await coreDispatcher.RunAsync(CoreDispatcherPriority.High, () =>
             {
                 // Update the device list
@@ -64,6 +70,27 @@ namespace PiaNotes
 
         private async void DeviceWatcher_Updated(DeviceWatcher sender, DeviceInformationUpdate args)
         {
+            // Event which is raised when the information assosiated with an excisting device is changed
+            await coreDispatcher.RunAsync(CoreDispatcherPriority.High, () =>
+            {
+                // Update the device list
+                UpdateDevices();
+            });
+        }
+
+        private async void DeviceWatcher_Removed(DeviceWatcher sender, DeviceInformationUpdate args)
+        {
+            // Event which is raised when a device is removed
+            await coreDispatcher.RunAsync(CoreDispatcherPriority.High, () =>
+            {
+                // Update the device list
+                UpdateDevices();
+            });
+        }
+
+        private async void DeviceWatcher_EnumerationCompleted(DeviceWatcher sender, object args)
+        {
+            // Event which is raised when the watcher has completed its enumeration of the requested device type
             await coreDispatcher.RunAsync(CoreDispatcherPriority.High, () =>
             {
                 // Update the device list
@@ -89,24 +116,6 @@ namespace PiaNotes
             }
         }
 
-        public void StartWatcher()
-        {
-            deviceWatcher.Start();
-        }
-
-        public void StopWatcher()
-        {
-            deviceWatcher.Stop();
-        }
-
-        ~MidiDeviceWatcher()
-        {
-            deviceWatcher.Added -= DeviceWatcher_Added;
-            deviceWatcher.Removed -= DeviceWatcher_Removed;
-            deviceWatcher.Updated -= DeviceWatcher_Updated;
-            deviceWatcher.EnumerationCompleted -= DeviceWatcher_EnumerationCompleted;
-            deviceWatcher = null;
-        }
     }
 
 }
