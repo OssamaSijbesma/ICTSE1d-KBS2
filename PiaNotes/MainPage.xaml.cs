@@ -260,37 +260,55 @@ namespace PiaNotes
                 musicSheetRectangle.StrokeThickness = 1;
                 musicSheetRectangle.Height = 50;
                 musicSheetRectangle.Width = 230;
-                musicSheetRectangle.Margin =  new Thickness(0, 10, 0, 10);
-
-                /* crashes:
+                musicSheetRectangle.Margin =  new Thickness(0, 0, 0, 5);
+                
                 TextBlock musicSheetTextBlock = new TextBlock();
-                musicSheetTextBlock.Text = "Test";
-                musicSheetTextBlock.Height = 25;
-                */
-                //SidebarSP.Children.Add(musicSheetTextBlock);
+                musicSheetTextBlock.TextWrapping = TextWrapping.Wrap;
+                musicSheetTextBlock.TextAlignment = TextAlignment.Center;
+                musicSheetTextBlock.Height = 30;
+                musicSheetTextBlock.Margin = new Thickness(0, 10, 0, 5);
+
+                musicSheetTextBlock.Text = $"Music Piece #{i}";
+
+                SidebarSP.Children.Add(musicSheetTextBlock);
                 SidebarSP.Children.Add(musicSheetRectangle);
 
             }
+
+
             UpdateSidebar();
         }
 
         public void UpdateSidebar()
         {
             int windowHeight = Convert.ToInt32(Window.Current.Bounds.Height);
-            int amount = (windowHeight - 30) / (50 + 20);
+            int amount = (windowHeight - 30) / (50);
             int count = 0;
-            foreach (Rectangle musicSheetRectangle in SidebarSP.Children)
+            foreach (object child in SidebarSP.Children)
             {
                 count++;
                 if (count <= amount)
-                { 
-                    musicSheetRectangle.Stroke = new SolidColorBrush(Colors.White);
+                {
+                    if (child is Rectangle)
+                    {
+                        (child as Rectangle).Visibility = Visibility.Visible;
+                    }
+                    if (child is TextBlock)
+                    {
+                        (child as TextBlock).Visibility = Visibility.Visible;
+                    }
                 }
                 else
                 {
-                    musicSheetRectangle.Stroke = new SolidColorBrush(Colors.Transparent);
+                    if (child is Rectangle)
+                    {
+                        (child as Rectangle).Visibility = Visibility.Collapsed;
+                    }
+                    if (child is TextBlock)
+                    {
+                        (child as TextBlock).Visibility = Visibility.Collapsed;
+                    }
                 }
-
             }
         }
 

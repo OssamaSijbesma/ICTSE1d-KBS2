@@ -37,7 +37,8 @@
                        RelativePanel.AlignLeftWithPanel="True"
                        RelativePanel.Below="MenuStrip"
                        RelativePanel.AlignBottomWithPanel="True">
-                
+
+
             </StackPanel>
 
 
@@ -52,7 +53,7 @@
                        RelativePanel.AlignLeftWithPanel="True"
                        RelativePanel.AlignRightWithPanel="True"/>
 
-            <Button x:Name="File" Content="File" HorizontalAlignment="Center" VerticalAlignment="Center" Background="#253847">
+            <Button x:Name="File" Content="File" HorizontalAlignment="Center" VerticalAlignment="Center" Background="#253847" Foreground="#FFD3ECFF">
                 <Button.Flyout>
                     <MenuFlyout>
                         <MenuFlyoutItem Text="New MIDI File" Click="FileNewMIDIFile" />
@@ -61,7 +62,7 @@
                 </Button.Flyout>
             </Button>
 
-            <Button x:Name="View" Content="View" HorizontalAlignment="Center" VerticalAlignment="Center" Background="#253847" RelativePanel.RightOf="File">
+            <Button x:Name="View" Content="View" HorizontalAlignment="Center" VerticalAlignment="Center" Background="#253847" RelativePanel.RightOf="File" Foreground="#FFD3ECFF">
                 <Button.Flyout>
                     <MenuFlyout>
                         <MenuFlyoutItem Text="Sidebar" Click="ViewSidebar"/>
@@ -70,7 +71,7 @@
                 </Button.Flyout>
             </Button>
 
-            <Button x:Name="Options" Content="Options" HorizontalAlignment="Center" VerticalAlignment="Center" Background="#253847" RelativePanel.RightOf="View">
+            <Button x:Name="Options" Content="Options" HorizontalAlignment="Center" VerticalAlignment="Center" Background="#253847" RelativePanel.RightOf="View" Foreground="#FFD3ECFF">
                 <Button.Flyout>
                     <MenuFlyout>
                         <MenuFlyoutItem Text="Settings" Click="OptionsSettings" />
