@@ -31,65 +31,19 @@ namespace PiaNotes
         {
             this.InitializeComponent();
         }
-        
-        private void Button_Click(object sender, RoutedEventArgs e)
+
+        private void Navigation_Click(object sender, RoutedEventArgs e)
         {
-            byte channel = 0;
-            byte note = 60;
-            byte velocity = 127;
-            IMidiMessage midiMessageToSend = new MidiNoteOnMessage(channel, note, velocity);
-
-            Settings.midiOutPort.SendMessage(midiMessageToSend);
-        }
-
-        private void Button_Click_1(object sender, RoutedEventArgs e)
-        {
-            byte channel = 0;
-            byte note = 61;
-            byte velocity = 127;
-            IMidiMessage midiMessageToSend = new MidiNoteOnMessage(channel, note, velocity);
-
-            Settings.midiOutPort.SendMessage(midiMessageToSend);
-        }
-
-        private void Button_Click_2(object sender, RoutedEventArgs e)
-        {
-            byte channel = 0;
-            byte note = 62;
-            byte velocity = 127;
-            IMidiMessage midiMessageToSend = new MidiNoteOnMessage(channel, note, velocity);
-
-            Settings.midiOutPort.SendMessage(midiMessageToSend);
-        }
-
-        private void Button_Click_3(object sender, RoutedEventArgs e)
-        {
-            byte channel = 0;
-            byte note = 63;
-            byte velocity = 127;
-            IMidiMessage midiMessageToSend = new MidiNoteOnMessage(channel, note, velocity);
-
-            Settings.midiOutPort.SendMessage(midiMessageToSend);
-        }
-
-        private void Button_Click_4(object sender, RoutedEventArgs e)
-        {
-            byte channel = 0;
-            byte note = 64;
-            byte velocity = 127;
-            IMidiMessage midiMessageToSend = new MidiNoteOnMessage(channel, note, velocity);
-
-            Settings.midiOutPort.SendMessage(midiMessageToSend);
-        }
-
-        private void Button_Click_5(object sender, RoutedEventArgs e)
-        {
-            this.Frame.Navigate(typeof(SettingsPage));
-        }
-
-        private void Button_Click_6(object sender, RoutedEventArgs e)
-        {
-            this.Frame.Navigate(typeof(PracticePage));
+            Button curButton = (Button)sender;
+            switch (curButton.Name)
+            {
+                case "nav_settings":
+                    this.Frame.Navigate(typeof(SettingsPage));
+                    break;
+                case "nav_practice":
+                    this.Frame.Navigate(typeof(PracticePage));
+                    break;
+            }
         }
     }
 }
