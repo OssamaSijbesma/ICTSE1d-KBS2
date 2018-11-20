@@ -29,8 +29,17 @@
             <Rectangle x:Name="Sidebar" Fill="#2b3c49"
                        MinHeight="30" MinWidth="250"
                        RelativePanel.AlignLeftWithPanel="True"
-                       RelativePanel.AlignTopWith="MenuStrip"
+                       RelativePanel.Below="MenuStrip"
                        RelativePanel.AlignBottomWithPanel="True"/>
+
+            <StackPanel x:Name="SidebarSP"
+                       MinHeight="30" MinWidth="250"
+                       RelativePanel.AlignLeftWithPanel="True"
+                       RelativePanel.Below="MenuStrip"
+                       RelativePanel.AlignBottomWithPanel="True">
+                
+            </StackPanel>
+
 
             <Rectangle x:Name="Progress" Fill="#2b3c49"
                        MinHeight="30"
@@ -46,8 +55,8 @@
             <Button x:Name="File" Content="File" HorizontalAlignment="Center" VerticalAlignment="Center" Background="#253847">
                 <Button.Flyout>
                     <MenuFlyout>
-                        <MenuFlyoutItem Text="New MIDI File" />
-                        <MenuFlyoutItem Text="Open MIDI Selection" />
+                        <MenuFlyoutItem Text="New MIDI File" Click="FileNewMIDIFile" />
+                        <MenuFlyoutItem Text="Open MIDI Selection" Click="FileOpenMIDIFile" />
                     </MenuFlyout>
                 </Button.Flyout>
             </Button>
@@ -64,8 +73,8 @@
             <Button x:Name="Options" Content="Options" HorizontalAlignment="Center" VerticalAlignment="Center" Background="#253847" RelativePanel.RightOf="View">
                 <Button.Flyout>
                     <MenuFlyout>
-                        <MenuFlyoutItem Text="Settings" />
-                        <MenuFlyoutItem Text="Credits" />
+                        <MenuFlyoutItem Text="Settings" Click="OptionsSettings" />
+                        <MenuFlyoutItem Text="Credits" Click="OptionsCredits" />
                     </MenuFlyout>
                 </Button.Flyout>
             </Button>

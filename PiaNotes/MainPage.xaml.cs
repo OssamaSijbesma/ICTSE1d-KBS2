@@ -19,6 +19,7 @@ using Windows.ApplicationModel.Core;
 using Windows.UI.ViewManagement;
 using Windows.UI;
 using Windows.UI.Xaml.Shapes;
+using System.Threading;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
@@ -31,7 +32,7 @@ namespace PiaNotes
     {
         public bool SidebarIsOpen { get; set; } = true;
         public bool KeyboardIsOpen { get; set; } = true;
-        public int OctavesAmount { get; set; } = 3;
+        public int OctavesAmount { get; set; } = 5;
 
         private List<Rectangle> keysWhite = new List<Rectangle>();
         private List<Rectangle> keysBlack = new List<Rectangle>();
@@ -45,7 +46,10 @@ namespace PiaNotes
         public MainPage()
         {
             this.InitializeComponent();
-            
+
+            var appView = ApplicationView.GetForCurrentView();
+            appView.Title = "";
+
             // MIDI zooi
             inputDeviceWatcher =
                 new MidiDeviceWatcher(MidiInPort.GetDeviceSelector(), midiInPortListBox, Dispatcher);
@@ -62,13 +66,51 @@ namespace PiaNotes
             coreTitleBar.ExtendViewIntoTitleBar = false;
             
             CreateKeyboard();
+            CreateSidebar();
         }
-        
-        // Menustrip: ViewKeyboard
+
+        // Menustrip: File > New MIDI File
+        private void FileNewMIDIFile(object sender, RoutedEventArgs e)
+        {
+            // Dialog
+        }
+
+        // Menustrip: File > New MIDI File
+        private void FileOpenMIDIFile(object sender, RoutedEventArgs e)
+        {
+            //this.Frame.Navigate(typeof(SelectionMenu));
+        }
+
+        // Menustrip: View > Sidebar
+        private void ViewSidebar(object sender, RoutedEventArgs e)
+        {
+            ToggleSidebar();
+            if (KeyboardIsOpen)
+            {
+                CreateKeyboard();
+            }
+        }
+
+        // Menustrip: View > Keyboard
         private void ViewKeyboard(object sender, RoutedEventArgs e)
         {
             ToggleKeyboard();
         }
+        
+        // Menustrip: Options > Settings
+        private void OptionsSettings(object sender, RoutedEventArgs e)
+        {
+            this.Frame.Navigate(typeof(Settings));
+        }
+
+
+        // Menustrip: Options > Credits
+        private void OptionsCredits(object sender, RoutedEventArgs e)
+        {
+            this.Frame.Navigate(typeof(Credits));
+        }
+
+
 
         public void ToggleKeyboard()
         {
@@ -93,16 +135,6 @@ namespace PiaNotes
             
             KeyboardIsOpen = !KeyboardIsOpen;
         }
-
-        // Menustrip: ViewSidebar
-        private void ViewSidebar(object sender, RoutedEventArgs e)
-        {
-            ToggleSidebar();
-            if (KeyboardIsOpen)
-            {
-                CreateKeyboard();
-            }
-        }
         
         public void ToggleSidebar()
         {
@@ -124,8 +156,6 @@ namespace PiaNotes
         {
             for (int i = 0; i < OctavesAmount; i++)
             {
-                
-
                 for (int j = 0; j < 6; j++)
                 {
                     Rectangle keyWhiteRect = new Rectangle();
@@ -209,6 +239,29 @@ namespace PiaNotes
                 }
             }
         }
+        
+        public void CreateSidebar()
+        {
+            int windowHeight = Convert.ToInt32(Window.Current.Bounds.Height);
+            
+            int amount = (windowHeight - 30) / (50 + 20);
+            
+            SidebarSP.Children.Clear();
+
+            for (int i = 0; i < amount; i++)
+            {
+                Rectangle musicSheetRectangle = new Rectangle();
+                musicSheetRectangle.Name = $"Music Piece #{i}";
+                musicSheetRectangle.Stroke = new SolidColorBrush(Colors.White);
+                musicSheetRectangle.StrokeThickness = 1;
+                musicSheetRectangle.Height = 50;
+                musicSheetRectangle.Width = 230;
+                musicSheetRectangle.Margin =  new Thickness(0, 10, 0, 10);
+                SidebarSP.Children.Add(musicSheetRectangle);
+            }
+
+            
+        }
 
         // Is executed when the window is resized.
         private void Page_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -217,6 +270,13 @@ namespace PiaNotes
             {
                 CreateKeyboard();
             }
+
+            if (SidebarIsOpen)
+            {
+                CreateSidebar();
+            }
+
+
         }
         
         private async void midiInPortListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
