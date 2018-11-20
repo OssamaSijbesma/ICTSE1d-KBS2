@@ -27,9 +27,6 @@ namespace PiaNotes.Views
         {
             this.InitializeComponent();
 
-            if (Settings.midiInPort == null)
-                this.Frame.Navigate(typeof(MainPage));
-
             Settings.midiInPort.MessageReceived += MidiInPort_MessageReceived;
         }
 

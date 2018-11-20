@@ -32,16 +32,37 @@ namespace PiaNotes
             this.InitializeComponent();
         }
 
-        private void Navigation_Click(object sender, RoutedEventArgs e)
+        private async void Navigation_Click(object sender, RoutedEventArgs e)
         {
+            // Get the current button click
             Button curButton = (Button)sender;
+
             switch (curButton.Name)
             {
                 case "nav_settings":
+                    // Go to the settings page
                     this.Frame.Navigate(typeof(SettingsPage));
                     break;
                 case "nav_practice":
-                    this.Frame.Navigate(typeof(PracticePage));
+                    if (Settings.midiInPort != null && Settings.midiOutPort != null)
+                        // Go to the practice page
+                        this.Frame.Navigate(typeof(PracticePage));
+                    else
+                    {
+                        // Create ContenDialog object
+                        ContentDialog noMidiInOut = new ContentDialog
+                        {
+                            Title = "There is no MIDI in- or output!",
+                            Content = "Check your MIDI input and output device before practicing.",
+                            CloseButtonText = "Ok"
+                        };
+
+                        // Show dialog
+                        await noMidiInOut.ShowAsync();
+
+                        // Go to the settings page
+                        this.Frame.Navigate(typeof(SettingsPage));
+                    }
                     break;
             }
         }
