@@ -53,5 +53,21 @@ namespace PiaNotes.Views
                 Settings.midiOutPort.SendMessage(midiMessageToSend);
             }
         }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            byte channel = 0;
+            byte note = 60;
+            byte velocity = 127;
+            IMidiMessage midiMessageToSend = new MidiNoteOnMessage(channel, note, velocity);
+
+            Settings.midiOutPort.SendMessage(midiMessageToSend);
+        }
+
+        private void Nav_main_Click(object sender, RoutedEventArgs e)
+        {
+            Settings.midiInPort.MessageReceived -= MidiInPort_MessageReceived;
+            this.Frame.Navigate(typeof(MainPage));
+        }
     }
 }
