@@ -27,14 +27,13 @@ namespace PiaNotes.Views
         {
             this.InitializeComponent();
 
-            if (Settings.midiInPort == null)
-                this.Frame.Navigate(typeof(MainPage));
-
+            // Register a handler for the MessageReceived event
             Settings.midiInPort.MessageReceived += MidiInPort_MessageReceived;
         }
 
         private void MidiInPort_MessageReceived(MidiInPort sender, MidiMessageReceivedEventArgs args)
         {
+            // Recieved message
             IMidiMessage receivedMidiMessage = args.Message;
 
             System.Diagnostics.Debug.WriteLine(receivedMidiMessage.Timestamp.ToString());
@@ -45,6 +44,7 @@ namespace PiaNotes.Views
                 System.Diagnostics.Debug.WriteLine(((MidiNoteOnMessage)receivedMidiMessage).Note);
                 System.Diagnostics.Debug.WriteLine(((MidiNoteOnMessage)receivedMidiMessage).Velocity);
 
+                // Play the note
                 byte channel = ((MidiNoteOnMessage)receivedMidiMessage).Channel;
                 byte note = ((MidiNoteOnMessage)receivedMidiMessage).Note;
                 //If the player releases the key there should be no sound else their should be more sound
