@@ -37,6 +37,9 @@ namespace PiaNotes
         private List<Rectangle> keysWhite = new List<Rectangle>();
         private List<Rectangle> keysBlack = new List<Rectangle>();
 
+        private enum PianoKey { C, D, E, F, G, A, B };
+        private enum PianoKeySharp { Csharp, Dsharp, Fsharp, Gsharp, Asharp };
+
         MidiDeviceWatcher inputDeviceWatcher;
         MidiDeviceWatcher outputDeviceWatcher;
 
@@ -50,7 +53,14 @@ namespace PiaNotes
             var appView = ApplicationView.GetForCurrentView();
             appView.Title = "";
 
-            // MIDI zooi
+            // Titlebar
+            var coreTitleBar = CoreApplication.GetCurrentView().TitleBar;
+            coreTitleBar.ExtendViewIntoTitleBar = false;
+
+            CreateKeyboard();
+            CreateSidebar();
+
+            // MIDI
             inputDeviceWatcher =
                 new MidiDeviceWatcher(MidiInPort.GetDeviceSelector(), midiInPortListBox, Dispatcher);
 
@@ -60,14 +70,7 @@ namespace PiaNotes
                 new MidiDeviceWatcher(MidiOutPort.GetDeviceSelector(), midiOutPortListBox, Dispatcher);
 
             outputDeviceWatcher.StartWatcher();
-
-            // Titlebar
-            var coreTitleBar = CoreApplication.GetCurrentView().TitleBar;
-            coreTitleBar.ExtendViewIntoTitleBar = false;
-
-            CreateKeyboard();
-            CreateSidebar();
-
+            
         }
 
         // Menustrip: File > New MIDI File
@@ -117,7 +120,7 @@ namespace PiaNotes
             //this.Frame.Navigate(typeof(SelectionPage));
         }
 
-
+        // Toggles the keyboard to show/hide.
         public void ToggleKeyboard()
         {
             // Iterate through all keyboard items to hide/show them.
@@ -138,7 +141,6 @@ namespace PiaNotes
                 CreateKeyboard();
                 KeyboardBG.MinHeight = 200;
             }
-
             KeyboardIsOpen = !KeyboardIsOpen;
         }
 
@@ -154,10 +156,8 @@ namespace PiaNotes
             }
             SidebarIsOpen = !SidebarIsOpen;
         }
-
-        enum PianoKey { C, D, E, F, G, A, B };
-        enum PianoKeySharp { Csharp, Dsharp, Fsharp, Gsharp, Asharp };
-
+        
+        // Creates the keyboard.
         public void CreateKeyboard()
         {
             for (int i = 0; i < OctavesAmount; i++)
@@ -185,24 +185,25 @@ namespace PiaNotes
             UpdateKeyboard();
         }
 
+        // Updates the keyboard. Is used after first initializing the keyboard or after resizing the window width.
         public void UpdateKeyboard()
         {
-
             int windowWidth = Convert.ToInt32(Window.Current.Bounds.Width);
 
-            // Count keys
+            // Count white keys.
             int keyWhiteAmount = 7 * OctavesAmount;
-
-
+            
             // Set width for white keys.
             foreach (Rectangle key in KeysWhiteSP.Children)
             {
                 try
                 {
+                    // Calculate width for the white keys.
                     key.Width = (windowWidth - Sidebar.MinWidth) / keyWhiteAmount;
                 }
                 catch (Exception)
                 {
+                    // If width can't be calculated, change width to a set value.
                     key.Width = 40;
                 }
             }
@@ -214,18 +215,21 @@ namespace PiaNotes
                 double keyWhiteWidth;
                 try
                 {
+                    // Calculate width for the black keys.
                     keyWhiteWidth = (windowWidth - Sidebar.MinWidth) / keyWhiteAmount;
-
                     key.Width = keyWhiteWidth / 100 * 60;
                 }
                 catch (Exception)
                 {
+                    // If width can't be calculated, change width to a set value.
                     keyWhiteWidth = 40;
                     key.Width = keyWhiteWidth / 100 * 60;
                 }
 
                 if (key.Name.Contains("Csharp"))
                 {
+                    // Calculate location for C# key.
+                    // The first key has a different calculation than the rest, because there are no prior keys.
                     double location;
                     if (initialCsharp)
                     {
@@ -240,48 +244,59 @@ namespace PiaNotes
                 }
                 else if (key.Name.Contains("Dsharp") || key.Name.Contains("Gsharp") || key.Name.Contains("Asharp"))
                 {
+                    // Calculate location for D#/G#/A# keys.
                     double location = keyWhiteWidth - key.Width;
                     key.Margin = new Thickness(location, 0, 0, 50);
                 }
                 else if (key.Name.Contains("Fsharp"))
                 {
+                    // Calculate location for F# key.
                     double location = keyWhiteWidth * 2 - key.Width;
                     key.Margin = new Thickness(location, 0, 0, 50);
                 }
             }
         }
 
+        // Creates the sidebar.
         public void CreateSidebar()
         {
             int windowHeight = Convert.ToInt32(Window.Current.Bounds.Height);
-            //int amount = (windowHeight - 30) / (50 + 20);
-
+            
             SidebarSP.Children.Clear();
 
-            for (int i = 1; i < 10; i++)
+            for (int i = 1; i < 15; i++)
             {
-                
+                StackPanel MusicPieceSP = new StackPanel();
+                MusicPieceSP.MinHeight = 30;
+                MusicPieceSP.MinWidth = 250;
+
+                // Creates rectangle for MIDI preview.
                 Rectangle musicSheetRectangle = new Rectangle();
                 musicSheetRectangle.Name = $"Music Piece #{i}";
                 musicSheetRectangle.Stroke = new SolidColorBrush(Colors.White);
                 musicSheetRectangle.StrokeThickness = 1;
                 musicSheetRectangle.Height = 50;
                 musicSheetRectangle.Width = 230;
-                musicSheetRectangle.Margin = new Thickness(0, 0, 0, 5);
+                musicSheetRectangle.Margin = new Thickness(0, 0, 0, 0);
 
+                // Creates textblock for MIDI name.
                 TextBlock musicSheetTextBlock = new TextBlock();
                 musicSheetTextBlock.TextWrapping = TextWrapping.Wrap;
                 musicSheetTextBlock.TextAlignment = TextAlignment.Center;
                 musicSheetTextBlock.Height = 30;
-                musicSheetTextBlock.Margin = new Thickness(0, 10, 0, 5);
-
+                musicSheetTextBlock.Margin = new Thickness(0, 10, 0, 0);
                 musicSheetTextBlock.Text = musicSheetRectangle.Name;
 
+                // Adds rectangle and children to stackpanel.
+                MusicPieceSP.Children.Add(musicSheetTextBlock);
+                MusicPieceSP.Children.Add(musicSheetRectangle);
+
+                SidebarSP.Children.Add(MusicPieceSP);
+
+                /*
                 SidebarSP.Children.Add(musicSheetTextBlock);
                 SidebarSP.Children.Add(musicSheetRectangle);
-                
-                
-                
+                */
             }
 
             Button btn_SidebarMore = new Button();
@@ -291,41 +306,30 @@ namespace PiaNotes
             btn_SidebarMore.Margin = new Thickness(0, 10, 10, 10);
 
             SidebarSP.Children.Add(btn_SidebarMore);
-
-
+            
             UpdateSidebar();
         }
-        
+
+        // Updates the sidebar. Is used after first initializing the sidebar or after resizing the window height.
         public void UpdateSidebar()
         {
             int windowHeight = Convert.ToInt32(Window.Current.Bounds.Height);
-            int amount = (windowHeight - 30) / (55);
+            int amount = (windowHeight - 35 - 50) / (90);
             int count = 0;
 
-            
+            // Iterates through the sidebar children and decides whether or not a child should be shown or not. 
             foreach (object child in SidebarSP.Children)
             {
                 count++;
-                if (count <= amount)
+                if (child is StackPanel)
                 {
-                    if (child is TextBlock)
+                    if (count <= amount)
                     {
-                        (child as TextBlock).Visibility = Visibility.Visible;
+                        (child as StackPanel).Visibility = Visibility.Visible;
                     }
-                    if (child is Rectangle)
+                    else
                     {
-                        (child as Rectangle).Visibility = Visibility.Visible;
-                    }
-                }
-                else
-                {
-                    if (child is TextBlock)
-                    {
-                        (child as TextBlock).Visibility = Visibility.Collapsed;
-                    }
-                    if (child is Rectangle)
-                    {
-                        (child as Rectangle).Visibility = Visibility.Collapsed;
+                        (child as StackPanel).Visibility = Visibility.Collapsed;
                     }
                 }
             }
@@ -336,17 +340,17 @@ namespace PiaNotes
         {
             if (KeyboardIsOpen)
             {
+                // If the keyboard is shown, it will be updated.
                 UpdateKeyboard();
             }
-
             if (SidebarIsOpen)
             {
+                // If the sidebar is shown, it will be updated.
                 UpdateSidebar();
             }
-
-
         }
 
+        // MIDI
         private async void midiInPortListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var deviceInformationCollection = inputDeviceWatcher.DeviceInformationCollection;
