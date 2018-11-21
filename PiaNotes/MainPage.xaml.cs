@@ -64,25 +64,26 @@ namespace PiaNotes
             // Titlebar
             var coreTitleBar = CoreApplication.GetCurrentView().TitleBar;
             coreTitleBar.ExtendViewIntoTitleBar = false;
-            
+
             CreateKeyboard();
             CreateSidebar();
+
         }
 
         // Menustrip: File > New MIDI File
-        private void FileNewMIDIFile(object sender, RoutedEventArgs e)
+        private void FileNewMIDIFile_Click(object sender, RoutedEventArgs e)
         {
             // Dialog
         }
 
-        // Menustrip: File > New MIDI File
-        private void FileOpenMIDIFile(object sender, RoutedEventArgs e)
+        // Menustrip: File > Open MIDI File
+        private void FileOpenMIDIFile_Click(object sender, RoutedEventArgs e)
         {
-            //this.Frame.Navigate(typeof(SelectionMenu));
+            //this.Frame.Navigate(typeof(SelectionPage));
         }
 
         // Menustrip: View > Sidebar
-        private void ViewSidebar(object sender, RoutedEventArgs e)
+        private void ViewSidebar_Click(object sender, RoutedEventArgs e)
         {
             ToggleSidebar();
             if (KeyboardIsOpen)
@@ -92,24 +93,29 @@ namespace PiaNotes
         }
 
         // Menustrip: View > Keyboard
-        private void ViewKeyboard(object sender, RoutedEventArgs e)
+        private void ViewKeyboard_Click(object sender, RoutedEventArgs e)
         {
             ToggleKeyboard();
         }
-        
+
         // Menustrip: Options > Settings
-        private void OptionsSettings(object sender, RoutedEventArgs e)
+        private void OptionsSettings_Click(object sender, RoutedEventArgs e)
         {
             this.Frame.Navigate(typeof(Settings));
         }
 
 
         // Menustrip: Options > Credits
-        private void OptionsCredits(object sender, RoutedEventArgs e)
+        private void OptionsCredits_Click(object sender, RoutedEventArgs e)
         {
             this.Frame.Navigate(typeof(Credits));
         }
 
+        // Sidebar: More
+        private void SidebarMore_Click(object sender, RoutedEventArgs e)
+        {
+            //this.Frame.Navigate(typeof(SelectionPage));
+        }
 
 
         public void ToggleKeyboard()
@@ -132,10 +138,10 @@ namespace PiaNotes
                 CreateKeyboard();
                 KeyboardBG.MinHeight = 200;
             }
-            
+
             KeyboardIsOpen = !KeyboardIsOpen;
         }
-        
+
         public void ToggleSidebar()
         {
             if (SidebarIsOpen)
@@ -244,69 +250,82 @@ namespace PiaNotes
                 }
             }
         }
-        
+
         public void CreateSidebar()
         {
             int windowHeight = Convert.ToInt32(Window.Current.Bounds.Height);
-            int amount = (windowHeight - 30) / (50 + 20);
-            
+            //int amount = (windowHeight - 30) / (50 + 20);
+
             SidebarSP.Children.Clear();
 
-            for (int i = 0; i < amount; i++)
+            for (int i = 1; i < 10; i++)
             {
+                
                 Rectangle musicSheetRectangle = new Rectangle();
                 musicSheetRectangle.Name = $"Music Piece #{i}";
                 musicSheetRectangle.Stroke = new SolidColorBrush(Colors.White);
                 musicSheetRectangle.StrokeThickness = 1;
                 musicSheetRectangle.Height = 50;
                 musicSheetRectangle.Width = 230;
-                musicSheetRectangle.Margin =  new Thickness(0, 0, 0, 5);
-                
+                musicSheetRectangle.Margin = new Thickness(0, 0, 0, 5);
+
                 TextBlock musicSheetTextBlock = new TextBlock();
                 musicSheetTextBlock.TextWrapping = TextWrapping.Wrap;
                 musicSheetTextBlock.TextAlignment = TextAlignment.Center;
                 musicSheetTextBlock.Height = 30;
                 musicSheetTextBlock.Margin = new Thickness(0, 10, 0, 5);
 
-                musicSheetTextBlock.Text = $"Music Piece #{i}";
+                musicSheetTextBlock.Text = musicSheetRectangle.Name;
 
                 SidebarSP.Children.Add(musicSheetTextBlock);
                 SidebarSP.Children.Add(musicSheetRectangle);
-
+                
+                
+                
             }
+
+            Button btn_SidebarMore = new Button();
+            btn_SidebarMore.Content = "More...";
+            btn_SidebarMore.Click += SidebarMore_Click;
+            btn_SidebarMore.HorizontalAlignment = HorizontalAlignment.Right;
+            btn_SidebarMore.Margin = new Thickness(0, 10, 10, 10);
+
+            SidebarSP.Children.Add(btn_SidebarMore);
 
 
             UpdateSidebar();
         }
-
+        
         public void UpdateSidebar()
         {
             int windowHeight = Convert.ToInt32(Window.Current.Bounds.Height);
-            int amount = (windowHeight - 30) / (50);
+            int amount = (windowHeight - 30) / (55);
             int count = 0;
+
+            
             foreach (object child in SidebarSP.Children)
             {
                 count++;
                 if (count <= amount)
                 {
-                    if (child is Rectangle)
-                    {
-                        (child as Rectangle).Visibility = Visibility.Visible;
-                    }
                     if (child is TextBlock)
                     {
                         (child as TextBlock).Visibility = Visibility.Visible;
                     }
+                    if (child is Rectangle)
+                    {
+                        (child as Rectangle).Visibility = Visibility.Visible;
+                    }
                 }
                 else
                 {
-                    if (child is Rectangle)
-                    {
-                        (child as Rectangle).Visibility = Visibility.Collapsed;
-                    }
                     if (child is TextBlock)
                     {
                         (child as TextBlock).Visibility = Visibility.Collapsed;
+                    }
+                    if (child is Rectangle)
+                    {
+                        (child as Rectangle).Visibility = Visibility.Collapsed;
                     }
                 }
             }
@@ -319,15 +338,15 @@ namespace PiaNotes
             {
                 UpdateKeyboard();
             }
-            
+
             if (SidebarIsOpen)
             {
                 UpdateSidebar();
             }
-            
+
 
         }
-        
+
         private async void midiInPortListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var deviceInformationCollection = inputDeviceWatcher.DeviceInformationCollection;
