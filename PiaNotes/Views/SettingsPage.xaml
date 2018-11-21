@@ -14,8 +14,8 @@
         <ListBox x:Name="midiInPortListBox" SelectionChanged="midiInPortListBox_SelectionChanged" Margin="375,54,0,566" HorizontalAlignment="Left" Width="914" Height="100" VerticalAlignment="Stretch"/>
         <ListBox x:Name="midiOutPortListBox" SelectionChanged="midiOutPortListBox_SelectionChanged" Margin="375,260,0,360" HorizontalAlignment="Left" Height="100" VerticalAlignment="Stretch"/>
         <CheckBox x:Name="Feedback" Content="Set velocity" HorizontalAlignment="Center" Margin="0,379,0,0" VerticalAlignment="Top" Click="Velocity_Checked"/>
-        <Slider x:Name="volumeSlider" IsEnabled="true" Value="50" Minimum ="0" Maximum="100" Header="Volume" ValueChanged="Volume_ValueChanged" Margin="540,528,540,-528" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
-        <Slider x:Name="velocitySlider" IsEnabled="False" Value="50" Minimum ="20" Maximum="125" Header="Velocity" ValueChanged="Velocity_ValueChanged" Margin="541,440,539,-440" />
+        <Slider x:Name="volumeSlider" Minimum ="0" Maximum="100" Header="Volume" ValueChanged="Volume_ValueChanged" Margin="540,528,540,-528" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+        <Slider x:Name="velocitySlider" Minimum ="0" Maximum="100" Header="Velocity" ValueChanged="Velocity_ValueChanged" Margin="541,440,539,-440" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
         <Button Content="Return to main menu" HorizontalAlignment="Center" Margin="0,600,0,0" VerticalAlignment="Top" Click="Button_Click"/>
     </Grid>
 </Page>

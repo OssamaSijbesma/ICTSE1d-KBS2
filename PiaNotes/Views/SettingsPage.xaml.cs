@@ -42,6 +42,10 @@ namespace PiaNotes.Views
 
             outputDeviceWatcher.StartWatcher();
 
+            velocitySlider.Value = (Settings.velocity - 20);
+
+            volumeSlider.Value = (Settings.volume + 50);
+
             if (Settings.feedback == true)
             {
                 volumeSlider.IsEnabled = true;
@@ -81,12 +85,12 @@ namespace PiaNotes.Views
 
         private void Velocity_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
         {
-            Settings.velocity = e.NewValue; 
+            Settings.velocity = (e.NewValue + 20); 
         }
 
         private void Volume_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
         {
-            Settings.velocity = e.NewValue;
+            Settings.volume = (e.NewValue - 50);
         }
 
         private async void midiOutPortListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)

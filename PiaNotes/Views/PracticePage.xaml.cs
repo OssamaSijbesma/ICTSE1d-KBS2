@@ -47,7 +47,7 @@ namespace PiaNotes.Views
                 // Play the note
                 byte channel = ((MidiNoteOnMessage)receivedMidiMessage).Channel;
                 byte note = ((MidiNoteOnMessage)receivedMidiMessage).Note;
-                //If the player releases the key there should be no sound else their should be more sound
+                //If the player releases the key there should be no sound
                 byte velocity;
                 if (((MidiNoteOnMessage)receivedMidiMessage).Velocity != 0)
                 {
@@ -55,7 +55,17 @@ namespace PiaNotes.Views
                     {
                         //Use the input from the keyboard the see what the normal velocity is and then add the volume the user chose
                         velocity = ((MidiNoteOnMessage)receivedMidiMessage).Velocity;
-                        velocity += DoubleToByte(Settings.volume);
+                        
+                        if (velocity + DoubleToByte(Settings.volume) <= 127 && velocity + DoubleToByte(Settings.volume) >= 0)
+                        {
+                            velocity += DoubleToByte(Settings.volume);
+                        } else if(velocity + DoubleToByte(Settings.volume) > 127)
+                        {
+                            velocity = 127;
+                        } else
+                        {
+                            velocity = 0;
+                        }
                         //Else use the static velocity the user chose
                     } else velocity = DoubleToByte(Settings.velocity);
                     //Else do not produce any sound, when the input is 0
