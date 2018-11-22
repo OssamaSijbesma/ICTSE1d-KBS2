@@ -116,7 +116,7 @@ namespace PiaNotes
         // Menustrip: Options > Settings
         private void OptionsSettings_Click(object sender, RoutedEventArgs e)
         {
-            this.Frame.Navigate(typeof(Settings));
+            //this.Frame.Navigate(typeof(Settings));
         }
 
 
