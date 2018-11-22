@@ -15,14 +15,14 @@
                        RelativePanel.AlignLeftWithPanel="True"
                        RelativePanel.AlignRightWithPanel="True"/>
 
-            <Button x:Name="Return" Content="Return" Click="OpenMainPage" HorizontalAlignment="Center" VerticalAlignment="Center" Background="#253847" />
-            <TextBlock Text="Input devices:" Style="{StaticResource TitleTextBlockStyle}" Margin="200,0,0,600" VerticalAlignment="Bottom" HorizontalAlignment="Left"/>
-            <TextBlock Text="Output devices:" Style="{StaticResource TitleTextBlockStyle}" Margin="200,0,0,400" VerticalAlignment="Bottom" HorizontalAlignment="Left"/>
-            <ListBox x:Name="midiInPortListBox" SelectionChanged="midiInPortListBox_SelectionChanged" Margin="375,54,0,566" HorizontalAlignment="Left" Width="914" Height="100" VerticalAlignment="Stretch"/>
-            <ListBox x:Name="midiOutPortListBox" SelectionChanged="midiOutPortListBox_SelectionChanged" Margin="375,260,0,360" HorizontalAlignment="Left" Height="100" VerticalAlignment="Stretch"/>
-            <CheckBox x:Name="Feedback" Content="Set velocity" HorizontalAlignment="Center" Margin="0,379,0,0" VerticalAlignment="Top" Click="Velocity_Checked"/>
-            <Slider x:Name="volumeSlider" Minimum ="0" Maximum="100" Header="Volume" ValueChanged="Volume_ValueChanged" Margin="540,528,540,-528" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
-            <Slider x:Name="velocitySlider" Minimum ="0" Maximum="100" Header="Velocity" ValueChanged="Velocity_ValueChanged" Margin="541,440,539,-440" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+            <Button x:Name="Return" Content="Return" Click="OpenMainPage" HorizontalAlignment="Left" VerticalAlignment="Top" Background="#253847" Margin="1391,-5,0,0" FontSize="20" />
+            <TextBlock Text="Input devices:" Style="{StaticResource TitleTextBlockStyle}" Margin="81,250,0,360.4" HorizontalAlignment="Left" FontSize="36"/>
+            <TextBlock Text="Output devices:" Style="{StaticResource TitleTextBlockStyle}" Margin="81,110,0,293.2"  HorizontalAlignment="Left" FontSize="36"/>
+            <ListBox x:Name="midiInPortListBox" SelectionChanged="midiInPortListBox_SelectionChanged" Margin="348,110,0,510" HorizontalAlignment="Left" Width="1082" Height="100" VerticalAlignment="Stretch"/>
+            <ListBox x:Name="midiOutPortListBox" SelectionChanged="midiOutPortListBox_SelectionChanged" Margin="348,250,0,370" HorizontalAlignment="Left" Height="100" Width="1082"/>
+            <CheckBox  x:Name="Feedback" Content="Set velocity" HorizontalAlignment="Left" Margin="80,552,0,0" VerticalAlignment="Top" Click="Velocity_Checked" FontSize="36"/>
+            <Slider x:Name="volumeSlider" Minimum ="0" Maximum="100" Header="Volume" ValueChanged="Volume_ValueChanged" Margin="80,400,572,-400" FontSize="36" Width="500" Height="100" />
+            <Slider x:Name="velocitySlider" Minimum ="0" Maximum="100" Header="Velocity" ValueChanged="Velocity_ValueChanged" Margin="80,669,843.2,-669" Width="500" Height="100" FontSize="36"/>
         </RelativePanel>
     </Grid>
 </Page>
