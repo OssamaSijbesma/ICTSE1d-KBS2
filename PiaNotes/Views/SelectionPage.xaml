@@ -1,5 +1,5 @@
 ﻿<Page SizeChanged="Page_SizeChanged"
-    x:Class="PiaNotes.SelectionPage"
+    x:Class="PiaNotes.Views.SelectionPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:PiaNotes"
@@ -15,7 +15,25 @@
                        RelativePanel.AlignLeftWithPanel="True"
                        RelativePanel.AlignRightWithPanel="True"/>
 
-            <Button x:Name="Return" Content="Return" Click="OpenMainPage" HorizontalAlignment="Center" VerticalAlignment="Center" Background="#253847" />
+            <Button x:Name="File" Content="File" HorizontalAlignment="Center" VerticalAlignment="Center" Background="#253847">
+                <Button.Flyout>
+                    <MenuFlyout>
+                        <MenuFlyoutItem Text="New MIDI File" Click="FileNewMIDIFile_Click" />
+                        <MenuFlyoutItem Text="Open MIDI Selection" Click="FileOpenMIDIFile_Click" />
+                    </MenuFlyout>
+                </Button.Flyout>
+            </Button>
+
+            <Button x:Name="Options" Content="Options" HorizontalAlignment="Center" VerticalAlignment="Center" Background="#253847" RelativePanel.RightOf="File">
+                <Button.Flyout>
+                    <MenuFlyout>
+                        <MenuFlyoutItem x:Name="nav_practice" Text="Practice" Click="NavPractice_Click" />
+                        <MenuFlyoutItem x:Name="nav_settings" Text="Settings" Click="NavSettings_Click" />
+                        <MenuFlyoutItem x:Name="nav_credits" Text="Credits" Click="NavCredits_Click" />
+                    </MenuFlyout>
+                </Button.Flyout>
+            </Button>
+
             <TextBlock HorizontalAlignment="Left" Height="48" Margin="30,35,0,0" Text="MIDI Files" TextWrapping="Wrap" VerticalAlignment="Top" Width="159" FontSize="36"/>
 
             <Rectangle x:Name="MIDIFiles" Stroke="#2b3c49" StrokeThickness="5"
@@ -40,17 +58,9 @@
             <Button x:Name="New" Content="New" Click="NewMIDIFile"
                     HorizontalAlignment="Center" VerticalAlignment="Center" Background="#253847"
                     RelativePanel.AlignBottomWith="MIDIFiles"
-                    RelativePanel.LeftOf="Close"
-                    Margin="0,0,10,30"
-                    />
-            <Button x:Name="Close" Content="Close" Click="OpenMainPage"
-                    HorizontalAlignment="Center" VerticalAlignment="Center" Background="#253847"
-                    RelativePanel.AlignBottomWith="MIDIFiles"
                     RelativePanel.AlignRightWith="MIDIFiles"
                     Margin="0,0,50,30"
                     />
-
-
         </RelativePanel>
     </Grid>
 </Page>

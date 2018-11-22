@@ -154,12 +154,6 @@ namespace PiaNotes.Views
             this.midiOutPortListBox.IsEnabled = true;
         }
 
-        private void OpenMainPage(object sender, RoutedEventArgs e)
-        {
-            //Button to return to the main menu
-            this.Frame.Navigate(typeof(MainPage));
-        }
-
         private void Velocity_Checked(object sender, RoutedEventArgs e)
         {
             //Checking if the feedback setting is turned off or on and act accordingly
@@ -174,6 +168,15 @@ namespace PiaNotes.Views
                 volumeSlider.IsEnabled = true;
                 velocitySlider.IsEnabled = false;
             }
+        }
+
+        // Return to previous page
+        private void NavBack_Click(object sender, RoutedEventArgs e)
+        {
+            if (this.Frame.CanGoBack)
+                this.Frame.GoBack();
+            else
+                this.Frame.Navigate(typeof(SelectionPage));
         }
     }
 }

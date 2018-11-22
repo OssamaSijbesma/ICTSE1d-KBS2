@@ -17,6 +17,7 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using Windows.Devices.Enumeration;
 using System.Threading.Tasks;
+using PiaNotes.Views;
 
 namespace PiaNotes
 {
@@ -70,7 +71,7 @@ namespace PiaNotes
                     // When the navigation stack isn't restored navigate to the first page,
                     // configuring the new page by passing required information as a navigation
                     // parameter
-                    rootFrame.Navigate(typeof(MainPage), e.Arguments);
+                    rootFrame.Navigate(typeof(SelectionPage), e.Arguments);
                 }
                 // Ensure the current window is active
                 Window.Current.Activate();

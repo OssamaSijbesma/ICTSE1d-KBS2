@@ -8,7 +8,7 @@ using Windows.UI.Xaml.Shapes;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
-namespace PiaNotes
+namespace PiaNotes.Views
 {
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
@@ -24,6 +24,43 @@ namespace PiaNotes
 
             CreateMostRecent();
         }
+
+        // Menustrip: File > New MIDI File
+        private void FileNewMIDIFile_Click(object sender, RoutedEventArgs e)
+        {
+            // Dialog
+        }
+
+        // Menustrip: File > Open MIDI File
+        private void FileOpenMIDIFile_Click(object sender, RoutedEventArgs e)
+        {
+            //this.Frame.Navigate(typeof(SelectionPage));
+        }
+
+
+
+        //private async void OptionsPractice_Click(object sender, RoutedEventArgs e)
+        //{
+        //    if (Settings.midiInPort != null && Settings.midiOutPort != null)
+        //        // Go to the practice page
+        //        this.Frame.Navigate(typeof(PracticePage));
+        //    else
+        //    {
+        //        // Create ContenDialog object
+        //        ContentDialog noMidiInOut = new ContentDialog
+        //        {
+        //            Title = "There is no MIDI in- or output!",
+        //            Content = "Check your MIDI input and output device before practicing.",
+        //            CloseButtonText = "Ok"
+        //        };
+
+        //        // Show dialog
+        //        await noMidiInOut.ShowAsync();
+
+        //        // Go to the settings page
+        //        this.Frame.Navigate(typeof(SettingsPage));
+        //    }
+        //}
 
         public void CreateMostRecent()
         {
@@ -63,17 +100,28 @@ namespace PiaNotes
         {
             
         }
-        
-        // Return
-        private void OpenMainPage(object sender, RoutedEventArgs e)
-        {
-            this.Frame.Navigate(typeof(MainPage));
-        }
 
         // New MIDI File
         private void NewMIDIFile(object sender, RoutedEventArgs e)
         {
             // Dialog
         }
+
+
+        /// <summary>
+        /// On click standard navigation
+        /// </summary>
+
+        // Navigate to the settings page
+        private void NavSettings_Click(object sender, RoutedEventArgs e) => this.Frame.Navigate(typeof(SettingsPage));
+
+        // Navigate to the credits page
+        private void NavCredits_Click(object sender, RoutedEventArgs e) => this.Frame.Navigate(typeof(CreditsPage));
+
+        // Navigate to the practice page
+        private void NavPractice_Click(object sender, RoutedEventArgs e) => this.Frame.Navigate(typeof(PracticePage));
+
+        // Navigate to the selection page
+        private void NavSelection_Click(object sender, RoutedEventArgs e) => this.Frame.Navigate(typeof(SelectionPage));
     }
 }

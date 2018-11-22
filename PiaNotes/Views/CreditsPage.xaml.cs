@@ -31,10 +31,13 @@ namespace PiaNotes.Views
             appView.Title = "Credits";
         }
         
-        // Return
-        private void OpenMainPage(object sender, RoutedEventArgs e)
+        // Return to previous page
+        private void NavBack_Click(object sender, RoutedEventArgs e)
         {
-            this.Frame.Navigate(typeof(MainPage));
+            if (this.Frame.CanGoBack)
+                this.Frame.GoBack();
+            else
+                this.Frame.Navigate(typeof(SelectionPage));
         }
     }
 }

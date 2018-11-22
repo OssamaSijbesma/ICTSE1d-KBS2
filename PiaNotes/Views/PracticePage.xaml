@@ -8,40 +8,22 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" RequestedTheme="Dark">
 
-
     <Grid>
         <RelativePanel Background="#162632">
 
             <Rectangle x:Name="KeyboardBG" Stroke="Black"
                        MinHeight="200"
-                       RelativePanel.RightOf="Sidebar"
+                       RelativePanel.AlignLeftWithPanel="True"
                        RelativePanel.AlignRightWithPanel="True"
                        RelativePanel.AlignBottomWithPanel="True"/>
 
-
-            <StackPanel x:Name="KeysWhiteSP" Orientation="Horizontal" RelativePanel.RightOf="Sidebar" RelativePanel.AlignBottomWithPanel="True" />
-
-            <StackPanel x:Name="KeysBlackSP" Orientation="Horizontal" RelativePanel.RightOf="Sidebar" RelativePanel.AlignBottomWithPanel="True" />
-
-            <Rectangle x:Name="Sidebar" Fill="#2b3c49"
-                       MinHeight="30" MinWidth="250"
-                       RelativePanel.AlignLeftWithPanel="True"
-                       RelativePanel.Below="MenuStrip"
-                       RelativePanel.AlignBottomWithPanel="True"/>
-
-            <StackPanel x:Name="SidebarSP"
-                       MinHeight="30" MinWidth="250"
-                       RelativePanel.AlignLeftWithPanel="True"
-                       RelativePanel.Below="MenuStrip"
-                       RelativePanel.AlignBottomWithPanel="True">
-
-
-            </StackPanel>
+            <StackPanel x:Name="KeysWhiteSP" Orientation="Horizontal" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignBottomWithPanel="True" />
+            <StackPanel x:Name="KeysBlackSP" Orientation="Horizontal" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignBottomWithPanel="True" />
 
 
             <Rectangle x:Name="Progress" Fill="#2b3c49"
                        MinHeight="30"
-                       RelativePanel.RightOf="Sidebar"
+                       RelativePanel.AlignLeftWithPanel="True"
                        RelativePanel.AlignRightWithPanel="True"
                        RelativePanel.Above="KeyboardBG" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
 
@@ -50,19 +32,9 @@
                        RelativePanel.AlignLeftWithPanel="True"
                        RelativePanel.AlignRightWithPanel="True"/>
 
-            <Button x:Name="File" Content="File" HorizontalAlignment="Center" VerticalAlignment="Center" Background="#253847">
+            <Button x:Name="View" Content="View" HorizontalAlignment="Center" VerticalAlignment="Center" Background="#253847" >
                 <Button.Flyout>
                     <MenuFlyout>
-                        <MenuFlyoutItem Text="New MIDI File" Click="FileNewMIDIFile_Click" />
-                        <MenuFlyoutItem Text="Open MIDI Selection" Click="FileOpenMIDIFile_Click" />
-                    </MenuFlyout>
-                </Button.Flyout>
-            </Button>
-
-            <Button x:Name="View" Content="View" HorizontalAlignment="Center" VerticalAlignment="Center" Background="#253847" RelativePanel.RightOf="File">
-                <Button.Flyout>
-                    <MenuFlyout>
-                        <MenuFlyoutItem Text="Sidebar" Click="ViewSidebar_Click"/>
                         <MenuFlyoutItem Text="Keyboard" Click="ViewKeyboard_Click" />
                     </MenuFlyout>
                 </Button.Flyout>

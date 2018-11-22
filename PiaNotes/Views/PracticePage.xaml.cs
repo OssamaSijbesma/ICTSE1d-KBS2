@@ -28,7 +28,6 @@ namespace PiaNotes.Views
     /// </summary>
     public sealed partial class PracticePage : Page
     {
-        public bool SidebarIsOpen { get; set; } = true;
         public bool KeyboardIsOpen { get; set; } = true;
         public int OctavesAmount { get; set; } = 5;
 
@@ -44,6 +43,9 @@ namespace PiaNotes.Views
         {
             this.InitializeComponent();
 
+            // Register a handler for the MessageReceived event
+            //Settings.midiInPort.MessageReceived += MidiInPort_MessageReceived;
+
             var appView = ApplicationView.GetForCurrentView();
             appView.Title = "";
 
@@ -52,31 +54,6 @@ namespace PiaNotes.Views
             coreTitleBar.ExtendViewIntoTitleBar = false;
 
             CreateKeyboard();
-            CreateSidebar();
-
-            // Register a handler for the MessageReceived event
-            Settings.midiInPort.MessageReceived += MidiInPort_MessageReceived;
-
-            //// zet notes in array zodat ze gekleurd kunnen worden
-            //Notes.Add(cn1);
-            //Notes.Add(cisn1);
-            //Notes.Add(dn1);
-            //Notes.Add(disn1);
-            //Notes.Add(en1);
-            //Notes.Add(eisn1);
-            //Notes.Add(fn1);
-            //Notes.Add(fisn1);
-            //Notes.Add(gn1);
-            //Notes.Add(gisn1);
-            //Notes.Add(an1);
-            //Notes.Add(aisn1);
-            //Notes.Add(bn1);
-            //Notes.Add(bisn1);
-            //Notes.Add(c0);
-            //Notes.Add(cis0);
-            //Notes.Add(d0);
-            //Notes.Add(dis0);
-
         }
 
         private void MidiInPort_MessageReceived(MidiInPort sender, MidiMessageReceivedEventArgs args)
@@ -133,20 +110,10 @@ namespace PiaNotes.Views
             });
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            byte channel = 0;
-            byte note = 60;
-            byte velocity = 127;
-            IMidiMessage midiMessageToSend = new MidiNoteOnMessage(channel, note, velocity);
-
-            Settings.midiOutPort.SendMessage(midiMessageToSend);
-        }
-
         private void Nav_main_Click(object sender, RoutedEventArgs e)
         {
             Settings.midiInPort.MessageReceived -= MidiInPort_MessageReceived;
-            this.Frame.Navigate(typeof(MainPage));
+            this.Frame.Navigate(typeof(SelectionPage));
         }
 
         public static byte DoubleToByte(double doubleVal)
@@ -182,16 +149,6 @@ namespace PiaNotes.Views
             //this.Frame.Navigate(typeof(SelectionPage));
         }
 
-        // Menustrip: View > Sidebar
-        private void ViewSidebar_Click(object sender, RoutedEventArgs e)
-        {
-            ToggleSidebar();
-            if (KeyboardIsOpen)
-            {
-                CreateKeyboard();
-            }
-        }
-
         // Menustrip: View > Keyboard
         private void ViewKeyboard_Click(object sender, RoutedEventArgs e)
         {
@@ -211,11 +168,6 @@ namespace PiaNotes.Views
             this.Frame.Navigate(typeof(CreditsPage));
         }
 
-        // Sidebar: More
-        private void SidebarMore_Click(object sender, RoutedEventArgs e)
-        {
-            //this.Frame.Navigate(typeof(SelectionPage));
-        }
 
         // Toggles the keyboard to show/hide.
         public void ToggleKeyboard()
@@ -241,22 +193,6 @@ namespace PiaNotes.Views
             KeyboardIsOpen = !KeyboardIsOpen;
         }
 
-        public void ToggleSidebar()
-        {
-            if (SidebarIsOpen)
-            {
-                Sidebar.MinWidth = 0;
-                SidebarSP.MinWidth = 0;
-                SidebarSP.Margin = new Thickness(-250, 0, 0, 0);
-            }
-            else
-            {
-                Sidebar.MinWidth = 250;
-                SidebarSP.MinWidth = 250;
-                SidebarSP.Margin = new Thickness(0, 0, 0, 0);
-            }
-            SidebarIsOpen = !SidebarIsOpen;
-        }
 
         // Creates the keyboard.
         public void CreateKeyboard()
@@ -300,7 +236,7 @@ namespace PiaNotes.Views
                 try
                 {
                     // Calculate width for the white keys.
-                    key.Width = (windowWidth - Sidebar.MinWidth) / keyWhiteAmount;
+                    key.Width = (windowWidth) / keyWhiteAmount;
                 }
                 catch (Exception)
                 {
@@ -317,7 +253,7 @@ namespace PiaNotes.Views
                 try
                 {
                     // Calculate width for the black keys.
-                    keyWhiteWidth = (windowWidth - Sidebar.MinWidth) / keyWhiteAmount;
+                    keyWhiteWidth = (windowWidth) / keyWhiteAmount;
                     key.Width = keyWhiteWidth / 100 * 60;
                 }
                 catch (Exception)
@@ -358,92 +294,12 @@ namespace PiaNotes.Views
             }
         }
 
-        // Creates the sidebar.
-        public void CreateSidebar()
-        {
-            int windowHeight = Convert.ToInt32(Window.Current.Bounds.Height);
-
-            SidebarSP.Children.Clear();
-
-            for (int i = 1; i < 15; i++)
-            {
-                StackPanel MusicPieceSP = new StackPanel();
-                MusicPieceSP.MinHeight = 30;
-                MusicPieceSP.MinWidth = 250;
-
-                // Creates rectangle for MIDI preview.
-                Rectangle musicSheetRectangle = new Rectangle();
-                musicSheetRectangle.Name = $"Music Piece #{i}";
-                musicSheetRectangle.Stroke = new SolidColorBrush(Colors.White);
-                musicSheetRectangle.StrokeThickness = 1;
-                musicSheetRectangle.Height = 50;
-                musicSheetRectangle.Width = 230;
-                musicSheetRectangle.Margin = new Thickness(0, 0, 0, 0);
-
-                // Creates textblock for MIDI name.
-                TextBlock musicSheetTextBlock = new TextBlock();
-                musicSheetTextBlock.TextWrapping = TextWrapping.Wrap;
-                musicSheetTextBlock.TextAlignment = TextAlignment.Center;
-                musicSheetTextBlock.Height = 30;
-                musicSheetTextBlock.Margin = new Thickness(0, 10, 0, 0);
-                musicSheetTextBlock.Text = musicSheetRectangle.Name;
-
-                // Adds rectangle and children to stackpanel.
-                MusicPieceSP.Children.Add(musicSheetTextBlock);
-                MusicPieceSP.Children.Add(musicSheetRectangle);
-
-                SidebarSP.Children.Add(MusicPieceSP);
-            }
-
-            Button btn_SidebarMore = new Button();
-            btn_SidebarMore.Content = "More...";
-            btn_SidebarMore.Click += SidebarMore_Click;
-            btn_SidebarMore.HorizontalAlignment = HorizontalAlignment.Right;
-            btn_SidebarMore.Margin = new Thickness(0, 10, 10, 10);
-
-            SidebarSP.Children.Add(btn_SidebarMore);
-
-            UpdateSidebar();
-        }
-
-        // Updates the sidebar. Is used after first initializing the sidebar or after resizing the window height.
-        public void UpdateSidebar()
-        {
-            int windowHeight = Convert.ToInt32(Window.Current.Bounds.Height);
-            int amount = (windowHeight - 35 - 50) / (90);
-            int count = 0;
-
-            // Iterates through the sidebar children and decides whether or not a child should be shown or not. 
-            foreach (object child in SidebarSP.Children)
-            {
-                count++;
-                if (child is StackPanel)
-                {
-                    if (count <= amount)
-                    {
-                        (child as StackPanel).Visibility = Visibility.Visible;
-                    }
-                    else
-                    {
-                        (child as StackPanel).Visibility = Visibility.Collapsed;
-                    }
-                }
-            }
-        }
-
         // Is executed when the window is resized.
         private void Page_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             if (KeyboardIsOpen)
-            {
                 // If the keyboard is shown, it will be updated.
                 UpdateKeyboard();
-            }
-            if (SidebarIsOpen)
-            {
-                // If the sidebar is shown, it will be updated.
-                UpdateSidebar();
-            }
         }
     }
 }

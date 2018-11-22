@@ -15,7 +15,7 @@
                        RelativePanel.AlignLeftWithPanel="True"
                        RelativePanel.AlignRightWithPanel="True"/>
 
-            <Button x:Name="Return" Content="Return" Click="OpenMainPage" HorizontalAlignment="Left" VerticalAlignment="Top" Background="#253847" Margin="1391,-5,0,0" FontSize="20" />
+            <Button x:Name="Return" Content="Return" Click="NavBack_Click" HorizontalAlignment="Center" VerticalAlignment="Center" Background="#253847" />
             <TextBlock Text="Input devices:" Style="{StaticResource TitleTextBlockStyle}" Margin="81,250,0,360.4" HorizontalAlignment="Left" FontSize="36"/>
             <TextBlock Text="Output devices:" Style="{StaticResource TitleTextBlockStyle}" Margin="81,110,0,293.2"  HorizontalAlignment="Left" FontSize="36"/>
             <ListBox x:Name="midiInPortListBox" SelectionChanged="midiInPortListBox_SelectionChanged" Margin="348,110,0,510" HorizontalAlignment="Left" Width="1082" Height="100" VerticalAlignment="Stretch"/>
