@@ -68,7 +68,7 @@ namespace PiaNotes
         // Menustrip: File > Open MIDI File
         private void FileOpenMIDIFile_Click(object sender, RoutedEventArgs e)
         {
-            //this.Frame.Navigate(typeof(SelectionPage));
+            this.Frame.Navigate(typeof(SelectionPage));
         }
 
         // Menustrip: View > Sidebar
@@ -103,7 +103,7 @@ namespace PiaNotes
         // Sidebar: More
         private void SidebarMore_Click(object sender, RoutedEventArgs e)
         {
-            //this.Frame.Navigate(typeof(SelectionPage));
+            this.Frame.Navigate(typeof(SelectionPage));
         }
 
         // Toggles the keyboard to show/hide.
@@ -112,11 +112,11 @@ namespace PiaNotes
             // Iterate through all keyboard items to hide/show them.
             if (KeyboardIsOpen)
             {
-                foreach (Rectangle key in keysWhite)
+                foreach (Rectangle key in KeysWhiteSP.Children)
                 {
                     key.Width = 0;
                 }
-                foreach (Rectangle key in keysBlack)
+                foreach (Rectangle key in KeysBlackSP.Children)
                 {
                     key.Width = 0;
                 }
