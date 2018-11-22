@@ -55,14 +55,12 @@ namespace PiaNotes.Views
             Notes.Add(cis0);
             Notes.Add(d0);
             Notes.Add(dis0);
-
         }
 
         private void MidiInPort_MessageReceived(MidiInPort sender, MidiMessageReceivedEventArgs args)
         {
             // Recieved message
             IMidiMessage receivedMidiMessage = args.Message;
-
             System.Diagnostics.Debug.WriteLine(receivedMidiMessage.Timestamp.ToString());
 
             if (receivedMidiMessage.Type == MidiMessageType.NoteOn)
@@ -86,13 +84,9 @@ namespace PiaNotes.Views
                         if (velocity + DoubleToByte(Settings.volume) <= 127 && velocity + DoubleToByte(Settings.volume) >= 0)
                         {
                             velocity += DoubleToByte(Settings.volume);
-                        } else if(velocity + DoubleToByte(Settings.volume) > 127)
-                        {
-                            velocity = 127;
-                        } else
-                        {
-                            velocity = 0;
-                        }
+                        } else if(velocity + DoubleToByte(Settings.volume) > 127) velocity = 127;
+                        else velocity = 0;
+
                         //Else use the static velocity the user chose
                     } else velocity = DoubleToByte(Settings.velocity);
                     //Else do not produce any sound, when the input is 0
