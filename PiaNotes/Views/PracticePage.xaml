@@ -12,5 +12,36 @@
         <Button x:Name="nav_main" Content="Stop" HorizontalAlignment="Left" Margin="823,210,0,0" VerticalAlignment="Top" Click="Nav_main_Click"/>
         <Button Content="Button" HorizontalAlignment="Left" Margin="849,354,0,0" VerticalAlignment="Top" Click="Button_Click"/>
 
+        <Rectangle x:Name="cn1" HorizontalAlignment="Left" Height="100" Margin="100,663,0,0" VerticalAlignment="Top" Width="20" Fill="White"/>
+        <Rectangle x:Name="cisn1" HorizontalAlignment="Left" Height="100" Margin="150,663,0,0" VerticalAlignment="Top" Width="20" Fill="White"/>
+        <Rectangle x:Name="dn1" HorizontalAlignment="Left" Height="100" Margin="200,663,0,0" VerticalAlignment="Top" Width="20" Fill="White"/>
+        <Rectangle x:Name="disn1" HorizontalAlignment="Left" Height="100" Margin="250,663,0,0" VerticalAlignment="Top" Width="20" Fill="White"/>
+        <Rectangle x:Name="en1" HorizontalAlignment="Left" Height="100" Margin="300,663,0,0" VerticalAlignment="Top" Width="20" Fill="White"/>
+        <Rectangle x:Name="eisn1" HorizontalAlignment="Left" Height="100" Margin="350,663,0,0" VerticalAlignment="Top" Width="20" Fill="White"/>
+        <Rectangle x:Name="fn1" HorizontalAlignment="Left" Height="100" Margin="400,663,0,0" VerticalAlignment="Top" Width="20" Fill="White"/>
+        <Rectangle x:Name="fisn1" HorizontalAlignment="Left" Height="100" Margin="450,663,0,0" VerticalAlignment="Top" Width="20" Fill="White"/>
+        <Rectangle x:Name="gn1" HorizontalAlignment="Left" Height="100" Margin="500,663,0,0" VerticalAlignment="Top" Width="20" Fill="White"/>
+        <Rectangle x:Name="gisn1" HorizontalAlignment="Left" Height="100" Margin="550,663,0,0" VerticalAlignment="Top" Width="20" Fill="White"/>
+        <Rectangle x:Name="an1" HorizontalAlignment="Left" Height="100" Margin="600,663,0,0" VerticalAlignment="Top" Width="20" Fill="White"/>
+        <Rectangle x:Name="aisn1" HorizontalAlignment="Left" Height="100" Margin="650,663,0,0" VerticalAlignment="Top" Width="20" Fill="White"/>
+        <Rectangle x:Name="bn1" HorizontalAlignment="Left" Height="100" Margin="700,663,0,0" VerticalAlignment="Top" Width="20" Fill="White"/>
+        <Rectangle x:Name="bisn1" HorizontalAlignment="Left" Height="100" Margin="750,663,0,0" VerticalAlignment="Top" Width="20" Fill="White"/>
+        <Rectangle x:Name="c0" HorizontalAlignment="Left" Height="100" Margin="800,663,0,0" VerticalAlignment="Top" Width="20" Fill="White"/>
+        <Rectangle x:Name="cis0" HorizontalAlignment="Left" Height="100" Margin="850,663,0,0" VerticalAlignment="Top" Width="20" Fill="White"/>
+        <Rectangle x:Name="d0" HorizontalAlignment="Left" Height="100" Margin="900,663,0,0" VerticalAlignment="Top" Width="20" Fill="White"/>
+        <Rectangle x:Name="dis0" HorizontalAlignment="Left" Height="100" Margin="950,663,0,0" VerticalAlignment="Top" Width="20" Fill="White"/>
+        <Rectangle x:Name="e0" HorizontalAlignment="Left" Height="100" Margin="1000,663,0,0" VerticalAlignment="Top" Width="20" Fill="White"/>
+        <Rectangle x:Name="eis0" HorizontalAlignment="Left" Height="100" Margin="1050,663,0,0" VerticalAlignment="Top" Width="20" Fill="White"/>
+        <Rectangle x:Name="f0" HorizontalAlignment="Left" Height="100" Margin="1100,663,0,0" VerticalAlignment="Top" Width="20" Fill="White"/>
+        <Rectangle x:Name="fis0" HorizontalAlignment="Left" Height="100" Margin="1150,663,0,0" VerticalAlignment="Top" Width="20" Fill="White"/>
+        <Rectangle x:Name="g0" HorizontalAlignment="Left" Height="100" Margin="1200,663,0,0" VerticalAlignment="Top" Width="20" Fill="White"/>
+        <Rectangle x:Name="gis0" HorizontalAlignment="Left" Height="100" Margin="1250,663,0,0" VerticalAlignment="Top" Width="20" Fill="White"/>
+        <Rectangle x:Name="a0" HorizontalAlignment="Left" Height="100" Margin="1300,663,0,0" VerticalAlignment="Top" Width="20" Fill="White"/>
+        <Rectangle x:Name="ais0" HorizontalAlignment="Left" Height="100" Margin="1350,663,0,0" VerticalAlignment="Top" Width="20" Fill="White"/>
+        <Rectangle x:Name="b0" HorizontalAlignment="Left" Height="100" Margin="1400,663,0,0" VerticalAlignment="Top" Width="20" Fill="White"/>
+        <Rectangle x:Name="bis0" HorizontalAlignment="Left" Height="100" Margin="1450,663,0,0" VerticalAlignment="Top" Width="20" Fill="White"/>
+        <Rectangle x:Name="c1" HorizontalAlignment="Left" Height="100" Margin="1500,663,0,0" VerticalAlignment="Top" Width="20" Fill="White"/>
+        <Rectangle x:Name="cis1" HorizontalAlignment="Left" Height="100" Margin="1550,663,0,0" VerticalAlignment="Top" Width="20" Fill="White"/>
+        
     </Grid>
 </Page>

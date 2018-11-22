@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using Windows.ApplicationModel.Core;
 using Windows.Devices.Midi;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -13,6 +15,7 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using Windows.UI.Xaml.Shapes;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -23,12 +26,36 @@ namespace PiaNotes.Views
     /// </summary>
     public sealed partial class PracticePage : Page
     {
+
+        List<Rectangle> Notes = new List<Rectangle>();
+
         public PracticePage()
         {
             this.InitializeComponent();
 
             // Register a handler for the MessageReceived event
             Settings.midiInPort.MessageReceived += MidiInPort_MessageReceived;
+
+            // zet notes in array zodat ze gekleurd kunnen worden
+            Notes.Add(cn1);
+            Notes.Add(cisn1);
+            Notes.Add(dn1);
+            Notes.Add(disn1);
+            Notes.Add(en1);
+            Notes.Add(eisn1);
+            Notes.Add(fn1);
+            Notes.Add(fisn1);
+            Notes.Add(gn1);
+            Notes.Add(gisn1);
+            Notes.Add(an1);
+            Notes.Add(aisn1);
+            Notes.Add(bn1);
+            Notes.Add(bisn1);
+            Notes.Add(c0);
+            Notes.Add(cis0);
+            Notes.Add(d0);
+            Notes.Add(dis0);
+
         }
 
         private void MidiInPort_MessageReceived(MidiInPort sender, MidiMessageReceivedEventArgs args)
@@ -72,9 +99,17 @@ namespace PiaNotes.Views
                 } else velocity = ((MidiNoteOnMessage)receivedMidiMessage).Velocity;
 
                 IMidiMessage midiMessageToSend = new MidiNoteOnMessage(channel, note, velocity);
-
+                FillKey(note);
                 Settings.midiOutPort.SendMessage(midiMessageToSend);
             }
+        }
+
+        private async void FillKey(byte note)
+        {
+            await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            {
+                Notes[note].Fill = new SolidColorBrush(Windows.UI.Colors.Blue);
+            });
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
