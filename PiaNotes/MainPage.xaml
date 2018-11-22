@@ -1,4 +1,4 @@
-﻿<Page
+﻿<Page SizeChanged="Page_SizeChanged"
     x:Class="PiaNotes.MainPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -6,10 +6,81 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" RequestedTheme="Dark">
+
 
     <Grid>
-        <Button x:Name="nav_settings" Content="Settings" HorizontalAlignment="Left" Margin="642,285,0,0" VerticalAlignment="Top" Click="Navigation_Click"/>
-        <Button x:Name="nav_practice" Content="Practice" HorizontalAlignment="Left" Margin="788,301,0,0" VerticalAlignment="Top" Click="Navigation_Click"/>
+        <ListBox x:Name="midiInPortListBox" SelectionChanged="midiInPortListBox_SelectionChanged" Margin="252,250,709,250" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+        <ListBox x:Name="midiOutPortListBox" SelectionChanged="midiOutPortListBox_SelectionChanged" Margin="796,250,144,250" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+
+        <RelativePanel Background="#162632">
+
+            <Rectangle x:Name="KeyboardBG" Stroke="Black"
+                       MinHeight="200"
+                       RelativePanel.RightOf="Sidebar"
+                       RelativePanel.AlignRightWithPanel="True"
+                       RelativePanel.AlignBottomWithPanel="True"/>
+
+
+            <StackPanel x:Name="KeysWhiteSP" Orientation="Horizontal" RelativePanel.RightOf="Sidebar" RelativePanel.AlignBottomWithPanel="True" />
+
+            <StackPanel x:Name="KeysBlackSP" Orientation="Horizontal" RelativePanel.RightOf="Sidebar" RelativePanel.AlignBottomWithPanel="True" />
+
+            <Rectangle x:Name="Sidebar" Fill="#2b3c49"
+                       MinHeight="30" MinWidth="250"
+                       RelativePanel.AlignLeftWithPanel="True"
+                       RelativePanel.Below="MenuStrip"
+                       RelativePanel.AlignBottomWithPanel="True"/>
+
+            <StackPanel x:Name="SidebarSP"
+                       MinHeight="30" MinWidth="250"
+                       RelativePanel.AlignLeftWithPanel="True"
+                       RelativePanel.Below="MenuStrip"
+                       RelativePanel.AlignBottomWithPanel="True">
+
+                
+            </StackPanel>
+
+
+            <Rectangle x:Name="Progress" Fill="#2b3c49"
+                       MinHeight="30"
+                       RelativePanel.RightOf="Sidebar"
+                       RelativePanel.AlignRightWithPanel="True"
+                       RelativePanel.Above="KeyboardBG" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+
+            <Rectangle x:Name="MenuStrip" Fill="#253847"
+                       MinHeight="35" MinWidth="250"
+                       RelativePanel.AlignLeftWithPanel="True"
+                       RelativePanel.AlignRightWithPanel="True"/>
+
+            <Button x:Name="File" Content="File" HorizontalAlignment="Center" VerticalAlignment="Center" Background="#253847">
+                <Button.Flyout>
+                    <MenuFlyout>
+                        <MenuFlyoutItem Text="New MIDI File" Click="FileNewMIDIFile_Click" />
+                        <MenuFlyoutItem Text="Open MIDI Selection" Click="FileOpenMIDIFile_Click" />
+                    </MenuFlyout>
+                </Button.Flyout>
+            </Button>
+
+            <Button x:Name="View" Content="View" HorizontalAlignment="Center" VerticalAlignment="Center" Background="#253847" RelativePanel.RightOf="File">
+                <Button.Flyout>
+                    <MenuFlyout>
+                        <MenuFlyoutItem Text="Sidebar" Click="ViewSidebar_Click"/>
+                        <MenuFlyoutItem Text="Keyboard" Click="ViewKeyboard_Click" />
+                    </MenuFlyout>
+                </Button.Flyout>
+            </Button>
+
+            <Button x:Name="Options" Content="Options" HorizontalAlignment="Center" VerticalAlignment="Center" Background="#253847" RelativePanel.RightOf="View">
+                <Button.Flyout>
+                    <MenuFlyout>
+                        <MenuFlyoutItem Text="Settings" Click="OptionsSettings_Click" />
+                        <MenuFlyoutItem Text="Credits" Click="OptionsCredits_Click" />
+                    </MenuFlyout>
+                </Button.Flyout>
+            </Button>
+
+
+        </RelativePanel>
     </Grid>
 </Page>

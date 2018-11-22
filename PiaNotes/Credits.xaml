@@ -1,0 +1,22 @@
+﻿<Page
+    x:Class="PiaNotes.Credits"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:PiaNotes"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" RequestedTheme="Dark">
+
+    <Grid>
+        <RelativePanel Background="#162632">
+            <Rectangle x:Name="MenuStrip" Fill="#253847"
+                       MinHeight="35" MinWidth="250"
+                       RelativePanel.AlignLeftWithPanel="True"
+                       RelativePanel.AlignRightWithPanel="True"/>
+
+            <Button x:Name="Return" Content="Return" Click="OpenMainPage" HorizontalAlignment="Center" VerticalAlignment="Center" Background="#253847" />
+
+        </RelativePanel>
+    </Grid>
+</Page>
