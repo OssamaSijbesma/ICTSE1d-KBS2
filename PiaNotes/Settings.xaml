@@ -14,9 +14,43 @@
                        MinHeight="35" MinWidth="250"
                        RelativePanel.AlignLeftWithPanel="True"
                        RelativePanel.AlignRightWithPanel="True"/>
-            
+
             <Button x:Name="Return" Content="Return" Click="OpenMainPage" HorizontalAlignment="Center" VerticalAlignment="Center" Background="#253847" />
-            
+            <TextBlock HorizontalAlignment="Left" Height="48" Margin="30,35,0,0" Text="Settings" TextWrapping="Wrap" VerticalAlignment="Top" Width="159" FontSize="36"/>
+
+            <Rectangle x:Name="SettingsRectangle" Stroke="#2b3c49" StrokeThickness="5"
+                       MinHeight="30" MinWidth="250"
+                       RelativePanel.AlignLeftWithPanel="True"
+                       RelativePanel.AlignRightWithPanel="True"
+                       RelativePanel.AlignBottomWithPanel="True"
+                       RelativePanel.Below="MenuStrip"
+                       Margin="30,50,30,100"
+                       />
+
+
+            <StackPanel x:Name="SettingsSP"
+                       MinHeight="30" MinWidth="250"
+                       RelativePanel.AlignLeftWithPanel="True"
+                       RelativePanel.AlignRightWithPanel="True"
+                       RelativePanel.AlignBottomWithPanel="True"
+                       RelativePanel.Below="MenuStrip"
+                       Margin="30,50,30,90">
+            </StackPanel>
+
+            <Button x:Name="OK" Content="OK" Click="SaveSettings"
+                    HorizontalAlignment="Center" VerticalAlignment="Center" Background="#253847"
+                    RelativePanel.AlignBottomWith="SettingsRectangle"
+                    RelativePanel.LeftOf="Cancel"
+                    Margin="0,0,10,30"
+                    />
+            <Button x:Name="Cancel" Content="Cancel" Click="OpenMainPage"
+                    HorizontalAlignment="Center" VerticalAlignment="Center" Background="#253847"
+                    RelativePanel.AlignBottomWith="SettingsRectangle"
+                    RelativePanel.AlignRightWith="SettingsRectangle"
+                    Margin="0,0,50,30"
+                    />
+
+
         </RelativePanel>
     </Grid>
 </Page>

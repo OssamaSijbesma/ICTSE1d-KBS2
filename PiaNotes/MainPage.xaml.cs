@@ -30,9 +30,10 @@ namespace PiaNotes
     /// </summary>
     public sealed partial class MainPage : Page
     {
-        public bool SidebarIsOpen { get; set; } = true;
-        public bool KeyboardIsOpen { get; set; } = true;
-        public int OctavesAmount { get; set; } = 5;
+        public bool InitialStartup { get; set; } = true;
+        public bool SidebarIsOpen { get; set; }
+        public bool KeyboardIsOpen { get; set; }
+        public int OctavesAmount { get; set; }
 
         private List<Rectangle> keysWhite = new List<Rectangle>();
         private List<Rectangle> keysBlack = new List<Rectangle>();
@@ -49,6 +50,16 @@ namespace PiaNotes
         public MainPage()
         {
             this.InitializeComponent();
+
+            if (InitialStartup)
+            {
+                // change settings
+                SidebarIsOpen = true;
+                KeyboardIsOpen = true;
+                OctavesAmount = 4;
+
+                InitialStartup = false;
+            }
 
             var appView = ApplicationView.GetForCurrentView();
             appView.Title = "";
@@ -70,6 +81,8 @@ namespace PiaNotes
                 new MidiDeviceWatcher(MidiOutPort.GetDeviceSelector(), midiOutPortListBox, Dispatcher);
 
             outputDeviceWatcher.StartWatcher();
+
+            
         }
 
         // Menustrip: File > New MIDI File
@@ -147,13 +160,13 @@ namespace PiaNotes
         {
             if (SidebarIsOpen)
             {
-                Sidebar.MinWidth = 0;
+                SidebarRectangle.MinWidth = 0;
                 SidebarSP.MinWidth = 0;
                 SidebarSP.Margin = new Thickness(-250,0,0,0);
             }
             else
             {
-                Sidebar.MinWidth = 250;
+                SidebarRectangle.MinWidth = 250;
                 SidebarSP.MinWidth = 250;
                 SidebarSP.Margin = new Thickness(0, 0, 0, 0);
             }
@@ -202,7 +215,7 @@ namespace PiaNotes
                 try
                 {
                     // Calculate width for the white keys.
-                    key.Width = (windowWidth - Sidebar.MinWidth) / keyWhiteAmount;
+                    key.Width = (windowWidth - SidebarRectangle.MinWidth) / keyWhiteAmount;
                 }
                 catch (Exception)
                 {
@@ -219,7 +232,7 @@ namespace PiaNotes
                 try
                 {
                     // Calculate width for the black keys.
-                    keyWhiteWidth = (windowWidth - Sidebar.MinWidth) / keyWhiteAmount;
+                    keyWhiteWidth = (windowWidth - SidebarRectangle.MinWidth) / keyWhiteAmount;
                     key.Width = keyWhiteWidth / 100 * 60;
                 }
                 catch (Exception)

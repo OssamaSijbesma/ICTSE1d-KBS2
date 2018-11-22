@@ -17,16 +17,16 @@
 
             <Rectangle x:Name="KeyboardBG" Stroke="Black"
                        MinHeight="200"
-                       RelativePanel.RightOf="Sidebar"
+                       RelativePanel.RightOf="SidebarRectangle"
                        RelativePanel.AlignRightWithPanel="True"
                        RelativePanel.AlignBottomWithPanel="True"/>
 
 
-            <StackPanel x:Name="KeysWhiteSP" Orientation="Horizontal" RelativePanel.RightOf="Sidebar" RelativePanel.AlignBottomWithPanel="True" />
+            <StackPanel x:Name="KeysWhiteSP" Orientation="Horizontal" RelativePanel.RightOf="SidebarRectangle" RelativePanel.AlignBottomWithPanel="True" />
 
-            <StackPanel x:Name="KeysBlackSP" Orientation="Horizontal" RelativePanel.RightOf="Sidebar" RelativePanel.AlignBottomWithPanel="True" />
+            <StackPanel x:Name="KeysBlackSP" Orientation="Horizontal" RelativePanel.RightOf="SidebarRectangle" RelativePanel.AlignBottomWithPanel="True" />
 
-            <Rectangle x:Name="Sidebar" Fill="#2b3c49"
+            <Rectangle x:Name="SidebarRectangle" Fill="#2b3c49"
                        MinHeight="30" MinWidth="250"
                        RelativePanel.AlignLeftWithPanel="True"
                        RelativePanel.Below="MenuStrip"
@@ -44,7 +44,7 @@
 
             <Rectangle x:Name="Progress" Fill="#2b3c49"
                        MinHeight="30"
-                       RelativePanel.RightOf="Sidebar"
+                       RelativePanel.RightOf="SidebarRectangle"
                        RelativePanel.AlignRightWithPanel="True"
                        RelativePanel.Above="KeyboardBG" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
 

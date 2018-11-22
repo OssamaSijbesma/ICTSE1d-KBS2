@@ -36,5 +36,12 @@ namespace PiaNotes
         {
             this.Frame.Navigate(typeof(MainPage));
         }
+
+        // OK
+        private void SaveSettings(object sender, RoutedEventArgs e)
+        {
+
+            this.Frame.Navigate(typeof(MainPage));
+        }
     }
 }
