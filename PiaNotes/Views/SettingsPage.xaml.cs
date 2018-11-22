@@ -170,6 +170,10 @@ namespace PiaNotes.Views
             }
         }
 
+        /// <summary>
+        /// On click navigation
+        /// </summary>
+
         // Return to previous page
         private void NavBack_Click(object sender, RoutedEventArgs e)
         {

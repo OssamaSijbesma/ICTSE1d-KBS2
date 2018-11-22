@@ -110,11 +110,7 @@ namespace PiaNotes.Views
             });
         }
 
-        private void Nav_main_Click(object sender, RoutedEventArgs e)
-        {
-            Settings.midiInPort.MessageReceived -= MidiInPort_MessageReceived;
-            this.Frame.Navigate(typeof(SelectionPage));
-        }
+
 
         public static byte DoubleToByte(double doubleVal)
         {
@@ -155,18 +151,6 @@ namespace PiaNotes.Views
             ToggleKeyboard();
         }
 
-        // Menustrip: Options > Settings
-        private void OptionsSettings_Click(object sender, RoutedEventArgs e)
-        {
-            this.Frame.Navigate(typeof(SettingsPage));
-        }
-
-
-        // Menustrip: Options > Credits
-        private void OptionsCredits_Click(object sender, RoutedEventArgs e)
-        {
-            this.Frame.Navigate(typeof(CreditsPage));
-        }
 
 
         // Toggles the keyboard to show/hide.
@@ -300,6 +284,23 @@ namespace PiaNotes.Views
             if (KeyboardIsOpen)
                 // If the keyboard is shown, it will be updated.
                 UpdateKeyboard();
+        }
+
+        /// <summary>
+        /// On click navigation
+        /// </summary>
+
+        // Navigate to the settings page
+        private void NavSettings_Click(object sender, RoutedEventArgs e) => this.Frame.Navigate(typeof(SettingsPage));
+
+        // Navigate to the credits page
+        private void NavCredits_Click(object sender, RoutedEventArgs e) => this.Frame.Navigate(typeof(CreditsPage));
+
+        // Navigate to the selection page
+        private void NavSelection_Click(object sender, RoutedEventArgs e)
+        {
+            Settings.midiInPort.MessageReceived -= MidiInPort_MessageReceived;
+            this.Frame.Navigate(typeof(SelectionPage));
         }
     }
 }
