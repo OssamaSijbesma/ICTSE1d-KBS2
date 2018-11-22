@@ -44,7 +44,7 @@ namespace PiaNotes.Views
             this.InitializeComponent();
 
             // Register a handler for the MessageReceived event
-            //Settings.midiInPort.MessageReceived += MidiInPort_MessageReceived;
+            Settings.midiInPort.MessageReceived += MidiInPort_MessageReceived;
 
             var appView = ApplicationView.GetForCurrentView();
             appView.Title = "";

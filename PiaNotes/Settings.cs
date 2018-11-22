@@ -7,7 +7,7 @@ using Windows.Devices.Midi;
 
 namespace PiaNotes
 {
-    public static class Settings
+    static class Settings
     {
         public static MidiInPort midiInPort;
         public static IMidiOutPort midiOutPort;
