@@ -10,14 +10,15 @@ namespace PianotesUnitTest
     public class UnitTest1
     {
         [TestMethod]
-        public void TestMethod10()
+        public void ReturningToSettings()
         {
-            byte channel = 0;
-            byte note = 60;
-            byte velocity = 127;
-            IMidiMessage midiMessageToSend = new MidiNoteOnMessage(channel, note, velocity);
+            // arrange
+            
 
-            Settings.midiOutPort.SendMessage(midiMessageToSend);
+            // act
+            
+
+            // assert
         }
     }
 }

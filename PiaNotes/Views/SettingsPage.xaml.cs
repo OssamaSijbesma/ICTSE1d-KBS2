@@ -42,10 +42,9 @@ namespace PiaNotes.Views
 
             outputDeviceWatcher.StartWatcher();
 
-            velocitySlider.Value = (Settings.velocity - 20);
-
-            volumeSlider.Value = (Settings.volume + 50);
-
+            //Set the slider back to the values the user put in
+            velocitySlider.Value = (Settings.velocity - 27);
+             volumeSlider.Value = (Settings.volume + 50);
             if (Settings.feedback == true)
             {
                 volumeSlider.IsEnabled = true;
@@ -85,7 +84,7 @@ namespace PiaNotes.Views
 
         private void Velocity_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
         {
-            Settings.velocity = (e.NewValue + 20); 
+            Settings.velocity = (e.NewValue + 27); 
         }
 
         private void Volume_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
