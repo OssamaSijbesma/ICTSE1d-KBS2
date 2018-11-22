@@ -42,7 +42,7 @@ namespace PiaNotes
         public MainPage()
         {
             this.InitializeComponent();
-            
+
             // MIDI zooi
             inputDeviceWatcher =
                 new MidiDeviceWatcher(MidiInPort.GetDeviceSelector(), midiInPortListBox, Dispatcher);
