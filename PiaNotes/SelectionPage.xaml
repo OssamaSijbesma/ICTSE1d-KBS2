@@ -28,13 +28,13 @@
                        />
 
 
-            <StackPanel x:Name="MIDIFilesSP"
+            <StackPanel x:Name="MIDIFilesSP" BorderBrush="White" BorderThickness="2"
                        MinHeight="30" MinWidth="250"
-                       RelativePanel.AlignLeftWithPanel="True"
-                       RelativePanel.AlignRightWithPanel="True"
-                       RelativePanel.AlignBottomWithPanel="True"
+                       RelativePanel.AlignLeftWith="MIDIFiles"
+                       RelativePanel.AlignRightWith="MIDIFiles"
+                       RelativePanel.AlignBottomWith="MIDIFiles"
                        RelativePanel.Below="MenuStrip"
-                       Margin="30,50,30,90">
+                       Margin="30,50,30,100">
             </StackPanel>
 
             <Button x:Name="New" Content="New" Click="NewMIDIFile"

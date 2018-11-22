@@ -1,25 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
-using Windows.Devices.Enumeration;
-using Windows.Devices.Midi;
-using System.Threading.Tasks;
-using Windows.UI.Xaml.Navigation;
 using Windows.ApplicationModel.Core;
 using Windows.UI.ViewManagement;
 using Windows.UI;
 using Windows.UI.Xaml.Shapes;
-using System.Threading;
 using PiaNotes.Views;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
@@ -40,10 +27,7 @@ namespace PiaNotes
 
         private enum PianoKey { C, D, E, F, G, A, B };
         private enum PianoKeySharp { Csharp, Dsharp, Fsharp, Gsharp, Asharp };
-
-        MidiDeviceWatcher inputDeviceWatcher;
-        MidiDeviceWatcher outputDeviceWatcher;
-
+        
         public MainPage()
         {
             this.InitializeComponent();
@@ -250,16 +234,12 @@ namespace PiaNotes
         // Creates the sidebar.
         public void CreateSidebar()
         {
-            int windowHeight = Convert.ToInt32(Window.Current.Bounds.Height);
-            
             SidebarSP.Children.Clear();
 
             for (int i = 1; i < 15; i++)
             {
                 StackPanel MusicPieceSP = new StackPanel();
-                MusicPieceSP.MinHeight = 30;
-                MusicPieceSP.MinWidth = 250;
-
+                
                 // Creates rectangle for MIDI preview.
                 Rectangle musicSheetRectangle = new Rectangle();
                 musicSheetRectangle.Name = $"Music Piece #{i}";
