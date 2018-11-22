@@ -16,14 +16,14 @@ using Windows.UI.ViewManagement;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
-namespace PiaNotes
+namespace PiaNotes.Views
 {
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class Credits : Page
+    public sealed partial class CreditsPage : Page
     {
-        public Credits()
+        public CreditsPage()
         {
             this.InitializeComponent();
 

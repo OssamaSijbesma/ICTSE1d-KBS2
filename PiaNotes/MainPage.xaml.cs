@@ -57,8 +57,6 @@ namespace PiaNotes
 
             CreateKeyboard();
             CreateSidebar();
-
-
         }
 
         // Menustrip: File > New MIDI File
@@ -92,14 +90,14 @@ namespace PiaNotes
         // Menustrip: Options > Settings
         private void OptionsSettings_Click(object sender, RoutedEventArgs e)
         {
-            this.Frame.Navigate(typeof(Settings));
+            this.Frame.Navigate(typeof(SettingsPage));
         }
 
 
         // Menustrip: Options > Credits
         private void OptionsCredits_Click(object sender, RoutedEventArgs e)
         {
-            this.Frame.Navigate(typeof(Credits));
+            this.Frame.Navigate(typeof(CreditsPage));
         }
 
         // Sidebar: More

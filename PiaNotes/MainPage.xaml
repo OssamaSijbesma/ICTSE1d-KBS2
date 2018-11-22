@@ -10,9 +10,6 @@
 
 
     <Grid>
-        <ListBox x:Name="midiInPortListBox" SelectionChanged="midiInPortListBox_SelectionChanged" Margin="252,250,709,250" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-        <ListBox x:Name="midiOutPortListBox" SelectionChanged="midiOutPortListBox_SelectionChanged" Margin="796,250,144,250" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-
         <RelativePanel Background="#162632">
 
             <Rectangle x:Name="KeyboardBG" Stroke="Black"

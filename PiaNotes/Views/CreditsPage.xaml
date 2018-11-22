@@ -1,5 +1,5 @@
 ﻿<Page
-    x:Class="PiaNotes.Credits"
+    x:Class="PiaNotes.Views.CreditsPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:PiaNotes"
