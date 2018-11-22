@@ -70,7 +70,6 @@ namespace PiaNotes
                 new MidiDeviceWatcher(MidiOutPort.GetDeviceSelector(), midiOutPortListBox, Dispatcher);
 
             outputDeviceWatcher.StartWatcher();
-            
         }
 
         // Menustrip: File > New MIDI File
@@ -149,10 +148,14 @@ namespace PiaNotes
             if (SidebarIsOpen)
             {
                 Sidebar.MinWidth = 0;
+                SidebarSP.MinWidth = 0;
+                SidebarSP.Margin = new Thickness(-250,0,0,0);
             }
             else
             {
                 Sidebar.MinWidth = 250;
+                SidebarSP.MinWidth = 250;
+                SidebarSP.Margin = new Thickness(0, 0, 0, 0);
             }
             SidebarIsOpen = !SidebarIsOpen;
         }
@@ -292,11 +295,6 @@ namespace PiaNotes
                 MusicPieceSP.Children.Add(musicSheetRectangle);
 
                 SidebarSP.Children.Add(MusicPieceSP);
-
-                /*
-                SidebarSP.Children.Add(musicSheetTextBlock);
-                SidebarSP.Children.Add(musicSheetRectangle);
-                */
             }
 
             Button btn_SidebarMore = new Button();
