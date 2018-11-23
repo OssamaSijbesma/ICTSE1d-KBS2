@@ -5,6 +5,7 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.ViewManagement;
 using Windows.UI;
 using Windows.UI.Xaml.Shapes;
+using Windows.ApplicationModel.Core;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -21,6 +22,11 @@ namespace PiaNotes.Views
 
             var appView = ApplicationView.GetForCurrentView();
             appView.Title = "Select MIDI";
+            
+            // Titlebar
+            var coreTitleBar = CoreApplication.GetCurrentView().TitleBar;
+            coreTitleBar.ExtendViewIntoTitleBar = false;
+
 
             CreateMostRecent();
         }

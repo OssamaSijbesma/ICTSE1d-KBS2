@@ -46,13 +46,21 @@
                        />
 
 
-            <StackPanel x:Name="MIDIFilesSP" BorderBrush="White" BorderThickness="2"
+            <StackPanel x:Name="MIDIFilesSP"
                        MinHeight="30" MinWidth="250"
                        RelativePanel.AlignLeftWith="MIDIFiles"
                        RelativePanel.AlignRightWith="MIDIFiles"
                        RelativePanel.AlignBottomWith="MIDIFiles"
                        RelativePanel.Below="MenuStrip"
                        Margin="30,50,30,100">
+
+                <StackPanel x:Name="obj1" MinHeight="30" Width="250" RelativePanel.AlignLeftWith="" HorizontalAlignment="Left">
+                    
+                </StackPanel>
+                <StackPanel x:Name="obj2" MinHeight="30" Width="250" RelativePanel.LeftOf="obj1" HorizontalAlignment="Left">
+
+                </StackPanel>
+                
             </StackPanel>
 
             <Button x:Name="New" Content="New" Click="NewMIDIFile"
