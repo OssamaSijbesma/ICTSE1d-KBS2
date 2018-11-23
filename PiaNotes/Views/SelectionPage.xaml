@@ -1,4 +1,4 @@
-﻿<Page 
+﻿<Page SizeChanged="Page_SizeChanged"
     x:Class="PiaNotes.Views.SelectionPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"

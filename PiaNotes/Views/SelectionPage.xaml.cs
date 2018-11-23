@@ -108,7 +108,9 @@ namespace PiaNotes.Views
             int windowWidth = Convert.ToInt32(Window.Current.Bounds.Width);
             int amountHeight = (windowHeight - 35 - 150) / (90);
             int amountWidth = (windowWidth - 80) / (280);
+            int amount = amountHeight * amountWidth;
             int count = 0;
+            Options.Content = amount;
 
             // Iterates through the sidebar children and decides whether or not a child should be shown or not. 
             foreach (object child in MIDIFilesWG.Children)
@@ -116,7 +118,7 @@ namespace PiaNotes.Views
                 count++;
                 if (child is StackPanel)
                 {
-                    if (count <= amountHeight * amountWidth)
+                    if (count <= amount)
                     {
                         (child as StackPanel).Visibility = Visibility.Visible;
                     }
@@ -127,6 +129,13 @@ namespace PiaNotes.Views
                 }
             }
         }
+
+        // Is executed when the window is resized.
+        private void Page_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            UpdateMostRecent();
+        }
+
 
         // New MIDI File
         private void NewMIDIFile(object sender, RoutedEventArgs e)
