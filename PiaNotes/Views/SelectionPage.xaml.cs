@@ -75,11 +75,14 @@ namespace PiaNotes.Views
             {
                 StackPanel MusicPieceSP = new StackPanel();
                 MusicPieceSP.Width = 280;
+                MusicPieceSP.Name = $"Music Piece #{i}";
+                MusicPieceSP.Tapped += Preview_Tapped;
 
                 // Creates rectangle for MIDI preview.
                 Rectangle musicSheetRectangle = new Rectangle();
-                musicSheetRectangle.Name = $"Music Piece #{i}";
+                musicSheetRectangle.Name = MusicPieceSP.Name;
                 musicSheetRectangle.Stroke = new SolidColorBrush(Colors.White);
+                musicSheetRectangle.Fill = new SolidColorBrush(Colors.Transparent);
                 musicSheetRectangle.StrokeThickness = 1;
                 musicSheetRectangle.Height = 50;
                 musicSheetRectangle.Width = 260;
@@ -91,7 +94,7 @@ namespace PiaNotes.Views
                 musicSheetTextBlock.TextAlignment = TextAlignment.Center;
                 musicSheetTextBlock.Height = 30;
                 musicSheetTextBlock.Margin = new Thickness(0, 10, 0, 0);
-                musicSheetTextBlock.Text = musicSheetRectangle.Name;
+                musicSheetTextBlock.Text = MusicPieceSP.Name;
 
                 // Adds rectangle and children to stackpanel.
                 MusicPieceSP.Children.Add(musicSheetTextBlock);
@@ -106,11 +109,10 @@ namespace PiaNotes.Views
         {
             int windowHeight = Convert.ToInt32(Window.Current.Bounds.Height);
             int windowWidth = Convert.ToInt32(Window.Current.Bounds.Width);
-            int amountHeight = (windowHeight - 35 - 150) / (90);
+            int amountHeight = (windowHeight - 35 - 160) / (90);
             int amountWidth = (windowWidth - 80) / (280);
             int amount = amountHeight * amountWidth;
             int count = 0;
-            Options.Content = amount;
 
             // Iterates through the sidebar children and decides whether or not a child should be shown or not. 
             foreach (object child in MIDIFilesWG.Children)
@@ -136,6 +138,11 @@ namespace PiaNotes.Views
             UpdateMostRecent();
         }
 
+        // Is executed when the window is resized.
+        private void Preview_Tapped(object sender, RoutedEventArgs e)
+        {
+            // 
+        }
 
         // New MIDI File
         private void NewMIDIFile(object sender, RoutedEventArgs e)

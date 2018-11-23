@@ -51,7 +51,7 @@
                        RelativePanel.AlignLeftWith="MIDIFiles"
                        RelativePanel.AlignRightWith="MIDIFiles"
                        RelativePanel.AlignBottomWith="MIDIFiles"
-                       RelativePanel.Below="MenuStrip"
+                       RelativePanel.Below="MenuStrip" HorizontalAlignment="Center"
                        Margin="40,50,40,100" Orientation="Horizontal">
             </VariableSizedWrapGrid>
 
