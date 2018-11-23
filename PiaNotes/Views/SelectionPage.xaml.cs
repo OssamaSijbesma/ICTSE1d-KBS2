@@ -37,31 +37,6 @@ namespace PiaNotes.Views
             //this.Frame.Navigate(typeof(SelectionPage));
         }
 
-
-
-        //private async void OptionsPractice_Click(object sender, RoutedEventArgs e)
-        //{
-        //    if (Settings.midiInPort != null && Settings.midiOutPort != null)
-        //        // Go to the practice page
-        //        this.Frame.Navigate(typeof(PracticePage));
-        //    else
-        //    {
-        //        // Create ContenDialog object
-        //        ContentDialog noMidiInOut = new ContentDialog
-        //        {
-        //            Title = "There is no MIDI in- or output!",
-        //            Content = "Check your MIDI input and output device before practicing.",
-        //            CloseButtonText = "Ok"
-        //        };
-
-        //        // Show dialog
-        //        await noMidiInOut.ShowAsync();
-
-        //        // Go to the settings page
-        //        this.Frame.Navigate(typeof(SettingsPage));
-        //    }
-        //}
-
         public void CreateMostRecent()
         {
             for (int i = 1; i < 10; i++)
