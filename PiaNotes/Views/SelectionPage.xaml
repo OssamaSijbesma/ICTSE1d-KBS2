@@ -1,4 +1,4 @@
-﻿<Page SizeChanged="Page_SizeChanged"
+﻿<Page 
     x:Class="PiaNotes.Views.SelectionPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -46,29 +46,21 @@
                        />
 
 
-            <StackPanel x:Name="MIDIFilesSP"
+            <VariableSizedWrapGrid x:Name="MIDIFilesWG" 
                        MinHeight="30" MinWidth="250"
                        RelativePanel.AlignLeftWith="MIDIFiles"
                        RelativePanel.AlignRightWith="MIDIFiles"
                        RelativePanel.AlignBottomWith="MIDIFiles"
                        RelativePanel.Below="MenuStrip"
-                       Margin="30,50,30,100">
+                       Margin="40,50,40,100" Orientation="Horizontal">
+            </VariableSizedWrapGrid>
 
-                <StackPanel x:Name="obj1" MinHeight="30" Width="250" RelativePanel.AlignLeftWith="" HorizontalAlignment="Left">
-                    
-                </StackPanel>
-                <StackPanel x:Name="obj2" MinHeight="30" Width="250" RelativePanel.LeftOf="obj1" HorizontalAlignment="Left">
-
-                </StackPanel>
-                
-            </StackPanel>
-
+            
             <Button x:Name="New" Content="New" Click="NewMIDIFile"
                     HorizontalAlignment="Center" VerticalAlignment="Center" Background="#253847"
                     RelativePanel.AlignBottomWith="MIDIFiles"
                     RelativePanel.AlignRightWith="MIDIFiles"
-                    Margin="0,0,50,30"
-                    />
+                    Margin="0,0,50,30"/>
         </RelativePanel>
     </Grid>
 </Page>

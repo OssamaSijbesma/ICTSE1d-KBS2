@@ -68,12 +68,13 @@ namespace PiaNotes.Views
         //    }
         //}
 
+        // Creates the previews of the most recent MIDI files.
         public void CreateMostRecent()
         {
-            for (int i = 1; i < 10; i++)
+            for (int i = 1; i < 21; i++)
             {
                 StackPanel MusicPieceSP = new StackPanel();
-                MusicPieceSP.Width = 250;
+                MusicPieceSP.Width = 280;
 
                 // Creates rectangle for MIDI preview.
                 Rectangle musicSheetRectangle = new Rectangle();
@@ -81,7 +82,7 @@ namespace PiaNotes.Views
                 musicSheetRectangle.Stroke = new SolidColorBrush(Colors.White);
                 musicSheetRectangle.StrokeThickness = 1;
                 musicSheetRectangle.Height = 50;
-                musicSheetRectangle.Width = 230;
+                musicSheetRectangle.Width = 260;
                 musicSheetRectangle.Margin = new Thickness(0, 0, 0, 0);
                 
                 // Creates textblock for MIDI name.
@@ -95,16 +96,36 @@ namespace PiaNotes.Views
                 // Adds rectangle and children to stackpanel.
                 MusicPieceSP.Children.Add(musicSheetTextBlock);
                 MusicPieceSP.Children.Add(musicSheetRectangle);
-                MusicPieceSP.HorizontalAlignment = HorizontalAlignment.Left;
 
-                MIDIFilesSP.Children.Add(MusicPieceSP);
+                MIDIFilesWG.Children.Add(MusicPieceSP);
             }
         }
 
-        // Is executed when the window is resized.
-        private void Page_SizeChanged(object sender, SizeChangedEventArgs e)
+        // Updates the most recent MIDI files. Is used after first initializing or after resizing the window height.
+        public void UpdateMostRecent()
         {
-            
+            int windowHeight = Convert.ToInt32(Window.Current.Bounds.Height);
+            int windowWidth = Convert.ToInt32(Window.Current.Bounds.Width);
+            int amountHeight = (windowHeight - 35 - 150) / (90);
+            int amountWidth = (windowWidth - 80) / (280);
+            int count = 0;
+
+            // Iterates through the sidebar children and decides whether or not a child should be shown or not. 
+            foreach (object child in MIDIFilesWG.Children)
+            {
+                count++;
+                if (child is StackPanel)
+                {
+                    if (count <= amountHeight * amountWidth)
+                    {
+                        (child as StackPanel).Visibility = Visibility.Visible;
+                    }
+                    else
+                    {
+                        (child as StackPanel).Visibility = Visibility.Collapsed;
+                    }
+                }
+            }
         }
 
         // New MIDI File
