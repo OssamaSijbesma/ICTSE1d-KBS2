@@ -15,5 +15,16 @@ namespace PiaNotes
         public static Boolean feedback = true;
         public static double volume = 0;
         public static double velocity = 90;
+
+        //Octave Settings
+        //OctaveAmount is the amount of octaves on your screen at once
+        public static int OctaveAmount = 5;
+        //OctaveStart is the starting location of the octaves frequenty
+        public static int OctaveStart = 3;
+
+        //Feedback Colours in RGB
+        public static byte R = 43;
+        public static byte G = 60;
+        public static byte B = 73;
     }
 }

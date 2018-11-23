@@ -29,15 +29,13 @@ namespace PiaNotes.Views
     public sealed partial class PracticePage : Page
     {
         public bool KeyboardIsOpen { get; set; } = true;
-        public int OctavesAmount { get; set; } = 5;
 
         private List<Rectangle> keysWhite = new List<Rectangle>();
         private List<Rectangle> keysBlack = new List<Rectangle>();
 
-        private enum PianoKey { C, D, E, F, G, A, B };
-        private enum PianoKeySharp { Csharp, Dsharp, Fsharp, Gsharp, Asharp };
-
-        List<Rectangle> Notes = new List<Rectangle>();
+        private Rectangle[] Notes = new Rectangle[127];
+        private enum PianoKey { C = 0, D = 2, E = 4, F = 5, G = 7, A = 9, B = 11 };
+        private enum PianoKeySharp { CSharp = 1, DSharp = 3, FSharp = 6, GSharp = 8, ASharp = 10 };
 
         public PracticePage()
         {
@@ -54,23 +52,6 @@ namespace PiaNotes.Views
             coreTitleBar.ExtendViewIntoTitleBar = false;
 
             CreateKeyboard();
-
-            // zet notes in array zodat ze gekleurd kunnen worden, de "s" in bijv. cs0, cs2, cs4 betekent # / fis.
-            //List<Rectangle> Notes = new List<Rectangle>(new Rectangle[] 
-
-            //    { cn1, csn1, dn1, dsn1, en1, esn1, fn1, fsn1, gn1, gsn1, an1, asn1, bn1, bsn1
-            //    , c0, cs0, d0, ds0, e0, es0, f0, fs0, g0, gs0, a0, as0, b0, bs0
-            //    , c1, cs1, d1, ds1, e1, es1, f1, fs1, g1, gs1, a1, as1, b1, bs1
-            //    , c2, cs2, d2, ds2, e2, es2, f2, fs2, g2, gs2, a2, as2, b2, bs2
-            //    , c3, cs3, d3, ds3, e3, es3, f3, fs3, g3, gs3, a3, as3, b3, bs3
-            //    , c4, cs4, d4, ds4, e4, es4, f4, fs4, g4, gs4, a4, as4, b4, bs4
-            //    , c5, cs5, d5, ds5, e5, es5, f5, fs5, g5, gs5, a5, as5, b5, bs5
-            //    , c6, cs6, d6, ds6, 5e6, es6, f6, fs6, g6, gs6, a6, as6, b6, bs6
-            //    , c7, cs7, d7, ds7, e7, es7, f7, fs7, g7, gs7, a7, as7, b7, bs7
-            //    , c8, cs8, d8, ds8, e8, es8, f8, fs8, g8, gs8, a8, as8, b8, bs8
-            //    , c9, cs9, d9, ds9, e9, es9, f9, fs9, g9, gs9, a9, as9, b9, bs9
-            //    , c10, cs10, d10, ds10, e10, es10, f10, fs10, g10, gs10, a10, as10, b10, bs10});
-
         }
 
         private void MidiInPort_MessageReceived(MidiInPort sender, MidiMessageReceivedEventArgs args)
@@ -141,7 +122,15 @@ namespace PiaNotes.Views
                 byte note = ((MidiNoteOnMessage)IM).Note;
                 try
                 {
-                    Notes[note].Fill = new SolidColorBrush(Windows.UI.Colors.Blue);
+                    byte neg = 25;
+                    if (Notes[note].Name.Contains("Sharp"))
+                    {
+                        Notes[note].Fill = new SolidColorBrush(Windows.UI.Color.FromArgb(255, DoubleToByte(Settings.R - neg), DoubleToByte(Settings.G - neg), DoubleToByte(Settings.B - neg)));
+                    }
+                    else
+                    {
+                        Notes[note].Fill = new SolidColorBrush(Windows.UI.Color.FromArgb(255, Settings.R, Settings.G, Settings.B));
+                    }
                 }
                 catch (Exception e)
                 {
@@ -157,7 +146,13 @@ namespace PiaNotes.Views
                 byte note = ((MidiNoteOffMessage)IM).Note;
                 try
                 {
-                    Notes[note].Fill = new SolidColorBrush(Windows.UI.Colors.White);
+                    if (Notes[note].Name.Contains("Sharp"))
+                    {
+                        Notes[note].Fill = new SolidColorBrush(Windows.UI.Colors.Black);
+                    } else
+                    {
+                        Notes[note].Fill = new SolidColorBrush(Windows.UI.Colors.White);
+                    }
                 }
                 catch (Exception e)
                 {
@@ -237,26 +232,77 @@ namespace PiaNotes.Views
         // Creates the keyboard.
         public void CreateKeyboard()
         {
-            for (int i = 0; i < OctavesAmount; i++)
+            for (int i = Settings.OctaveStart; i < (Settings.OctaveAmount + Settings.OctaveStart); i++)
             {
-                for (int j = 0; j < 7; j++)
+                for (int j = 0; j < 12; j++)
                 {
-                    Rectangle keyWhiteRect = new Rectangle();
-                    keyWhiteRect.Name = $"{((PianoKey)j).ToString()}{i}";
-                    keyWhiteRect.Stroke = new SolidColorBrush(Colors.Black);
-                    keyWhiteRect.Fill = new SolidColorBrush(Colors.White);
-                    keyWhiteRect.StrokeThickness = 4;
-                    keyWhiteRect.Height = 200;
-                    KeysWhiteSP.Children.Add(keyWhiteRect);
-                }
-
-                for (int j = 0; j < 5; j++)
-                {
-                    Rectangle keyBlackRect = new Rectangle();
-                    keyBlackRect.Name = $"{((PianoKeySharp)j).ToString()}{i}";
-                    keyBlackRect.Fill = new SolidColorBrush(Colors.Black);
-                    keyBlackRect.Height = 150;
-                    KeysBlackSP.Children.Add(keyBlackRect);
+                    switch (j)
+                    {
+                        case 1:
+                            Rectangle keyBlackRect = new Rectangle();
+                            keyBlackRect.Name = $"{((PianoKeySharp)j).ToString()}{i}";
+                            keyBlackRect.Fill = new SolidColorBrush(Colors.Black);
+                            keyBlackRect.Height = 150;
+                            KeysBlackSP.Children.Add(keyBlackRect);
+                            if (i == 0) Notes[j] = (keyBlackRect);
+                            else Notes[(j + (i * 12))] = (keyBlackRect);
+                            break;
+                        case 3:
+                            Rectangle keyBlackRect3 = new Rectangle();
+                            keyBlackRect3.Name = $"{((PianoKeySharp)j).ToString()}{i}";
+                            keyBlackRect3.Fill = new SolidColorBrush(Colors.Black);
+                            keyBlackRect3.Height = 150;
+                            KeysBlackSP.Children.Add(keyBlackRect3);
+                            if (i == 0) Notes[j] = (keyBlackRect3);
+                            else Notes[(j + (i * 12))] = (keyBlackRect3);
+                            break;
+                        case 6:
+                            Rectangle keyBlackRect6 = new Rectangle();
+                            keyBlackRect6.Name = $"{((PianoKeySharp)j).ToString()}{i}";
+                            keyBlackRect6.Fill = new SolidColorBrush(Colors.Black);
+                            keyBlackRect6.Height = 150;
+                            KeysBlackSP.Children.Add(keyBlackRect6);
+                            if (i == 0) Notes[j] = (keyBlackRect6);
+                            else Notes[(j + (i * 12))] = (keyBlackRect6);
+                            break;
+                        case 8:
+                            Rectangle keyBlackRect8 = new Rectangle();
+                            keyBlackRect8.Name = $"{((PianoKeySharp)j).ToString()}{i}";
+                            keyBlackRect8.Fill = new SolidColorBrush(Colors.Black);
+                            keyBlackRect8.Height = 150;
+                            KeysBlackSP.Children.Add(keyBlackRect8);
+                            if (i == 0) Notes[j] = (keyBlackRect8);
+                            else Notes[(j + (i * 12))] = (keyBlackRect8);
+                            break;
+                        case 10:
+                            Rectangle keyBlackRect10 = new Rectangle();
+                            keyBlackRect10.Name = $"{((PianoKeySharp)j).ToString()}{i}";
+                            keyBlackRect10.Fill = new SolidColorBrush(Colors.Black);
+                            keyBlackRect10.Height = 150;
+                            KeysBlackSP.Children.Add(keyBlackRect10);
+                            if (i == 0) Notes[j] = (keyBlackRect10);
+                            else Notes[(j + (i * 12))] = (keyBlackRect10);
+                            break;
+                        default:
+                            Rectangle keyWhiteRect = new Rectangle();
+                            keyWhiteRect.Name = $"{((PianoKey)j).ToString()}{i}";
+                            keyWhiteRect.Stroke = new SolidColorBrush(Colors.Black);
+                            keyWhiteRect.Fill = new SolidColorBrush(Colors.White);
+                            keyWhiteRect.StrokeThickness = 4;
+                            keyWhiteRect.Height = 200;
+                            KeysWhiteSP.Children.Add(keyWhiteRect);
+                            System.Diagnostics.Debug.WriteLine(keyWhiteRect.Name);
+                            if (j == 0)
+                            {
+                                if (i == 0) Notes[j] = (keyWhiteRect);
+                                else Notes[(i * 12)] = (keyWhiteRect);
+                            } else
+                            {
+                                if (i == 0) Notes[j] = (keyWhiteRect);
+                                else Notes[(j + (i * 12))] = (keyWhiteRect);
+                            }
+                            break;
+                    }
                 }
             }
             UpdateKeyboard();
@@ -268,7 +314,7 @@ namespace PiaNotes.Views
             int windowWidth = Convert.ToInt32(Window.Current.Bounds.Width);
 
             // Count white keys.
-            int keyWhiteAmount = 7 * OctavesAmount;
+            int keyWhiteAmount = 7 * Settings.OctaveAmount;
 
             // Set width for white keys.
             foreach (Rectangle key in KeysWhiteSP.Children)
@@ -303,7 +349,7 @@ namespace PiaNotes.Views
                     key.Width = keyWhiteWidth / 100 * 60;
                 }
 
-                if (key.Name.Contains("Csharp"))
+                if (key.Name.Contains("CSharp"))
                 {
                     // Calculate location for C# key.
                     // The first key has a different calculation than the rest, because there are no prior keys.
@@ -319,13 +365,13 @@ namespace PiaNotes.Views
                     }
                     key.Margin = new Thickness(location, 0, 0, 50);
                 }
-                else if (key.Name.Contains("Dsharp") || key.Name.Contains("Gsharp") || key.Name.Contains("Asharp"))
+                else if (key.Name.Contains("DSharp") || key.Name.Contains("GSharp") || key.Name.Contains("ASharp"))
                 {
                     // Calculate location for D#/G#/A# keys.
                     double location = keyWhiteWidth - key.Width;
                     key.Margin = new Thickness(location, 0, 0, 50);
                 }
-                else if (key.Name.Contains("Fsharp"))
+                else if (key.Name.Contains("FSharp"))
                 {
                     // Calculate location for F# key.
                     double location = keyWhiteWidth * 2 - key.Width;
