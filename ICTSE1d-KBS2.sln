@@ -5,18 +5,23 @@ VisualStudioVersion = 15.0.28306.52
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PiaNotes", "PiaNotes\PiaNotes.csproj", "{DAE3A593-3437-44C6-B3C8-1A1E4D74097A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PiaNotes.UnitTests", "PiaNotes.UnitTests\PiaNotes.UnitTests.csproj", "{D5ED9139-EC0B-4CB2-8611-B0FD39AD1FAF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
 		Debug|ARM = Debug|ARM
 		Debug|ARM64 = Debug|ARM64
 		Debug|x64 = Debug|x64
 		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
 		Release|ARM = Release|ARM
 		Release|ARM64 = Release|ARM64
 		Release|x64 = Release|x64
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DAE3A593-3437-44C6-B3C8-1A1E4D74097A}.Debug|Any CPU.ActiveCfg = Debug|x86
 		{DAE3A593-3437-44C6-B3C8-1A1E4D74097A}.Debug|ARM.ActiveCfg = Debug|ARM
 		{DAE3A593-3437-44C6-B3C8-1A1E4D74097A}.Debug|ARM.Build.0 = Debug|ARM
 		{DAE3A593-3437-44C6-B3C8-1A1E4D74097A}.Debug|ARM.Deploy.0 = Debug|ARM
@@ -29,6 +34,7 @@ Global
 		{DAE3A593-3437-44C6-B3C8-1A1E4D74097A}.Debug|x86.ActiveCfg = Debug|x86
 		{DAE3A593-3437-44C6-B3C8-1A1E4D74097A}.Debug|x86.Build.0 = Debug|x86
 		{DAE3A593-3437-44C6-B3C8-1A1E4D74097A}.Debug|x86.Deploy.0 = Debug|x86
+		{DAE3A593-3437-44C6-B3C8-1A1E4D74097A}.Release|Any CPU.ActiveCfg = Release|x86
 		{DAE3A593-3437-44C6-B3C8-1A1E4D74097A}.Release|ARM.ActiveCfg = Release|ARM
 		{DAE3A593-3437-44C6-B3C8-1A1E4D74097A}.Release|ARM.Build.0 = Release|ARM
 		{DAE3A593-3437-44C6-B3C8-1A1E4D74097A}.Release|ARM.Deploy.0 = Release|ARM
@@ -41,6 +47,32 @@ Global
 		{DAE3A593-3437-44C6-B3C8-1A1E4D74097A}.Release|x86.ActiveCfg = Release|x86
 		{DAE3A593-3437-44C6-B3C8-1A1E4D74097A}.Release|x86.Build.0 = Release|x86
 		{DAE3A593-3437-44C6-B3C8-1A1E4D74097A}.Release|x86.Deploy.0 = Release|x86
+		{D5ED9139-EC0B-4CB2-8611-B0FD39AD1FAF}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{D5ED9139-EC0B-4CB2-8611-B0FD39AD1FAF}.Debug|ARM.ActiveCfg = Debug|ARM
+		{D5ED9139-EC0B-4CB2-8611-B0FD39AD1FAF}.Debug|ARM.Build.0 = Debug|ARM
+		{D5ED9139-EC0B-4CB2-8611-B0FD39AD1FAF}.Debug|ARM.Deploy.0 = Debug|ARM
+		{D5ED9139-EC0B-4CB2-8611-B0FD39AD1FAF}.Debug|ARM64.ActiveCfg = Debug|ARM64
+		{D5ED9139-EC0B-4CB2-8611-B0FD39AD1FAF}.Debug|ARM64.Build.0 = Debug|ARM64
+		{D5ED9139-EC0B-4CB2-8611-B0FD39AD1FAF}.Debug|ARM64.Deploy.0 = Debug|ARM64
+		{D5ED9139-EC0B-4CB2-8611-B0FD39AD1FAF}.Debug|x64.ActiveCfg = Debug|x64
+		{D5ED9139-EC0B-4CB2-8611-B0FD39AD1FAF}.Debug|x64.Build.0 = Debug|x64
+		{D5ED9139-EC0B-4CB2-8611-B0FD39AD1FAF}.Debug|x64.Deploy.0 = Debug|x64
+		{D5ED9139-EC0B-4CB2-8611-B0FD39AD1FAF}.Debug|x86.ActiveCfg = Debug|x86
+		{D5ED9139-EC0B-4CB2-8611-B0FD39AD1FAF}.Debug|x86.Build.0 = Debug|x86
+		{D5ED9139-EC0B-4CB2-8611-B0FD39AD1FAF}.Debug|x86.Deploy.0 = Debug|x86
+		{D5ED9139-EC0B-4CB2-8611-B0FD39AD1FAF}.Release|Any CPU.ActiveCfg = Release|x86
+		{D5ED9139-EC0B-4CB2-8611-B0FD39AD1FAF}.Release|ARM.ActiveCfg = Release|ARM
+		{D5ED9139-EC0B-4CB2-8611-B0FD39AD1FAF}.Release|ARM.Build.0 = Release|ARM
+		{D5ED9139-EC0B-4CB2-8611-B0FD39AD1FAF}.Release|ARM.Deploy.0 = Release|ARM
+		{D5ED9139-EC0B-4CB2-8611-B0FD39AD1FAF}.Release|ARM64.ActiveCfg = Release|ARM64
+		{D5ED9139-EC0B-4CB2-8611-B0FD39AD1FAF}.Release|ARM64.Build.0 = Release|ARM64
+		{D5ED9139-EC0B-4CB2-8611-B0FD39AD1FAF}.Release|ARM64.Deploy.0 = Release|ARM64
+		{D5ED9139-EC0B-4CB2-8611-B0FD39AD1FAF}.Release|x64.ActiveCfg = Release|x64
+		{D5ED9139-EC0B-4CB2-8611-B0FD39AD1FAF}.Release|x64.Build.0 = Release|x64
+		{D5ED9139-EC0B-4CB2-8611-B0FD39AD1FAF}.Release|x64.Deploy.0 = Release|x64
+		{D5ED9139-EC0B-4CB2-8611-B0FD39AD1FAF}.Release|x86.ActiveCfg = Release|x86
+		{D5ED9139-EC0B-4CB2-8611-B0FD39AD1FAF}.Release|x86.Build.0 = Release|x86
+		{D5ED9139-EC0B-4CB2-8611-B0FD39AD1FAF}.Release|x86.Deploy.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

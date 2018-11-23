@@ -31,7 +31,7 @@ namespace PiaNotes
         {
             this.InitializeComponent();
             var db = new Databaser();
-            db.Connect();
+            var result = db.SearchNumber(1,1);
         }
 
         private void Navigation_Click(object sender, RoutedEventArgs e)
