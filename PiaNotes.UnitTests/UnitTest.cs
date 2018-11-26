@@ -91,5 +91,79 @@ namespace PianNotes.UnitTests
             //Assert
             Assert.AreEqual(1, result.Count);
         }
+
+        //Depends on database
+        [TestMethod]
+        public void Search_AllSearch_AllFromTable()
+        {
+            //Arange
+            var db = new PiaNotes.Databaser();
+
+            //Act
+            var result = db.Search(null,null,null,0,0);
+
+            //Assert
+            Assert.AreEqual(2, result.Count);
+        }
+
+        //Depends on database
+        [TestMethod]
+        public void Search_UseExtra_TestSheet1()
+        {
+            //Arange
+            var db = new PiaNotes.Databaser();
+
+            //Act
+            var result = db.Search("Id,Title,Path", "Id", "1", 1, 0);
+
+            //Assert
+            Assert.AreEqual(1, result[0].Id);
+            Assert.AreEqual("TestSheet", result[0].Title);
+            Assert.AreEqual("C//TestPath", result[0].Path);
+        }
+
+        //Depends on database
+        [TestMethod]
+        public void Search_UseOffset_TestSheet2()
+        {
+            //Arange
+            var db = new PiaNotes.Databaser();
+
+            //Act
+            var result = db.Search(null, null, null, 1, 1);
+
+            //Assert
+            Assert.AreEqual(2, result[0].Id);
+            Assert.AreEqual("TestSheet", result[0].Title);
+            Assert.AreEqual("c//TestSheet2", result[0].Path);
+        }
+
+        //Depends on database
+        [TestMethod]
+        public void Search_WrongWhereBInput_NullResult()
+        {
+            //Arange
+            var db = new PiaNotes.Databaser();
+
+            //Act
+            var result = db.Search(null, "Title", "shfhw", 0, 0);
+
+            //Assert
+            Assert.AreEqual(0, result.Count);
+        }
+
+        //Depends on database
+        [TestMethod]
+        public void Search_WrongWhereAInput_NullResult()
+        {
+            //Arange
+            var db = new PiaNotes.Databaser();
+
+            //Act
+            var result = db.Search(null, "Tittttle", "Testsheet", 0, 0);
+
+            //Assert
+            Assert.AreEqual(0, result.Count);
+        }
     }
 }
