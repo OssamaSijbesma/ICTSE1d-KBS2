@@ -264,6 +264,8 @@ namespace PiaNotes.Views
                             Rectangle keyBlackRect = new Rectangle();
                             keyBlackRect.Name = $"{((PianoKeySharp)j).ToString()}{i}";
                             keyBlackRect.Fill = new SolidColorBrush(Colors.Black);
+                            keyBlackRect.Stroke = new SolidColorBrush(Colors.Black);
+                            keyBlackRect.StrokeThickness = 4;
                             keyBlackRect.Height = 150;
                             KeysBlackSP.Children.Add(keyBlackRect);
                             if (i == 0) Notes[j] = (keyBlackRect);
@@ -273,6 +275,8 @@ namespace PiaNotes.Views
                             Rectangle keyBlackRect3 = new Rectangle();
                             keyBlackRect3.Name = $"{((PianoKeySharp)j).ToString()}{i}";
                             keyBlackRect3.Fill = new SolidColorBrush(Colors.Black);
+                            keyBlackRect3.Stroke = new SolidColorBrush(Colors.Black);
+                            keyBlackRect3.StrokeThickness = 4;
                             keyBlackRect3.Height = 150;
                             KeysBlackSP.Children.Add(keyBlackRect3);
                             if (i == 0) Notes[j] = (keyBlackRect3);
@@ -282,6 +286,8 @@ namespace PiaNotes.Views
                             Rectangle keyBlackRect6 = new Rectangle();
                             keyBlackRect6.Name = $"{((PianoKeySharp)j).ToString()}{i}";
                             keyBlackRect6.Fill = new SolidColorBrush(Colors.Black);
+                            keyBlackRect6.Stroke = new SolidColorBrush(Colors.Black);
+                            keyBlackRect6.StrokeThickness = 4;
                             keyBlackRect6.Height = 150;
                             KeysBlackSP.Children.Add(keyBlackRect6);
                             if (i == 0) Notes[j] = (keyBlackRect6);
@@ -291,6 +297,8 @@ namespace PiaNotes.Views
                             Rectangle keyBlackRect8 = new Rectangle();
                             keyBlackRect8.Name = $"{((PianoKeySharp)j).ToString()}{i}";
                             keyBlackRect8.Fill = new SolidColorBrush(Colors.Black);
+                            keyBlackRect8.Stroke = new SolidColorBrush(Colors.Black);
+                            keyBlackRect8.StrokeThickness = 4;
                             keyBlackRect8.Height = 150;
                             KeysBlackSP.Children.Add(keyBlackRect8);
                             if (i == 0) Notes[j] = (keyBlackRect8);
@@ -300,6 +308,8 @@ namespace PiaNotes.Views
                             Rectangle keyBlackRect10 = new Rectangle();
                             keyBlackRect10.Name = $"{((PianoKeySharp)j).ToString()}{i}";
                             keyBlackRect10.Fill = new SolidColorBrush(Colors.Black);
+                            keyBlackRect10.Stroke = new SolidColorBrush(Colors.Black);
+                            keyBlackRect10.StrokeThickness = 4;
                             keyBlackRect10.Height = 150;
                             KeysBlackSP.Children.Add(keyBlackRect10);
                             if (i == 0) Notes[j] = (keyBlackRect10);
