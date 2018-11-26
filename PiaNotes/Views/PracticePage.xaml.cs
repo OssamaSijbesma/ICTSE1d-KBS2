@@ -28,10 +28,11 @@ namespace PiaNotes.Views
     {
         public bool KeyboardIsOpen { get; set; } = true;
 
+        //List for White keys and Black keys of the keyboard
         private List<Rectangle> keysWhite = new List<Rectangle>();
         private List<Rectangle> keysBlack = new List<Rectangle>();
 
-        // Length of 127 because of 127 notes.
+        // Length of 127 because of 127 notes
         private Rectangle[] Notes = new Rectangle[127];
         private enum PianoKey { C = 0, D = 2, E = 4, F = 5, G = 7, A = 9, B = 11 };
         private enum PianoKeySharp { CSharp = 1, DSharp = 3, FSharp = 6, GSharp = 8, ASharp = 10 };
@@ -40,16 +41,17 @@ namespace PiaNotes.Views
         {
             this.InitializeComponent();
 
-            // Registers a handler for the MessageReceived event.
+            // Registers a handler for the MessageReceived event
             Settings.midiInPort.MessageReceived += MidiInPort_MessageReceived;
 
             var appView = ApplicationView.GetForCurrentView();
-            appView.Title = "";
+            appView.Title = "Practise";
 
-            // Titlebar.
+            //Titlebar
             var coreTitleBar = CoreApplication.GetCurrentView().TitleBar;
             coreTitleBar.ExtendViewIntoTitleBar = false;
             
+            //Create the keyboard to show on the screen
             CreateKeyboard();
         }
 
@@ -57,17 +59,17 @@ namespace PiaNotes.Views
         {
             // Converts received message into IMidiMessage.
             IMidiMessage receivedMidiMessage = args.Message;
-
             System.Diagnostics.Debug.WriteLine(receivedMidiMessage.Timestamp.ToString());
 
             // Checks if a key has been pressed.
             if (receivedMidiMessage.Type == MidiMessageType.NoteOn)
             {
+                //Debug lines to show the Channel Note and Velocity output from the keyboard
                 System.Diagnostics.Debug.WriteLine(((MidiNoteOnMessage)receivedMidiMessage).Channel);
                 System.Diagnostics.Debug.WriteLine(((MidiNoteOnMessage)receivedMidiMessage).Note);
                 System.Diagnostics.Debug.WriteLine(((MidiNoteOnMessage)receivedMidiMessage).Velocity);
 
-                // Retrieves channel, note and velocity from the MidiMessage.
+                // Retrieves channel, note from the MidiMessage, and sets the velocity.
                 byte channel = ((MidiNoteOnMessage)receivedMidiMessage).Channel;
                 byte note = ((MidiNoteOnMessage)receivedMidiMessage).Note;
                 byte velocity;
@@ -80,6 +82,7 @@ namespace PiaNotes.Views
                         // Retrieves the velocity from the played note and then adds the amount of volume the user has set.
                         velocity = ((MidiNoteOnMessage)receivedMidiMessage).Velocity;
                         
+                        //If the velocity surpases the limits of MIDI it will go to the limit, otherwise it will act normally
                         if (velocity + DoubleToByte(Settings.volume) <= 127 && velocity + DoubleToByte(Settings.volume) >= 0)
                         {
                             velocity += DoubleToByte(Settings.volume);
@@ -95,7 +98,7 @@ namespace PiaNotes.Views
                     // Else use velocity from the midimessage, if below a certain amount, no sound will be played.
                 } else velocity = ((MidiNoteOnMessage)receivedMidiMessage).Velocity;
 
-                // Creates the message that will be played.
+                // Creates the message that will be send to play.
                 IMidiMessage midiMessageToSend = new MidiNoteOnMessage(channel, note, velocity);
                 FillKey(midiMessageToSend);
                 Settings.midiOutPort.SendMessage(midiMessageToSend);
@@ -104,6 +107,7 @@ namespace PiaNotes.Views
             // Checks if note has been released.
             if (receivedMidiMessage.Type == MidiMessageType.NoteOff)
             {
+                //Debug lines to show the Channel Note and Velocity output from the keyboard
                 System.Diagnostics.Debug.WriteLine(((MidiNoteOffMessage)receivedMidiMessage).Channel);
                 System.Diagnostics.Debug.WriteLine(((MidiNoteOffMessage)receivedMidiMessage).Note);
                 System.Diagnostics.Debug.WriteLine(((MidiNoteOffMessage)receivedMidiMessage).Velocity);
@@ -126,6 +130,8 @@ namespace PiaNotes.Views
             await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
                 byte note = ((MidiNoteOnMessage)IM).Note;
+                
+                //Try colour the keys
                 try
                 {
                     byte neg = 25;
@@ -143,7 +149,8 @@ namespace PiaNotes.Views
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine(e.Message);
+                    //If it doesn't work, display the error message in the debug console
+                    System.Diagnostics.Debug.WriteLine(e.Message);
                 }
             });
         }
@@ -156,6 +163,7 @@ namespace PiaNotes.Views
                 byte note = ((MidiNoteOffMessage)IM).Note;
                 try
                 {
+                    // The keys original colour will be restored
                     if (Notes[note].Name.Contains("Sharp"))
                     {
                         Notes[note].Fill = new SolidColorBrush(Windows.UI.Colors.Black);
@@ -166,11 +174,11 @@ namespace PiaNotes.Views
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine(e.Message);
+                    //If it doesn't work, display the error message in the debug console
+                    System.Diagnostics.Debug.WriteLine(e.Message);
                 }
             });
         }
-
 
         // Method for converting a double to byte.
         public static byte DoubleToByte(double doubleVal)
@@ -185,8 +193,8 @@ namespace PiaNotes.Views
             }
             catch (System.OverflowException)
             {
-                System.Console.WriteLine(
-                    "Overflow in double-to-byte conversion.");
+                //If it doesn't work, display the error message in the debug console
+                System.Diagnostics.Debug.WriteLine("Overflow in double-to-byte conversion.");
             }
 
             // Byte to double conversion cannot overflow.
@@ -197,7 +205,7 @@ namespace PiaNotes.Views
         // Menustrip: File > New MIDI File
         private void FileNewMIDIFile_Click(object sender, RoutedEventArgs e)
         {
-            // Dialog
+            //TO DO
         }
 
         // Menustrip: File > Open MIDI File
@@ -242,10 +250,14 @@ namespace PiaNotes.Views
         {
             int oct = 0;
             int ky = 0;
+
+            //First go through each Octave to make keys
             for (int i = Settings.OctaveStart; i < (Settings.OctaveAmount + Settings.OctaveStart); i++)
             {
+                //In each Octave make 12 keys, 7 white and 5 black keys
                 for (int j = 0; j < 12; j++)
                 {
+                    //See if the key is a white or black key
                     switch (j)
                     {
                         case 1:
