@@ -70,8 +70,9 @@ namespace PiaNotes.Views
                 // Retrieves channel, note and velocity from the MidiMessage.
                 byte channel = ((MidiNoteOnMessage)receivedMidiMessage).Channel;
                 byte note = ((MidiNoteOnMessage)receivedMidiMessage).Note;
-                // If the player releases the key there should be no sound <-- ???
                 byte velocity;
+                
+                // If the player releases the key there should be no sound
                 if (((MidiNoteOnMessage)receivedMidiMessage).Velocity != 0)
                 {
                     if (Settings.feedback == true)
