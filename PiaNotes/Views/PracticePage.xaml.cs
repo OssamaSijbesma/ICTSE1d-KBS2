@@ -45,7 +45,7 @@ namespace PiaNotes.Views
             Settings.midiInPort.MessageReceived += MidiInPort_MessageReceived;
 
             var appView = ApplicationView.GetForCurrentView();
-            appView.Title = "Practise";
+            appView.Title = "Practice";
 
             //Titlebar
             var coreTitleBar = CoreApplication.GetCurrentView().TitleBar;
