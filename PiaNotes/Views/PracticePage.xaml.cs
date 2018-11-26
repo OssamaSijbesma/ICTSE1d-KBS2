@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -49,7 +49,7 @@ namespace PiaNotes.Views
             // Titlebar.
             var coreTitleBar = CoreApplication.GetCurrentView().TitleBar;
             coreTitleBar.ExtendViewIntoTitleBar = false;
-
+            
             CreateKeyboard();
         }
 
