@@ -145,11 +145,22 @@ namespace PiaNotes.Views
         }
 
         // New MIDI File
-        private void NewMIDIFile(object sender, RoutedEventArgs e)
+        private void NewMIDIFile_Click(object sender, RoutedEventArgs e)
         {
             // Dialog
         }
 
+        // Search bar text
+        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            Search(SearchBar.Text);
+        }
+
+        // Search function.
+        public void Search(string search)
+        {
+            
+        }
 
         /// <summary>
         /// On click standard navigation
@@ -176,5 +187,6 @@ namespace PiaNotes.Views
 
         // Navigate to the selection page
         private void NavSelection_Click(object sender, RoutedEventArgs e) => this.Frame.Navigate(typeof(SelectionPage));
+
     }
 }
