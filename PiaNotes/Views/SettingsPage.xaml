@@ -8,18 +8,18 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" RequestedTheme="Dark">
 
-    <Grid>
-        <RelativePanel Background="#162632" HorizontalAlignment="Stretch" Margin="-10,0,10,0" VerticalAlignment="Stretch">
+    <Grid Margin="0,0,0,0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+        <RelativePanel Background="#162632" Margin="0,0,0,0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
             <Rectangle x:Name="MenuStrip" Fill="#253847"
                        MinHeight="35" MinWidth="250"
                        RelativePanel.AlignLeftWithPanel="True"
-                       RelativePanel.AlignRightWithPanel="True"/>
+                       RelativePanel.AlignRightWithPanel="True" HorizontalAlignment="Stretch" Margin="0,0,0.4,0.2" VerticalAlignment="Stretch"/>
             <Button x:Name="Return" Content="Return" Click="NavBack_Click" 
-                    HorizontalAlignment="Center" RelativePanel.AlignRightWithPanel="True" Background="#253847" />
-            <TextBlock Text="Input devices:" Name="InputText" Style="{StaticResource TitleTextBlockStyle}" Margin="80,136,0.8,-189" 
+     HorizontalAlignment="Left" Background="#253847" RenderTransformOrigin="0.368,0.5" Margin="0,0,0,0" VerticalAlignment="Center" Height="35" Width="74" />
+            <TextBlock Text="Input devices:" Name="InputText" Style="{StaticResource TitleTextBlockStyle}" Margin="64,134,16.8,-187" 
                        RelativePanel.AlignLeftWithPanel="True" RelativePanel.Above="MenuStrip" FontSize="36" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
             <TextBlock Text="Output devices:" Name="OutputText" Style="{StaticResource TitleTextBlockStyle}" Margin="65,301,16.2,-346" 
-                       RelativePanel.AlignLeftWithPanel="True"  RelativePanel.Above="InputText" FontSize="36" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                       RelativePanel.AlignLeftWithPanel="True"  RelativePanel.Above="InputText" FontSize="36" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" RenderTransformOrigin="0.614,0.632"/>
 
             <ListBox x:Name="midiInPortListBox" SelectionChanged="midiInPortListBox_SelectionChanged" 
                      Margin="348,110,0,-206" HorizontalAlignment="Left" RelativePanel.Above="MenuStrip" Width="1082"/>
@@ -28,7 +28,7 @@
             <Slider x:Name="volumeSlider" Minimum ="0" Maximum="100" Header="Volume" ValueChanged="Volume_ValueChanged"
                     Margin="80,400,572,-500" FontSize="36" Width="500" Height="100" RelativePanel.AlignLeftWithPanel="True" RelativePanel.Above="OutputText" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
             <CheckBox  x:Name="Feedback" 
-                       Margin="289,566,-241,-618" Click="Velocity_Checked" FontSize="36" RelativePanel.AlignLeftWithPanel="True" RelativePanel.Above="volumeSlider" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" RenderTransformOrigin="0.5,0.5">
+                       Margin="289,565,-294.6,-606" Click="Velocity_Checked" FontSize="36" RelativePanel.AlignLeftWithPanel="True" RelativePanel.Above="volumeSlider" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
             </CheckBox>
             <TextBlock Margin="80,553,0.2,-641" Text="Set Velocity" TextWrapping="Wrap" Width="195" FontSize="36" RelativePanel.Above="volumeSlider"/>
             <Slider x:Name="velocitySlider" Minimum ="0" Maximum="100" Header="Velocity" ValueChanged="Velocity_ValueChanged"
