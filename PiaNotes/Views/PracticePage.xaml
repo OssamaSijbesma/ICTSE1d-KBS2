@@ -28,11 +28,11 @@
                        RelativePanel.Above="KeyboardBG" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
 
             <Rectangle x:Name="MenuStrip" Fill="#253847"
-                       MinHeight="35" MinWidth="250"
+                       MinHeight="36" MinWidth="250"
                        RelativePanel.AlignLeftWithPanel="True"
                        RelativePanel.AlignRightWithPanel="True"/>
 
-            <Button x:Name="View" Content="View" HorizontalAlignment="Center" VerticalAlignment="Center" Background="#253847" >
+            <Button x:Name="View" MinHeight="36" Content="View" HorizontalAlignment="Center" VerticalAlignment="Center" Background="#253847" >
                 <Button.Flyout>
                     <MenuFlyout>
                         <MenuFlyoutItem Text="Keyboard" Click="ViewKeyboard_Click" />
@@ -40,7 +40,7 @@
                 </Button.Flyout>
             </Button>
 
-            <Button x:Name="Options" Content="Options" HorizontalAlignment="Center" VerticalAlignment="Center" Background="#253847" RelativePanel.RightOf="View">
+            <Button x:Name="Options" MinHeight="36" Content="Options" HorizontalAlignment="Center" VerticalAlignment="Center" Background="#253847" RelativePanel.RightOf="View">
                 <Button.Flyout>
                     <MenuFlyout>
                         <MenuFlyoutItem Text="Open Selection Menu" Click="NavSelection_Click" />

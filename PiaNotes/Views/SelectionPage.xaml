@@ -11,11 +11,12 @@
     <Grid>
         <RelativePanel Background="#162632">
             <Rectangle x:Name="MenuStrip" Fill="#253847"
-                       MinHeight="35" MinWidth="250"
+                       MinHeight="36"
+                       MinWidth="250"
                        RelativePanel.AlignLeftWithPanel="True"
                        RelativePanel.AlignRightWithPanel="True"/>
 
-            <Button x:Name="File" Content="File" HorizontalAlignment="Center" VerticalAlignment="Center" Background="#253847">
+            <Button x:Name="File" MinHeight="36" Content="File" HorizontalAlignment="Center" VerticalAlignment="Center" Background="#253847">
                 <Button.Flyout>
                     <MenuFlyout>
                         <MenuFlyoutItem Text="New MIDI File" Click="FileNewMIDIFile_Click" />
@@ -23,7 +24,7 @@
                 </Button.Flyout>
             </Button>
 
-            <Button x:Name="Options" Content="Options" HorizontalAlignment="Center" VerticalAlignment="Center" Background="#253847" RelativePanel.RightOf="File">
+            <Button x:Name="Options" MinHeight="36" Content="Options" HorizontalAlignment="Center" VerticalAlignment="Center" Background="#253847" RelativePanel.RightOf="File">
                 <Button.Flyout>
                     <MenuFlyout>
                         <MenuFlyoutItem x:Name="nav_practice" Text="Practice" Click="NavPractice_Click" />

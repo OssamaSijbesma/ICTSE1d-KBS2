@@ -11,11 +11,11 @@
     <Grid>
         <RelativePanel Background="#162632">
             <Rectangle x:Name="MenuStrip" Fill="#253847"
-                       MinHeight="35" MinWidth="250"
+                       MinHeight="36" MinWidth="250"
                        RelativePanel.AlignLeftWithPanel="True"
                        RelativePanel.AlignRightWithPanel="True"/>
 
-            <Button x:Name="Return" Content="Return" Click="NavBack_Click" HorizontalAlignment="Center" VerticalAlignment="Center" Background="#253847" />
+            <Button x:Name="Return" MinHeight="36" Content="Return" Click="NavBack_Click" HorizontalAlignment="Center" VerticalAlignment="Center" Background="#253847" />
 
         </RelativePanel>
     </Grid>
