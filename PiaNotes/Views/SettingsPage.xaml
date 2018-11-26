@@ -15,7 +15,7 @@
                        RelativePanel.AlignLeftWithPanel="True"
                        RelativePanel.AlignRightWithPanel="True" HorizontalAlignment="Stretch" Margin="0,0,0.4,0.2" VerticalAlignment="Stretch"/>
             <Button x:Name="Return" MinHeight="36" Content="Return" Click="NavBack_Click" 
-     HorizontalAlignment="Left" Background="#253847" RenderTransformOrigin="0.368,0.5" Margin="0,0,0,0" VerticalAlignment="Center" Height="35" Width="74" />
+                       HorizontalAlignment="Left" Background="#253847" RenderTransformOrigin="0.368,0.5" Margin="0,0,0,0" VerticalAlignment="Center" Height="35" Width="74" />
             <TextBlock Text="Input devices:" Name="InputText" Style="{StaticResource TitleTextBlockStyle}" Margin="35,35,0,0"
                        RelativePanel.AlignLeftWithPanel="True" RelativePanel.Below="MenuStrip" FontSize="36" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
             <TextBlock Text="Output devices:" Name="OutputText" Style="{StaticResource TitleTextBlockStyle}" Margin="35,35,0,0"
