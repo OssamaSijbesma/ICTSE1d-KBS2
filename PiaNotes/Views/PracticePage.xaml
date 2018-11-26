@@ -43,6 +43,7 @@
             <Button x:Name="Options" Content="Options" HorizontalAlignment="Center" VerticalAlignment="Center" Background="#253847" RelativePanel.RightOf="View">
                 <Button.Flyout>
                     <MenuFlyout>
+                        <MenuFlyoutItem Text="Open Selection Menu" Click="NavSelection_Click" />
                         <MenuFlyoutItem Text="Settings" Click="NavSettings_Click" />
                         <MenuFlyoutItem Text="Credits" Click="NavCredits_Click" />
                     </MenuFlyout>

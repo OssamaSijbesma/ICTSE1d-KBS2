@@ -218,11 +218,11 @@ namespace PiaNotes.Views
             // Iterates through all keyboard items to hide/show them.
             if (KeyboardIsOpen)
             {
-                foreach (Rectangle key in keysWhite)
+                foreach (Rectangle key in KeysWhiteSP.Children)
                 {
                     key.Width = 0;
                 }
-                foreach (Rectangle key in keysBlack)
+                foreach (Rectangle key in KeysBlackSP.Children)
                 {
                     key.Width = 0;
                 }

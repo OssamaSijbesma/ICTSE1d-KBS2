@@ -26,8 +26,7 @@ namespace PiaNotes.Views
             // Titlebar
             var coreTitleBar = CoreApplication.GetCurrentView().TitleBar;
             coreTitleBar.ExtendViewIntoTitleBar = false;
-
-
+            
             CreateMostRecent();
         }
 
@@ -36,15 +35,7 @@ namespace PiaNotes.Views
         {
             // Dialog
         }
-
-        // Menustrip: File > Open MIDI File
-        private void FileOpenMIDIFile_Click(object sender, RoutedEventArgs e)
-        {
-            //this.Frame.Navigate(typeof(SelectionPage));
-        }
-
-
-
+        
         //private async void OptionsPractice_Click(object sender, RoutedEventArgs e)
         //{
         //    if (Settings.midiInPort != null && Settings.midiOutPort != null)
