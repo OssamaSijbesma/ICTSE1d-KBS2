@@ -232,6 +232,8 @@ namespace PiaNotes.Views
         // Creates the keyboard.
         public void CreateKeyboard()
         {
+            int oct = 0;
+            int ky = 0;
             for (int i = Settings.OctaveStart; i < (Settings.OctaveAmount + Settings.OctaveStart); i++)
             {
                 for (int j = 0; j < 12; j++)
@@ -302,9 +304,31 @@ namespace PiaNotes.Views
                                 else Notes[(j + (i * 12))] = (keyWhiteRect);
                             }
                             break;
+                            ky = j;
                     }
+                    oct = i;
                 }
             }
+            /*
+            Rectangle keyWhiteRectLast = new Rectangle();
+            keyWhiteRectLast.Name = $"{((PianoKey)ky).ToString()}{oct}";
+            keyWhiteRectLast.Stroke = new SolidColorBrush(Colors.Black);
+            keyWhiteRectLast.Fill = new SolidColorBrush(Colors.White);
+            keyWhiteRectLast.StrokeThickness = 4;
+            keyWhiteRectLast.Height = 200;
+            KeysWhiteSP.Children.Add(keyWhiteRectLast);
+            System.Diagnostics.Debug.WriteLine(keyWhiteRectLast.Name);
+            if (ky == 0)
+            {
+                if (oct == 0) Notes[ky] = (keyWhiteRectLast);
+                else Notes[(oct * 12)] = (keyWhiteRectLast);
+            }
+            else
+            {
+                if (oct == 0) Notes[ky] = (keyWhiteRectLast);
+                else Notes[(ky + (oct * 12))] = (keyWhiteRectLast);
+            }
+            */
             UpdateKeyboard();
         }
 
@@ -314,15 +338,15 @@ namespace PiaNotes.Views
             int windowWidth = Convert.ToInt32(Window.Current.Bounds.Width);
 
             // Count white keys.
-            int keyWhiteAmount = 7 * Settings.OctaveAmount;
+            int keyWhiteAmount = (7 * Settings.OctaveAmount);
 
             // Set width for white keys.
             foreach (Rectangle key in KeysWhiteSP.Children)
             {
                 try
                 {
-                    // Calculate width for the white keys.
-                    key.Width = (windowWidth) / keyWhiteAmount;
+                    // Calculate width for the white keys. +1 is there to fix it to the complete window size
+                    key.Width = (windowWidth / keyWhiteAmount);
                 }
                 catch (Exception)
                 {
@@ -339,7 +363,7 @@ namespace PiaNotes.Views
                 try
                 {
                     // Calculate width for the black keys.
-                    keyWhiteWidth = (windowWidth) / keyWhiteAmount;
+                    keyWhiteWidth = (windowWidth / keyWhiteAmount);
                     key.Width = keyWhiteWidth / 100 * 60;
                 }
                 catch (Exception)
