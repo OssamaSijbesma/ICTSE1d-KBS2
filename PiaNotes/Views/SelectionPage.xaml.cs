@@ -20,13 +20,15 @@ namespace PiaNotes.Views
         {
             this.InitializeComponent();
 
+            // Add text to titlebar.
             var appView = ApplicationView.GetForCurrentView();
             appView.Title = "Select MIDI";
             
-            // Titlebar
+            // Adds titlebar.
             var coreTitleBar = CoreApplication.GetCurrentView().TitleBar;
             coreTitleBar.ExtendViewIntoTitleBar = false;
             
+            // Creates most recent MIDI files.
             CreateMostRecent();
         }
 
@@ -41,6 +43,7 @@ namespace PiaNotes.Views
         {
             for (int i = 1; i < 21; i++)
             {
+                // Creates StackPanel.
                 StackPanel MusicPieceSP = new StackPanel();
                 MusicPieceSP.Width = 280;
                 MusicPieceSP.Name = $"Music Piece #{i}";
@@ -68,6 +71,7 @@ namespace PiaNotes.Views
                 MusicPieceSP.Children.Add(musicSheetTextBlock);
                 MusicPieceSP.Children.Add(musicSheetRectangle);
 
+                // Adds StackPanel to the VariableSizedWrapGrid.
                 MIDIFilesWG.Children.Add(MusicPieceSP);
             }
         }
@@ -75,6 +79,7 @@ namespace PiaNotes.Views
         // Updates the most recent MIDI files. Is used after first initializing or after resizing the window height.
         public void UpdateMostRecent()
         {
+            // Creates variables for the height and width.
             int windowHeight = Convert.ToInt32(Window.Current.Bounds.Height);
             int windowWidth = Convert.ToInt32(Window.Current.Bounds.Width);
             int amountHeight = (windowHeight - 35 - 160) / (90);
@@ -90,10 +95,12 @@ namespace PiaNotes.Views
                 {
                     if (count <= amount)
                     {
+                        // Makes said StackPanel visible.
                         (child as StackPanel).Visibility = Visibility.Visible;
                     }
                     else
                     {
+                        // Makes said StackPanel invisible/collapsed.
                         (child as StackPanel).Visibility = Visibility.Collapsed;
                     }
                 }
@@ -106,7 +113,7 @@ namespace PiaNotes.Views
             UpdateMostRecent();
         }
 
-        // Is executed when the window is resized.
+        // MIDI file click functionality.
         private void Preview_Tapped(object sender, RoutedEventArgs e)
         {
             //TO DO
@@ -154,6 +161,5 @@ namespace PiaNotes.Views
 
         // Navigate to the selection page
         private void NavSelection_Click(object sender, RoutedEventArgs e) => this.Frame.Navigate(typeof(SelectionPage));
-
     }
 }
