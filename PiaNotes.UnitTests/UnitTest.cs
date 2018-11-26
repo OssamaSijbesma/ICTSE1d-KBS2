@@ -163,7 +163,7 @@ namespace PianNotes.UnitTests
             var result = db.Search(null, "Tittttle", "Testsheet", 0, 0);
 
             //Assert
-            Assert.AreEqual(0, result.Count);
+            Assert.AreEqual(null, result);
         }
     }
 }

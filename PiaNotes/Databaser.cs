@@ -212,16 +212,25 @@ namespace PiaNotes
         {
             try
             {
+                //Set query standaard.
                 var Select = $"SELECT * FROM musicsheet ";
                 var Where = $"";
                 var Limit = $"";
                 var Offset = $"";
 
+                //If function has specific selected, change it in the query.
                 if (select != null) { Select = $"SELECT {select} FROM musicsheet "; }
+                
+                //If both Wheres are specified add a WHERE to the query.
                 if (whereA != null && whereB != null) { Where = $"WHERE {whereA} = '{whereB}' "; }
+
+                //If a limit is specified, add a LIMIT to the query
                 if (limit != 0) { Limit = $"LIMIT {limit} "; }
+
+                //If offset is specified, check if LIMIT is also specified, if yes, add OFFSET to query
                 if (offset != 0 && limit != 0) { Offset = $"OFFSET {offset} "; }
 
+                //Build the sql into a string
                 string sql = Select + Where + Limit + Offset;
 
                 //Setup connection and SQL command
@@ -269,8 +278,7 @@ namespace PiaNotes
             }
             catch
             {
-                // Not developed yet.
-                throw new NotImplementedException();
+                return null;
             }
         }
     }
