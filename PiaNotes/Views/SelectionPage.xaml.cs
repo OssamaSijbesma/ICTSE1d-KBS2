@@ -33,31 +33,8 @@ namespace PiaNotes.Views
         // Menustrip: File > New MIDI File
         private void FileNewMIDIFile_Click(object sender, RoutedEventArgs e)
         {
-            // Dialog
+            //TO DO
         }
-        
-        //private async void OptionsPractice_Click(object sender, RoutedEventArgs e)
-        //{
-        //    if (Settings.midiInPort != null && Settings.midiOutPort != null)
-        //        // Go to the practice page
-        //        this.Frame.Navigate(typeof(PracticePage));
-        //    else
-        //    {
-        //        // Create ContenDialog object
-        //        ContentDialog noMidiInOut = new ContentDialog
-        //        {
-        //            Title = "There is no MIDI in- or output!",
-        //            Content = "Check your MIDI input and output device before practicing.",
-        //            CloseButtonText = "Ok"
-        //        };
-
-        //        // Show dialog
-        //        await noMidiInOut.ShowAsync();
-
-        //        // Go to the settings page
-        //        this.Frame.Navigate(typeof(SettingsPage));
-        //    }
-        //}
 
         // Creates the previews of the most recent MIDI files.
         public void CreateMostRecent()
@@ -132,13 +109,13 @@ namespace PiaNotes.Views
         // Is executed when the window is resized.
         private void Preview_Tapped(object sender, RoutedEventArgs e)
         {
-            // 
+            //TO DO
         }
 
         // New MIDI File
         private void NewMIDIFile_Click(object sender, RoutedEventArgs e)
         {
-            // Dialog
+            //TO DO
         }
 
         // Search bar text
@@ -156,7 +133,6 @@ namespace PiaNotes.Views
         /// <summary>
         /// On click standard navigation
         /// </summary>
-        /// 
 
         private async void NavPractice_Click(object sender, RoutedEventArgs e)
         {

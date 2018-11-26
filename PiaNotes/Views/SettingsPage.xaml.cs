@@ -37,6 +37,7 @@ namespace PiaNotes.Views
             inputDeviceWatcher.StartWatcher();
             outputDeviceWatcher = new MidiDeviceWatcher(MidiOutPort.GetDeviceSelector(), midiOutPortListBox, Dispatcher);
 
+            //Start the Device Watchers
             outputDeviceWatcher.StartWatcher();
 
             //Set the slider back to the values the user put in and activate the correct settings
