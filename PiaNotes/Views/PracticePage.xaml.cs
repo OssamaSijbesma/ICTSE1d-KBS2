@@ -19,12 +19,10 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using Windows.UI.Xaml.Shapes;
 
-// The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
-
 namespace PiaNotes.Views
 {
     /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
+    /// Practice Page. Contains Sheet Music and Keyboard.
     /// </summary>
     public sealed partial class PracticePage : Page
     {
@@ -33,6 +31,7 @@ namespace PiaNotes.Views
         private List<Rectangle> keysWhite = new List<Rectangle>();
         private List<Rectangle> keysBlack = new List<Rectangle>();
 
+        // Length of 127 because of 127 notes.
         private Rectangle[] Notes = new Rectangle[127];
         private enum PianoKey { C = 0, D = 2, E = 4, F = 5, G = 7, A = 9, B = 11 };
         private enum PianoKeySharp { CSharp = 1, DSharp = 3, FSharp = 6, GSharp = 8, ASharp = 10 };
@@ -41,13 +40,13 @@ namespace PiaNotes.Views
         {
             this.InitializeComponent();
 
-            // Register a handler for the MessageReceived event
+            // Registers a handler for the MessageReceived event.
             Settings.midiInPort.MessageReceived += MidiInPort_MessageReceived;
 
             var appView = ApplicationView.GetForCurrentView();
             appView.Title = "";
 
-            // Titlebar
+            // Titlebar.
             var coreTitleBar = CoreApplication.GetCurrentView().TitleBar;
             coreTitleBar.ExtendViewIntoTitleBar = false;
 
@@ -56,27 +55,28 @@ namespace PiaNotes.Views
 
         private void MidiInPort_MessageReceived(MidiInPort sender, MidiMessageReceivedEventArgs args)
         {
-            // Recieved message
+            // Converts received message into IMidiMessage.
             IMidiMessage receivedMidiMessage = args.Message;
 
             System.Diagnostics.Debug.WriteLine(receivedMidiMessage.Timestamp.ToString());
 
+            // Checks if a key has been pressed.
             if (receivedMidiMessage.Type == MidiMessageType.NoteOn)
             {
                 System.Diagnostics.Debug.WriteLine(((MidiNoteOnMessage)receivedMidiMessage).Channel);
                 System.Diagnostics.Debug.WriteLine(((MidiNoteOnMessage)receivedMidiMessage).Note);
                 System.Diagnostics.Debug.WriteLine(((MidiNoteOnMessage)receivedMidiMessage).Velocity);
 
-                // Play the note
+                // Retrieves channel, note and velocity from the MidiMessage.
                 byte channel = ((MidiNoteOnMessage)receivedMidiMessage).Channel;
                 byte note = ((MidiNoteOnMessage)receivedMidiMessage).Note;
-                //If the player releases the key there should be no sound
+                // If the player releases the key there should be no sound <-- ???
                 byte velocity;
                 if (((MidiNoteOnMessage)receivedMidiMessage).Velocity != 0)
                 {
                     if (Settings.feedback == true)
                     {
-                        //Use the input from the keyboard the see what the normal velocity is and then add the volume the user chose
+                        // Retrieves the velocity from the played note and then adds the amount of volume the user has set.
                         velocity = ((MidiNoteOnMessage)receivedMidiMessage).Velocity;
                         
                         if (velocity + DoubleToByte(Settings.volume) <= 127 && velocity + DoubleToByte(Settings.volume) >= 0)
@@ -89,32 +89,37 @@ namespace PiaNotes.Views
                         {
                             velocity = 0;
                         }
-                        //Else use the static velocity the user chose
+                        // Else use the static velocity the user chose.
                     } else velocity = DoubleToByte(Settings.velocity);
-                    //Else do not produce any sound, when the input is 0
+                    // Else use velocity from the midimessage, if below a certain amount, no sound will be played.
                 } else velocity = ((MidiNoteOnMessage)receivedMidiMessage).Velocity;
 
+                // Creates the message that will be played.
                 IMidiMessage midiMessageToSend = new MidiNoteOnMessage(channel, note, velocity);
                 FillKey(midiMessageToSend);
                 Settings.midiOutPort.SendMessage(midiMessageToSend);
             }
 
+            // Checks if note has been released.
             if (receivedMidiMessage.Type == MidiMessageType.NoteOff)
             {
                 System.Diagnostics.Debug.WriteLine(((MidiNoteOffMessage)receivedMidiMessage).Channel);
                 System.Diagnostics.Debug.WriteLine(((MidiNoteOffMessage)receivedMidiMessage).Note);
                 System.Diagnostics.Debug.WriteLine(((MidiNoteOffMessage)receivedMidiMessage).Velocity);
 
+                // Retrieves channel, note and velocity from the MidiMessage.
                 byte channel = ((MidiNoteOffMessage)receivedMidiMessage).Channel;
                 byte note = ((MidiNoteOffMessage)receivedMidiMessage).Note;
                 byte velocity = ((MidiNoteOffMessage)receivedMidiMessage).Velocity;
 
+                // Creates a message solely for the purpose of changing the key-color back to its default color.
                 IMidiMessage midiMessageToSend = new MidiNoteOffMessage(channel, note, velocity);
                 UnFillKey(midiMessageToSend);
             }
 
         }
 
+        // Method for coloring the played key.
         private async void FillKey(IMidiMessage IM)
         {
             await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
@@ -123,6 +128,9 @@ namespace PiaNotes.Views
                 try
                 {
                     byte neg = 25;
+
+                    // If it is a black key, the color will be slightly darker (-25 on all values except A) than a white key.
+                    // Colors will be pulled from Settings.cs.
                     if (Notes[note].Name.Contains("Sharp"))
                     {
                         Notes[note].Fill = new SolidColorBrush(Windows.UI.Color.FromArgb(255, DoubleToByte(Settings.R - neg), DoubleToByte(Settings.G - neg), DoubleToByte(Settings.B - neg)));
@@ -139,6 +147,7 @@ namespace PiaNotes.Views
             });
         }
 
+        // Method for changing the color of the played key back to its default color.
         private async void UnFillKey(IMidiMessage IM)
         {
             await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
@@ -162,7 +171,7 @@ namespace PiaNotes.Views
         }
 
 
-
+        // Method for converting a double to byte.
         public static byte DoubleToByte(double doubleVal)
         {
             byte byteVal = 0;
@@ -202,12 +211,10 @@ namespace PiaNotes.Views
             ToggleKeyboard();
         }
 
-
-
         // Toggles the keyboard to show/hide.
         public void ToggleKeyboard()
         {
-            // Iterate through all keyboard items to hide/show them.
+            // Iterates through all keyboard items to hide/show them.
             if (KeyboardIsOpen)
             {
                 foreach (Rectangle key in keysWhite)
@@ -309,26 +316,6 @@ namespace PiaNotes.Views
                     oct = i;
                 }
             }
-            /*
-            Rectangle keyWhiteRectLast = new Rectangle();
-            keyWhiteRectLast.Name = $"{((PianoKey)ky).ToString()}{oct}";
-            keyWhiteRectLast.Stroke = new SolidColorBrush(Colors.Black);
-            keyWhiteRectLast.Fill = new SolidColorBrush(Colors.White);
-            keyWhiteRectLast.StrokeThickness = 4;
-            keyWhiteRectLast.Height = 200;
-            KeysWhiteSP.Children.Add(keyWhiteRectLast);
-            System.Diagnostics.Debug.WriteLine(keyWhiteRectLast.Name);
-            if (ky == 0)
-            {
-                if (oct == 0) Notes[ky] = (keyWhiteRectLast);
-                else Notes[(oct * 12)] = (keyWhiteRectLast);
-            }
-            else
-            {
-                if (oct == 0) Notes[ky] = (keyWhiteRectLast);
-                else Notes[(ky + (oct * 12))] = (keyWhiteRectLast);
-            }
-            */
             UpdateKeyboard();
         }
 
@@ -337,15 +324,15 @@ namespace PiaNotes.Views
         {
             int windowWidth = Convert.ToInt32(Window.Current.Bounds.Width);
 
-            // Count white keys.
+            // Counts amount of white keys.
             int keyWhiteAmount = (7 * Settings.OctaveAmount);
 
-            // Set width for white keys.
+            // Sets width for white keys.
             foreach (Rectangle key in KeysWhiteSP.Children)
             {
                 try
                 {
-                    // Calculate width for the white keys. +1 is there to fix it to the complete window size
+                    // Calculates width for the white keys.
                     key.Width = (windowWidth / keyWhiteAmount);
                 }
                 catch (Exception)
@@ -355,14 +342,14 @@ namespace PiaNotes.Views
                 }
             }
 
-            // Set width and location for black keys.
+            // Sets width and location for black keys.
             bool initialCsharp = true;
             foreach (Rectangle key in KeysBlackSP.Children)
             {
                 double keyWhiteWidth;
                 try
                 {
-                    // Calculate width for the black keys.
+                    // Calculates width for the black keys.
                     keyWhiteWidth = (windowWidth / keyWhiteAmount);
                     key.Width = keyWhiteWidth / 100 * 60;
                 }
@@ -375,7 +362,7 @@ namespace PiaNotes.Views
 
                 if (key.Name.Contains("CSharp"))
                 {
-                    // Calculate location for C# key.
+                    // Calculates location for C# key.
                     // The first key has a different calculation than the rest, because there are no prior keys.
                     double location;
                     if (initialCsharp)
@@ -391,13 +378,13 @@ namespace PiaNotes.Views
                 }
                 else if (key.Name.Contains("DSharp") || key.Name.Contains("GSharp") || key.Name.Contains("ASharp"))
                 {
-                    // Calculate location for D#/G#/A# keys.
+                    // Calculates location for D#/G#/A# keys.
                     double location = keyWhiteWidth - key.Width;
                     key.Margin = new Thickness(location, 0, 0, 50);
                 }
                 else if (key.Name.Contains("FSharp"))
                 {
-                    // Calculate location for F# key.
+                    // Calculates location for F# key.
                     double location = keyWhiteWidth * 2 - key.Width;
                     key.Margin = new Thickness(location, 0, 0, 50);
                 }
