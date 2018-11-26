@@ -49,10 +49,6 @@ namespace PiaNotes.Views
             var appView = ApplicationView.GetForCurrentView();
             appView.Title = "";
 
-            // Titlebar
-            var coreTitleBar = CoreApplication.GetCurrentView().TitleBar;
-            coreTitleBar.ExtendViewIntoTitleBar = false;
-
             CreateKeyboard();
         }
 
