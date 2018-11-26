@@ -50,7 +50,7 @@ namespace PiaNotes.Views
             //Titlebar
             var coreTitleBar = CoreApplication.GetCurrentView().TitleBar;
             coreTitleBar.ExtendViewIntoTitleBar = false;
-            
+
             //Create the keyboard to show on the screen
             CreateKeyboard();
         }
@@ -73,7 +73,7 @@ namespace PiaNotes.Views
                 byte channel = ((MidiNoteOnMessage)receivedMidiMessage).Channel;
                 byte note = ((MidiNoteOnMessage)receivedMidiMessage).Note;
                 byte velocity;
-                
+
                 // If the player releases the key there should be no sound
                 if (((MidiNoteOnMessage)receivedMidiMessage).Velocity != 0)
                 {
@@ -81,12 +81,12 @@ namespace PiaNotes.Views
                     {
                         // Retrieves the velocity from the played note and then adds the amount of volume the user has set.
                         velocity = ((MidiNoteOnMessage)receivedMidiMessage).Velocity;
-                        
+
                         //If the velocity surpases the limits of MIDI it will go to the limit, otherwise it will act normally
                         if (velocity + DoubleToByte(Settings.volume) <= 127 && velocity + DoubleToByte(Settings.volume) >= 0)
                         {
                             velocity += DoubleToByte(Settings.volume);
-                        } else if(velocity + DoubleToByte(Settings.volume) > 127)
+                        } else if (velocity + DoubleToByte(Settings.volume) > 127)
                         {
                             velocity = 127;
                         } else
@@ -130,7 +130,7 @@ namespace PiaNotes.Views
             await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
                 byte note = ((MidiNoteOnMessage)IM).Note;
-                
+
                 //Try colour the keys
                 try
                 {
@@ -416,13 +416,21 @@ namespace PiaNotes.Views
         /// On click navigation
         /// </summary>
 
-        // Navigate to the settings page
-        private void NavSettings_Click(object sender, RoutedEventArgs e) => this.Frame.Navigate(typeof(SettingsPage));
+        // Unsubscribe the MidiInPort_MessageReceived and navigate to the settings page
+        private void NavSettings_Click(object sender, RoutedEventArgs e)
+        { 
+            Settings.midiInPort.MessageReceived -= MidiInPort_MessageReceived;
+            this.Frame.Navigate(typeof(SettingsPage));
+        }
 
-        // Navigate to the credits page
-        private void NavCredits_Click(object sender, RoutedEventArgs e) => this.Frame.Navigate(typeof(CreditsPage));
+        // Unsubscribe the MidiInPort_MessageReceived and navigate to the credits page
+        private void NavCredits_Click(object sender, RoutedEventArgs e)
+        {
+            Settings.midiInPort.MessageReceived -= MidiInPort_MessageReceived;
+            this.Frame.Navigate(typeof(CreditsPage));
+        }
 
-        // Navigate to the selection page
+        // Unsubscribe the MidiInPort_MessageReceived and navigate to the selection page
         private void NavSelection_Click(object sender, RoutedEventArgs e)
         {
             Settings.midiInPort.MessageReceived -= MidiInPort_MessageReceived;
