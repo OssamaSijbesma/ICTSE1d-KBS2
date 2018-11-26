@@ -9,9 +9,11 @@ namespace PiaNotes
 {
     static class Settings
     {
+        //Input port and Output port
         public static MidiInPort midiInPort;
         public static IMidiOutPort midiOutPort;
 
+        //Settings for the keyboard, such as: if feedback is turned on, what volume it is or what the set velocity is
         public static Boolean feedback = true;
         public static double volume = 0;
         public static double velocity = 90;

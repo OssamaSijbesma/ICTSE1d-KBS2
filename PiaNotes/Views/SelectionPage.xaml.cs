@@ -35,9 +35,9 @@ namespace PiaNotes.Views
         // Menustrip: File > New MIDI File
         private void FileNewMIDIFile_Click(object sender, RoutedEventArgs e)
         {
-            // Dialog to add new MIDI file.
+            //TO DO
         }
-        
+
         // Creates the previews of the most recent MIDI files.
         public void CreateMostRecent()
         {
@@ -116,13 +116,13 @@ namespace PiaNotes.Views
         // MIDI file click functionality.
         private void Preview_Tapped(object sender, RoutedEventArgs e)
         {
-            // 
+            //TO DO
         }
 
         // New MIDI File
         private void NewMIDIFile_Click(object sender, RoutedEventArgs e)
         {
-            // Dialog
+            //TO DO
         }
 
         // Search bar text
@@ -140,7 +140,6 @@ namespace PiaNotes.Views
         /// <summary>
         /// On click standard navigation
         /// </summary>
-        /// 
 
         private async void NavPractice_Click(object sender, RoutedEventArgs e)
         {
@@ -162,6 +161,5 @@ namespace PiaNotes.Views
 
         // Navigate to the selection page
         private void NavSelection_Click(object sender, RoutedEventArgs e) => this.Frame.Navigate(typeof(SelectionPage));
-
     }
 }

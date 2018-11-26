@@ -14,6 +14,7 @@ namespace PiaNotes
         /// Dialogs
         /// </summary>
 
+        //Popup dialog for if you have no midi devices but still want to run the practisepage
         public static ContentDialog NoMidiInOutDialog = new ContentDialog
         {
             Title = "There is no MIDI in- or output!",
