@@ -30,8 +30,6 @@ namespace PiaNotes
         public MainPage()
         {
             this.InitializeComponent();
-            var db = new Databaser();
-            var result = db.SearchNumber(1,1);
         }
 
         private void Navigation_Click(object sender, RoutedEventArgs e)
