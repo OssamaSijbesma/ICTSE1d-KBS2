@@ -281,5 +281,50 @@ namespace PiaNotes
                 return null;
             }
         }
+
+        public bool UploadToDB(MusicSheet sheet)
+        {
+            try
+            {
+                //Set query standaard.
+                var Select = $"SELECT * FROM musicsheet ";
+                var Where = $"";
+                var Limit = $"";
+                var Offset = $"";
+
+                //Build the sql into a string
+                string sql = Select + Where + Limit + Offset;
+
+                //Setup connection and SQL command
+                using (MySqlConnection sqlconn = new MySqlConnection(ConnectionString))
+                using (var cmd = new MySqlCommand(sql, sqlconn))
+                {
+                    //List of Searched sheets
+                    List<MusicSheet> result = new List<MusicSheet>();
+
+                    //Open connection to database
+                    sqlconn.Open();
+
+                    //Prepare statement for execution
+                    cmd.Prepare();
+
+                    //Execute SQL command
+                    var go = cmd.ExecuteReader();
+
+                    //New list to remember ids.
+                    List<int> list = new List<int>();
+
+                    
+
+                    //Close connection to database and return results
+                    sqlconn.Close();
+                    return true;
+                }
+            }
+            catch
+            {
+                return false;
+            }
+        }
     }
 }
