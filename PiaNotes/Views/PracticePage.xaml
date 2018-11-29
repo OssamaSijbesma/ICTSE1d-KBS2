@@ -11,6 +11,14 @@
     <Grid>
         <RelativePanel Background="#162632">
 
+            <Button Content="Stop" HorizontalAlignment="Center" Height="32.8" 
+                    VerticalAlignment="Center" 
+                    Width="65.6" 
+                    RelativePanel.AlignRightWithPanel="True"
+                    RelativePanel.Above="Progress"
+                    Margin="20,20,20,20"
+                    Click="NavSelection_Click"/>
+
             <Rectangle x:Name="KeyboardBG" Stroke="Black"
                        MinHeight="200"
                        RelativePanel.AlignLeftWithPanel="True"
