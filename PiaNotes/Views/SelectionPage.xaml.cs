@@ -6,6 +6,7 @@ using Windows.UI.ViewManagement;
 using Windows.UI;
 using Windows.UI.Xaml.Shapes;
 using Windows.ApplicationModel.Core;
+using Windows.UI.Popups;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -31,13 +32,7 @@ namespace PiaNotes.Views
             // Creates most recent MIDI files.
             CreateMostRecent();
         }
-
-        // Menustrip: File > New MIDI File
-        private void FileNewMIDIFile_Click(object sender, RoutedEventArgs e)
-        {
-            //TO DO
-        }
-
+        
         // Creates the previews of the most recent MIDI files.
         public void CreateMostRecent()
         {
@@ -120,9 +115,31 @@ namespace PiaNotes.Views
         }
 
         // New MIDI File
-        private void NewMIDIFile_Click(object sender, RoutedEventArgs e)
+        private async void NewMIDIFile_Click(object sender, RoutedEventArgs e)
         {
-            //TO DO
+            // DOING
+
+            var picker = new Windows.Storage.Pickers.FileOpenPicker();
+            picker.ViewMode = Windows.Storage.Pickers.PickerViewMode.Thumbnail;
+            picker.SuggestedStartLocation = Windows.Storage.Pickers.PickerLocationId.PicturesLibrary;
+            picker.FileTypeFilter.Add(".mid");
+
+            Windows.Storage.StorageFile file = await picker.PickSingleFileAsync();
+            if (file != null)
+            {
+                // Opening file
+                MidiConverter midiConverter = new MidiConverter(file.Path.ToString());
+                var dialog = new MessageDialog("File opened ;)");
+                await dialog.ShowAsync();
+            }
+            else
+            {
+                // Cancel operation.
+                var dialog = new MessageDialog("Canceling operation.");
+                await dialog.ShowAsync();
+            }
+
+            
         }
 
         // Search bar text
