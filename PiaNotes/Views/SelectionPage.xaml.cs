@@ -35,7 +35,7 @@ namespace PiaNotes.Views
         // Menustrip: File > New MIDI File
         private void FileNewMIDIFile_Click(object sender, RoutedEventArgs e)
         {
-            //TO DO
+            this.Frame.Navigate(typeof(UploadPage));
         }
 
         // Creates the previews of the most recent MIDI files.
@@ -122,7 +122,7 @@ namespace PiaNotes.Views
         // New MIDI File
         private void NewMIDIFile_Click(object sender, RoutedEventArgs e)
         {
-            //TO DO
+            this.Frame.Navigate(typeof(UploadPage));
         }
 
         // Search bar text

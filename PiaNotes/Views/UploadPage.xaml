@@ -34,19 +34,20 @@
                     </MenuFlyout>
                 </Button.Flyout>
             </Button>
-            
 
 
-           
-            <TextBlock Text="Title" HorizontalAlignment="Left" Height="28" Margin="0,133,0,0" TextWrapping="Wrap" RelativePanel.AlignLeftWith="TitleBox" VerticalAlignment="Top" FontSize="18"/>
-            <TextBox x:Name="TitleBox" PlaceholderText="Insert title here" Height="26" Margin="0,126,821,0" Text="" MinWidth="250" HorizontalAlignment="Right" VerticalAlignment="Top" Width="598" Background="Transparent"
-                     RelativePanel.AlignRightWithPanel="True"
-                     RelativePanel.Below="MenuStrip"
+
+
+            <TextBlock Name="Title" Text="Title" Margin="80,80,0,1"
+                       RelativePanel.AlignLeftWithPanel="True" RelativePanel.Below="MenuStrip" FontSize="36" />
+            <TextBox x:Name="TitleBox" PlaceholderText="Insert title here" Height="26" Margin="80,0,0,0" Text="" MinWidth="250" HorizontalAlignment="Right" VerticalAlignment="Top" Width="598" Background="Transparent"
+                     RelativePanel.AlignLeftWithPanel="True"
+                     RelativePanel.Below="Title"
                      TextChanged="Title_TextChanged"
                      />
-            <TextBlock Text="Open MIDI File" HorizontalAlignment="Left" Height="28" Margin="0,0,0,0" TextWrapping="Wrap" RelativePanel.AlignLeftWith="OpenFile" VerticalAlignment="Top" FontSize="18"/>
-            <Button Name="OpenFile" Content="Open" HorizontalAlignment="Center" Margin="0,0,0,0" RelativePanel.AlignLeftWith="TitleBox" RelativePanel.AlignBottomWith="TitleBox" />
-           
+            <TextBlock Name="OpenFileText" Text="Open MIDI File" HorizontalAlignment="Center" Margin="80,50,0,0" TextWrapping="Wrap" RelativePanel.Below="TitleBox" VerticalAlignment="Stretch" FontSize="36"/>
+            <Button Name="OpenFile" Background="#253847" Content="Open" HorizontalAlignment="Right" Margin="60,50,0,0" RelativePanel.RightOf="OpenFileText" RelativePanel.Below="TitleBox" VerticalAlignment="Top" Width="100" Height="50" Click="OpenFile_Click"/>
+
 
 
         </RelativePanel>

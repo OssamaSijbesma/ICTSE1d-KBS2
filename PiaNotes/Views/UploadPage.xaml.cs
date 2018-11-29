@@ -31,6 +31,14 @@ namespace PiaNotes.Views
         {
 
         }
+
+        private void OpenFile_Click(object sender, RoutedEventArgs e)
+        {
+            var picker = new Windows.Storage.Pickers.FileOpenPicker();
+            picker.ViewMode = Windows.Storage.Pickers.PickerViewMode.Thumbnail;
+            picker.SuggestedStartLocation = Windows.Storage.Pickers.PickerLocationId.PicturesLibrary;
+            picker.FileTypeFilter.Add(".MIDI");
+        }
+    }
     }
 
-}
