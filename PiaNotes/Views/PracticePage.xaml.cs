@@ -34,6 +34,7 @@ namespace PiaNotes.Views
 
         // Length of 127 because of 127 notes
         private Rectangle[] Notes = new Rectangle[127];
+        private int Keys = Settings.OctaveAmount * 12;
         private enum PianoKey { C = 0, D = 2, E = 4, F = 5, G = 7, A = 9, B = 11 };
         private enum PianoKeySharp { CSharp = 1, DSharp = 3, FSharp = 6, GSharp = 8, ASharp = 10 };
 
@@ -50,6 +51,13 @@ namespace PiaNotes.Views
             //Titlebar
             var coreTitleBar = CoreApplication.GetCurrentView().TitleBar;
             coreTitleBar.ExtendViewIntoTitleBar = false;
+
+            //Generate the amount of Keys
+            if (Settings.OctaveAmount != 0)
+            {
+                Keys = Settings.OctaveAmount * 12;
+            }
+            else Keys = 12;
 
             //Create the keyboard to show on the screen
             CreateKeyboard();
@@ -336,7 +344,7 @@ namespace PiaNotes.Views
                             break;
                             ky = j;
                     }
-                    oct = i;
+                    oct = i + 1;
                 }
             }
             UpdateKeyboard();
@@ -346,9 +354,11 @@ namespace PiaNotes.Views
         public void UpdateKeyboard()
         {
             int windowWidth = Convert.ToInt32(Window.Current.Bounds.Width);
+            windowWidth -= (Convert.ToInt32(Window.Current.Bounds.Width)) / Keys;
 
             // Counts amount of white keys.
-            int keyWhiteAmount = (7 * Settings.OctaveAmount);
+            int keyWhiteAmount = 7;
+            if (Settings.OctaveAmount != 0) keyWhiteAmount = Keys - (Settings.OctaveAmount * 5);
 
             // Sets width for white keys.
             foreach (Rectangle key in KeysWhiteSP.Children)
