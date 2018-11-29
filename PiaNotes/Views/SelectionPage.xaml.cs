@@ -125,7 +125,7 @@ namespace PiaNotes.Views
             //TO DO
         }
 
-        // Search bar text
+        // Display search changes
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             Search(SearchBar.Text);
@@ -134,7 +134,41 @@ namespace PiaNotes.Views
         // Search function.
         public void Search(string search)
         {
-            
+            Databaser.Search(null, search, null, 0, 0);
+
+            foreach (var element in list)
+            {
+                // Creates StackPanel.
+                StackPanel MusicPieceSP = new StackPanel();
+                MusicPieceSP.Width = 280;
+                MusicPieceSP.Name = $"Music Piece #{element}";
+                MusicPieceSP.Tapped += Preview_Tapped;
+
+                // Creates rectangle for MIDI preview.
+                Rectangle musicSheetRectangle = new Rectangle();
+                musicSheetRectangle.Name = MusicPieceSP.Name;
+                musicSheetRectangle.Stroke = new SolidColorBrush(Colors.White);
+                musicSheetRectangle.Fill = new SolidColorBrush(Colors.Transparent);
+                musicSheetRectangle.StrokeThickness = 1;
+                musicSheetRectangle.Height = 50;
+                musicSheetRectangle.Width = 260;
+                musicSheetRectangle.Margin = new Thickness(0, 0, 0, 0);
+
+                // Creates textblock for MIDI name.
+                TextBlock musicSheetTextBlock = new TextBlock();
+                musicSheetTextBlock.TextWrapping = TextWrapping.Wrap;
+                musicSheetTextBlock.TextAlignment = TextAlignment.Center;
+                musicSheetTextBlock.Height = 30;
+                musicSheetTextBlock.Margin = new Thickness(0, 10, 0, 0);
+                musicSheetTextBlock.Text = MusicPieceSP.Name;
+
+                // Adds rectangle and children to stackpanel.
+                MusicPieceSP.Children.Add(musicSheetTextBlock);
+                MusicPieceSP.Children.Add(musicSheetRectangle);
+
+                // Adds StackPanel to the VariableSizedWrapGrid.
+                MIDIFilesWG.Children.Add(MusicPieceSP);
+            }
         }
 
         /// <summary>
