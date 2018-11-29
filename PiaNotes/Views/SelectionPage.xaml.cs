@@ -7,6 +7,9 @@ using Windows.UI;
 using Windows.UI.Xaml.Shapes;
 using Windows.ApplicationModel.Core;
 using Windows.UI.Popups;
+using Windows.Storage.Streams;
+using Windows.Storage;
+using System.Runtime.InteropServices.WindowsRuntime;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -121,14 +124,20 @@ namespace PiaNotes.Views
 
             var picker = new Windows.Storage.Pickers.FileOpenPicker();
             picker.ViewMode = Windows.Storage.Pickers.PickerViewMode.Thumbnail;
-            picker.SuggestedStartLocation = Windows.Storage.Pickers.PickerLocationId.PicturesLibrary;
+            picker.SuggestedStartLocation = Windows.Storage.Pickers.PickerLocationId.MusicLibrary;
             picker.FileTypeFilter.Add(".mid");
 
             Windows.Storage.StorageFile file = await picker.PickSingleFileAsync();
+            Windows.Storage.ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
             if (file != null)
             {
+                //string content;
                 // Opening file
-                MidiConverter midiConverter = new MidiConverter(file.Path.ToString());
+                IBuffer buffer = await FileIO.ReadBufferAsync(file);
+                byte[] bytes = buffer.ToArray();
+
+                Console.WriteLine(bytes);
+                //MidiConverter midiConverter = new MidiConverter(file);
                 var dialog = new MessageDialog("File opened ;)");
                 await dialog.ShowAsync();
             }
