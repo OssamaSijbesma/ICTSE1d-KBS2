@@ -6,6 +6,7 @@ using Windows.UI.ViewManagement;
 using Windows.UI;
 using Windows.UI.Xaml.Shapes;
 using Windows.ApplicationModel.Core;
+using System.Collections.Generic;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -16,6 +17,11 @@ namespace PiaNotes.Views
     /// </summary>
     public sealed partial class SelectionPage : Page
     {
+        Databaser DB = new Databaser();
+
+        List<MusicSheet> Sheets = new List<MusicSheet>();
+        MusicSheet a = new MusicSheet(0, "fruitmuziek", "/downloads");
+
         public SelectionPage()
         {
             this.InitializeComponent();
@@ -27,9 +33,13 @@ namespace PiaNotes.Views
             // Adds titlebar.
             var coreTitleBar = CoreApplication.GetCurrentView().TitleBar;
             coreTitleBar.ExtendViewIntoTitleBar = false;
-            
+
+            Sheets = DB.Search(null, null, null, 0, 0);
+
             // Creates most recent MIDI files.
             CreateMostRecent();
+
+            
         }
 
         // Menustrip: File > New MIDI File
@@ -41,12 +51,12 @@ namespace PiaNotes.Views
         // Creates the previews of the most recent MIDI files.
         public void CreateMostRecent()
         {
-            for (int i = 1; i < 21; i++)
+            foreach (MusicSheet l in Sheets)
             {
                 // Creates StackPanel.
                 StackPanel MusicPieceSP = new StackPanel();
                 MusicPieceSP.Width = 280;
-                MusicPieceSP.Name = $"Music Piece #{i}";
+                MusicPieceSP.Name = l.Title;
                 MusicPieceSP.Tapped += Preview_Tapped;
 
                 // Creates rectangle for MIDI preview.
@@ -58,7 +68,7 @@ namespace PiaNotes.Views
                 musicSheetRectangle.Height = 50;
                 musicSheetRectangle.Width = 260;
                 musicSheetRectangle.Margin = new Thickness(0, 0, 0, 0);
-                
+
                 // Creates textblock for MIDI name.
                 TextBlock musicSheetTextBlock = new TextBlock();
                 musicSheetTextBlock.TextWrapping = TextWrapping.Wrap;
@@ -128,20 +138,22 @@ namespace PiaNotes.Views
         // Display search changes
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
+            MIDIFilesWG.Children.Clear();
             Search(SearchBar.Text);
         }
 
         // Search function.
         public void Search(string search)
         {
-            Databaser.Search(null, search, null, 0, 0);
+            
+            List<MusicSheet> results = DB.Search(null, "MusicSheet.Title", search + "%", 0, 0);
 
-            foreach (var element in list)
+            foreach (var element in results)
             {
                 // Creates StackPanel.
                 StackPanel MusicPieceSP = new StackPanel();
                 MusicPieceSP.Width = 280;
-                MusicPieceSP.Name = $"Music Piece #{element}";
+                MusicPieceSP.Name = element.Title;
                 MusicPieceSP.Tapped += Preview_Tapped;
 
                 // Creates rectangle for MIDI preview.

@@ -12,7 +12,7 @@ namespace PiaNotes
     public class Databaser
     {
         //Set connection string (ROOT USER IS FOR TESTING ONLY, Use system instead)
-        private const string ConnectionString = "SERVER = localhost; DATABASE = pianotes; Uid = system; Pwd = System01!";
+        private const string ConnectionString = "SERVER = localhost; DATABASE = pianotes; Uid = root; Pwd = ";
 
         //Function for checking connection status.
         public bool CheckConnection()
@@ -222,7 +222,7 @@ namespace PiaNotes
                 if (select != null) { Select = $"SELECT {select} FROM musicsheet "; }
                 
                 //If both Wheres are specified add a WHERE to the query.
-                if (whereA != null && whereB != null) { Where = $"WHERE {whereA} = '{whereB}' "; }
+                if (whereA != null && whereB != null) { Where = $"WHERE UPPER({whereA}) LIKE UPPER('{whereB}%') "; }
 
                 //If a limit is specified, add a LIMIT to the query
                 if (limit != 0) { Limit = $"LIMIT {limit} "; }
