@@ -17,8 +17,8 @@
                        RelativePanel.AlignRightWithPanel="True"
                        RelativePanel.AlignBottomWithPanel="True"/>
 
-            <StackPanel x:Name="KeysWhiteSP" Orientation="Horizontal" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignBottomWithPanel="True"/>
-            <StackPanel x:Name="KeysBlackSP" Orientation="Horizontal" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignBottomWithPanel="True"/>
+            <StackPanel x:Name="KeysWhiteSP" Orientation="Horizontal" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignBottomWithPanel="True" HorizontalAlignment="Center"/>
+            <StackPanel x:Name="KeysBlackSP" Orientation="Horizontal" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignBottomWithPanel="True" HorizontalAlignment="Center"/>
 
 
             <Rectangle x:Name="Progress" Fill="#2b3c49"
