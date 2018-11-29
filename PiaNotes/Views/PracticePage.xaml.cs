@@ -366,11 +366,8 @@ namespace PiaNotes.Views
         // Updates the keyboard. Is used after first initializing the keyboard or after resizing the window width.
         public void UpdateKeyboard()
         {
-            int windowWidthBlack = Convert.ToInt32(Window.Current.Bounds.Width);
-            double windowWidth = Convert.ToInt64(ActualWidth);
+            int windowWidth = Convert.ToInt32(Window.Current.Bounds.Width);
             double keyWidthWhite = 40;
-            double keyWidthBlack = 40;
-            bool widthChanged = false;
 
             // Counts amount of white keys.
             int keyWhiteAmount = 8;
@@ -383,7 +380,6 @@ namespace PiaNotes.Views
                 {
                     // Calculates width for the white keys.
                     keyWidthWhite = (windowWidth / keyWhiteAmount);
-                    keyWidthBlack = (windowWidth / keyWhiteAmount);
                     key.Width = keyWidthWhite;
                 }
                 catch (Exception)
@@ -391,20 +387,17 @@ namespace PiaNotes.Views
                     // If width can't be calculated, change width to a set value.
                     key.Width = keyWidthWhite;
                 }
-                if (key.Width != oldWidth) widthChanged = true;
-                oldWidth = key.Width;
             }
 
             // Sets width and location for black keys.
-            if(widthChanged)
+            bool initialCsharp = true;
+            foreach (Rectangle key in KeysBlackSP.Children)
             {
-                bool initialCsharp = true;
-                int count = 0;
-                foreach (Rectangle key in KeysBlackSP.Children)
+                double keyWhiteWidth;
+                try
                 {
-                    count++;
                     // Calculates width for the black keys.
-                    key.Width = keyWidthBlack / 100 * 60;
+                    key.Width = keyWidthWhite / 100 * 60;
 
                     if (key.Name.Contains("CSharp"))
                     {
@@ -413,27 +406,30 @@ namespace PiaNotes.Views
                         double location;
                         if (initialCsharp)
                         {
-                            location = (keyWidthBlack - (key.Width / 2));
+                            location = keyWidthWhite - (key.Width / 2);
                             initialCsharp = false;
                         }
                         else
                         {
-                            location = (keyWidthBlack - (key.Width / 2)) * 2;
+                            location = (keyWidthWhite - (key.Width / 2)) * 2;
                         }
                         key.Margin = new Thickness(location, 0, 0, 50);
                     }
                     else if (key.Name.Contains("DSharp") || key.Name.Contains("GSharp") || key.Name.Contains("ASharp"))
                     {
                         // Calculates location for D#/G#/A# keys.
-                        double location = keyWidthBlack - key.Width;
+                        double location = keyWidthWhite - key.Width;
                         key.Margin = new Thickness(location, 0, 0, 50);
                     }
                     else if (key.Name.Contains("FSharp"))
                     {
                         // Calculates location for F# key.
-                        double location = keyWidthBlack * 2 - key.Width;
+                        double location = keyWidthWhite * 2 - key.Width;
                         key.Margin = new Thickness(location, 0, 0, 50);
                     }
+                } catch (Exception e)
+                {
+                    
                 }
             }
         }
@@ -442,11 +438,8 @@ namespace PiaNotes.Views
         private void Page_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             if (KeyboardIsOpen)
-            {
                 // If the keyboard is shown, it will be updated.
                 UpdateKeyboard();
-
-            }
         }
 
         /// <summary>
