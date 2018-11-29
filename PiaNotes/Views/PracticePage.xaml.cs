@@ -334,10 +334,29 @@ namespace PiaNotes.Views
                                 else Notes[(j + (i * 12))] = (keyWhiteRect);
                             }
                             break;
-                            ky = j;
+                            ky = 0;
                     }
-                    oct = i;
+                    oct = i + 1;
+                    
                 }
+            }
+            Rectangle keyWhiteRect1 = new Rectangle();
+            keyWhiteRect1.Name = $"{((PianoKey)ky).ToString()}{oct}";
+            keyWhiteRect1.Stroke = new SolidColorBrush(Colors.Black);
+            keyWhiteRect1.Fill = new SolidColorBrush(Colors.White);
+            keyWhiteRect1.StrokeThickness = 4;
+            keyWhiteRect1.Height = 200;
+            KeysWhiteSP.Children.Add(keyWhiteRect1);
+            System.Diagnostics.Debug.WriteLine(keyWhiteRect1.Name);
+            if (ky == 0)
+            {
+                if (oct == 0) Notes[ky] = (keyWhiteRect1);
+                else Notes[(oct * 12)] = (keyWhiteRect1);
+            }
+            else
+            {
+                if (oct == 0) Notes[ky] = (keyWhiteRect1);
+                else Notes[(ky + (oct * 12))] = (keyWhiteRect1);
             }
             UpdateKeyboard();
         }
