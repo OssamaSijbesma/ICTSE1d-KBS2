@@ -10,45 +10,29 @@
 
 
     <Grid>
-        <RelativePanel Background="#162632">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="24*"/>
+            <RowDefinition Height="101*"/>
+        </Grid.RowDefinitions>
+        <RelativePanel Background="#162632" Margin="0,0,0,0" Grid.RowSpan="2">
             <Rectangle x:Name="MenuStrip" Fill="#253847"
                        MinHeight="36"
                        MinWidth="250"
                        RelativePanel.AlignLeftWithPanel="True"
                        RelativePanel.AlignRightWithPanel="True"/>
+            <Button x:Name="Return" MinHeight="36" Content="Return" Click="NavBack_Click" HorizontalAlignment="Left" Background="#253847" RenderTransformOrigin="0.368,0.5" Margin="0,0,0,0" VerticalAlignment="Center" Height="35" Width="74" />
 
-            <Button x:Name="File" MinHeight="36" Content="File" HorizontalAlignment="Center" VerticalAlignment="Center" Background="#253847">
-                <Button.Flyout>
-                    <MenuFlyout>
-                        <MenuFlyoutItem Text="New MIDI File" Click="FileNewMIDIFile_Click" />
-                    </MenuFlyout>
-                </Button.Flyout>
-            </Button>
+            <TextBlock Name="TXTBlock_OpenFile" Text="Open MIDI File" HorizontalAlignment="Left" Margin="80,55,0,-5" TextWrapping="Wrap" RelativePanel.Above="TXTBox_Title" FontSize="36"/>
+            <Button Name="BTN_OpenFile" Background="#253847" Content="Open" HorizontalAlignment="Left" Margin="21,44,0,0" RelativePanel.RightOf="TXTBlock_OpenFile" RelativePanel.Above="TXTBox_Title" VerticalAlignment="Top" Width="75" Height="35" Click="OnOpenFile"/>
 
-            <Button x:Name="Options" MinHeight="36" Content="Options" HorizontalAlignment="Center" VerticalAlignment="Center" Background="#253847" RelativePanel.RightOf="File">
-                <Button.Flyout>
-                    <MenuFlyout>
-                        <MenuFlyoutItem x:Name="nav_practice" Text="Practice" Click="NavPractice_Click" />
-                        <MenuFlyoutItem x:Name="nav_settings" Text="Settings" Click="NavSettings_Click" />
-                        <MenuFlyoutItem x:Name="nav_credits" Text="Credits" Click="NavCredits_Click" />
-                    </MenuFlyout>
-                </Button.Flyout>
-            </Button>
+            <TextBlock Name="TXTBlock_Title" Text="Title" Margin="80,155,1,-74"
+                       RelativePanel.AlignLeftWithPanel="True" RelativePanel.Below="MenuStrip" FontSize="36" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
 
+            <TextBox x:Name="TXTBox_Title" PlaceholderText="Insert title here..." Height="26" Margin="0,79,-478,0" Text="" MinWidth="250" HorizontalAlignment="Right" VerticalAlignment="Top" Width="398" Background="Transparent"
+                     RelativePanel.Below="TXTBlock_Title"
+                     TextChanged="Title_TextChanged"/>
 
-
-
-            <TextBlock Name="Title" Text="Title" Margin="80,80,0,1"
-                       RelativePanel.AlignLeftWithPanel="True" RelativePanel.Below="MenuStrip" FontSize="36" />
-            <TextBox x:Name="TitleBox" PlaceholderText="Insert title here" Height="26" Margin="80,0,0,0" Text="" MinWidth="250" HorizontalAlignment="Right" VerticalAlignment="Top" Width="598" Background="Transparent"
-                     RelativePanel.AlignLeftWithPanel="True"
-                     RelativePanel.Below="Title"
-                     TextChanged="Title_TextChanged"
-                     />
-            <TextBlock Name="OpenFileText" Text="Open MIDI File" HorizontalAlignment="Center" Margin="80,50,0,0" TextWrapping="Wrap" RelativePanel.Below="TitleBox" VerticalAlignment="Stretch" FontSize="36"/>
-            <Button Name="OpenFile" Background="#253847" Content="Open" HorizontalAlignment="Right" Margin="60,50,0,0" RelativePanel.RightOf="OpenFileText" RelativePanel.Below="TitleBox" VerticalAlignment="Top" Width="100" Height="50" Click="OpenFile_Click"/>
-
-
+            <Button Name="BTN_Submit" Background="#253847" Content="Submit" HorizontalAlignment="Left" RelativePanel.RightOf="TXTBlock_OpenFile" RelativePanel.Below="TXTBox_Title" VerticalAlignment="Top" Width="75" Height="35" Click="OnSubmit" Margin="-238,20,0,0"/>
 
         </RelativePanel>
     </Grid>
