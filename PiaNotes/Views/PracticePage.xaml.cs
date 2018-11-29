@@ -34,6 +34,8 @@ namespace PiaNotes.Views
 
         // Length of 127 because of 127 notes
         private Rectangle[] Notes = new Rectangle[127];
+        private int Keys = Settings.OctaveAmount * 12;
+        private double oldWidth;
         private enum PianoKey { C = 0, D = 2, E = 4, F = 5, G = 7, A = 9, B = 11 };
         private enum PianoKeySharp { CSharp = 1, DSharp = 3, FSharp = 6, GSharp = 8, ASharp = 10 };
 
@@ -364,12 +366,15 @@ namespace PiaNotes.Views
         // Updates the keyboard. Is used after first initializing the keyboard or after resizing the window width.
         public void UpdateKeyboard()
         {
-            int windowWidth = Convert.ToInt32(Window.Current.Bounds.Width);
-            windowWidth -= (Convert.ToInt32(Window.Current.Bounds.Width)) / Keys;
+            int windowWidthBlack = Convert.ToInt32(Window.Current.Bounds.Width);
+            double windowWidth = Convert.ToInt64(ActualWidth);
+            double keyWidthWhite = 40;
+            double keyWidthBlack = 40;
+            bool widthChanged = false;
 
             // Counts amount of white keys.
-            int keyWhiteAmount = 7;
-            if (Settings.OctaveAmount != 0) keyWhiteAmount = Keys - (Settings.OctaveAmount * 5);
+            int keyWhiteAmount = 8;
+            if (Settings.OctaveAmount != 0) keyWhiteAmount = (Keys - (Settings.OctaveAmount * 5) + 1);
 
             // Sets width for white keys.
             foreach (Rectangle key in KeysWhiteSP.Children)
@@ -377,60 +382,58 @@ namespace PiaNotes.Views
                 try
                 {
                     // Calculates width for the white keys.
-                    key.Width = (windowWidth / keyWhiteAmount);
+                    keyWidthWhite = (windowWidth / keyWhiteAmount);
+                    keyWidthBlack = (windowWidth / keyWhiteAmount);
+                    key.Width = keyWidthWhite;
                 }
                 catch (Exception)
                 {
                     // If width can't be calculated, change width to a set value.
-                    key.Width = 40;
+                    key.Width = keyWidthWhite;
                 }
+                if (key.Width != oldWidth) widthChanged = true;
+                oldWidth = key.Width;
             }
 
             // Sets width and location for black keys.
-            bool initialCsharp = true;
-            foreach (Rectangle key in KeysBlackSP.Children)
+            if(widthChanged)
             {
-                double keyWhiteWidth;
-                try
+                bool initialCsharp = true;
+                int count = 0;
+                foreach (Rectangle key in KeysBlackSP.Children)
                 {
+                    count++;
                     // Calculates width for the black keys.
-                    keyWhiteWidth = (windowWidth / keyWhiteAmount);
-                    key.Width = keyWhiteWidth / 100 * 60;
-                }
-                catch (Exception)
-                {
-                    // If width can't be calculated, change width to a set value.
-                    keyWhiteWidth = 40;
-                    key.Width = keyWhiteWidth / 100 * 60;
-                }
+                    key.Width = keyWidthBlack / 100 * 60;
 
-                if (key.Name.Contains("CSharp"))
-                {
-                    // Calculates location for C# key.
-                    // The first key has a different calculation than the rest, because there are no prior keys.
-                    double location;
-                    if (initialCsharp)
+                    if (key.Name.Contains("CSharp"))
                     {
-                        location = keyWhiteWidth - (key.Width / 2);
-                        initialCsharp = false;
+                        // Calculates location for C# key.
+                        // The first key has a different calculation than the rest, because there are no prior keys.
+                        double location;
+                        if (initialCsharp)
+                        {
+                            location = (keyWidthBlack - (key.Width / 2));
+                            initialCsharp = false;
+                        }
+                        else
+                        {
+                            location = (keyWidthBlack - (key.Width / 2)) * 2;
+                        }
+                        key.Margin = new Thickness(location, 0, 0, 50);
                     }
-                    else
+                    else if (key.Name.Contains("DSharp") || key.Name.Contains("GSharp") || key.Name.Contains("ASharp"))
                     {
-                        location = (keyWhiteWidth - (key.Width / 2)) * 2;
+                        // Calculates location for D#/G#/A# keys.
+                        double location = keyWidthBlack - key.Width;
+                        key.Margin = new Thickness(location, 0, 0, 50);
                     }
-                    key.Margin = new Thickness(location, 0, 0, 50);
-                }
-                else if (key.Name.Contains("DSharp") || key.Name.Contains("GSharp") || key.Name.Contains("ASharp"))
-                {
-                    // Calculates location for D#/G#/A# keys.
-                    double location = keyWhiteWidth - key.Width;
-                    key.Margin = new Thickness(location, 0, 0, 50);
-                }
-                else if (key.Name.Contains("FSharp"))
-                {
-                    // Calculates location for F# key.
-                    double location = keyWhiteWidth * 2 - key.Width;
-                    key.Margin = new Thickness(location, 0, 0, 50);
+                    else if (key.Name.Contains("FSharp"))
+                    {
+                        // Calculates location for F# key.
+                        double location = keyWidthBlack * 2 - key.Width;
+                        key.Margin = new Thickness(location, 0, 0, 50);
+                    }
                 }
             }
         }
@@ -439,8 +442,11 @@ namespace PiaNotes.Views
         private void Page_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             if (KeyboardIsOpen)
+            {
                 // If the keyboard is shown, it will be updated.
                 UpdateKeyboard();
+
+            }
         }
 
         /// <summary>
