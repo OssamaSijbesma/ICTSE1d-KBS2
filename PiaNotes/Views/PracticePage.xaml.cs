@@ -365,9 +365,11 @@ namespace PiaNotes.Views
         public void UpdateKeyboard()
         {
             int windowWidth = Convert.ToInt32(Window.Current.Bounds.Width);
+            windowWidth -= (Convert.ToInt32(Window.Current.Bounds.Width)) / Keys;
 
             // Counts amount of white keys.
-            int keyWhiteAmount = (7 * Settings.OctaveAmount);
+            int keyWhiteAmount = 7;
+            if (Settings.OctaveAmount != 0) keyWhiteAmount = Keys - (Settings.OctaveAmount * 5);
 
             // Sets width for white keys.
             foreach (Rectangle key in KeysWhiteSP.Children)
