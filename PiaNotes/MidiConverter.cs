@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Windows.UI.Popups;
 
 namespace PiaNotes
 {
@@ -19,7 +18,6 @@ namespace PiaNotes
             if (!info.Exists)
             {
                 // doesn't exist
-                
             }
             if (info.Length == 0)
             {

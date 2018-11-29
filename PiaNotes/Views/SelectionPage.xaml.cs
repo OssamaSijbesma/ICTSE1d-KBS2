@@ -7,6 +7,7 @@ using Windows.UI;
 using Windows.UI.Xaml.Shapes;
 using Windows.ApplicationModel.Core;
 using Windows.UI.Popups;
+using System.IO;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -125,10 +126,12 @@ namespace PiaNotes.Views
             picker.FileTypeFilter.Add(".mid");
 
             Windows.Storage.StorageFile file = await picker.PickSingleFileAsync();
+            
             if (file != null)
             {
+                
+                MidiConverter midiConverter = new MidiConverter(file.Path);
                 // Opening file
-                MidiConverter midiConverter = new MidiConverter(file.Path.ToString());
                 var dialog = new MessageDialog("File opened ;)");
                 await dialog.ShowAsync();
             }
