@@ -16,6 +16,8 @@ using Melanchall.DryWetMidi.Smf.Interaction;
 using System.Linq;
 using System.IO;
 using System.Collections.Generic;
+using PiaNotes.ViewModels;
+using PiaNotes.Models;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
