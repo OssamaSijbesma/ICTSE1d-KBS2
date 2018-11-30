@@ -15,6 +15,7 @@ using Melanchall.DryWetMidi.Smf;
 using Melanchall.DryWetMidi.Smf.Interaction;
 using System.Linq;
 using System.IO;
+using System.Collections.Generic;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -126,7 +127,6 @@ namespace PiaNotes.Views
         private async void NewMIDIFile_Click(object sender, RoutedEventArgs e)
         {
             // DOING
-
             var picker = new Windows.Storage.Pickers.FileOpenPicker();
             picker.ViewMode = Windows.Storage.Pickers.PickerViewMode.Thumbnail;
             picker.SuggestedStartLocation = Windows.Storage.Pickers.PickerLocationId.MusicLibrary;
@@ -136,12 +136,11 @@ namespace PiaNotes.Views
             Windows.Storage.ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
             if (file != null)
             {
-                var stream = await file.OpenStreamForReadAsync();
-                ConvertMidiToText(stream, "C:\\Users\\Martijn\\Music\\midi.txt"); // hardcoded voor nu
-
-                //MidiConverter midiConverter = new MidiConverter(file);
-                var dialog = new MessageDialog("File opened ;)");
+                var dialog = new MessageDialog("File opened...");
                 await dialog.ShowAsync();
+
+                var stream = await file.OpenStreamForReadAsync();
+                ConvertMidiToText(stream);
             }
             else
             {
@@ -151,12 +150,18 @@ namespace PiaNotes.Views
             }
         }
 
-        public static void ConvertMidiToText(Stream midiFilePath, string textFilePath)
+        public async void ConvertMidiToText(Stream midiFilePath)
         {
             var midiFile = MidiFile.Read(midiFilePath);
+            IEnumerable<string> items = midiFile.GetNotes()
+                .Select(n => $"{n.NoteNumber} {n.Time} {n.Length}");
 
-            System.IO.File.WriteAllLines(textFilePath, midiFile.GetNotes()
-                .Select(n => $"{n.NoteNumber} {n.Time} {n.Length}"));
+            foreach (string i in items)
+            {
+                // Show each notenumber, time and length in dialogs.
+                var dialog = new MessageDialog($"{i}");
+                await dialog.ShowAsync();
+            }
         }       
 
         // Search bar text
