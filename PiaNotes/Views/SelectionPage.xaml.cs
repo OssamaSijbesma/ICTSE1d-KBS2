@@ -17,8 +17,10 @@ namespace PiaNotes.Views
     /// </summary>
     public sealed partial class SelectionPage : Page
     {
+        //Get Search Functionality from Databaser Class
         Databaser DB = new Databaser();
 
+       //Creates a list of musicsheets
         List<MusicSheet> Sheets = new List<MusicSheet>();
         MusicSheet a = new MusicSheet(0, "fruitmuziek", "/downloads");
 
@@ -34,6 +36,7 @@ namespace PiaNotes.Views
             var coreTitleBar = CoreApplication.GetCurrentView().TitleBar;
             coreTitleBar.ExtendViewIntoTitleBar = false;
 
+            //Adds all items from Database in list of musicsheets
             Sheets = DB.Search(null, null, null, 0, 0);
 
             // Creates most recent MIDI files.
@@ -145,7 +148,7 @@ namespace PiaNotes.Views
         // Search function.
         public void Search(string search)
         {
-            
+            //Creates a list of results where inserted Searchbar text will be displayed with the corresponding item in Database.
             List<MusicSheet> results = DB.Search(null, "MusicSheet.Title", search + "%", 0, 0);
 
             foreach (var element in results)
