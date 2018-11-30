@@ -120,6 +120,7 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="MidiConverter.cs" />
+    <Compile Include="MidiParser.cs" />
     <Compile Include="StaticObjects.cs" />
     <Compile Include="Views\SelectionPage.xaml.cs">
       <DependentUpon>SelectionPage.xaml</DependentUpon>

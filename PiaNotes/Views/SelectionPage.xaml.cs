@@ -10,6 +10,7 @@ using Windows.UI.Popups;
 using Windows.Storage.Streams;
 using Windows.Storage;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Text;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -131,12 +132,12 @@ namespace PiaNotes.Views
             Windows.Storage.ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
             if (file != null)
             {
-                //string content;
-                // Opening file
                 IBuffer buffer = await FileIO.ReadBufferAsync(file);
                 byte[] bytes = buffer.ToArray();
 
-                Console.WriteLine(bytes);
+                MidiParser midiParser = new MidiParser(bytes);
+                Console.WriteLine(midiParser.ReadHeaderChunk());
+
                 //MidiConverter midiConverter = new MidiConverter(file);
                 var dialog = new MessageDialog("File opened ;)");
                 await dialog.ShowAsync();
