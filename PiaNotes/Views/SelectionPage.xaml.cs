@@ -6,6 +6,15 @@ using Windows.UI.ViewManagement;
 using Windows.UI;
 using Windows.UI.Xaml.Shapes;
 using Windows.ApplicationModel.Core;
+using Windows.UI.Popups;
+using Windows.Storage.Streams;
+using Windows.Storage;
+using System.Runtime.InteropServices.WindowsRuntime;
+using System.Text;
+using Melanchall.DryWetMidi.Smf;
+using Melanchall.DryWetMidi.Smf.Interaction;
+using System.Linq;
+using System.IO;
 using System.Collections.Generic;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
@@ -44,13 +53,7 @@ namespace PiaNotes.Views
 
             
         }
-
-        // Menustrip: File > New MIDI File
-        private void FileNewMIDIFile_Click(object sender, RoutedEventArgs e)
-        {
-            //TO DO
-        }
-
+        
         // Creates the previews of the most recent MIDI files.
         public void CreateMostRecent()
         {
@@ -133,10 +136,45 @@ namespace PiaNotes.Views
         }
 
         // New MIDI File
-        private void NewMIDIFile_Click(object sender, RoutedEventArgs e)
+        private async void NewMIDIFile_Click(object sender, RoutedEventArgs e)
         {
-            //TO DO
+            // DOING
+            var picker = new Windows.Storage.Pickers.FileOpenPicker();
+            picker.ViewMode = Windows.Storage.Pickers.PickerViewMode.Thumbnail;
+            picker.SuggestedStartLocation = Windows.Storage.Pickers.PickerLocationId.MusicLibrary;
+            picker.FileTypeFilter.Add(".mid");
+
+            Windows.Storage.StorageFile file = await picker.PickSingleFileAsync();
+            Windows.Storage.ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
+            if (file != null)
+            {
+                var dialog = new MessageDialog("File opened...");
+                await dialog.ShowAsync();
+
+                var stream = await file.OpenStreamForReadAsync();
+                ConvertMidiToText(stream);
+            }
+            else
+            {
+                // Cancel operation.
+                var dialog = new MessageDialog("Canceling operation.");
+                await dialog.ShowAsync();
+            }
         }
+
+        public async void ConvertMidiToText(Stream midiFilePath)
+        {
+            var midiFile = MidiFile.Read(midiFilePath);
+            IEnumerable<string> items = midiFile.GetNotes()
+                .Select(n => $"{n.NoteNumber} {n.Time} {n.Length}");
+
+            foreach (string i in items)
+            {
+                // Show each notenumber, time and length in dialogs.
+                var dialog = new MessageDialog($"{i}");
+                await dialog.ShowAsync();
+            }
+        }       
 
         // Display search changes
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
