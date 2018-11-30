@@ -11,6 +11,10 @@ using Windows.Storage.Streams;
 using Windows.Storage;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text;
+using Melanchall.DryWetMidi.Smf;
+using Melanchall.DryWetMidi.Smf.Interaction;
+using System.Linq;
+using System.IO;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -132,11 +136,8 @@ namespace PiaNotes.Views
             Windows.Storage.ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
             if (file != null)
             {
-                IBuffer buffer = await FileIO.ReadBufferAsync(file);
-                byte[] bytes = buffer.ToArray();
-
-                MidiParser midiParser = new MidiParser(bytes);
-                Console.WriteLine(midiParser.ReadHeaderChunk());
+                var stream = await file.OpenStreamForReadAsync();
+                ConvertMidiToText(stream, "C:\\Users\\Martijn\\Music\\midi.txt"); // hardcoded voor nu
 
                 //MidiConverter midiConverter = new MidiConverter(file);
                 var dialog = new MessageDialog("File opened ;)");
@@ -148,9 +149,15 @@ namespace PiaNotes.Views
                 var dialog = new MessageDialog("Canceling operation.");
                 await dialog.ShowAsync();
             }
-
-            
         }
+
+        public static void ConvertMidiToText(Stream midiFilePath, string textFilePath)
+        {
+            var midiFile = MidiFile.Read(midiFilePath);
+
+            System.IO.File.WriteAllLines(textFilePath, midiFile.GetNotes()
+                .Select(n => $"{n.NoteNumber} {n.Time} {n.Length}"));
+        }       
 
         // Search bar text
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
