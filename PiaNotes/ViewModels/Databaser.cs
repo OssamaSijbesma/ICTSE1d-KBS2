@@ -13,7 +13,7 @@ namespace PiaNotes.ViewModels
     public class Databaser
     {
         //Set connection string (ROOT USER IS FOR TESTING ONLY, Use system instead)
-        private const string ConnectionString = "SERVER = localhost; DATABASE = pianotes; Uid = root; Pwd = ";
+        private const string ConnectionString = "Server=pianotesmysql.mysql.database.azure.com; Port=3306; Database=pianotes; Uid=notesAdmin@pianotesmysql; Pwd=!Pianotes223; SslMode=Preferred;";
 
         //Function for checking connection status.
         public bool CheckConnection()
