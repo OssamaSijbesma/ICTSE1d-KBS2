@@ -35,6 +35,7 @@ namespace PiaNotes.Views
         // Length of 127 because of 127 notes
         private Rectangle[] Notes = new Rectangle[127];
         private int Keys = Settings.OctaveAmount * 12;
+        private double oldWidth;
         private enum PianoKey { C = 0, D = 2, E = 4, F = 5, G = 7, A = 9, B = 11 };
         private enum PianoKeySharp { CSharp = 1, DSharp = 3, FSharp = 6, GSharp = 8, ASharp = 10 };
 
@@ -342,10 +343,28 @@ namespace PiaNotes.Views
                                 else Notes[(j + (i * 12))] = (keyWhiteRect);
                             }
                             break;
-                            ky = j;
+                            ky = 0;
                     }
                     oct = i + 1;
                 }
+            }
+            Rectangle keyWhiteRect1 = new Rectangle();
+            keyWhiteRect1.Name = $"{((PianoKey)ky).ToString()}{oct}";
+            keyWhiteRect1.Stroke = new SolidColorBrush(Colors.Black);
+            keyWhiteRect1.Fill = new SolidColorBrush(Colors.White);
+            keyWhiteRect1.StrokeThickness = 4;
+            keyWhiteRect1.Height = 200;
+            KeysWhiteSP.Children.Add(keyWhiteRect1);
+            System.Diagnostics.Debug.WriteLine(keyWhiteRect1.Name);
+            if (ky == 0)
+            {
+                if (oct == 0) Notes[ky] = (keyWhiteRect1);
+                else Notes[(oct * 12)] = (keyWhiteRect1);
+            }
+            else
+            {
+                if (oct == 0) Notes[ky] = (keyWhiteRect1);
+                else Notes[(ky + (oct * 12))] = (keyWhiteRect1);
             }
             UpdateKeyboard();
         }
@@ -354,11 +373,11 @@ namespace PiaNotes.Views
         public void UpdateKeyboard()
         {
             int windowWidth = Convert.ToInt32(Window.Current.Bounds.Width);
-            windowWidth -= (Convert.ToInt32(Window.Current.Bounds.Width)) / Keys;
+            double keyWidthWhite = 40;
 
             // Counts amount of white keys.
-            int keyWhiteAmount = 7;
-            if (Settings.OctaveAmount != 0) keyWhiteAmount = Keys - (Settings.OctaveAmount * 5);
+            int keyWhiteAmount = 8;
+            if (Settings.OctaveAmount != 0) keyWhiteAmount = (Keys - (Settings.OctaveAmount * 5) + 1);
 
             // Sets width for white keys.
             foreach (Rectangle key in KeysWhiteSP.Children)
@@ -366,12 +385,13 @@ namespace PiaNotes.Views
                 try
                 {
                     // Calculates width for the white keys.
-                    key.Width = (windowWidth / keyWhiteAmount);
+                    keyWidthWhite = (windowWidth / keyWhiteAmount);
+                    key.Width = keyWidthWhite;
                 }
                 catch (Exception)
                 {
                     // If width can't be calculated, change width to a set value.
-                    key.Width = 40;
+                    key.Width = keyWidthWhite;
                 }
             }
 
@@ -383,43 +403,39 @@ namespace PiaNotes.Views
                 try
                 {
                     // Calculates width for the black keys.
-                    keyWhiteWidth = (windowWidth / keyWhiteAmount);
-                    key.Width = keyWhiteWidth / 100 * 60;
-                }
-                catch (Exception)
-                {
-                    // If width can't be calculated, change width to a set value.
-                    keyWhiteWidth = 40;
-                    key.Width = keyWhiteWidth / 100 * 60;
-                }
+                    key.Width = keyWidthWhite / 100 * 60;
 
-                if (key.Name.Contains("CSharp"))
-                {
-                    // Calculates location for C# key.
-                    // The first key has a different calculation than the rest, because there are no prior keys.
-                    double location;
-                    if (initialCsharp)
+                    if (key.Name.Contains("CSharp"))
                     {
-                        location = keyWhiteWidth - (key.Width / 2);
-                        initialCsharp = false;
+                        // Calculates location for C# key.
+                        // The first key has a different calculation than the rest, because there are no prior keys.
+                        double location;
+                        if (initialCsharp)
+                        {
+                            location = keyWidthWhite - (key.Width / 2);
+                            initialCsharp = false;
+                        }
+                        else
+                        {
+                            location = (keyWidthWhite - (key.Width / 2)) * 2;
+                        }
+                        key.Margin = new Thickness(location, 0, 0, 50);
                     }
-                    else
+                    else if (key.Name.Contains("DSharp") || key.Name.Contains("GSharp") || key.Name.Contains("ASharp"))
                     {
-                        location = (keyWhiteWidth - (key.Width / 2)) * 2;
+                        // Calculates location for D#/G#/A# keys.
+                        double location = keyWidthWhite - key.Width;
+                        key.Margin = new Thickness(location, 0, 0, 50);
                     }
-                    key.Margin = new Thickness(location, 0, 0, 50);
-                }
-                else if (key.Name.Contains("DSharp") || key.Name.Contains("GSharp") || key.Name.Contains("ASharp"))
+                    else if (key.Name.Contains("FSharp"))
+                    {
+                        // Calculates location for F# key.
+                        double location = keyWidthWhite * 2 - key.Width;
+                        key.Margin = new Thickness(location, 0, 0, 50);
+                    }
+                } catch (Exception e)
                 {
-                    // Calculates location for D#/G#/A# keys.
-                    double location = keyWhiteWidth - key.Width;
-                    key.Margin = new Thickness(location, 0, 0, 50);
-                }
-                else if (key.Name.Contains("FSharp"))
-                {
-                    // Calculates location for F# key.
-                    double location = keyWhiteWidth * 2 - key.Width;
-                    key.Margin = new Thickness(location, 0, 0, 50);
+                    
                 }
             }
         }
