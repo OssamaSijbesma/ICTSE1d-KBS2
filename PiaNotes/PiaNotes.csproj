@@ -119,7 +119,9 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Models\Clef.cs" />
     <Compile Include="Models\MusicSheet.cs" />
+    <Compile Include="Models\Staff.cs" />
     <Compile Include="StaticObjects.cs" />
     <Compile Include="Views\SelectionPage.xaml.cs">
       <DependentUpon>SelectionPage.xaml</DependentUpon>
