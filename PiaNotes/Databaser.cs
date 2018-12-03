@@ -6,13 +6,14 @@ using System.Threading.Tasks;
 using System.Data.SqlClient;
 using MySql.Data.MySqlClient;
 using System.Data;
+using System.IO;
 
 namespace PiaNotes
 {
     public class Databaser
     {
         //Set connection string (ROOT USER IS FOR TESTING ONLY, Use system instead)
-        private const string ConnectionString = "SERVER = localhost; DATABASE = pianotes; Uid = system; Pwd = System01!";
+        private const string ConnectionString = "SERVER = pianotesmysql.mysql.database.azure.com; PORT=3306; DATABASE = pianotes; Uid = notesAdmin@pianotesmysql; Pwd = !Pianotes223; SslMode = Preferred;";
 
         //Function for checking connection status.
         public bool CheckConnection()
@@ -222,7 +223,7 @@ namespace PiaNotes
                 if (select != null) { Select = $"SELECT {select} FROM musicsheet "; }
                 
                 //If both Wheres are specified add a WHERE to the query.
-                if (whereA != null && whereB != null) { Where = $"WHERE {whereA} = '{whereB}' "; }
+                if (whereA != null && whereB != null) { Where = $"WHERE {whereA} LIKE '{whereB}' "; }
 
                 //If a limit is specified, add a LIMIT to the query
                 if (limit != 0) { Limit = $"LIMIT {limit} "; }
@@ -282,26 +283,15 @@ namespace PiaNotes
             }
         }
 
-        public bool UploadToDB(MusicSheet sheet)
+        public bool Upload(string title, string file)
         {
             try
             {
-                //Set query standaard.
-                var Select = $"SELECT * FROM musicsheet ";
-                var Where = $"";
-                var Limit = $"";
-                var Offset = $"";
-
-                //Build the sql into a string
-                string sql = Select + Where + Limit + Offset;
-
+                string sql = $"INSERT INTO musicsheet ( Title,File ) VALUES ('{title}','{file}');";
                 //Setup connection and SQL command
                 using (MySqlConnection sqlconn = new MySqlConnection(ConnectionString))
                 using (var cmd = new MySqlCommand(sql, sqlconn))
                 {
-                    //List of Searched sheets
-                    List<MusicSheet> result = new List<MusicSheet>();
-
                     //Open connection to database
                     sqlconn.Open();
 
@@ -309,15 +299,11 @@ namespace PiaNotes
                     cmd.Prepare();
 
                     //Execute SQL command
-                    var go = cmd.ExecuteReader();
-
-                    //New list to remember ids.
-                    List<int> list = new List<int>();
-
-                    
+                    cmd.ExecuteNonQuery();
 
                     //Close connection to database and return results
                     sqlconn.Close();
+
                     return true;
                 }
             }

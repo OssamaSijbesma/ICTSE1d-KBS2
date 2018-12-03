@@ -103,7 +103,7 @@ namespace PianNotes.UnitTests
             var result = db.Search(null,null,null,0,0);
 
             //Assert
-            Assert.AreEqual(2, result.Count);
+            Assert.AreEqual(4, result.Count);
         }
 
         //Depends on database
