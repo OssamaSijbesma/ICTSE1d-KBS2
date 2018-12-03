@@ -22,7 +22,7 @@ namespace PiaNotes
         //OctaveAmount is the amount of octaves on your screen at once
         public static int OctaveAmount = 5;
         //OctaveStart is the starting location of the octaves frequenty
-        public static int OctaveStart = 3;
+        public static int OctaveStart = 2;
 
         //Feedback Colours in RGB
         public static byte R = 43;

@@ -120,6 +120,8 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="Models\MusicSheet.cs" />
+    <Compile Include="Models\Note.cs" />
+    <Compile Include="Models\Sheet.cs" />
     <Compile Include="StaticObjects.cs" />
     <Compile Include="Views\SelectionPage.xaml.cs">
       <DependentUpon>SelectionPage.xaml</DependentUpon>
