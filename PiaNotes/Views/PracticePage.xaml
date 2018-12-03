@@ -12,7 +12,7 @@
         <RelativePanel Background="#162632">
 
             <Canvas
-                x:Name=""
+                x:Name="GameCanvas"
                 RelativePanel.Above="BtnStop"
                 RelativePanel.Below="MenuStrip"
                 RelativePanel.AlignRightWithPanel="True"

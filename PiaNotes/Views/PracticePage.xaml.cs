@@ -58,11 +58,7 @@ namespace PiaNotes.Views
             coreTitleBar.ExtendViewIntoTitleBar = false;
 
             //Generate the amount of Keys
-            if (Settings.OctaveAmount != 0)
-            {
-                Keys = Settings.OctaveAmount * 12;
-            }
-            else Keys = 12;
+            Keys = (Settings.OctaveAmount != 0) ? Settings.OctaveAmount * 12 : 12;
 
             //Create the keyboard to show on the screen
             CreateKeyboard();
@@ -458,6 +454,7 @@ namespace PiaNotes.Views
 
         private void GameLogic()
         {
+
         }
        
 
@@ -467,7 +464,6 @@ namespace PiaNotes.Views
 
         private void GameUI()
         {
-
 
         }
 
