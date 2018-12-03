@@ -33,7 +33,6 @@ namespace PiaNotes.Views
 
        //Creates a list of musicsheets
         List<MusicSheet> Sheets = new List<MusicSheet>();
-        MusicSheet a = new MusicSheet(0, "fruitmuziek", "/downloads");
 
         public SelectionPage()
         {
