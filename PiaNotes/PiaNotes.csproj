@@ -121,6 +121,8 @@
     </Compile>
     <Compile Include="Models\Clef.cs" />
     <Compile Include="Models\MusicSheet.cs" />
+    <Compile Include="Models\Note.cs" />
+    <Compile Include="Models\Sheet.cs" />
     <Compile Include="Models\Staff.cs" />
     <Compile Include="StaticObjects.cs" />
     <Compile Include="Views\SelectionPage.xaml.cs">
