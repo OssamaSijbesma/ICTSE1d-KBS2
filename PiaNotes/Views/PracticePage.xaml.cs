@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading;
 using Windows.ApplicationModel.Core;
 using Windows.Devices.Midi;
 using Windows.Foundation;
@@ -26,6 +27,9 @@ namespace PiaNotes.Views
     /// </summary>
     public sealed partial class PracticePage : Page
     {
+        Thread GameLogicThread;
+        Thread GameUIThread;
+
         public bool KeyboardIsOpen { get; set; } = true;
 
         //List for White keys and Black keys of the keyboard
@@ -447,6 +451,26 @@ namespace PiaNotes.Views
                 // If the keyboard is shown, it will be updated.
                 UpdateKeyboard();
         }
+
+        /// <summary>
+        /// Logic Thread where game logic gets updated
+        /// </summary>
+
+        private void GameLogic()
+        {
+        }
+       
+
+        /// <summary>
+        /// UI thread where the game objects are drawn
+        /// </summary>
+
+        private void GameUI()
+        {
+
+
+        }
+
 
         /// <summary>
         /// On click navigation
