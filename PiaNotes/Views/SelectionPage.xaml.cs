@@ -151,9 +151,6 @@ namespace PiaNotes.Views
             Windows.Storage.ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
             if (file != null)
             {
-                var dialog = new MessageDialog("File opened...");
-                await dialog.ShowAsync();
-
                 var stream = await file.OpenStreamForReadAsync();
                 ConvertMidiToText(stream);
             }
@@ -174,10 +171,46 @@ namespace PiaNotes.Views
             foreach (string i in items)
             {
                 // Show each notenumber, time and length in dialogs.
+                //string[] split = i.Split(' ');
+                //var dialog = new MessageDialog($"{GetNote(Int32.Parse(split[0]))}");
                 var dialog = new MessageDialog($"{i}");
                 await dialog.ShowAsync();
             }
-        }       
+        }
+
+        private enum PianoKey { C = 0, D = 2, E = 4, F = 5, G = 7, A = 9, B = 11 };
+        private enum PianoKeySharp { CSharp = 1, DSharp = 3, FSharp = 6, GSharp = 8, ASharp = 10 };
+
+        public string GetNote(int noteNumber)
+        {
+            int noteNumber2 = noteNumber;
+            for (int i = noteNumber; i > 11; i -= 12)
+            {
+                noteNumber2 -= 12;
+            }
+
+            string returnValue = "";
+            if (noteNumber2 == 0 || noteNumber2 == 2 ||
+                noteNumber2 == 4 || noteNumber2 == 5 ||
+                noteNumber2 == 7 || noteNumber2 == 9 ||
+                noteNumber2 == 11)
+            {
+                returnValue = ((PianoKey)noteNumber2).ToString();
+            }
+            else if (noteNumber2 == 1 || noteNumber2 == 3 ||
+                noteNumber2 == 6 || noteNumber2 == 8 ||
+                noteNumber2 == 10)
+            {
+                returnValue = ((PianoKeySharp)noteNumber2).ToString();
+            }
+            else
+            {
+                returnValue = $"Something went wrong.\nnoteNumber: {noteNumber}\nnoteNumber2: {noteNumber2}";
+            }
+
+            return returnValue;
+        }
+
 
         // Display search changes
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
