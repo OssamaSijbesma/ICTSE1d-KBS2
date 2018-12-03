@@ -47,9 +47,8 @@ namespace PiaNotes.Views
             var coreTitleBar = CoreApplication.GetCurrentView().TitleBar;
             coreTitleBar.ExtendViewIntoTitleBar = false;
 
-            //Adds all items from Database in list of musicsheets
-            //Uncomment when you have DB
-            //Sheets = DB.Search(null, null, null, 0, 0);
+            // Adds all items from Database in list of musicsheets
+            Sheets = DB.Search(null, null, null, 0, 0);
 
             // Creates most recent MIDI files.
             CreateMostRecent();
