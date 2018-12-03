@@ -6,8 +6,7 @@ using System.Threading.Tasks;
 
 namespace PiaNotes.Models
 {
-    class Sheet
+    class Staff
     {
-        
     }
 }

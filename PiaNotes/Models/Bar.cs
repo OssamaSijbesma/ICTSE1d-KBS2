@@ -6,10 +6,7 @@ using System.Threading.Tasks;
 
 namespace PiaNotes.Models
 {
-    class Clef
+    class Bar
     {
-        enum ClefTypes {Treble, Bass, Alto, Tenor}
-
-        private ClefTypes name;
     }
 }

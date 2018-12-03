@@ -30,6 +30,7 @@ namespace PiaNotes.Views
     {
         //Get Search Functionality from Databaser Class
         Databaser DB = new Databaser();
+        MidiParser MP;
 
        //Creates a list of musicsheets
         List<MusicSheet> Sheets = new List<MusicSheet>();
@@ -166,6 +167,9 @@ namespace PiaNotes.Views
             IEnumerable<string> items = midiFile.GetNotes()
                 .Select(n => $"{n.NoteNumber} {n.Time} {n.Length}");
 
+            MP = new MidiParser(midiFile);
+
+            /* Debug Test to see if all the items where received
             foreach (string i in items)
             {
                 // Show each notenumber, time and length in dialogs.
@@ -174,6 +178,7 @@ namespace PiaNotes.Views
                 var dialog = new MessageDialog($"{i}");
                 await dialog.ShowAsync();
             }
+            */
         }
 
         private enum PianoKey { C = 0, D = 2, E = 4, F = 5, G = 7, A = 9, B = 11 };
