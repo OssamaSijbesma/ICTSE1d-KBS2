@@ -12,6 +12,8 @@ namespace PiaNotes.ViewModels
     class MidiParser
     {
         private List<Models.Note> notes = new List<Models.Note>();
+        private bool multipleClefs;
+        private int amountBars;
 
         public MidiParser(MidiFile MF)
         {
@@ -21,29 +23,48 @@ namespace PiaNotes.ViewModels
             List<string> notesTimes = (MF.GetNotes().Select(n => $"{n.Time}")).ToList();
             List<string>  notesLengths = (MF.GetNotes().Select(n => $"{n.Length}")).ToList();
 
-            MusicSheet MS = new MusicSheet(MF);
-
-            for (int i = 0; i < notesNumbers.Count(); i++)
+            //Set the notes in an array and sends the array to SheetMusic
+            for (int i = 0; i < notesNumbers.Count() - 1; i++)
             {
                 notes.Add(new Models.Note(Int32.Parse(notesNumbers[i]), Int32.Parse(notesTimes[i]), Int32.Parse(notesLengths[i])));
             }
 
-            if(CheckNotes(notes)) MS.multipleClefs = true;
-            else MS.multipleClefs = false;
+            //Check if multiple clefs are needed
+            CheckClefs(notes);
+
+            //Check how many bars are needed
+            CheckBars(notes);
+
+            //Create SheetMusic with every element MidiParser calculated
+            SheetMusic SM = new SheetMusic(MF, notes, multipleClefs);
+
         }
 
-        public bool CheckNotes(List<Models.Note> notes)
+        public void CheckClefs(List<Models.Note> notes)
         {
             foreach(Models.Note n in notes)
             {
-                //Check if a note is lower than the treble clef supports
-                //TO DO find the lowest key of the treble clef and what number it connects to
-                if(n.number <= 0)
+                //Check if a note is lower than the treble clef supports, if not the bass cleff will be added
+                if(n.number <= 60)
                 {
-                    return true;
+                    multipleClefs = true;
                 }
             }
-            return false;
+            multipleClefs = false;
+        }
+
+        public void CheckBars(List<Models.Note> notes)
+        {
+            //Check how many bars are needed in the song
+            //TO DO see how many ticks there are per bar
+            int ticks = 0;
+
+            foreach (Models.Note n in notes)
+            {
+                ticks += n.length;
+            }
+            
+            //bars = ticks/(tickamount)
         }
     }
 }
