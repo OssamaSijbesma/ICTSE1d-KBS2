@@ -119,6 +119,7 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Interfaces\IGameObject.cs" />
     <Compile Include="Models\Bar.cs" />
     <Compile Include="Models\Clef.cs" />
     <Compile Include="Models\MusicSheet.cs" />
