@@ -9,13 +9,17 @@ namespace PiaNotes.Models
 {
     class Clef : IGameObject
     {
-        enum ClefTypes { Treble, Bass, Alto, Tenor }
-
         public int PosX { get; set; }
         public int PosY { get; set; }
         public int Width { get; set; }
         public int Heigth { get; set; }
+        public enum ClefTypes {Treble, Bass, Alto, Tenor}
 
-        private ClefTypes name;
+        public ClefTypes CT;
+
+        public Clef(ClefTypes ct)
+        {
+            CT = ct;
+        }
     }
 }
