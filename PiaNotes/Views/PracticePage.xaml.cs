@@ -1,23 +1,15 @@
+using Microsoft.Graphics.Canvas.UI;
+using Microsoft.Graphics.Canvas.UI.Xaml;
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using System.Threading;
 using Windows.ApplicationModel.Core;
 using Windows.Devices.Midi;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
 using Windows.UI;
 using Windows.UI.Core;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Navigation;
 using Windows.UI.Xaml.Shapes;
 
 namespace PiaNotes.Views
@@ -27,8 +19,6 @@ namespace PiaNotes.Views
     /// </summary>
     public sealed partial class PracticePage : Page
     {
-        Thread GameLogicThread;
-        Thread GameUIThread;
 
         public bool KeyboardIsOpen { get; set; } = true;
 
@@ -37,9 +27,8 @@ namespace PiaNotes.Views
         private List<Rectangle> keysBlack = new List<Rectangle>();
 
         // Length of 127 because of 127 notes
+        private int Keys;
         private Rectangle[] Notes = new Rectangle[127];
-        private int Keys = Settings.OctaveAmount * 12;
-        private double oldWidth;
         private enum PianoKey { C = 0, D = 2, E = 4, F = 5, G = 7, A = 9, B = 11 };
         private enum PianoKeySharp { CSharp = 1, DSharp = 3, FSharp = 6, GSharp = 8, ASharp = 10 };
 
@@ -47,15 +36,16 @@ namespace PiaNotes.Views
         {
             this.InitializeComponent();
 
-            // Registers a handler for the MessageReceived event
-            Settings.midiInPort.MessageReceived += MidiInPort_MessageReceived;
-
+            // Initialize the page.
             var appView = ApplicationView.GetForCurrentView();
             appView.Title = "Practice";
 
             //Titlebar
             var coreTitleBar = CoreApplication.GetCurrentView().TitleBar;
             coreTitleBar.ExtendViewIntoTitleBar = false;
+
+            // Subscribes a handler for the MessageReceived event.
+            Settings.midiInPort.MessageReceived += MidiInPort_MessageReceived;
 
             //Generate the amount of Keys
             Keys = (Settings.OctaveAmount != 0) ? Settings.OctaveAmount * 12 : 12;
@@ -209,18 +199,6 @@ namespace PiaNotes.Views
             // Byte to double conversion cannot overflow.
             doubleVal = System.Convert.ToDouble(byteVal);
             return byteVal;
-        }
-
-        // Menustrip: File > New MIDI File
-        private void FileNewMIDIFile_Click(object sender, RoutedEventArgs e)
-        {
-            //TO DO
-        }
-
-        // Menustrip: File > Open MIDI File
-        private void FileOpenMIDIFile_Click(object sender, RoutedEventArgs e)
-        {
-            //this.Frame.Navigate(typeof(SelectionPage));
         }
 
         // Menustrip: View > Keyboard
@@ -456,41 +434,48 @@ namespace PiaNotes.Views
         {
 
         }
-       
+
 
         /// <summary>
-        /// UI thread where the game objects are drawn
+        /// GameCanvas is a Win2D canvas which makes 2D graphics rendering with GPU acceleration possible.
+        /// This includes all kind of cool stuf as particles, effects etc...
         /// </summary>
 
-        private void GameUI()
+        // Initialize images and stuff.
+        private void GameCanvas_CreateResources(CanvasControl sender, CanvasCreateResourcesEventArgs args)
         {
-
         }
 
+        private void GameCanvas_Draw(CanvasControl sender, CanvasDrawEventArgs args)
+        {
+            args.DrawingSession.DrawLine(100, 100, 900, 100, Colors.White);
+            args.DrawingSession.DrawLine(100, 150, 900, 150, Colors.White);
+            args.DrawingSession.DrawLine(100, 200, 900, 200, Colors.White);
+            args.DrawingSession.DrawLine(100, 250, 900, 250, Colors.White);
+        }
 
         /// <summary>
         /// On click navigation
         /// </summary>
 
-        // Unsubscribe the MidiInPort_MessageReceived and navigate to the settings page
-        private void NavSettings_Click(object sender, RoutedEventArgs e)
-        { 
-            Settings.midiInPort.MessageReceived -= MidiInPort_MessageReceived;
-            this.Frame.Navigate(typeof(SettingsPage));
-        }
+        // Navigate to the settings page
+        private void NavSettings_Click(object sender, RoutedEventArgs e) => this.Frame.Navigate(typeof(SettingsPage));
 
-        // Unsubscribe the MidiInPort_MessageReceived and navigate to the credits page
-        private void NavCredits_Click(object sender, RoutedEventArgs e)
-        {
-            Settings.midiInPort.MessageReceived -= MidiInPort_MessageReceived;
-            this.Frame.Navigate(typeof(CreditsPage));
-        }
+        // Navigate to the credits page
+        private void NavCredits_Click(object sender, RoutedEventArgs e) => this.Frame.Navigate(typeof(CreditsPage));
 
-        // Unsubscribe the MidiInPort_MessageReceived and navigate to the selection page
-        private void NavSelection_Click(object sender, RoutedEventArgs e)
+        // Navigate to the selection page
+        private void NavSelection_Click(object sender, RoutedEventArgs e) => this.Frame.Navigate(typeof(SelectionPage));
+
+        // Handler for when the page is unloaded
+        private void Page_Unloaded(object sender, RoutedEventArgs e)
         {
+            // Unsubscribe the MidiInPort_MessageReceived
             Settings.midiInPort.MessageReceived -= MidiInPort_MessageReceived;
-            this.Frame.Navigate(typeof(SelectionPage));
+
+            // Dispose of the Win2D resources
+            this.GameCanvas.RemoveFromVisualTree();
+            this.GameCanvas = null;
         }
     }
 }
