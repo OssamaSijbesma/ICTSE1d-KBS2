@@ -1,3 +1,5 @@
+using Microsoft.Graphics.Canvas.UI;
+using Microsoft.Graphics.Canvas.UI.Xaml;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -27,8 +29,6 @@ namespace PiaNotes.Views
     /// </summary>
     public sealed partial class PracticePage : Page
     {
-        Thread GameLogicThread;
-        Thread GameUIThread;
 
         public bool KeyboardIsOpen { get; set; } = true;
 
@@ -456,17 +456,25 @@ namespace PiaNotes.Views
         {
 
         }
-       
+
 
         /// <summary>
-        /// UI thread where the game objects are drawn
+        /// GameCanvas is a Win2D canvas which makes 2D graphics rendering with GPU acceleration possible.
+        /// This includes all kind of cool stuf as particles, effects etc...
         /// </summary>
 
-        private void GameUI()
+        // Initialize images and stuff.
+        private void GameCanvas_CreateResources(CanvasControl sender, CanvasCreateResourcesEventArgs args)
         {
-
         }
 
+        private void GameCanvas_Draw(CanvasControl sender, CanvasDrawEventArgs args)
+        {
+            args.DrawingSession.DrawLine(100, 100, 900, 100, Colors.White);
+            args.DrawingSession.DrawLine(100, 150, 900, 150, Colors.White);
+            args.DrawingSession.DrawLine(100, 200, 900, 200, Colors.White);
+            args.DrawingSession.DrawLine(100, 250, 900, 250, Colors.White);
+        }
 
         /// <summary>
         /// On click navigation
@@ -491,6 +499,13 @@ namespace PiaNotes.Views
         {
             Settings.midiInPort.MessageReceived -= MidiInPort_MessageReceived;
             this.Frame.Navigate(typeof(SelectionPage));
+        }
+
+        // When the page is unloaded dispose of the Win2D resources
+        private void Page_Unloaded(object sender, RoutedEventArgs e)
+        {
+            this.GameCanvas.RemoveFromVisualTree();
+            this.GameCanvas = null;
         }
     }
 }
