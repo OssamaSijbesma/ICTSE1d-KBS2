@@ -2,6 +2,7 @@ using Microsoft.Graphics.Canvas.UI;
 using Microsoft.Graphics.Canvas.UI.Xaml;
 using System;
 using System.Collections.Generic;
+using System.Timers;
 using Windows.ApplicationModel.Core;
 using Windows.Devices.Midi;
 using Windows.UI;
@@ -19,7 +20,7 @@ namespace PiaNotes.Views
     /// </summary>
     public sealed partial class PracticePage : Page
     {
-
+        private static Timer sixtyFourthTick;
         public bool KeyboardIsOpen { get; set; } = true;
 
         //List for White keys and Black keys of the keyboard
@@ -50,8 +51,9 @@ namespace PiaNotes.Views
             //Generate the amount of Keys
             Keys = (Settings.OctaveAmount != 0) ? Settings.OctaveAmount * 12 : 12;
 
-            //Create the keyboard to show on the screen
+            //Create the keyboard to show on the screen and set a timer
             CreateKeyboard();
+            SetTimer();
         }
 
         private void MidiInPort_MessageReceived(MidiInPort sender, MidiMessageReceivedEventArgs args)
@@ -418,17 +420,23 @@ namespace PiaNotes.Views
             }
         }
 
-        // Is executed when the window is resized.
-        private void Page_SizeChanged(object sender, SizeChangedEventArgs e)
-        {
-            if (KeyboardIsOpen)
-                // If the keyboard is shown, it will be updated.
-                UpdateKeyboard();
-        }
+
 
         /// <summary>
         /// Logic Thread where game logic gets updated
         /// </summary>
+
+        private static void SetTimer()
+        {
+            // Create a timer with a sixty-fourth tick which represents the 1/64 note.
+            sixtyFourthTick = new Timer(15.625);
+            sixtyFourthTick.AutoReset = true;
+            sixtyFourthTick.Enabled = true;
+
+            // Hook up the Elapsed event for the timer. 
+            //sixtyFourthTick.Elapsed += OnTimedEvent;
+
+        }
 
         private void GameLogic()
         {
@@ -455,7 +463,7 @@ namespace PiaNotes.Views
         }
 
         /// <summary>
-        /// On click navigation
+        /// On click events navigation
         /// </summary>
 
         // Navigate to the settings page
@@ -467,6 +475,10 @@ namespace PiaNotes.Views
         // Navigate to the selection page
         private void NavSelection_Click(object sender, RoutedEventArgs e) => this.Frame.Navigate(typeof(SelectionPage));
 
+        /// <summary>
+        /// Page events
+        /// </summary>
+
         // Handler for when the page is unloaded
         private void Page_Unloaded(object sender, RoutedEventArgs e)
         {
@@ -476,6 +488,14 @@ namespace PiaNotes.Views
             // Dispose of the Win2D resources
             this.GameCanvas.RemoveFromVisualTree();
             this.GameCanvas = null;
+        }
+
+        // Handler for when the page is resized
+        private void Page_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            if (KeyboardIsOpen)
+                // If the keyboard is shown, it will be updated.
+                UpdateKeyboard();
         }
     }
 }
