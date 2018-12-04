@@ -13,6 +13,9 @@ namespace PiaNotes.Models
 
         public int PosX { get; set; }
         public int PosY { get; set; }
+        public int Width { get; set; }
+        public int Heigth { get; set; }
+
         private ClefTypes name;
     }
 }

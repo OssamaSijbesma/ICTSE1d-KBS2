@@ -10,5 +10,7 @@ namespace PiaNotes.Interfaces
     {
         int PosX { get; set; }
         int PosY { get; set; }
+        int Width { get; set; }
+        int Heigth { get; set; }
     }
 }
