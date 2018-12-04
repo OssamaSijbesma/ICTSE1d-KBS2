@@ -20,7 +20,10 @@ namespace PiaNotes.Views
     /// </summary>
     public sealed partial class PracticePage : Page
     {
-        private static Timer sixtyFourthTick;
+        //DispatcherTimer is the regular timer. It fires its Tick event on the UI thread, you can do anything you want with the UI. System.Timers.Timer is an asynchronous timer, its Elapsed event runs on a thread pool thread. You have to be very careful in your event handler, you are not allowed to touch any UI component or data-bound variables. And you'll need to use the lock statement where ever you access class members that are also used on the UI thread.
+        private DispatcherTimer timerGameUI;
+        private static Timer timerGameLogic;
+
         public bool KeyboardIsOpen { get; set; } = true;
 
         //List for White keys and Black keys of the keyboard
@@ -32,6 +35,13 @@ namespace PiaNotes.Views
         private Rectangle[] Notes = new Rectangle[127];
         private enum PianoKey { C = 0, D = 2, E = 4, F = 5, G = 7, A = 9, B = 11 };
         private enum PianoKeySharp { CSharp = 1, DSharp = 3, FSharp = 6, GSharp = 8, ASharp = 10 };
+
+        // GameCanvas
+        private int windowWidth;
+        private int windowHeight;
+        private int gameCanvasWidth;
+        private int gameCanvasHeight;
+        private int pos;
 
         public PracticePage()
         {
@@ -45,6 +55,10 @@ namespace PiaNotes.Views
             var coreTitleBar = CoreApplication.GetCurrentView().TitleBar;
             coreTitleBar.ExtendViewIntoTitleBar = false;
 
+            // Initialize variables
+            windowWidth = Convert.ToInt32(Window.Current.Bounds.Width);
+            windowHeight = Convert.ToInt32(Window.Current.Bounds.Height);
+
             // Subscribes a handler for the MessageReceived event.
             Settings.midiInPort.MessageReceived += MidiInPort_MessageReceived;
 
@@ -53,7 +67,8 @@ namespace PiaNotes.Views
 
             //Create the keyboard to show on the screen and set a timer
             CreateKeyboard();
-            SetTimer();
+            GameTimerLogic();
+            GameTimerUI();
         }
 
         private void MidiInPort_MessageReceived(MidiInPort sender, MidiMessageReceivedEventArgs args)
@@ -139,14 +154,10 @@ namespace PiaNotes.Views
 
                     // If it is a black key, the color will be slightly darker (-25 on all values except A) than a white key.
                     // Colors will be pulled from Settings.cs.
-                    if (Notes[note].Name.Contains("Sharp"))
-                    {
-                        Notes[note].Fill = new SolidColorBrush(Windows.UI.Color.FromArgb(255, DoubleToByte(Settings.R - neg), DoubleToByte(Settings.G - neg), DoubleToByte(Settings.B - neg)));
-                    }
-                    else
-                    {
-                        Notes[note].Fill = new SolidColorBrush(Windows.UI.Color.FromArgb(255, Settings.R, Settings.G, Settings.B));
-                    }
+                    Notes[note].Fill = (Notes[note].Name.Contains("Sharp")) ?
+                                            Notes[note].Fill = new SolidColorBrush(Color.FromArgb(255, DoubleToByte(Settings.R - neg), DoubleToByte(Settings.G - neg), DoubleToByte(Settings.B - neg))) :
+                                            Notes[note].Fill = new SolidColorBrush(Color.FromArgb(255, Settings.R, Settings.G, Settings.B));
+
                 }
                 catch (Exception e)
                 {
@@ -352,7 +363,6 @@ namespace PiaNotes.Views
         // Updates the keyboard. Is used after first initializing the keyboard or after resizing the window width.
         public void UpdateKeyboard()
         {
-            int windowWidth = Convert.ToInt32(Window.Current.Bounds.Width);
             double keyWidthWhite = 40;
 
             // Counts amount of white keys.
@@ -415,7 +425,7 @@ namespace PiaNotes.Views
                     }
                 } catch (Exception e)
                 {
-                    
+
                 }
             }
         }
@@ -425,41 +435,62 @@ namespace PiaNotes.Views
         /// <summary>
         /// Logic Thread where game logic gets updated
         /// </summary>
+        /// 
 
-        private static void SetTimer()
+        private void GameTimerLogic()
         {
             // Create a timer with a sixty-fourth tick which represents the 1/64 note.
-            sixtyFourthTick = new Timer(15.625);
-            sixtyFourthTick.AutoReset = true;
-            sixtyFourthTick.Enabled = true;
+            timerGameLogic = new Timer(15.625);
+            timerGameLogic.AutoReset = true;
+            timerGameLogic.Enabled = true;
 
             // Hook up the Elapsed event for the timer. 
-            //sixtyFourthTick.Elapsed += OnTimedEvent;
-
+            timerGameLogic.Elapsed += GameTickLogic;
         }
 
-        private void GameLogic()
+        private void GameTickLogic(Object source, ElapsedEventArgs e)
         {
-
+            pos--;
         }
 
 
         /// <summary>
         /// GameCanvas is a Win2D canvas which makes 2D graphics rendering with GPU acceleration possible.
         /// This includes all kind of cool stuf as particles, effects etc...
-        /// </summary>
+        /// </summary> 
+
+        private void GameTimerUI()
+        {
+            timerGameUI = new DispatcherTimer();
+            timerGameUI.Interval = TimeSpan.FromMilliseconds(8);
+            timerGameUI.Tick += GameTickUI;
+            timerGameUI.Start();
+        }
+
+        private void GameTickUI(object sender, object e)
+        {
+            // Redraw screen.
+            GameCanvas.Invalidate();
+        }
 
         // Initialize images and stuff.
         private void GameCanvas_CreateResources(CanvasControl sender, CanvasCreateResourcesEventArgs args)
         {
+            pos = windowWidth - windowWidth/10;
+
         }
 
         private void GameCanvas_Draw(CanvasControl sender, CanvasDrawEventArgs args)
         {
-            args.DrawingSession.DrawLine(100, 100, 900, 100, Colors.White);
-            args.DrawingSession.DrawLine(100, 150, 900, 150, Colors.White);
-            args.DrawingSession.DrawLine(100, 200, 900, 200, Colors.White);
-            args.DrawingSession.DrawLine(100, 250, 900, 250, Colors.White);
+            int staffStart = windowWidth / 10;
+            int staffWidth = windowWidth - staffStart;
+            
+
+            for (int i = 100; i <= 300; i += 50 )
+            {
+                 args.DrawingSession.DrawLine(staffStart, i, staffWidth, i, Colors.White);
+            }
+            args.DrawingSession.DrawCircle(pos, 100, 8, Colors.White, 3);
         }
 
         /// <summary>
@@ -496,6 +527,11 @@ namespace PiaNotes.Views
             if (KeyboardIsOpen)
                 // If the keyboard is shown, it will be updated.
                 UpdateKeyboard();
+
+            var bounds = ApplicationView.GetForCurrentView().VisibleBounds;
+
+            gameCanvasWidth = (int)bounds.Width;
+            gameCanvasHeight = (int)bounds.Height;
         }
     }
 }
