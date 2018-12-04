@@ -36,7 +36,7 @@ namespace PiaNotes.ViewModels
             CheckBars(notes);
 
             //Create SheetMusic with every element MidiParser calculated
-            SheetMusic SM = new SheetMusic(MF, notes, multipleClefs);
+            SheetMusic SM = new SheetMusic(MF, notes, multipleClefs, amountBars);
 
         }
 
@@ -56,15 +56,15 @@ namespace PiaNotes.ViewModels
         public void CheckBars(List<Models.Note> notes)
         {
             //Check how many bars are needed in the song
-            //TO DO see how many ticks there are per bar
+            //There are 96 ticks for a quarternote, so in a 4/4 beat there are 384
             int ticks = 0;
 
             foreach (Models.Note n in notes)
             {
                 ticks += n.length;
             }
-            
-            //bars = ticks/(tickamount)
+
+            amountBars = ticks / 384;
         }
     }
 }

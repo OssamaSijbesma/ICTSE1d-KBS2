@@ -23,11 +23,20 @@ namespace PiaNotes.Models
         private List<Clef> clefs;
         private List<Staff> staffs;
 
-        public SheetMusic(MidiFile MiFi, List<Note> Notes, bool MC)
+        public SheetMusic(MidiFile MiFi, List<Note> Notes, bool MC, int AB)
         {
             MF = MiFi;
             notes = Notes;
             multipleClefs = MC;
+
+            if(AB > 1)
+            {
+                bars = new List<Bar>();
+                for (int i = AB; i > 0; i--)
+                {
+                    bars.Add(new Bar());
+                }
+            }
 
             if (multipleClefs)
             {
