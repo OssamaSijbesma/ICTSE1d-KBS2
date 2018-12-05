@@ -15,6 +15,7 @@ using Windows.UI.Xaml.Navigation;
 using Windows.Devices.Enumeration;
 using Windows.Devices.Midi;
 using System.Threading.Tasks;
+using PiaNotes.ViewModels;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -57,21 +58,35 @@ namespace PiaNotes.Views
 
         private async void midiInPortListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            //Collect device information about the input devices, if nothing is there return
+            //Collect device information about the input devices, if there's no info -> return
             var deviceInformationCollection = inputDeviceWatcher.DeviceInformationCollection;
             if (deviceInformationCollection == null) return;
 
-            //If there is something select the one, but if it doesn't contain anything return again
-            DeviceInformation devInfo = deviceInformationCollection[midiInPortListBox.SelectedIndex];
-            if (devInfo == null) return;
-
-            //Await the response of the input device. If there is nothing return with debug writeline
-            Settings.midiInPort = await MidiInPort.FromIdAsync(devInfo.Id);
-            if (Settings.midiInPort == null)
+            //Checks if the list contains a Midi In device. If there's no In Device there will be a msg saying that there are no devices connected. If you click this msg an error will pop-up
+            try
             {
-                System.Diagnostics.Debug.WriteLine("Unable to create MidiInPort from input device");
-                return;
+                // Checks if selectedindex is -1. -1 Means that nothing is selected -> if you dont check this it shows the error pop-up
+                if (midiInPortListBox.SelectedIndex != -1)
+                {
+                DeviceInformation devInfo = deviceInformationCollection[midiInPortListBox.SelectedIndex];
+                if (devInfo == null) return;
+
+                //Await the response of the input device. If there is nothing return with debug writeline
+                Settings.midiInPort = await MidiInPort.FromIdAsync(devInfo.Id);
+                if (Settings.midiInPort == null)
+                {
+                    System.Diagnostics.Debug.WriteLine("Unable to create MidiInPort from input device");
+                    return;
+                }
+                }
             }
+            catch (Exception b)
+            {
+                // Sets SelectedIndex to -1, making it so that whatever was previously selected will now be unselected.
+                midiInPortListBox.SelectedIndex = -1;
+                await StaticObjects.NoMidiInOutDialog.ShowAsync();
+                System.Diagnostics.Debug.WriteLine(b.Message);
+            }  
         }
 
         private void Velocity_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
@@ -90,20 +105,34 @@ namespace PiaNotes.Views
 
         private async void midiOutPortListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            //Collect device information about the output devices, if nothing is there return
+            //Collect device information about the output devices, if there's no info -> return
             var deviceInformationCollection = outputDeviceWatcher.DeviceInformationCollection;
             if (deviceInformationCollection == null) return;
 
-            //If there is something select the one, but if it doesn't contain anything return again
-            DeviceInformation devInfo = deviceInformationCollection[midiOutPortListBox.SelectedIndex];
-            if (devInfo == null) return;
-
-            //Await the response of the output device. If there is nothing return with debug writeline
-            Settings.midiOutPort = await MidiOutPort.FromIdAsync(devInfo.Id);
-            if (Settings.midiOutPort == null)
+            //Checks if the list contains a Midi Out device. If there's no Out device there will be a msg saying that there are no devices connected. If you click this msg an error will pop-up
+            try
             {
-                System.Diagnostics.Debug.WriteLine("Unable to create MidiOutPort from output device");
-                return;
+                // Checks if selectedindex is -1. -1 Means that nothing is selected -> if you dont check this it shows the error pop-up
+                if (midiOutPortListBox.SelectedIndex != -1)
+                {
+                    DeviceInformation devInfo = deviceInformationCollection[midiOutPortListBox.SelectedIndex];
+                    if (devInfo == null) return;
+
+                    //Await the response of the output device. If there is nothing return with debug writeline
+                    Settings.midiOutPort = await MidiOutPort.FromIdAsync(devInfo.Id);
+                    if (Settings.midiOutPort == null)
+                    {
+                        System.Diagnostics.Debug.WriteLine("Unable to create MidiOutPort from input device");
+                        return;
+                    }
+                }
+            }
+            catch (Exception b)
+            {
+                // Sets SelectedIndex to -1, making it so that whatever was previously selected will now be unselected.
+                midiInPortListBox.SelectedIndex = -1;
+                await StaticObjects.NoMidiInOutDialog.ShowAsync();
+                System.Diagnostics.Debug.WriteLine(b.Message);
             }
         }
 

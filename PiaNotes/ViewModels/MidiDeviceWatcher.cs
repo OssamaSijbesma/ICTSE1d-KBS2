@@ -8,7 +8,7 @@ using Windows.UI.Core;
 using Windows.UI.Xaml.Controls;
 using Windows.Devices.Midi;
 
-namespace PiaNotes
+namespace PiaNotes.ViewModels
 {
 
     class MidiDeviceWatcher 

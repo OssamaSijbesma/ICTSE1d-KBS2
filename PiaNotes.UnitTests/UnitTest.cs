@@ -10,7 +10,7 @@ namespace PianNotes.UnitTests
         public void CheckConnection_AttemptConnection_IsOpen()
         {
             //Arange
-            var db = new PiaNotes.Databaser();
+            var db = new PiaNotes.ViewModels.Databaser();
 
             //Act
             var result = db.CheckConnection();
@@ -25,7 +25,7 @@ namespace PianNotes.UnitTests
         public void SearchId_SearchId1_IsTestSheet1()
         {
             //Arange
-            var db = new PiaNotes.Databaser();
+            var db = new PiaNotes.ViewModels.Databaser();
 
             //Act
             var result = db.SearchId(1);
@@ -41,7 +41,7 @@ namespace PianNotes.UnitTests
         public void SearchId_SearchIdThatDoesNotExist_IsNull()
         {
             //Arange
-            var db = new PiaNotes.Databaser();
+            var db = new PiaNotes.ViewModels.Databaser();
 
             //Act
             var result = db.SearchId(9999999);
@@ -55,7 +55,7 @@ namespace PianNotes.UnitTests
         public void SearchTitle_SearchTitleTestSheet_FoundAllWithTitleAsTestSheet()
         {
             //Arange
-            var db = new PiaNotes.Databaser();
+            var db = new PiaNotes.ViewModels.Databaser();
 
             //Act
             var result = db.SearchTitle("TestSheet");
@@ -69,7 +69,7 @@ namespace PianNotes.UnitTests
         public void SearchTitle_SearchTitleThatDoesNotExist_IsNull()
         {
             //Arange
-            var db = new PiaNotes.Databaser();
+            var db = new PiaNotes.ViewModels.Databaser();
 
             //Act
             var result = db.SearchTitle("TestShewegwggdset");
@@ -83,7 +83,7 @@ namespace PianNotes.UnitTests
         public void SearchNumber_Skip1Pick1_1ResultId2()
         {
             //Arange
-            var db = new PiaNotes.Databaser();
+            var db = new PiaNotes.ViewModels.Databaser();
 
             //Act
             var result = db.SearchNumber(1,1);
@@ -97,7 +97,7 @@ namespace PianNotes.UnitTests
         public void Search_SearchAll_AllFromTable()
         {
             //Arange
-            var db = new PiaNotes.Databaser();
+            var db = new PiaNotes.ViewModels.Databaser();
 
             //Act
             var result = db.Search(null,null,null,0,0);
@@ -111,7 +111,7 @@ namespace PianNotes.UnitTests
         public void Search_UseExtraSpecific_TestSheet1()
         {
             //Arange
-            var db = new PiaNotes.Databaser();
+            var db = new PiaNotes.ViewModels.Databaser();
 
             //Act
             var result = db.Search("Id,Title,File", "Id", "1", 0, 0);
@@ -125,7 +125,7 @@ namespace PianNotes.UnitTests
         public void Search_UseOffset_TestSheet2()
         {
             //Arange
-            var db = new PiaNotes.Databaser();
+            var db = new PiaNotes.ViewModels.Databaser();
 
             //Act
             var result = db.Search(null, null, null, 1, 1);
@@ -141,7 +141,7 @@ namespace PianNotes.UnitTests
         public void Search_WrongWhereBInput_NullResult()
         {
             //Arange
-            var db = new PiaNotes.Databaser();
+            var db = new PiaNotes.ViewModels.Databaser();
 
             //Act
             var result = db.Search(null, "Title", "shfhw", 0, 0);
@@ -155,7 +155,7 @@ namespace PianNotes.UnitTests
         public void Search_WrongWhereAInput_NullResult()
         {
             //Arange
-            var db = new PiaNotes.Databaser();
+            var db = new PiaNotes.ViewModels.Databaser();
 
             //Act
             var result = db.Search(null, "Tittttle", "Testsheet", 0, 0);

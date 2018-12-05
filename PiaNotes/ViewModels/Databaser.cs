@@ -7,8 +7,9 @@ using System.Data.SqlClient;
 using MySql.Data.MySqlClient;
 using System.Data;
 using System.IO;
+using PiaNotes.Models;
 
-namespace PiaNotes
+namespace PiaNotes.ViewModels
 {
     public class Databaser
     {
@@ -225,7 +226,14 @@ namespace PiaNotes
                 //If both Wheres are specified add a WHERE to the query.
                 if (whereA != null && whereB != null)
                 {
-                    Where = $"WHERE {whereA} LIKE '{whereB}' ";
+                    if (whereA == "Id")
+                    {
+                        Where = $"WHERE UPPER({whereA}) LIKE UPPER('{whereB}') ";
+                    }
+                    else
+                    {
+                        Where = $"WHERE UPPER({whereA}) LIKE UPPER('{whereB}%') ";
+                    }
                 }
 
                 //If a limit is specified, add a LIMIT to the query

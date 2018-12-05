@@ -19,7 +19,7 @@
             <Button x:Name="File" MinHeight="36" Content="File" HorizontalAlignment="Center" VerticalAlignment="Center" Background="#253847">
                 <Button.Flyout>
                     <MenuFlyout>
-                        <MenuFlyoutItem Text="New MIDI File" Click="FileNewMIDIFile_Click" />
+                        <MenuFlyoutItem Text="New MIDI File" Click="NewMIDIFile_Click" />
                     </MenuFlyout>
                 </Button.Flyout>
             </Button>

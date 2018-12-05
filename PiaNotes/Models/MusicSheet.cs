@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PiaNotes
+namespace PiaNotes.Models
 {
     public class MusicSheet
     {
