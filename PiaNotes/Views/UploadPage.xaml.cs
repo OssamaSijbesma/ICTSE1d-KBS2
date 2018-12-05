@@ -1,8 +1,11 @@
-﻿using System;
+﻿using Melanchall.DryWetMidi.Smf;
+using Melanchall.DryWetMidi.Smf.Interaction;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.Storage;
@@ -43,7 +46,10 @@ namespace PiaNotes.Views
 
             if (file != null)
             {
-                var stream = await file.OpenAsync(Windows.Storage.FileAccessMode.Read);
+                var stream = await file.OpenStreamForReadAsync(); // martijn edition
+                //var stream = await file.OpenAsync(Windows.Storage.FileAccessMode.Read); // sybren edition
+                TXTBox_Title.Text = file.DisplayName;
+                ConvertMidiToText(stream);
             }
             else
             {
@@ -51,7 +57,25 @@ namespace PiaNotes.Views
             }
 
         }
+        
+        public void ConvertMidiToText(Stream midiFilePath)
+        {
+            var midiFile = MidiFile.Read(midiFilePath);
+            IEnumerable<string> items = midiFile.GetNotes()
+                .Select(n => $"{n.NoteNumber} {n.Time} {n.Length}");
+            int count = items.Count();
 
+            int current = 0;
+
+            // Load each notenumber, time and length
+            foreach (string i in items)
+            {
+                current++;
+                ProgressBar_MIDILoader.Value = current / count * 100;
+                // Do something with i
+            }
+        }     
+        
         private void OnSubmit(object sender, RoutedEventArgs e)
         {
             return;
