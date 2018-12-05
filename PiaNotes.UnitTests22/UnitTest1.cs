@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace UnitTestProject1
+namespace PiaNotes.UnitTests22
 {
     [TestClass]
     public class UnitTest1

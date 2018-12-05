@@ -52,7 +52,7 @@ namespace PianNotes.UnitTests
 
         //Depends on database with named TestSheet
         [TestMethod]
-        public void SearchTitle_SearchTitleTestSheet_FoundTestSheets()
+        public void SearchTitle_SearchTitleTestSheet_FoundAllWithTitleAsTestSheet()
         {
             //Arange
             var db = new PiaNotes.ViewModels.Databaser();
@@ -94,7 +94,7 @@ namespace PianNotes.UnitTests
 
         //Depends on database
         [TestMethod]
-        public void Search_AllSearch_AllFromTable()
+        public void Search_SearchAll_AllFromTable()
         {
             //Arange
             var db = new PiaNotes.ViewModels.Databaser();
@@ -103,23 +103,21 @@ namespace PianNotes.UnitTests
             var result = db.Search(null,null,null,0,0);
 
             //Assert
-            Assert.AreEqual(2, result.Count);
+            Assert.IsTrue(result.Count > 0);
         }
 
         //Depends on database
         [TestMethod]
-        public void Search_UseExtra_TestSheet1()
+        public void Search_UseExtraSpecific_TestSheet1()
         {
             //Arange
             var db = new PiaNotes.ViewModels.Databaser();
 
             //Act
-            var result = db.Search("Id,Title,Path", "Id", "1", 1, 0);
+            var result = db.Search("Id,Title,File", "Id", "1", 0, 0);
 
             //Assert
-            Assert.AreEqual(1, result[0].Id);
-            Assert.AreEqual("TestSheet", result[0].Title);
-            Assert.AreEqual("C//TestPath", result[0].Path);
+            Assert.IsTrue(result.Count == 1);
         }
 
         //Depends on database
