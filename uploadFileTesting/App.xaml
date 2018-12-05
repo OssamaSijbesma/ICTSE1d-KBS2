@@ -1,7 +1,7 @@
 ﻿<Application
-    x:Class="PianotesUnitTest.App"
+    x:Class="uploadFileTesting.App"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:PianotesUnitTest">
+    xmlns:local="using:uploadFileTesting">
 
 </Application>
