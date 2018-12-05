@@ -223,7 +223,10 @@ namespace PiaNotes
                 if (select != null) { Select = $"SELECT {select} FROM musicsheet "; }
                 
                 //If both Wheres are specified add a WHERE to the query.
-                if (whereA != null && whereB != null) { Where = $"WHERE {whereA} LIKE '{whereB}' "; }
+                if (whereA != null && whereB != null)
+                {
+                    Where = $"WHERE {whereA} LIKE '{whereB}' ";
+                }
 
                 //If a limit is specified, add a LIMIT to the query
                 if (limit != 0) { Limit = $"LIMIT {limit} "; }
