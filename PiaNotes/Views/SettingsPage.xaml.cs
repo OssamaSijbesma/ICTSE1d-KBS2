@@ -16,43 +16,96 @@ using Windows.Devices.Enumeration;
 using Windows.Devices.Midi;
 using System.Threading.Tasks;
 using PiaNotes.ViewModels;
+using Windows.Storage;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
 namespace PiaNotes.Views
 {
     /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
+    /// Settings page.
     /// </summary>
     public sealed partial class SettingsPage : Page
-    {
+    {                                                                                               
         MidiDeviceWatcher inputDeviceWatcher;
         MidiDeviceWatcher outputDeviceWatcher;
+        
+        // Storing in Local
+        ApplicationDataContainer localSettings;
+        StorageFolder localFolder;
 
         public SettingsPage()
         {
             this.InitializeComponent();
 
-            //Device watchers added to watch for the MIDI input and output devices
+            // Device watchers added to watch for the MIDI input and output devices
             inputDeviceWatcher = new MidiDeviceWatcher(MidiInPort.GetDeviceSelector(), midiInPortListBox, Dispatcher);
             inputDeviceWatcher.StartWatcher();
             outputDeviceWatcher = new MidiDeviceWatcher(MidiOutPort.GetDeviceSelector(), midiOutPortListBox, Dispatcher);
+
+            localFolder = ApplicationData.Current.LocalFolder;
+            localSettings = ApplicationData.Current.LocalSettings;
+
 
             //Start the Device Watchers
             outputDeviceWatcher.StartWatcher();
 
             //Set the slider back to the values the user put in and activate the correct settings
-            velocitySlider.Value = (Settings.velocity - 27);
-            volumeSlider.Value = (Settings.volume + 50);
-            if (Settings.feedback == true)
+            if (localSettings.Values["Velocity"] != null)
             {
-                volumeSlider.IsEnabled = true;
-                velocitySlider.IsEnabled = false;
-            } else
+                double velocity = (double)localSettings.Values["Velocity"];
+                velocitySlider.Value = (velocity - 27);
+            }
+            else
             {
-                Feedback.IsChecked = true;
-                volumeSlider.IsEnabled = false;
-                velocitySlider.IsEnabled = true;
+                localSettings.Values["Velocity"] = 90;
+                double velocity = (double)localSettings.Values["Velocity"];
+                velocitySlider.Value = (velocity - 27);
+            }
+
+            if (localSettings.Values["Volume"] != null)
+            {
+                double volume = (double)localSettings.Values["Volume"];
+                volumeSlider.Value = (volume + 50);
+            }
+            else
+            {
+                localSettings.Values["Volume"] = 90;
+                double volume = (double)localSettings.Values["Volume"];
+                volumeSlider.Value = (volume + 50);
+            }
+
+
+            if (localSettings.Values["Feedback"] != null)
+            {
+                bool feedback = (bool)localSettings.Values["Feedback"];
+                if (feedback)
+                {
+                    volumeSlider.IsEnabled = true;
+                    velocitySlider.IsEnabled = false;
+                }
+                else
+                {
+                    Feedback.IsChecked = true;
+                    volumeSlider.IsEnabled = false;
+                    velocitySlider.IsEnabled = true;
+                }
+            }
+            else
+            {
+                localSettings.Values["Feedback"] = true;
+                bool feedback = (bool)localSettings.Values["Feedback"];
+                if (feedback)
+                {
+                    volumeSlider.IsEnabled = true;
+                    velocitySlider.IsEnabled = false;
+                }
+                else
+                {
+                    Feedback.IsChecked = true;
+                    volumeSlider.IsEnabled = false;
+                    velocitySlider.IsEnabled = true;
+                }
             }
         }
 
@@ -93,14 +146,14 @@ namespace PiaNotes.Views
         {
             //If the slider value changed from the velocity slider, set the new value +27
             //+27 is there so the slider goes from 0 to 100, instead of 27 to 127
-            Settings.velocity = (e.NewValue + 27); 
+            localSettings.Values["Velocity"] = (e.NewValue + 27); 
         }
 
         private void Volume_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
         {
             //If the slider value changed from the volume slider, set the new value -50.
             //-50 is there so 50 = 0 and 0 = -50. This is so the volume can be lowered.
-            Settings.volume = (e.NewValue - 50);
+            localSettings.Values["Volume"] = (e.NewValue - 50);
         }
 
         private async void midiOutPortListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -187,16 +240,38 @@ namespace PiaNotes.Views
         private void Velocity_Checked(object sender, RoutedEventArgs e)
         {
             //Checking if the feedback setting is turned off or on and act accordingly
-            if(Settings.feedback == true)
+            if (localSettings.Values["Feedback"] != null)
             {
-                Settings.feedback = false;
-                volumeSlider.IsEnabled = false;
-                velocitySlider.IsEnabled = true;
-            } else
+                bool feedback = (bool)localSettings.Values["Feedback"];
+                if (feedback)
+                {
+                    localSettings.Values["Feedback"] = false;
+                    volumeSlider.IsEnabled = false;
+                    velocitySlider.IsEnabled = true;
+                }
+                else
+                {
+                    localSettings.Values["Feedback"] = true;
+                    volumeSlider.IsEnabled = true;
+                    velocitySlider.IsEnabled = false;
+                }
+            }
+            else
             {
-                Settings.feedback = true;
-                volumeSlider.IsEnabled = true;
-                velocitySlider.IsEnabled = false;
+                localSettings.Values["Feedback"] = true;
+                bool feedback = (bool)localSettings.Values["Feedback"];
+                if (feedback)
+                {
+                    localSettings.Values["Feedback"] = false;
+                    volumeSlider.IsEnabled = false;
+                    velocitySlider.IsEnabled = true;
+                }
+                else
+                {
+                    localSettings.Values["Feedback"] = true;
+                    volumeSlider.IsEnabled = true;
+                    velocitySlider.IsEnabled = false;
+                }
             }
         }
 
@@ -212,5 +287,11 @@ namespace PiaNotes.Views
             else
                 this.Frame.Navigate(typeof(SelectionPage));
         }
+
+        private void NavSelection_Click(object sender, RoutedEventArgs e)
+        {
+            this.Frame.Navigate(typeof(Test));
+        }
+
     }
 }

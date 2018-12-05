@@ -1,0 +1,31 @@
+﻿<Page
+    x:Class="PiaNotes.Test"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:PiaNotes"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Grid>
+
+        <NavigationView x:Name="SettingsNV"
+                Loaded="SettingsNV_Loaded"
+                Margin="0,12,0,0"
+                SelectionChanged="SettingsNV_SelectionChanged"
+                ItemInvoked="SettingsNV_ItemInvoked"
+                IsTabStop="False">
+            <NavigationView.MenuItems>
+                <NavigationViewItem Icon="Keyboard" Content="MIDI" Tag="MIDI_Settings" />
+                <NavigationViewItem Icon="Volume" Content="Sound" Tag="Sound_Settings" />
+                <NavigationViewItem Icon="TwoPage" Content="Octaves" Tag="Octaves_Settings" />
+                <NavigationViewItem Icon="Edit" Content="Theme" Tag="Theme_Settings" />
+            </NavigationView.MenuItems>
+            <Frame x:Name="contentFrame"></Frame>
+        </NavigationView>
+
+
+
+    </Grid>
+</Page>
