@@ -1,7 +1,10 @@
+using Microsoft.Graphics.Canvas;
 using Microsoft.Graphics.Canvas.UI;
 using Microsoft.Graphics.Canvas.UI.Xaml;
+using PiaNotes.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Timers;
 using Windows.ApplicationModel.Core;
 using Windows.Devices.Midi;
@@ -42,6 +45,17 @@ namespace PiaNotes.Views
         private int gameCanvasWidth;
         private int gameCanvasHeight;
         private int pos;
+
+        // Assets
+        bool isLoaded = false;
+        CanvasBitmap wholeNote;
+        CanvasBitmap halfNote;
+        CanvasBitmap quaterNote;
+        CanvasBitmap eighthNote;
+        CanvasBitmap sixteenthNote;
+        CanvasBitmap thirtySecondNote;
+
+
 
         public PracticePage()
         {
@@ -435,7 +449,21 @@ namespace PiaNotes.Views
         private void GameCanvas_CreateResources(CanvasControl sender, CanvasCreateResourcesEventArgs args)
         {
             pos = windowWidth - windowWidth/10;
+            args.TrackAsyncAction(CreateResourcesAsync(sender).AsAsyncAction());
         }
+
+        private async Task CreateResourcesAsync(CanvasControl sender)
+        {
+            ContentPipeline.ParentCanvas = sender;
+            await ContentPipeline.AddImage("wholeNote", @"Assets/Notes/ooo.png");
+            await ContentPipeline.AddImage("halfNote", @"Assets/Notes/iwi.png");
+            await ContentPipeline.AddImage("quaterNote", @"Assets/Notes/dil.png");
+            await ContentPipeline.AddImage("eighthNote", @"Assets/Notes/owo.png");
+            await ContentPipeline.AddImage("sixteenthNote", @"Assets/Notes/par.png");
+            await ContentPipeline.AddImage("thirtySecondNote", @"Assets/Notes/uwu.png");
+            isLoaded = true;
+        }
+
 
         private void GameCanvas_Draw(CanvasControl sender, CanvasDrawEventArgs args)
         {
@@ -444,6 +472,12 @@ namespace PiaNotes.Views
 
             for (int i = 100; i <= 300; i += 50 ) args.DrawingSession.DrawLine(staffStart, i, staffWidth, i, Colors.White);
             args.DrawingSession.DrawCircle(pos, 100, 8, Colors.White, 3);
+
+            CanvasBitmap cb = null;
+            if (ContentPipeline.ImageDictionary.TryGetValue("quaterNote", out cb))
+            {
+                args.DrawingSession.DrawImage(cb, 150, 400);
+            }
         }
 
         /// <summary>
@@ -469,6 +503,7 @@ namespace PiaNotes.Views
             // Stop the GameLoop and UIloop
             timerGameLogic.Stop();
             timerGameUI.Stop();
+
             // Unsubscribe the MidiInPort_MessageReceived
             Settings.midiInPort.MessageReceived -= MidiInPort_MessageReceived;
 

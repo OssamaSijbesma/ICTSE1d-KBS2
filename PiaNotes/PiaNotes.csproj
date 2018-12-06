@@ -127,6 +127,7 @@
     <Compile Include="Models\SheetMusic.cs" />
     <Compile Include="Models\Staff.cs" />
     <Compile Include="StaticObjects.cs" />
+    <Compile Include="ViewModels\ContentPipeline.cs" />
     <Compile Include="ViewModels\MidiParser.cs" />
     <Compile Include="Views\SelectionPage.xaml.cs">
       <DependentUpon>SelectionPage.xaml</DependentUpon>
@@ -162,6 +163,12 @@
     <Content Include="Assets\LargeTile.scale-150.png" />
     <Content Include="Assets\LargeTile.scale-200.png" />
     <Content Include="Assets\LargeTile.scale-400.png" />
+    <Content Include="Assets\Notes\dil.png" />
+    <Content Include="Assets\Notes\iwi.png" />
+    <Content Include="Assets\Notes\ooo.png" />
+    <Content Include="Assets\Notes\owo.png" />
+    <Content Include="Assets\Notes\par.png" />
+    <Content Include="Assets\Notes\uwu.png" />
     <Content Include="Assets\SmallTile.scale-100.png" />
     <Content Include="Assets\SmallTile.scale-125.png" />
     <Content Include="Assets\SmallTile.scale-150.png" />

@@ -1,16 +1,24 @@
-﻿using System;
+﻿using Microsoft.Graphics.Canvas;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.Graphics.Imaging;
 
 namespace PiaNotes.Interfaces
 {
     interface IGameObject
     {
-        int PosX { get; set; }
-        int PosY { get; set; }
-        int Width { get; set; }
-        int Heigth { get; set; }
+        CanvasBitmap Bitmap { get; set; }
+        Vector2 Location { get; set; }
+        BitmapSize Size { get; set; }
+
+        bool SetBitmap(string key);
+        void SetSize(int width, int height);
+        void Draw();
+        void Update();
+
     }
 }
