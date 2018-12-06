@@ -42,7 +42,7 @@ namespace PiaNotes.Views
             // Add text to titlebar.
             var appView = ApplicationView.GetForCurrentView();
             appView.Title = "Select MIDI";
-            
+
             // Adds titlebar.
             var coreTitleBar = CoreApplication.GetCurrentView().TitleBar;
             coreTitleBar.ExtendViewIntoTitleBar = false;
@@ -52,8 +52,12 @@ namespace PiaNotes.Views
 
             // Creates most recent MIDI files.
             CreateMostRecent();
+        }
 
-            
+        // Menustrip: File > New MIDI File
+        private void FileNewMIDIFile_Click(object sender, RoutedEventArgs e)
+        {
+            this.Frame.Navigate(typeof(UploadPage));
         }
         
         // Creates the previews of the most recent MIDI files.
