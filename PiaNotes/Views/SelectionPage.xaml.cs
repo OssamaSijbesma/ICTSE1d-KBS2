@@ -31,8 +31,9 @@ namespace PiaNotes.Views
         //Get Search Functionality from Databaser Class
         Databaser DB = new Databaser();
         MidiParser MP;
+        public bool DBConnection;
 
-       //Creates a list of musicsheets
+        //Creates a list of musicsheets
         List<MusicSheet> Sheets = new List<MusicSheet>();
 
         public SelectionPage()
@@ -53,44 +54,64 @@ namespace PiaNotes.Views
             // Creates most recent MIDI files.
             CreateMostRecent();
 
+            //Checks if database connection is available
             
-        }
-        
-        // Creates the previews of the most recent MIDI files.
-        public void CreateMostRecent()
-        {
-            foreach (MusicSheet l in Sheets)
+            if (DB.CheckConnection())
             {
-                // Creates StackPanel.
-                StackPanel MusicPieceSP = new StackPanel();
-                MusicPieceSP.Width = 280;
-                MusicPieceSP.Name = l.Title;
-                MusicPieceSP.Tapped += Preview_Tapped;
+                DBConnection = true;
+            } else {
+                DBConnection = false;
+            }
 
-                // Creates rectangle for MIDI preview.
-                Rectangle musicSheetRectangle = new Rectangle();
-                musicSheetRectangle.Name = MusicPieceSP.Name;
-                musicSheetRectangle.Stroke = new SolidColorBrush(Colors.White);
-                musicSheetRectangle.Fill = new SolidColorBrush(Colors.Transparent);
-                musicSheetRectangle.StrokeThickness = 1;
-                musicSheetRectangle.Height = 50;
-                musicSheetRectangle.Width = 260;
-                musicSheetRectangle.Margin = new Thickness(0, 0, 0, 0);
 
-                // Creates textblock for MIDI name.
-                TextBlock musicSheetTextBlock = new TextBlock();
-                musicSheetTextBlock.TextWrapping = TextWrapping.Wrap;
-                musicSheetTextBlock.TextAlignment = TextAlignment.Center;
-                musicSheetTextBlock.Height = 30;
-                musicSheetTextBlock.Margin = new Thickness(0, 10, 0, 0);
-                musicSheetTextBlock.Text = MusicPieceSP.Name;
 
-                // Adds rectangle and children to stackpanel.
-                MusicPieceSP.Children.Add(musicSheetTextBlock);
-                MusicPieceSP.Children.Add(musicSheetRectangle);
+        }
 
-                // Adds StackPanel to the VariableSizedWrapGrid.
-                MIDIFilesWG.Children.Add(MusicPieceSP);
+
+
+        // Creates the previews of the most recent MIDI files.
+        public async void CreateMostRecent()
+        {
+            if (DB.CheckConnection() == true)
+            {
+                foreach (MusicSheet l in Sheets)
+                {
+                    // Creates StackPanel.
+                    StackPanel MusicPieceSP = new StackPanel();
+                    MusicPieceSP.Width = 280;
+                    MusicPieceSP.Name = l.Title;
+                    MusicPieceSP.Tapped += Preview_Tapped;
+
+                    // Creates rectangle for MIDI preview.
+                    Rectangle musicSheetRectangle = new Rectangle();
+                    musicSheetRectangle.Name = MusicPieceSP.Name;
+                    musicSheetRectangle.Stroke = new SolidColorBrush(Colors.White);
+                    musicSheetRectangle.Fill = new SolidColorBrush(Colors.Transparent);
+                    musicSheetRectangle.StrokeThickness = 1;
+                    musicSheetRectangle.Height = 50;
+                    musicSheetRectangle.Width = 260;
+                    musicSheetRectangle.Margin = new Thickness(0, 0, 0, 0);
+
+                    // Creates textblock for MIDI name.
+                    TextBlock musicSheetTextBlock = new TextBlock();
+                    musicSheetTextBlock.TextWrapping = TextWrapping.Wrap;
+                    musicSheetTextBlock.TextAlignment = TextAlignment.Center;
+                    musicSheetTextBlock.Height = 30;
+                    musicSheetTextBlock.Margin = new Thickness(0, 10, 0, 0);
+                    musicSheetTextBlock.Text = MusicPieceSP.Name;
+
+                    // Adds rectangle and children to stackpanel.
+                    MusicPieceSP.Children.Add(musicSheetTextBlock);
+                    MusicPieceSP.Children.Add(musicSheetRectangle);
+
+                    // Adds StackPanel to the VariableSizedWrapGrid.
+                    MIDIFilesWG.Children.Add(MusicPieceSP);
+                }
+            }
+            else
+            {
+                await StaticObjects.NoDatabaseConnectionDialog.ShowAsync();
+                this.Frame.Navigate(typeof(UploadPage));
             }
         }
 

@@ -21,5 +21,13 @@ namespace PiaNotes
             Content = "Check your MIDI input and output device before practicing.",
             CloseButtonText = "Ok"
         };
+
+        //Popup Dialog in case of no connection with the Database
+        public static ContentDialog NoDatabaseConnectionDialog = new ContentDialog
+        {
+            Title = "There is no Internet connection!",
+            Content = "Add a local MIDI file before practicing.",
+            CloseButtonText = "Ok"
+        };
     }
 }
