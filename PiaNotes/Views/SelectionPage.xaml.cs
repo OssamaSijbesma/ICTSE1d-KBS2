@@ -68,7 +68,6 @@ namespace PiaNotes.Views
         {
             foreach (MusicSheet element in Sheets)
             {
-
                 Button musicSheetButton = new Button();
                 musicSheetButton.Height = 35;
                 musicSheetButton.Width = 260;
@@ -83,6 +82,7 @@ namespace PiaNotes.Views
                 {
                     musicSheetButton.Content = element.Title;
                 }
+                musicSheetButton.Name = element.Title;
 
                 // Adds StackPanel to the VariableSizedWrapGrid.
                 MIDIFilesWG.Children.Add(musicSheetButton);
@@ -130,6 +130,8 @@ namespace PiaNotes.Views
         private void MidiFile_Click(object sender, RoutedEventArgs e)
         {
             //TO DO
+            var button = (Button)sender;
+            // = button.Name;
         }
         
         // Display search changes
@@ -175,15 +177,14 @@ namespace PiaNotes.Views
             //Creates a list of results where inserted Searchbar text will be displayed with the corresponding item in Database.
             List<MusicSheet> results = DB.Search(null, "MusicSheet.Title", search + "%", 0, 0);
 
-            foreach (MusicSheet element in Sheets)
+            foreach (MusicSheet element in results)
             {
-
                 Button musicSheetButton = new Button();
                 musicSheetButton.Height = 35;
                 musicSheetButton.Width = 260;
                 musicSheetButton.Margin = new Thickness(10, 10, 10, 0);
                 musicSheetButton.Click += MidiFile_Click;
-
+                
                 if (element.Title.Length > 30)
                 {
                     musicSheetButton.Content = element.Title.Substring(0, 27) + "...";
@@ -192,6 +193,7 @@ namespace PiaNotes.Views
                 {
                     musicSheetButton.Content = element.Title;
                 }
+                musicSheetButton.Name = element.Title;
 
                 // Adds StackPanel to the VariableSizedWrapGrid.
                 MIDIFilesWG.Children.Add(musicSheetButton);
