@@ -69,14 +69,12 @@ namespace PiaNotes.Views
             //Checks if Database is connected
             if (DB.CheckConnection() == true)
             {
-
                 foreach (MusicSheet element in Sheets)
                 {
-
                     Button musicSheetButton = new Button();
                     musicSheetButton.Height = 35;
                     musicSheetButton.Width = 260;
-                    musicSheetButton.Margin = new Thickness(10, 10, 10, 0);
+                    musicSheetButton.Margin = new Thickness(10, 10, 10, 10);
                     musicSheetButton.Click += MidiFile_Click;
 
                     if (element.Title.Length > 30)
@@ -98,6 +96,14 @@ namespace PiaNotes.Views
                 this.Frame.Navigate(typeof(UploadPage));
             }
         }
+        
+        // Search function.
+        public void Search(string search)
+        {
+            //Creates a list of results where inserted Searchbar text will be displayed with the corresponding item in Database.
+            Sheets = DB.Search(null, "MusicSheet.Title", search + "%", 0, 0);
+            CreateMostRecent();
+        }
 
         // Updates the most recent MIDI files. Is used after first initializing or after resizing the window height.
         public void UpdateMostRecent()
@@ -105,7 +111,7 @@ namespace PiaNotes.Views
             // Creates variables for the height and width.
             int windowHeight = Convert.ToInt32(Window.Current.Bounds.Height);
             int windowWidth = Convert.ToInt32(Window.Current.Bounds.Width);
-            int amountHeight = (windowHeight - 35 - 160) / (90);
+            int amountHeight = (windowHeight - 35 - 160) / (55);
             int amountWidth = (windowWidth - 80) / (280);
             int amount = amountHeight * amountWidth;
             int count = 0;
@@ -114,17 +120,17 @@ namespace PiaNotes.Views
             foreach (object child in MIDIFilesWG.Children)
             {
                 count++;
-                if (child is StackPanel)
+                if (child is Button)
                 {
                     if (count <= amount)
                     {
                         // Makes said StackPanel visible.
-                        (child as StackPanel).Visibility = Visibility.Visible;
+                        (child as Button).Visibility = Visibility.Visible;
                     }
                     else
                     {
                         // Makes said StackPanel invisible/collapsed.
-                        (child as StackPanel).Visibility = Visibility.Collapsed;
+                        (child as Button).Visibility = Visibility.Collapsed;
                     }
                 }
             }
@@ -141,7 +147,7 @@ namespace PiaNotes.Views
         {
             //TO DO
             var button = (Button)sender;
-            // = button.Name;
+            
         }
         
         // Display search changes
@@ -179,35 +185,6 @@ namespace PiaNotes.Views
             }
 
             return returnValue;
-        }
-
-        // Search function.
-        public void Search(string search)
-        {
-            //Creates a list of results where inserted Searchbar text will be displayed with the corresponding item in Database.
-            List<MusicSheet> results = DB.Search(null, "MusicSheet.Title", search + "%", 0, 0);
-
-            foreach (MusicSheet element in results)
-            {
-                Button musicSheetButton = new Button();
-                musicSheetButton.Height = 35;
-                musicSheetButton.Width = 260;
-                musicSheetButton.Margin = new Thickness(10, 10, 10, 0);
-                musicSheetButton.Click += MidiFile_Click;
-                
-                if (element.Title.Length > 30)
-                {
-                    musicSheetButton.Content = element.Title.Substring(0, 27) + "...";
-                }
-                else
-                {
-                    musicSheetButton.Content = element.Title;
-                }
-                musicSheetButton.Name = element.Title;
-
-                // Adds StackPanel to the VariableSizedWrapGrid.
-                MIDIFilesWG.Children.Add(musicSheetButton);
-            }
         }
 
         /// <summary>
