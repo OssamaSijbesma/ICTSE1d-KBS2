@@ -52,8 +52,7 @@ namespace PiaNotes.Views
 
             if (file != null)
             {
-                var stream = await file.OpenStreamForReadAsync(); // martijn edition
-                //var stream = await file.OpenAsync(Windows.Storage.FileAccessMode.Read); // sybren edition
+                var stream = await file.OpenStreamForReadAsync();
                 TXTBox_Title.Text = file.DisplayName;
                 ConvertMidiToText(stream);
             }
