@@ -398,7 +398,7 @@ namespace PiaNotes.Views
         private void GameTimerLogic()
         {
             // Create a timer with a sixty-fourth tick which represents the 1/64 note.
-            timerGameLogic = new Timer(15.625);
+            timerGameLogic = new Timer(500);
             timerGameLogic.AutoReset = true;
             timerGameLogic.Enabled = true;
 
@@ -466,6 +466,9 @@ namespace PiaNotes.Views
         // Handler for when the page is unloaded
         private void Page_Unloaded(object sender, RoutedEventArgs e)
         {
+            // Stop the GameLoop and UIloop
+            timerGameLogic.Stop();
+            timerGameUI.Stop();
             // Unsubscribe the MidiInPort_MessageReceived
             Settings.midiInPort.MessageReceived -= MidiInPort_MessageReceived;
 
