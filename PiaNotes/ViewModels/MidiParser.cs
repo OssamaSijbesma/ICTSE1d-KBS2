@@ -14,6 +14,7 @@ namespace PiaNotes.ViewModels
         private List<Models.Note> notes = new List<Models.Note>();
         private bool multipleClefs;
         private int amountBars;
+        public SheetMusic SM;
 
         public MidiParser(MidiFile MF)
         {
@@ -36,8 +37,7 @@ namespace PiaNotes.ViewModels
             CheckBars(notes);
 
             //Create SheetMusic with every element MidiParser calculated
-            SheetMusic SM = new SheetMusic(MF, notes, multipleClefs, amountBars);
-
+            SM = new SheetMusic(MF, notes, multipleClefs, amountBars);
         }
 
         public void CheckClefs(List<Models.Note> notes)
