@@ -13,15 +13,13 @@ namespace PiaNotes.Models
     {
         public MidiFile MF { get; set; }
         public bool multipleClefs { get; set; }
-
-        private Clef clef;
-        private Staff staff;
-        private List<Note> notes;
-        private List<Bar> bars;
+        
+        public List<Note> notes { get; set; }
+        public List<Bar> bars { get; set; }
 
         //If there are multiple clefs there should be a List of clefs and staffs
-        private List<Clef> clefs;
-        private List<Staff> staffs;
+        public List<Clef> clefs = new List<Clef>();
+        public List<Staff> staffs = new List<Staff>();
 
         public SheetMusic(MidiFile MiFi, List<Note> Notes, bool MC, int AB)
         {
@@ -36,26 +34,23 @@ namespace PiaNotes.Models
                 {
                     bars.Add(new Bar());
                 }
+            } else
+            {
+                bars.Add(new Bar());
             }
+
+            Clef cl = new Clef(Clef.ClefTypes.Treble);
+            Clef ef = new Clef(Clef.ClefTypes.Bass);
+            Staff st = new Staff();
+            Staff aff = new Staff();
+
+            clefs.Add(cl);
+                staffs.Add(st);
 
             if (multipleClefs)
             {
-                clefs = new List<Clef>();
-                staffs = new List<Staff>();
-
-                Clef cl = new Clef(Clef.ClefTypes.Treble);
-                Clef ef = new Clef(Clef.ClefTypes.Bass);
-                Staff st = new Staff();
-                Staff aff = new Staff();
-
-                clefs.Add(cl);
                 clefs.Add(ef);
-                staffs.Add(st);
                 staffs.Add(aff);
-            } else
-            {
-                clef = new Clef(Clef.ClefTypes.Treble);
-                staff = new Staff();
             }
         }
     }

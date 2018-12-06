@@ -31,6 +31,7 @@ namespace PiaNotes.Views
         //Get Search Functionality from Databaser Class
         Databaser DB = new Databaser();
         MidiParser MP;
+        SheetMusic SM;
 
        //Creates a list of musicsheets
         List<MusicSheet> Sheets = new List<MusicSheet>();
@@ -151,7 +152,10 @@ namespace PiaNotes.Views
             if (file != null)
             {
                 var stream = await file.OpenStreamForReadAsync();
-                ConvertMidiToText(stream);
+                var midiFile = MidiFile.Read(stream);
+                MP = new MidiParser(midiFile);
+                SM = MP.SM;
+                this.Frame.Navigate(typeof(PracticePage), SM);
             }
             else
             {
@@ -163,13 +167,10 @@ namespace PiaNotes.Views
 
         public async void ConvertMidiToText(Stream midiFilePath)
         {
-            var midiFile = MidiFile.Read(midiFilePath);
+            /* Debug Test to see if all the items where received
             IEnumerable<string> items = midiFile.GetNotes()
                 .Select(n => $"{n.NoteNumber} {n.Time} {n.Length}");
 
-            MP = new MidiParser(midiFile);
-
-            /* Debug Test to see if all the items where received
             foreach (string i in items)
             {
                 // Show each notenumber, time and length in dialogs.

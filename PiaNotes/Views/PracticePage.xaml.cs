@@ -14,7 +14,9 @@ using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Navigation;
 using Windows.UI.Xaml.Shapes;
+using PiaNotes.Models;
 
 namespace PiaNotes.Views
 {
@@ -26,6 +28,7 @@ namespace PiaNotes.Views
         //DispatcherTimer is the regular timer. It fires its Tick event on the UI thread, you can do anything you want with the UI. System.Timers.Timer is an asynchronous timer, its Elapsed event runs on a thread pool thread. You have to be very careful in your event handler, you are not allowed to touch any UI component or data-bound variables. And you'll need to use the lock statement where ever you access class members that are also used on the UI thread.
         private DispatcherTimer timerGameUI;
         private static Timer timerGameLogic;
+        SheetMusic SM;
 
         public bool KeyboardIsOpen { get; set; } = true;
 
@@ -407,7 +410,6 @@ namespace PiaNotes.Views
         /// <summary>
         /// Logic Thread where game logic gets updated
         /// </summary>
-        /// 
 
         private void GameTimerLogic()
         {
@@ -510,6 +512,13 @@ namespace PiaNotes.Views
             // Dispose of the Win2D resources
             this.GameCanvas.RemoveFromVisualTree();
             this.GameCanvas = null;
+        }
+        
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            base.OnNavigatedTo(e);
+
+            SM = (SheetMusic)e.Parameter;
         }
 
         // Handler for when the page is resized
