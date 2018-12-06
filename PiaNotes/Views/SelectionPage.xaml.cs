@@ -55,7 +55,7 @@ namespace PiaNotes.Views
         }
 
         // Menustrip: File > New MIDI File
-        private void FileNewMIDIFile_Click(object sender, RoutedEventArgs e)
+        private void NewMIDIFile_Click(object sender, RoutedEventArgs e)
         {
             this.Frame.Navigate(typeof(UploadPage));
         }
@@ -140,51 +140,7 @@ namespace PiaNotes.Views
         {
             //TO DO
         }
-
-        // New MIDI File
-        private async void NewMIDIFile_Click(object sender, RoutedEventArgs e)
-        {
-            // DOING
-            var picker = new Windows.Storage.Pickers.FileOpenPicker();
-            picker.ViewMode = Windows.Storage.Pickers.PickerViewMode.Thumbnail;
-            picker.SuggestedStartLocation = Windows.Storage.Pickers.PickerLocationId.MusicLibrary;
-            picker.FileTypeFilter.Add(".mid");
-
-            Windows.Storage.StorageFile file = await picker.PickSingleFileAsync();
-            Windows.Storage.ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
-            if (file != null)
-            {
-                var stream = await file.OpenStreamForReadAsync();
-                ConvertMidiToText(stream);
-            }
-            else
-            {
-                // Cancel operation.
-                var dialog = new MessageDialog("Canceling operation.");
-                await dialog.ShowAsync();
-            }
-        }
-
-        public async void ConvertMidiToText(Stream midiFilePath)
-        {
-            var midiFile = MidiFile.Read(midiFilePath);
-            IEnumerable<string> items = midiFile.GetNotes()
-                .Select(n => $"{n.NoteNumber} {n.Time} {n.Length}");
-
-            MP = new MidiParser(midiFile);
-
-            /* Debug Test to see if all the items where received
-            foreach (string i in items)
-            {
-                // Show each notenumber, time and length in dialogs.
-                //string[] split = i.Split(' ');
-                //var dialog = new MessageDialog($"{GetNote(Int32.Parse(split[0]))}");
-                var dialog = new MessageDialog($"{i}");
-                await dialog.ShowAsync();
-            }
-            */
-        }
-
+        
         private enum PianoKey { C = 0, D = 2, E = 4, F = 5, G = 7, A = 9, B = 11 };
         private enum PianoKeySharp { CSharp = 1, DSharp = 3, FSharp = 6, GSharp = 8, ASharp = 10 };
 

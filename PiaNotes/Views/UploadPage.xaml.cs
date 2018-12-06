@@ -1,10 +1,12 @@
 ﻿using Melanchall.DryWetMidi.Smf;
 using Melanchall.DryWetMidi.Smf.Interaction;
+using PiaNotes.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Text;
 using System.Threading;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
@@ -25,6 +27,10 @@ namespace PiaNotes.Views
     /// </summary>
     public sealed partial class UploadPage : Page
     {
+        Databaser DB = new Databaser();
+        private StringBuilder sb = new StringBuilder();
+        public bool FileSelected { get; set; } = false;
+
         public UploadPage()
         {
             this.InitializeComponent();
@@ -58,27 +64,50 @@ namespace PiaNotes.Views
 
         }
         
-        public void ConvertMidiToText(Stream midiFilePath)
+        public async void ConvertMidiToText(Stream midiFilePath)
         {
             var midiFile = MidiFile.Read(midiFilePath);
             IEnumerable<string> items = midiFile.GetNotes()
                 .Select(n => $"{n.NoteNumber} {n.Time} {n.Length}");
             int count = items.Count();
-
             int current = 0;
-
+            
             // Load each notenumber, time and length
             foreach (string i in items)
             {
+                if (current != 0)
+                {
+                    sb.Append("-");
+                }
+                sb.Append(i);
+                
                 current++;
                 ProgressBar_MIDILoader.Value = current / count * 100;
                 // Do something with i
             }
+
+            FileSelected = true;
+
+            ContentDialog stringDialog = new ContentDialog
+            {
+                Title = "MIDI String:",
+                Content = $"{sb.ToString().Length}",
+                CloseButtonText = "Close",
+                DefaultButton = ContentDialogButton.Primary
+            };
+
+            ContentDialogResult result = await stringDialog.ShowAsync();
+            
         }     
         
         private void OnSubmit(object sender, RoutedEventArgs e)
         {
-            return;
+            if (FileSelected)
+            {
+                DB.Upload(TXTBox_Title.Text, sb.ToString());
+                FileSelected = false;
+            }
+            
         }
 
         // Return to previous page

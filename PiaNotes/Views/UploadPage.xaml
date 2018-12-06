@@ -32,9 +32,9 @@
                      RelativePanel.Below="TXTBlock_Title"
                      TextChanged="Title_TextChanged"/>
 
-            <Button Name="BTN_Submit" Background="#253847" Content="Submit" HorizontalAlignment="Left" RelativePanel.Below="TXTBox_Title" VerticalAlignment="Stretch" Width="75" Click="OnSubmit" Margin="35,10.4,0,0.2"/>
-            <ProgressBar x:Name="ProgressBar_MIDILoader" HorizontalAlignment="Center" Height="35" Margin="35,10,0,0" VerticalAlignment="Center" Width="400" RelativePanel.Below="BTN_Submit" />
- 
+            <ProgressBar x:Name="ProgressBar_MIDILoader" HorizontalAlignment="Center" Height="35" Margin="35,10,0,0" VerticalAlignment="Center" Width="400" RelativePanel.Below="TXTBox_Title" />
+            <Button Name="BTN_Submit" Background="#253847" Content="Submit" HorizontalAlignment="Left" RelativePanel.Below="ProgressBar_MIDILoader" VerticalAlignment="Stretch" Width="75" Click="OnSubmit" Margin="35,10,0,0"/>
+
         </RelativePanel>
     </Grid>
 </Page>
