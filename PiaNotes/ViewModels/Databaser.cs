@@ -15,7 +15,7 @@ namespace PiaNotes.ViewModels
     {
         //Set connection string (ROOT USER IS FOR TESTING ONLY, Use system instead)
         private const string ConnectionString = "SERVER = pianotesmysql.mysql.database.azure.com; PORT=3306; DATABASE = pianotes; Uid = notesAdmin@pianotesmysql; Pwd = !Pianotes223; SslMode = Preferred;";
-
+        private const string DataTable = "musicsheet";
         //Function for checking connection status.
         public bool CheckConnection()
         {
@@ -62,7 +62,7 @@ namespace PiaNotes.ViewModels
             {
                 //Setup connection and SQL command
                 using (MySqlConnection sqlconn = new MySqlConnection(ConnectionString))
-                using (var cmd = new MySqlCommand($"SELECT * FROM musicsheet WHERE id = { id }", sqlconn))
+                using (var cmd = new MySqlCommand($"SELECT * FROM {DataTable} WHERE id = { id }", sqlconn))
                 {
                     //Sheet to be used if search comes up empty
                     MusicSheet result = null;
@@ -106,7 +106,7 @@ namespace PiaNotes.ViewModels
             {
                 //Setup connection and SQL command
                 using (MySqlConnection sqlconn = new MySqlConnection(ConnectionString))
-                using (var cmd = new MySqlCommand($"SELECT * FROM musicsheet WHERE Title = '{ title }'", sqlconn))
+                using (var cmd = new MySqlCommand($"SELECT * FROM {DataTable} WHERE Title = '{ title }'", sqlconn))
                 {
                     //List of Searched sheets
                     List<MusicSheet> result = new List<MusicSheet>();
@@ -161,7 +161,7 @@ namespace PiaNotes.ViewModels
             {
                 //Setup connection and SQL command
                 using (MySqlConnection sqlconn = new MySqlConnection(ConnectionString))
-                using (var cmd = new MySqlCommand($"SELECT * FROM musicsheet LIMIT { limit } OFFSET {offset}", sqlconn))
+                using (var cmd = new MySqlCommand($"SELECT * FROM {DataTable} LIMIT { limit } OFFSET {offset}", sqlconn))
                 {
                     //List of Searched sheets
                     List<MusicSheet> result = new List<MusicSheet>();
@@ -215,13 +215,13 @@ namespace PiaNotes.ViewModels
             try
             {
                 //Set query standaard.
-                var Select = $"SELECT * FROM musicsheet ";
+                var Select = $"SELECT * FROM {DataTable} ";
                 var Where = $"";
                 var Limit = $"";
                 var Offset = $"";
 
                 //If function has specific selected, change it in the query.
-                if (select != null) { Select = $"SELECT {select} FROM musicsheet "; }
+                if (select != null) { Select = $"SELECT {select} FROM {DataTable} "; }
                 
                 //If both Wheres are specified add a WHERE to the query.
                 if (whereA != null && whereB != null)
@@ -298,7 +298,7 @@ namespace PiaNotes.ViewModels
         {
             try
             {
-                string sql = $"INSERT INTO musicsheet ( Title,File ) VALUES ('{title}','{file}');";
+                string sql = $"INSERT INTO {DataTable} ( Title,File ) VALUES ('{title}','{file}');";
                 //Setup connection and SQL command
                 using (MySqlConnection sqlconn = new MySqlConnection(ConnectionString))
                 using (var cmd = new MySqlCommand(sql, sqlconn))
