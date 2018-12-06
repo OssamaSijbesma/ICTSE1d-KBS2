@@ -101,7 +101,7 @@ namespace PiaNotes.Views
         
         private void OnSubmit(object sender, RoutedEventArgs e)
         {
-            if (FileSelected)
+            if (FileSelected && sb.ToString().Length < 2000000)
             {
                 DB.Upload(TXTBox_Title.Text, sb.ToString());
                 FileSelected = false;

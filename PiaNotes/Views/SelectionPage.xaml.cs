@@ -32,7 +32,10 @@ namespace PiaNotes.Views
         Databaser DB = new Databaser();
         MidiParser MP;
 
-       //Creates a list of musicsheets
+        private enum PianoKey { C = 0, D = 2, E = 4, F = 5, G = 7, A = 9, B = 11 };
+        private enum PianoKeySharp { CSharp = 1, DSharp = 3, FSharp = 6, GSharp = 8, ASharp = 10 };
+        
+        //Creates a list of musicsheets
         List<MusicSheet> Sheets = new List<MusicSheet>();
 
         public SelectionPage()
@@ -65,31 +68,24 @@ namespace PiaNotes.Views
         {
             foreach (MusicSheet element in Sheets)
             {
-                // Creates StackPanel.
-                StackPanel MusicPieceSP = new StackPanel();
-                MusicPieceSP.Width = 280;
-                MusicPieceSP.Name = element.Title;
-                
+
                 Button musicSheetButton = new Button();
                 musicSheetButton.Height = 35;
                 musicSheetButton.Width = 260;
-                musicSheetButton.Margin = new Thickness(0, 10, 0, 0);
+                musicSheetButton.Margin = new Thickness(10, 10, 10, 0);
                 musicSheetButton.Click += MidiFile_Click;
 
-                if (MusicPieceSP.Name.Length > 30)
+                if (element.Title.Length > 30)
                 {
-                    musicSheetButton.Content = MusicPieceSP.Name.Substring(0, 27) + "...";
+                    musicSheetButton.Content = element.Title.Substring(0, 27) + "...";
                 }
                 else
                 {
-                    musicSheetButton.Content = MusicPieceSP.Name;
+                    musicSheetButton.Content = element.Title;
                 }
 
-                // Adds rectangle and children to stackpanel.
-                MusicPieceSP.Children.Add(musicSheetButton);
-
                 // Adds StackPanel to the VariableSizedWrapGrid.
-                MIDIFilesWG.Children.Add(MusicPieceSP);
+                MIDIFilesWG.Children.Add(musicSheetButton);
             }
         }
 
@@ -136,9 +132,13 @@ namespace PiaNotes.Views
             //TO DO
         }
         
-        private enum PianoKey { C = 0, D = 2, E = 4, F = 5, G = 7, A = 9, B = 11 };
-        private enum PianoKeySharp { CSharp = 1, DSharp = 3, FSharp = 6, GSharp = 8, ASharp = 10 };
-
+        // Display search changes
+        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            MIDIFilesWG.Children.Clear();
+            Search(SearchBar.Text);
+        }
+        
         public string GetNote(int noteNumber)
         {
             int noteNumber2 = noteNumber;
@@ -169,47 +169,32 @@ namespace PiaNotes.Views
             return returnValue;
         }
 
-
-        // Display search changes
-        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            MIDIFilesWG.Children.Clear();
-            Search(SearchBar.Text);
-        }
-
         // Search function.
         public void Search(string search)
         {
             //Creates a list of results where inserted Searchbar text will be displayed with the corresponding item in Database.
             List<MusicSheet> results = DB.Search(null, "MusicSheet.Title", search + "%", 0, 0);
 
-            foreach (var element in results)
+            foreach (MusicSheet element in Sheets)
             {
-                // Creates StackPanel.
-                StackPanel MusicPieceSP = new StackPanel();
-                MusicPieceSP.Width = 280;
-                MusicPieceSP.Name = element.Title;
-                
+
                 Button musicSheetButton = new Button();
                 musicSheetButton.Height = 35;
                 musicSheetButton.Width = 260;
-                musicSheetButton.Margin = new Thickness(0, 10, 0, 0);
+                musicSheetButton.Margin = new Thickness(10, 10, 10, 0);
                 musicSheetButton.Click += MidiFile_Click;
 
-                if (MusicPieceSP.Name.Length > 30)
+                if (element.Title.Length > 30)
                 {
-                    musicSheetButton.Content = MusicPieceSP.Name.Substring(0, 27) + "...";
+                    musicSheetButton.Content = element.Title.Substring(0, 27) + "...";
                 }
                 else
                 {
-                    musicSheetButton.Content = MusicPieceSP.Name;
+                    musicSheetButton.Content = element.Title;
                 }
 
-                // Adds rectangle and children to stackpanel.
-                MusicPieceSP.Children.Add(musicSheetButton);
-
                 // Adds StackPanel to the VariableSizedWrapGrid.
-                MIDIFilesWG.Children.Add(MusicPieceSP);
+                MIDIFilesWG.Children.Add(musicSheetButton);
             }
         }
 
