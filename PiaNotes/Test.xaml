@@ -12,20 +12,22 @@
 
         <NavigationView x:Name="SettingsNV"
                 Loaded="SettingsNV_Loaded"
-                Margin="0,12,0,0"
-                SelectionChanged="SettingsNV_SelectionChanged"
                 ItemInvoked="SettingsNV_ItemInvoked"
-                IsTabStop="False">
+                IsTabStop="False"
+                IsSettingsVisible="False">
             <NavigationView.MenuItems>
-                <NavigationViewItem Icon="Keyboard" Content="MIDI" Tag="MIDI_Settings" />
-                <NavigationViewItem Icon="Volume" Content="Sound" Tag="Sound_Settings" />
-                <NavigationViewItem Icon="TwoPage" Content="Octaves" Tag="Octaves_Settings" />
-                <NavigationViewItem Icon="Edit" Content="Theme" Tag="Theme_Settings" />
+                <NavigationViewItem Icon="Keyboard"  Tag="MIDI_SettingsPage">
+                    <TextBlock Tag="MIDI_SettingsPage">MIDI</TextBlock>
+                </NavigationViewItem>
+                <NavigationViewItem Icon="Volume"    Tag="Sound_SettingsPage">
+                    <TextBlock Tag="Sound_SettingsPage">Sound</TextBlock>
+                </NavigationViewItem>
+                <NavigationViewItem Icon="Shop"     Tag="Theme_SettingsPage">
+                    <TextBlock Tag="Theme_SettingsPage">Theme</TextBlock>
+                </NavigationViewItem>
             </NavigationView.MenuItems>
-            <Frame x:Name="contentFrame"></Frame>
+            <Frame x:Name="contentFrame" Margin="0,-60,0,0"/>
         </NavigationView>
-
-
 
     </Grid>
 </Page>

@@ -13,8 +13,6 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
-// The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
-
 namespace PiaNotes
 {
     /// <summary>
@@ -28,7 +26,7 @@ namespace PiaNotes
         }
 
         #region NavigationView event handlers
-        private void nvTopLevelNav_Loaded(object sender, RoutedEventArgs e)
+        private void SettingsNV_Loaded(object sender, RoutedEventArgs e)
         {
             // set the initial SelectedItem
             foreach (NavigationViewItemBase item in SettingsNV.MenuItems)
@@ -39,45 +37,31 @@ namespace PiaNotes
                     break;
                 }
             }
-            contentFrame.Navigate(typeof(Views.SettingsPage));
+            contentFrame.Navigate(typeof(Views.CreditsPage));
         }
 
-        private void SettingsNV_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
+        private void SettingsNV_ItemInvoked(NavigationView sender, NavigationViewItemInvokedEventArgs args)
         {
-        }
-
-        private void nSettingsNV_ItemInvoked(NavigationView sender, NavigationViewItemInvokedEventArgs args)
-        {
-            if (args.IsSettingsInvoked)
+            TextBlock ItemContent = args.InvokedItem as TextBlock;
+            if (ItemContent != null)
             {
-                contentFrame.Navigate(typeof(Views.SettingsPage));
-            }
-            else
-            {
-                TextBlock ItemContent = args.InvokedItem as TextBlock;
-                if (ItemContent != null)
+                switch (ItemContent.Tag)
                 {
-                    switch (ItemContent.Tag)
-                    {
-                        case "MIDi_Settings":
-                            contentFrame.Navigate(typeof(Views.SettingsPage));
-                            break;
+                    case "MIDI_SettingsPage":
+                        contentFrame.Navigate(typeof(Views.SettingsPages.MIDI_SettingsPage));
+                        break;
 
-                        case "Sound_Settings":
-                            contentFrame.Navigate(typeof(Views.CreditsPage));
-                            break;
+                    case "Sound_SettingsPage":
+                        contentFrame.Navigate(typeof(Views.SettingsPages.Sound_SettingsPage));
+                        break;
 
-                        case "Octaves_Settings":
-                            contentFrame.Navigate(typeof(Views.PracticePage));
-                            break;
-
-                        case "Theme_Settings":
-                            contentFrame.Navigate(typeof(Views.SelectionPage));
-                            break;
-                    }
+                    case "Theme_SettingsPage":
+                        contentFrame.Navigate(typeof(Views.SettingsPages.Theme_SettingsPage));
+                        break;
                 }
             }
         }
         #endregion
+
     }
 }
