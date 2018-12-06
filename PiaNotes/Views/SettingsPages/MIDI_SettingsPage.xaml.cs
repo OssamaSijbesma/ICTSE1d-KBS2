@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using Windows.Devices.Enumeration;
 using Windows.Devices.Midi;
 using Windows.Foundation;
@@ -155,7 +156,30 @@ namespace PiaNotes.Views.SettingsPages
             this.midiOutPortListBox.IsEnabled = true;
         }
 
+        private void BTN_Save(object sender, RoutedEventArgs e)
+        {
 
+        }
+
+        private void OctaveStart_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        { }
+        // TODO:
+        // - Check on max amount of octaves. If start == 8 then max can't be higher than 3 because there are only 11 octaves.
+        // - Cases for all possible selections.
+        // - Setting the actual StartingOctave to the selection.
+
+        // Setting the actual OctaveAmount to the selection.
+        public int StartingOctave;
+
+        private void OctaveAmount_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        { }
+        // TODO:
+        // - Check on starting octave. If start == 8 then max can't be higher than 3 because there are only 11 octaves.
+        // - Setting the actual OctaveAmount to the selection.
+        // - Making the keyboard get the OctaveAmount from this file instead of Settings.cs
+
+        // Setting the actual OctaveAmount to the selection.
+        public int OctaveAmount;
 
     }
 }

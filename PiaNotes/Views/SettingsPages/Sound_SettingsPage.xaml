@@ -15,6 +15,22 @@
                 <TextBlock Tag="Sound_Settings">Sound</TextBlock>
             </NavigationViewItem>
 
+            <Slider x:Name="volumeSlider" Minimum ="0" Maximum="100" Header="Volume" ValueChanged="Volume_ValueChanged"
+                    Margin="35,85,0,0" FontSize="24" Width="500" Height="100" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+            <CheckBox  x:Name="Feedback" 
+                       Margin="35,0,0,10" Click="Velocity_Checked" FontSize="36" RelativePanel.Below="volumeSlider" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+            </CheckBox>
+            <TextBlock x:Name="ToggleVelocity"  Margin="-87,0,9,0" Text="Set Velocity" TextWrapping="Wrap" FontSize="24" RelativePanel.Below="volumeSlider" RelativePanel.RightOf="Feedback" />
+            <Slider x:Name="velocitySlider" Minimum ="0" Maximum="100" Header="Velocity" ValueChanged="Velocity_ValueChanged"
+                    Margin="35,29,0,6" Width="500" FontSize="24" RelativePanel.AlignLeftWithPanel="True" RelativePanel.Below="ToggleVelocity"/>
+
+            <Button Content="Save" HorizontalAlignment="Left" Height="32.8" 
+                    VerticalAlignment="Top" 
+                    Width="64" 
+                    Margin="35,-6,0,0"
+                    Click="BTN_Save"
+                    RelativePanel.Below="velocitySlider"/>
+
         </RelativePanel>
     </Grid>
 </Page>
