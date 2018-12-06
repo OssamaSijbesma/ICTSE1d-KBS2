@@ -64,28 +64,38 @@ namespace PiaNotes.Views
         }
         
         // Creates the previews of the most recent MIDI files.
-        public void CreateMostRecent()
+        public async void CreateMostRecent()
         {
-            foreach (MusicSheet element in Sheets)
+            //Checks if Database is connected
+            if (DB.CheckConnection() == true)
             {
-                Button musicSheetButton = new Button();
-                musicSheetButton.Height = 35;
-                musicSheetButton.Width = 260;
-                musicSheetButton.Margin = new Thickness(10, 10, 10, 0);
-                musicSheetButton.Click += MidiFile_Click;
 
-                if (element.Title.Length > 30)
+                foreach (MusicSheet element in Sheets)
                 {
-                    musicSheetButton.Content = element.Title.Substring(0, 27) + "...";
-                }
-                else
-                {
-                    musicSheetButton.Content = element.Title;
-                }
-                musicSheetButton.Name = element.Title;
 
-                // Adds StackPanel to the VariableSizedWrapGrid.
-                MIDIFilesWG.Children.Add(musicSheetButton);
+                    Button musicSheetButton = new Button();
+                    musicSheetButton.Height = 35;
+                    musicSheetButton.Width = 260;
+                    musicSheetButton.Margin = new Thickness(10, 10, 10, 0);
+                    musicSheetButton.Click += MidiFile_Click;
+
+                    if (element.Title.Length > 30)
+                    {
+                        musicSheetButton.Content = element.Title.Substring(0, 27) + "...";
+                    }
+                    else
+                    {
+                        musicSheetButton.Content = element.Title;
+                    }
+
+                    // Adds StackPanel to the VariableSizedWrapGrid.
+                    MIDIFilesWG.Children.Add(musicSheetButton);
+                }
+                //Navigates to UploadPage when Offline
+            } else
+            {
+                await StaticObjects.NoDatabaseConnectionDialog.ShowAsync();
+                this.Frame.Navigate(typeof(UploadPage));
             }
         }
 
