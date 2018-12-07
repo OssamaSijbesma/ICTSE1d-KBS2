@@ -323,5 +323,35 @@ namespace PiaNotes.ViewModels
                 return false;
             }
         }
+
+        public bool Delete(int id)
+        {
+            try
+            {
+                string sql = $"DELETE FROM {DataTable} WHERE Id = {id}');";
+                //Setup connection and SQL command
+                using (MySqlConnection sqlconn = new MySqlConnection(ConnectionString))
+                using (var cmd = new MySqlCommand(sql, sqlconn))
+                {
+                    //Open connection to database
+                    sqlconn.Open();
+
+                    //Prepare statement for execution
+                    cmd.Prepare();
+
+                    //Execute SQL command
+                    cmd.ExecuteNonQuery();
+
+                    //Close connection to database and return results
+                    sqlconn.Close();
+
+                    return true;
+                }
+            }
+            catch
+            {
+                return false;
+            }
+        }
     }
 }
