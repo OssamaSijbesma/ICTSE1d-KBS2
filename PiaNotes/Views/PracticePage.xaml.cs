@@ -1,22 +1,16 @@
+using Microsoft.Graphics.Canvas.UI;
+using Microsoft.Graphics.Canvas.UI.Xaml;
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
+using System.Timers;
 using Windows.ApplicationModel.Core;
 using Windows.Devices.Midi;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
 using Windows.UI;
 using Windows.UI.Core;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Navigation;
 using Windows.UI.Xaml.Shapes;
 
 namespace PiaNotes.Views
@@ -26,6 +20,10 @@ namespace PiaNotes.Views
     /// </summary>
     public sealed partial class PracticePage : Page
     {
+        //DispatcherTimer is the regular timer. It fires its Tick event on the UI thread, you can do anything you want with the UI. System.Timers.Timer is an asynchronous timer, its Elapsed event runs on a thread pool thread. You have to be very careful in your event handler, you are not allowed to touch any UI component or data-bound variables. And you'll need to use the lock statement where ever you access class members that are also used on the UI thread.
+        private DispatcherTimer timerGameUI;
+        private static Timer timerGameLogic;
+
         public bool KeyboardIsOpen { get; set; } = true;
 
         //List for White keys and Black keys of the keyboard
@@ -33,19 +31,23 @@ namespace PiaNotes.Views
         private List<Rectangle> keysBlack = new List<Rectangle>();
 
         // Length of 127 because of 127 notes
+        private int Keys;
         private Rectangle[] Notes = new Rectangle[127];
-        private int Keys = Settings.OctaveAmount * 12;
-        private double oldWidth;
         private enum PianoKey { C = 0, D = 2, E = 4, F = 5, G = 7, A = 9, B = 11 };
         private enum PianoKeySharp { CSharp = 1, DSharp = 3, FSharp = 6, GSharp = 8, ASharp = 10 };
+
+        // GameCanvas
+        private int windowWidth;
+        private int windowHeight;
+        private int gameCanvasWidth;
+        private int gameCanvasHeight;
+        private int pos;
 
         public PracticePage()
         {
             this.InitializeComponent();
 
-            // Registers a handler for the MessageReceived event
-            Settings.midiInPort.MessageReceived += MidiInPort_MessageReceived;
-
+            // Initialize the page.
             var appView = ApplicationView.GetForCurrentView();
             appView.Title = "Practice";
 
@@ -53,15 +55,20 @@ namespace PiaNotes.Views
             var coreTitleBar = CoreApplication.GetCurrentView().TitleBar;
             coreTitleBar.ExtendViewIntoTitleBar = false;
 
-            //Generate the amount of Keys
-            if (Settings.OctaveAmount != 0)
-            {
-                Keys = Settings.OctaveAmount * 12;
-            }
-            else Keys = 12;
+            // Initialize variables
+            windowWidth = Convert.ToInt32(Window.Current.Bounds.Width);
+            windowHeight = Convert.ToInt32(Window.Current.Bounds.Height);
 
-            //Create the keyboard to show on the screen
+            // Subscribes a handler for the MessageReceived event.
+            Settings.midiInPort.MessageReceived += MidiInPort_MessageReceived;
+
+            //Generate the amount of Keys
+            Keys = (Settings.OctaveAmount != 0) ? Settings.OctaveAmount * 12 : 12;
+
+            //Create the keyboard to show on the screen and set a timer
             CreateKeyboard();
+            GameTimerLogic();
+            GameTimerUI();
         }
 
         private void MidiInPort_MessageReceived(MidiInPort sender, MidiMessageReceivedEventArgs args)
@@ -147,14 +154,10 @@ namespace PiaNotes.Views
 
                     // If it is a black key, the color will be slightly darker (-25 on all values except A) than a white key.
                     // Colors will be pulled from Settings.cs.
-                    if (Notes[note].Name.Contains("Sharp"))
-                    {
-                        Notes[note].Fill = new SolidColorBrush(Windows.UI.Color.FromArgb(255, DoubleToByte(Settings.R - neg), DoubleToByte(Settings.G - neg), DoubleToByte(Settings.B - neg)));
-                    }
-                    else
-                    {
-                        Notes[note].Fill = new SolidColorBrush(Windows.UI.Color.FromArgb(255, Settings.R, Settings.G, Settings.B));
-                    }
+                    Notes[note].Fill = (Notes[note].Name.Contains("Sharp")) ?
+                                            Notes[note].Fill = new SolidColorBrush(Color.FromArgb(255, DoubleToByte(Settings.R - neg), DoubleToByte(Settings.G - neg), DoubleToByte(Settings.B - neg))) :
+                                            Notes[note].Fill = new SolidColorBrush(Color.FromArgb(255, Settings.R, Settings.G, Settings.B));
+
                 }
                 catch (Exception e)
                 {
@@ -211,18 +214,6 @@ namespace PiaNotes.Views
             return byteVal;
         }
 
-        // Menustrip: File > New MIDI File
-        private void FileNewMIDIFile_Click(object sender, RoutedEventArgs e)
-        {
-            //TO DO
-        }
-
-        // Menustrip: File > Open MIDI File
-        private void FileOpenMIDIFile_Click(object sender, RoutedEventArgs e)
-        {
-            //this.Frame.Navigate(typeof(SelectionPage));
-        }
-
         // Menustrip: View > Keyboard
         private void ViewKeyboard_Click(object sender, RoutedEventArgs e)
         {
@@ -258,7 +249,6 @@ namespace PiaNotes.Views
         public void CreateKeyboard()
         {
             int oct = 0;
-            int ky = 0;
 
             //First go through each Octave to make keys
             for (int i = Settings.OctaveStart; i < (Settings.OctaveAmount + Settings.OctaveStart); i++)
@@ -270,109 +260,72 @@ namespace PiaNotes.Views
                     switch (j)
                     {
                         case 1:
-                            Rectangle keyBlackRect = new Rectangle();
-                            keyBlackRect.Name = $"{((PianoKeySharp)j).ToString()}{i}";
-                            keyBlackRect.Fill = new SolidColorBrush(Colors.Black);
-                            keyBlackRect.Stroke = new SolidColorBrush(Colors.Black);
-                            keyBlackRect.StrokeThickness = 4;
-                            keyBlackRect.Height = 150;
-                            KeysBlackSP.Children.Add(keyBlackRect);
-                            if (i == 0) Notes[j] = (keyBlackRect);
-                            else Notes[(j + (i * 12))] = (keyBlackRect);
+                            AddKey(false, j, i);
                             break;
                         case 3:
-                            Rectangle keyBlackRect3 = new Rectangle();
-                            keyBlackRect3.Name = $"{((PianoKeySharp)j).ToString()}{i}";
-                            keyBlackRect3.Fill = new SolidColorBrush(Colors.Black);
-                            keyBlackRect3.Stroke = new SolidColorBrush(Colors.Black);
-                            keyBlackRect3.StrokeThickness = 4;
-                            keyBlackRect3.Height = 150;
-                            KeysBlackSP.Children.Add(keyBlackRect3);
-                            if (i == 0) Notes[j] = (keyBlackRect3);
-                            else Notes[(j + (i * 12))] = (keyBlackRect3);
+                            AddKey(false, j, i);
                             break;
                         case 6:
-                            Rectangle keyBlackRect6 = new Rectangle();
-                            keyBlackRect6.Name = $"{((PianoKeySharp)j).ToString()}{i}";
-                            keyBlackRect6.Fill = new SolidColorBrush(Colors.Black);
-                            keyBlackRect6.Stroke = new SolidColorBrush(Colors.Black);
-                            keyBlackRect6.StrokeThickness = 4;
-                            keyBlackRect6.Height = 150;
-                            KeysBlackSP.Children.Add(keyBlackRect6);
-                            if (i == 0) Notes[j] = (keyBlackRect6);
-                            else Notes[(j + (i * 12))] = (keyBlackRect6);
+                            AddKey(false, j, i);
                             break;
                         case 8:
-                            Rectangle keyBlackRect8 = new Rectangle();
-                            keyBlackRect8.Name = $"{((PianoKeySharp)j).ToString()}{i}";
-                            keyBlackRect8.Fill = new SolidColorBrush(Colors.Black);
-                            keyBlackRect8.Stroke = new SolidColorBrush(Colors.Black);
-                            keyBlackRect8.StrokeThickness = 4;
-                            keyBlackRect8.Height = 150;
-                            KeysBlackSP.Children.Add(keyBlackRect8);
-                            if (i == 0) Notes[j] = (keyBlackRect8);
-                            else Notes[(j + (i * 12))] = (keyBlackRect8);
+                            AddKey(false, j, i);
                             break;
                         case 10:
-                            Rectangle keyBlackRect10 = new Rectangle();
-                            keyBlackRect10.Name = $"{((PianoKeySharp)j).ToString()}{i}";
-                            keyBlackRect10.Fill = new SolidColorBrush(Colors.Black);
-                            keyBlackRect10.Stroke = new SolidColorBrush(Colors.Black);
-                            keyBlackRect10.StrokeThickness = 4;
-                            keyBlackRect10.Height = 150;
-                            KeysBlackSP.Children.Add(keyBlackRect10);
-                            if (i == 0) Notes[j] = (keyBlackRect10);
-                            else Notes[(j + (i * 12))] = (keyBlackRect10);
+                            AddKey(false, j, i);
                             break;
                         default:
-                            Rectangle keyWhiteRect = new Rectangle();
-                            keyWhiteRect.Name = $"{((PianoKey)j).ToString()}{i}";
-                            keyWhiteRect.Stroke = new SolidColorBrush(Colors.Black);
-                            keyWhiteRect.Fill = new SolidColorBrush(Colors.White);
-                            keyWhiteRect.StrokeThickness = 4;
-                            keyWhiteRect.Height = 200;
-                            KeysWhiteSP.Children.Add(keyWhiteRect);
-                            System.Diagnostics.Debug.WriteLine(keyWhiteRect.Name);
-                            if (j == 0)
-                            {
-                                if (i == 0) Notes[j] = (keyWhiteRect);
-                                else Notes[(i * 12)] = (keyWhiteRect);
-                            } else
-                            {
-                                if (i == 0) Notes[j] = (keyWhiteRect);
-                                else Notes[(j + (i * 12))] = (keyWhiteRect);
-                            }
+                            AddKey(true, j, i);
                             break;
-                            ky = 0;
                     }
                     oct = i + 1;
                 }
             }
-            Rectangle keyWhiteRect1 = new Rectangle();
-            keyWhiteRect1.Name = $"{((PianoKey)ky).ToString()}{oct}";
-            keyWhiteRect1.Stroke = new SolidColorBrush(Colors.Black);
-            keyWhiteRect1.Fill = new SolidColorBrush(Colors.White);
-            keyWhiteRect1.StrokeThickness = 4;
-            keyWhiteRect1.Height = 200;
-            KeysWhiteSP.Children.Add(keyWhiteRect1);
-            System.Diagnostics.Debug.WriteLine(keyWhiteRect1.Name);
-            if (ky == 0)
+            //Add an extra C note at the end
+            AddKey(true, 0, oct);
+            UpdateKeyboard();
+        }
+
+        public void AddKey(bool white, int j, int i)
+        {
+            if(white)
             {
-                if (oct == 0) Notes[ky] = (keyWhiteRect1);
-                else Notes[(oct * 12)] = (keyWhiteRect1);
+                Rectangle keyWhiteRect = new Rectangle();
+                keyWhiteRect.Name = $"{((PianoKey)j).ToString()}{i}";
+                keyWhiteRect.Stroke = new SolidColorBrush(Colors.Black);
+                keyWhiteRect.Fill = new SolidColorBrush(Colors.White);
+                keyWhiteRect.StrokeThickness = 4;
+                keyWhiteRect.Height = 200;
+                KeysWhiteSP.Children.Add(keyWhiteRect);
+                System.Diagnostics.Debug.WriteLine(keyWhiteRect.Name);
+                if (j == 0)
+                {
+                    if (i == 0) Notes[j] = (keyWhiteRect);
+                    else Notes[(i * 12)] = (keyWhiteRect);
+                }
+                else
+                {
+                    if (i == 0) Notes[j] = (keyWhiteRect);
+                    else Notes[(j + (i * 12))] = (keyWhiteRect);
+                }
             }
             else
             {
-                if (oct == 0) Notes[ky] = (keyWhiteRect1);
-                else Notes[(ky + (oct * 12))] = (keyWhiteRect1);
+                Rectangle keyBlackRect = new Rectangle();
+                keyBlackRect.Name = $"{((PianoKeySharp)j).ToString()}{i}";
+                keyBlackRect.Fill = new SolidColorBrush(Colors.Black);
+                keyBlackRect.Stroke = new SolidColorBrush(Colors.Black);
+                keyBlackRect.StrokeThickness = 4;
+                keyBlackRect.Height = 150;
+                KeysBlackSP.Children.Add(keyBlackRect);
+                if (i == 0) Notes[j] = (keyBlackRect);
+                else Notes[(j + (i * 12))] = (keyBlackRect);
             }
-            UpdateKeyboard();
         }
 
         // Updates the keyboard. Is used after first initializing the keyboard or after resizing the window width.
         public void UpdateKeyboard()
         {
-            int windowWidth = Convert.ToInt32(Window.Current.Bounds.Width);
             double keyWidthWhite = 40;
 
             // Counts amount of white keys.
@@ -415,10 +368,7 @@ namespace PiaNotes.Views
                             location = keyWidthWhite - (key.Width / 2);
                             initialCsharp = false;
                         }
-                        else
-                        {
-                            location = (keyWidthWhite - (key.Width / 2)) * 2;
-                        }
+                        else location = (keyWidthWhite - (key.Width / 2)) * 2;
                         key.Margin = new Thickness(location, 0, 0, 50);
                     }
                     else if (key.Name.Contains("DSharp") || key.Name.Contains("GSharp") || key.Name.Contains("ASharp"))
@@ -435,42 +385,106 @@ namespace PiaNotes.Views
                     }
                 } catch (Exception e)
                 {
-                    
+
                 }
             }
         }
 
-        // Is executed when the window is resized.
+        /// <summary>
+        /// Logic Thread where game logic gets updated
+        /// </summary>
+        /// 
+
+        private void GameTimerLogic()
+        {
+            // Create a timer with a sixty-fourth tick which represents the 1/64 note.
+            timerGameLogic = new Timer(15.625);
+            timerGameLogic.AutoReset = true;
+            timerGameLogic.Enabled = true;
+
+            // Hook up the Elapsed event for the timer. 
+            timerGameLogic.Elapsed += GameTickLogic;
+        }
+
+        private void GameTickLogic(Object source, ElapsedEventArgs e)
+        {
+            pos--;
+        }
+
+
+        /// <summary>
+        /// GameCanvas is a Win2D canvas which makes 2D graphics rendering with GPU acceleration possible.
+        /// This includes all kind of cool stuf as particles, effects etc...
+        /// </summary> 
+
+        private void GameTimerUI()
+        {
+            timerGameUI = new DispatcherTimer();
+            timerGameUI.Interval = TimeSpan.FromMilliseconds(8);
+            timerGameUI.Tick += GameTickUI;
+            timerGameUI.Start();
+        }
+
+        private void GameTickUI(object sender, object e)
+        {
+            // Redraw screen.
+            GameCanvas.Invalidate();
+        }
+
+        // Initialize images and stuff.
+        private void GameCanvas_CreateResources(CanvasControl sender, CanvasCreateResourcesEventArgs args)
+        {
+            pos = windowWidth - windowWidth/10;
+        }
+
+        private void GameCanvas_Draw(CanvasControl sender, CanvasDrawEventArgs args)
+        {
+            int staffStart = windowWidth / 10;
+            int staffWidth = windowWidth - staffStart;
+
+            for (int i = 100; i <= 300; i += 50 ) args.DrawingSession.DrawLine(staffStart, i, staffWidth, i, Colors.White);
+            args.DrawingSession.DrawCircle(pos, 100, 8, Colors.White, 3);
+        }
+
+        /// <summary>
+        /// On click events navigation
+        /// </summary>
+
+        // Navigate to the settings page
+        private void NavSettings_Click(object sender, RoutedEventArgs e) => this.Frame.Navigate(typeof(SettingsPage));
+
+        // Navigate to the credits page
+        private void NavCredits_Click(object sender, RoutedEventArgs e) => this.Frame.Navigate(typeof(CreditsPage));
+
+        // Navigate to the selection page
+        private void NavSelection_Click(object sender, RoutedEventArgs e) => this.Frame.Navigate(typeof(SelectionPage));
+
+        /// <summary>
+        /// Page events
+        /// </summary>
+
+        // Handler for when the page is unloaded
+        private void Page_Unloaded(object sender, RoutedEventArgs e)
+        {
+            // Unsubscribe the MidiInPort_MessageReceived
+            Settings.midiInPort.MessageReceived -= MidiInPort_MessageReceived;
+
+            // Dispose of the Win2D resources
+            this.GameCanvas.RemoveFromVisualTree();
+            this.GameCanvas = null;
+        }
+
+        // Handler for when the page is resized
         private void Page_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             if (KeyboardIsOpen)
                 // If the keyboard is shown, it will be updated.
                 UpdateKeyboard();
-        }
 
-        /// <summary>
-        /// On click navigation
-        /// </summary>
+            var bounds = ApplicationView.GetForCurrentView().VisibleBounds;
 
-        // Unsubscribe the MidiInPort_MessageReceived and navigate to the settings page
-        private void NavSettings_Click(object sender, RoutedEventArgs e)
-        { 
-            Settings.midiInPort.MessageReceived -= MidiInPort_MessageReceived;
-            this.Frame.Navigate(typeof(SettingsPage));
-        }
-
-        // Unsubscribe the MidiInPort_MessageReceived and navigate to the credits page
-        private void NavCredits_Click(object sender, RoutedEventArgs e)
-        {
-            Settings.midiInPort.MessageReceived -= MidiInPort_MessageReceived;
-            this.Frame.Navigate(typeof(CreditsPage));
-        }
-
-        // Unsubscribe the MidiInPort_MessageReceived and navigate to the selection page
-        private void NavSelection_Click(object sender, RoutedEventArgs e)
-        {
-            Settings.midiInPort.MessageReceived -= MidiInPort_MessageReceived;
-            this.Frame.Navigate(typeof(SelectionPage));
+            gameCanvasWidth = (int)bounds.Width;
+            gameCanvasHeight = (int)bounds.Height;
         }
     }
 }
