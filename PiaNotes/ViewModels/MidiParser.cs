@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using PiaNotes.Models;
 using Melanchall.DryWetMidi.Smf;
 using Melanchall.DryWetMidi.Smf.Interaction;
+using Melanchall.DryWetMidi.MusicTheory;
 
 namespace PiaNotes.ViewModels
 {
@@ -23,6 +24,12 @@ namespace PiaNotes.ViewModels
             List<string> notesNumbers = (MF.GetNotes().Select(n => $"{n.NoteNumber}")).ToList();
             List<string> notesTimes = (MF.GetNotes().Select(n => $"{n.Time}")).ToList();
             List<string>  notesLengths = (MF.GetNotes().Select(n => $"{n.Length}")).ToList();
+
+            TempoMap tempo = MF.GetTempoMap();
+            //MetricTimeSpan metricTime = MF.GetNotes().TimeAs<MetricTimeSpan>(tempo);
+            //BarBeatTimeSpan musicalTime = note.TimeAs<BarBeatTimeSpan>(tempo);
+            //MetricTimeSpan metricLength = note.LengthAs<MetricTimeSpan>(tempo);
+            //BarBeatTimeSpan metricLength = note.LengthAs<BarBeatTimeSpan>(tempo);
 
             //Set the notes in an array and sends the array to SheetMusic
             for (int i = 0; i < notesNumbers.Count() - 1; i++)

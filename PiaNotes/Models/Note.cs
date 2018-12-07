@@ -44,7 +44,7 @@ namespace PiaNotes.Models
             if (ContentPipeline.ImageDictionary.TryGetValue(key, out canvasBitmap))
             {
                 Bitmap = canvasBitmap;
-                Size = this.Bitmap.SizeInPixels;
+                Size = Bitmap.SizeInPixels;
                 return true;
             }
             return false;

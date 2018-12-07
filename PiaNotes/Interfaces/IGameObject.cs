@@ -18,6 +18,5 @@ namespace PiaNotes.Interfaces
 
         bool SetBitmap(string key);
         void SetSize(uint width, uint height);
-        void Draw(CanvasControl cC);
     }
 }

@@ -18,6 +18,7 @@ using Windows.UI.Xaml.Navigation;
 using Windows.UI.Xaml.Shapes;
 using PiaNotes.Models;
 using System.Numerics;
+using PiaNotes.Interfaces;
 
 namespace PiaNotes.Views
 {
@@ -29,7 +30,7 @@ namespace PiaNotes.Views
         //DispatcherTimer is the regular timer. It fires its Tick event on the UI thread, you can do anything you want with the UI. System.Timers.Timer is an asynchronous timer, its Elapsed event runs on a thread pool thread. You have to be very careful in your event handler, you are not allowed to touch any UI component or data-bound variables. And you'll need to use the lock statement where ever you access class members that are also used on the UI thread.
         private DispatcherTimer timerGameUI;
         private static Timer timerGameLogic;
-        SheetMusic SM;
+        private SheetMusic SM;
 
         public bool KeyboardIsOpen { get; set; } = true;
 
@@ -51,17 +52,9 @@ namespace PiaNotes.Views
         private int pos;
 
         // Assets
+        List<IGameObject> gameObjects = new List<IGameObject>();
         bool isLoaded = false;
-        CanvasBitmap wholeNote;
-        CanvasBitmap halfNote;
-        CanvasBitmap quaterNote;
-        CanvasBitmap eighthNote;
-        CanvasBitmap sixteenthNote;
-        CanvasBitmap thirtySecondNote;
-        Note testNote;
-
-
-
+        private int tempoBPM = 120;
 
         public PracticePage()
         {
@@ -417,7 +410,7 @@ namespace PiaNotes.Views
         private void GameTimerLogic()
         {
             // Create a timer with a sixty-fourth tick which represents the 1/64 note.
-            timerGameLogic = new Timer(500);
+            timerGameLogic = new Timer(1000/tempoBPM);
             timerGameLogic.AutoReset = true;
             timerGameLogic.Enabled = true;
 
@@ -467,10 +460,13 @@ namespace PiaNotes.Views
             await ContentPipeline.AddImage("sixteenthNote", @"Assets/Notes/par.png");
             await ContentPipeline.AddImage("thirtySecondNote", @"Assets/Notes/uwu.png");
 
-            testNote = new Note(62,10,10);
-            testNote.SetBitmap("wholeNote");
-            testNote.SetSize(30,30);
-            testNote.Location = new Vector2(20,20);
+            for (int i = 0; i < SM.notes.Count; i++)
+            {
+                SM.notes[i].SetBitmap("wholeNote");
+                SM.notes[i].SetSize(30, 30);
+                SM.notes[i].Location = new Vector2(20, 20+i);
+                gameObjects.Add(SM.notes[i]);
+            }
 
             isLoaded = true;
         }
@@ -482,9 +478,11 @@ namespace PiaNotes.Views
             int staffWidth = windowWidth - staffStart;
 
             for (int i = 100; i <= 300; i += 50 ) args.DrawingSession.DrawLine(staffStart, i, staffWidth, i, Colors.White);
-            args.DrawingSession.DrawCircle(pos, 100, 8, Colors.White, 3);
 
-            args.DrawingSession.DrawImage(testNote.Bitmap, testNote.Size, testNote.Location);
+            foreach (IGameObject gameObject in gameObjects)
+            {
+                args.DrawingSession.DrawImage(gameObject.Bitmap, gameObject.Location);
+            }
         }
 
         /// <summary>
