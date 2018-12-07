@@ -1,4 +1,5 @@
 ﻿using Microsoft.Graphics.Canvas;
+using Microsoft.Graphics.Canvas.UI.Xaml;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,6 +18,6 @@ namespace PiaNotes.Interfaces
 
         bool SetBitmap(string key);
         void SetSize(uint width, uint height);
-        void Draw(CanvasDrawingSession cds);
+        void Draw(CanvasControl cC);
     }
 }

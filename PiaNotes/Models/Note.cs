@@ -1,4 +1,5 @@
 ﻿using Microsoft.Graphics.Canvas;
+using Microsoft.Graphics.Canvas.UI.Xaml;
 using PiaNotes.Interfaces;
 using PiaNotes.ViewModels;
 using System;
@@ -29,33 +30,32 @@ namespace PiaNotes.Models
             length = l;
         }
 
-        public void Draw(CanvasDrawingSession cds)
+        public void Draw(CanvasControl cC)
         {
             if (Bitmap == null)
                 return;
 
-            cds.DrawImage(Bitmap, Location);
+            //cC.DrawingSession.DrawImage(Bitmap, Location);
         }
 
         public bool SetBitmap(string key)
         {
-            CanvasBitmap cb = null;
-            if (ContentPipeline.ImageDictionary.TryGetValue(key, out cb))
+            CanvasBitmap canvasBitmap = null;
+            if (ContentPipeline.ImageDictionary.TryGetValue(key, out canvasBitmap))
             {
-                this.Bitmap = cb;
-                this.Size = this.Bitmap.SizeInPixels;
+                Bitmap = canvasBitmap;
+                Size = this.Bitmap.SizeInPixels;
                 return true;
             }
-
             return false;
         }
 
         public void SetSize(uint width, uint height)
         {
-            BitmapSize new_size;
-            new_size.Width = width;
-            new_size.Height = height;
-            this.Size = new_size;
+            BitmapSize bitmapSize;
+            bitmapSize.Width = width;
+            bitmapSize.Height = height;
+            Size = bitmapSize;
         }
     }
 }

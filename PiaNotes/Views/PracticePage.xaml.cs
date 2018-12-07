@@ -17,6 +17,7 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using Windows.UI.Xaml.Shapes;
 using PiaNotes.Models;
+using System.Numerics;
 
 namespace PiaNotes.Views
 {
@@ -57,6 +58,8 @@ namespace PiaNotes.Views
         CanvasBitmap eighthNote;
         CanvasBitmap sixteenthNote;
         CanvasBitmap thirtySecondNote;
+        Note testNote;
+
 
 
 
@@ -464,11 +467,12 @@ namespace PiaNotes.Views
             await ContentPipeline.AddImage("sixteenthNote", @"Assets/Notes/par.png");
             await ContentPipeline.AddImage("thirtySecondNote", @"Assets/Notes/uwu.png");
 
-
+            testNote = new Note(62,10,10);
+            testNote.SetBitmap("wholeNote");
+            testNote.SetSize(30,30);
+            testNote.Location = new Vector2(20,20);
 
             isLoaded = true;
-
-
         }
 
 
@@ -480,11 +484,7 @@ namespace PiaNotes.Views
             for (int i = 100; i <= 300; i += 50 ) args.DrawingSession.DrawLine(staffStart, i, staffWidth, i, Colors.White);
             args.DrawingSession.DrawCircle(pos, 100, 8, Colors.White, 3);
 
-            CanvasBitmap cb = null;
-            if (ContentPipeline.ImageDictionary.TryGetValue("quaterNote", out cb))
-            {
-                args.DrawingSession.DrawImage(cb, 150, 400);
-            }
+            args.DrawingSession.DrawImage(testNote.Bitmap, testNote.Size, testNote.Location);
         }
 
         /// <summary>
