@@ -37,7 +37,7 @@ namespace PiaNotes
                     break;
                 }
             }
-            contentFrame.Navigate(typeof(Views.CreditsPage));
+            contentFrame.Navigate(typeof(Views.SettingsPages.MIDI_SettingsPage));
         }
 
         private void SettingsNV_ItemInvoked(NavigationView sender, NavigationViewItemInvokedEventArgs args)
@@ -63,5 +63,9 @@ namespace PiaNotes
         }
         #endregion
 
+        private void SettingsNV_BackRequested(NavigationView sender, NavigationViewBackRequestedEventArgs args)
+        {
+            this.Frame.Navigate(typeof(Views.SelectionPage));
+        }
     }
 }

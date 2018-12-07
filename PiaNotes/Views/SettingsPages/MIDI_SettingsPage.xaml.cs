@@ -9,6 +9,7 @@ using Windows.Devices.Enumeration;
 using Windows.Devices.Midi;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Storage;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -29,9 +30,26 @@ namespace PiaNotes.Views.SettingsPages
         MidiDeviceWatcher inputDeviceWatcher;
         MidiDeviceWatcher outputDeviceWatcher;
 
+        // Storing in Local
+        ApplicationDataContainer localSettings;
+        StorageFolder localFolder;
+
+        //Octave Settings
+
+        //OctaveStart is the starting location of the octaves frequenty
+        public static int DefaultStartingOctave = 3;
+        public static int StartingOctave { get; set; }
+
+        //OctaveAmount is the amount of octaves on your screen at once
+        public static int DefaultOctaveAmount = 5;
+        public static int OctaveAmount { get; set; }
+
         public MIDI_SettingsPage()
         {
             this.InitializeComponent();
+
+            localFolder = ApplicationData.Current.LocalFolder;
+            localSettings = ApplicationData.Current.LocalSettings;
 
             // Device watchers added to watch for the MIDI input and output devices
             inputDeviceWatcher = new MidiDeviceWatcher(MidiInPort.GetDeviceSelector(), midiInPortListBox, Dispatcher);
@@ -40,6 +58,8 @@ namespace PiaNotes.Views.SettingsPages
 
             //Start the Device Watchers
             outputDeviceWatcher.StartWatcher();
+
+            //Set the slider back to the values the user put in and activate the correct settings
         }
 
         private async void midiInPortListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -158,28 +178,62 @@ namespace PiaNotes.Views.SettingsPages
 
         private void BTN_Save(object sender, RoutedEventArgs e)
         {
-
         }
 
         private void OctaveStart_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        { }
-        // TODO:
-        // - Check on max amount of octaves. If start == 8 then max can't be higher than 3 because there are only 11 octaves.
-        // - Cases for all possible selections.
-        // - Setting the actual StartingOctave to the selection.
+        {
+            // TODO:
+            // - Check on max amount of octaves. If start == 8 then max can't be higher than 3 because there are only 11 octaves.
+            // - Cases for all possible selections.
+            // - Setting the actual StartingOctave to the selection.
 
-        // Setting the actual OctaveAmount to the selection.
-        public int StartingOctave;
+            // Setting the actual OctaveAmount to the selection.
+            if (localSettings.Values["StartingOctave"] != null)
+            {
+                ComboBoxItem typeItem = (ComboBoxItem)CMB_StartingOctave.SelectedItem;
+                string value = typeItem.Content.ToString();
+                int StartingOctave = (int)localSettings.Values["StartingOctave"];
+                int selection = Int32.Parse(value);
+                StartingOctave = selection;
+            }
+            else
+            {
+                localSettings.Values["StartingOctave"] = DefaultStartingOctave;
+                ComboBoxItem typeItem = (ComboBoxItem)CMB_StartingOctave.SelectedItem;
+                string value = typeItem.Content.ToString();
+                int StartingOctave = (int)localSettings.Values["StartingOctave"];
+                int selection = Int32.Parse(value);
+                StartingOctave = selection;
+            }
+        }
+
 
         private void OctaveAmount_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        { }
-        // TODO:
-        // - Check on starting octave. If start == 8 then max can't be higher than 3 because there are only 11 octaves.
-        // - Setting the actual OctaveAmount to the selection.
-        // - Making the keyboard get the OctaveAmount from this file instead of Settings.cs
+        {
+            // TODO:
+            // - Check on starting octave. If start == 8 then max can't be higher than 3 because there are only 11 octaves.
+            // - Setting the actual OctaveAmount to the selection.
+            // - Making the keyboard get the OctaveAmount from this file instead of Settings.cs
 
-        // Setting the actual OctaveAmount to the selection.
-        public int OctaveAmount;
+            // Setting the actual OctaveAmount to the selection.
+            if (localSettings.Values["OctaveAmount"] != null)
+            {
+                ComboBoxItem typeItem = (ComboBoxItem)CMB_OctaveAmount.SelectedItem;
+                string value = typeItem.Content.ToString();
+                int OctaveAmount = (int)localSettings.Values["OctaveAmount"];
+                int selection = Int32.Parse(value);
+                OctaveAmount = selection;
+            }
+            else
+            {
+                localSettings.Values["OctaveAmount"] = DefaultOctaveAmount;
+                ComboBoxItem typeItem = (ComboBoxItem)CMB_OctaveAmount.SelectedItem;
+                string value = typeItem.Content.ToString();
+                int OctaveAmount = (int)localSettings.Values["OctaveAmount"];
+                int selection = Int32.Parse(value);
+                OctaveAmount = selection;
+            }
 
+        }
     }
 }

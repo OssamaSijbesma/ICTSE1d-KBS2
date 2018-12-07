@@ -56,7 +56,7 @@ namespace PiaNotes.Views
             //Generate the amount of Keys
             if (Settings.OctaveAmount != 0)
             {
-                Keys = Settings.OctaveAmount * 12;
+                Keys = Views.SettingsPages.MIDI_SettingsPage.OctaveAmount * 12;
             }
             else Keys = 12;
 
@@ -261,7 +261,7 @@ namespace PiaNotes.Views
             int ky = 0;
 
             //First go through each Octave to make keys
-            for (int i = Settings.OctaveStart; i < (Settings.OctaveAmount + Settings.OctaveStart); i++)
+            for (int i = Views.SettingsPages.MIDI_SettingsPage.StartingOctave; i < (Views.SettingsPages.MIDI_SettingsPage.OctaveAmount + Views.SettingsPages.MIDI_SettingsPage.StartingOctave); i++)
             {
                 //In each Octave make 12 keys, 7 white and 5 black keys
                 for (int j = 0; j < 12; j++)
