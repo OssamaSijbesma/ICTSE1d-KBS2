@@ -16,9 +16,7 @@ namespace PiaNotes.Interfaces
         BitmapSize Size { get; set; }
 
         bool SetBitmap(string key);
-        void SetSize(int width, int height);
-        void Draw();
-        void Update();
-
+        void SetSize(uint width, uint height);
+        void Draw(CanvasDrawingSession cds);
     }
 }

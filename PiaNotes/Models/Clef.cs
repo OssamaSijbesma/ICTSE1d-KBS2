@@ -7,12 +7,8 @@ using System.Threading.Tasks;
 
 namespace PiaNotes.Models
 {
-    class Clef : IGameObject
+    class Clef
     {
-        public int PosX { get; set; }
-        public int PosY { get; set; }
-        public int Width { get; set; }
-        public int Heigth { get; set; }
         public enum ClefTypes {Treble, Bass, Alto, Tenor}
 
         public ClefTypes CT;

@@ -463,7 +463,12 @@ namespace PiaNotes.Views
             await ContentPipeline.AddImage("eighthNote", @"Assets/Notes/owo.png");
             await ContentPipeline.AddImage("sixteenthNote", @"Assets/Notes/par.png");
             await ContentPipeline.AddImage("thirtySecondNote", @"Assets/Notes/uwu.png");
+
+
+
             isLoaded = true;
+
+
         }
 
 
