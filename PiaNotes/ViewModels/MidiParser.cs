@@ -15,26 +15,39 @@ namespace PiaNotes.ViewModels
         private List<Models.Note> notes = new List<Models.Note>();
         private bool multipleClefs;
         private int amountBars;
-        public SheetMusic SM;
+        public SheetMusic sheetMusic;
 
-        public MidiParser(MidiFile MF)
+        public MidiParser(MidiFile midiFile)
         {
-            //new Models.Note(Int32.Parse(MF.GetNotes().Select(n => $"n.NoteNumber")));
-            //Get every note from the list
-            List<string> notesNumbers = (MF.GetNotes().Select(n => $"{n.NoteNumber}")).ToList();
-            List<string> notesTimes = (MF.GetNotes().Select(n => $"{n.Time}")).ToList();
-            List<string>  notesLengths = (MF.GetNotes().Select(n => $"{n.Length}")).ToList();
+            // Get the tempo of the midiFile
+            TempoMap tempo = midiFile.GetTempoMap();
 
-            TempoMap tempo = MF.GetTempoMap();
-            //MetricTimeSpan metricTime = MF.GetNotes().TimeAs<MetricTimeSpan>(tempo);
+            //Get every note from the list
+            List<int> noteNumbers = midiFile.GetNotes().Select(n => $"{n.NoteNumber}").Select(int.Parse).ToList();
+            List<int> noteTimes = midiFile.GetNotes().Select(n => $"{n.Time}").Select(int.Parse).ToList();
+            List<int> noteLengths = midiFile.GetNotes().Select(n => $"{n.Length}").Select(int.Parse).ToList();
+
+            // Convert noteTimes to metric time
+            List<MetricTimeSpan> noteMetricTimes = noteTimes
+                .Select(t => TimeConverter.ConvertTo<MetricTimeSpan>(t, tempo))
+                .ToList();
+
+            // Convert noteLengths to metric time
+            List<MetricTimeSpan> noteMetricLengths = noteLengths
+                .Select(l => TimeConverter.ConvertTo<MetricTimeSpan>(l, tempo))
+                .ToList();
+
             //BarBeatTimeSpan musicalTime = note.TimeAs<BarBeatTimeSpan>(tempo);
-            //MetricTimeSpan metricLength = note.LengthAs<MetricTimeSpan>(tempo);
-            //BarBeatTimeSpan metricLength = note.LengthAs<BarBeatTimeSpan>(tempo);
 
             //Set the notes in an array and sends the array to SheetMusic
-            for (int i = 0; i < notesNumbers.Count() - 1; i++)
+            for (int i = 0; i < noteNumbers.Count() - 1; i++)
             {
-                notes.Add(new Models.Note(Int32.Parse(notesNumbers[i]), Int32.Parse(notesTimes[i]), Int32.Parse(notesLengths[i])));
+                notes.Add(new Models.Note(
+                    noteNumbers[i], 
+                    noteTimes[i], 
+                    noteLengths[i],
+                    noteMetricTimes[i],
+                    noteMetricLengths[i]));
             }
 
             //Check if multiple clefs are needed
@@ -44,7 +57,7 @@ namespace PiaNotes.ViewModels
             CheckBars(notes);
 
             //Create SheetMusic with every element MidiParser calculated
-            SM = new SheetMusic(MF, notes, multipleClefs, amountBars);
+            sheetMusic = new SheetMusic(midiFile, notes, multipleClefs, amountBars);
         }
 
         public void CheckClefs(List<Models.Note> notes)
@@ -52,7 +65,7 @@ namespace PiaNotes.ViewModels
             foreach(Models.Note n in notes)
             {
                 //Check if a note is lower than the treble clef supports, if not the bass cleff will be added
-                if(n.number <= 60)
+                if(n.Number <= 60)
                 {
                     multipleClefs = true;
                 }
@@ -68,9 +81,8 @@ namespace PiaNotes.ViewModels
 
             foreach (Models.Note n in notes)
             {
-                ticks += n.length;
+                ticks += n.Length;
             }
-
             amountBars = ticks / 384;
         }
     }

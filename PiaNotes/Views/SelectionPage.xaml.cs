@@ -154,7 +154,7 @@ namespace PiaNotes.Views
                 var stream = await file.OpenStreamForReadAsync();
                 var midiFile = MidiFile.Read(stream);
                 MP = new MidiParser(midiFile);
-                SM = MP.SM;
+                SM = MP.sheetMusic;
                 this.Frame.Navigate(typeof(PracticePage), SM);
             }
             else

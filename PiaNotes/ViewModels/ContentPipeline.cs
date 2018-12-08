@@ -14,6 +14,8 @@ namespace PiaNotes.ViewModels
     /// </summary>
     public static class ContentPipeline
     {
+        public static CanvasControl ParentCanvas = null;
+
         // our image dictionary
         public static Dictionary<string, CanvasBitmap> ImageDictionary = new Dictionary<string, CanvasBitmap>();
 
@@ -51,8 +53,5 @@ namespace PiaNotes.ViewModels
             return false;
         }
 
-        // TODO (duan) : RemoveImage
-
-        public static CanvasControl ParentCanvas = null;
     }
 }

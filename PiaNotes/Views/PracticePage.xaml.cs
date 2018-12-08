@@ -19,6 +19,7 @@ using Windows.UI.Xaml.Shapes;
 using PiaNotes.Models;
 using System.Numerics;
 using PiaNotes.Interfaces;
+using Melanchall.DryWetMidi.Smf.Interaction;
 
 namespace PiaNotes.Views
 {
@@ -50,11 +51,16 @@ namespace PiaNotes.Views
         private int gameCanvasWidth;
         private int gameCanvasHeight;
         private int pos;
+        private int staffStart;
+        private int staffEnd;
+        private int tickCount;
+        private double tickDistance;
+        private int FPS = 60;
+        private int UPS = 100;
+
 
         // Assets
         List<IGameObject> gameObjects = new List<IGameObject>();
-        bool isLoaded = false;
-        private int tempoBPM = 120;
 
         public PracticePage()
         {
@@ -80,8 +86,8 @@ namespace PiaNotes.Views
 
             //Create the keyboard to show on the screen and set a timer
             CreateKeyboard();
-            GameTimerLogic();
             GameTimerUI();
+
         }
 
         private void MidiInPort_MessageReceived(MidiInPort sender, MidiMessageReceivedEventArgs args)
@@ -410,7 +416,7 @@ namespace PiaNotes.Views
         private void GameTimerLogic()
         {
             // Create a timer with a sixty-fourth tick which represents the 1/64 note.
-            timerGameLogic = new Timer(1000/tempoBPM);
+            timerGameLogic = new Timer(1000/UPS);
             timerGameLogic.AutoReset = true;
             timerGameLogic.Enabled = true;
 
@@ -420,9 +426,27 @@ namespace PiaNotes.Views
 
         private void GameTickLogic(Object source, ElapsedEventArgs e)
         {
-            pos--;
-        }
+            tickCount += 1000000/UPS;
 
+            for (int i = 0; i < SM.notes.Count && i < 6; i++)
+            {
+                if (tickCount >= SM.notes[i].MetricTiming.TotalMicroseconds)
+                {
+                    gameObjects.Add(SM.notes[i]);
+                    SM.notes.Remove(SM.notes[i]);
+                }
+            }
+
+            for (int i = 0; i < gameObjects.Count; i++)
+            {
+                if (gameObjects[i].Location.X <= staffStart)
+                { 
+                    gameObjects.Remove(gameObjects[i]);
+                    return;
+                }
+                gameObjects[i].Location = new Vector2(gameObjects[i].Location.X - (float)tickDistance,gameObjects[i].Location.Y);
+            }
+        }
 
         /// <summary>
         /// GameCanvas is a Win2D canvas which makes 2D graphics rendering with GPU acceleration possible.
@@ -432,7 +456,7 @@ namespace PiaNotes.Views
         private void GameTimerUI()
         {
             timerGameUI = new DispatcherTimer();
-            timerGameUI.Interval = TimeSpan.FromMilliseconds(8);
+            timerGameUI.Interval = TimeSpan.FromMilliseconds(1000/FPS);
             timerGameUI.Tick += GameTickUI;
             timerGameUI.Start();
         }
@@ -446,29 +470,30 @@ namespace PiaNotes.Views
         // Initialize images and stuff.
         private void GameCanvas_CreateResources(CanvasControl sender, CanvasCreateResourcesEventArgs args)
         {
-            pos = windowWidth - windowWidth/10;
+            staffStart = windowWidth / 10;
+            staffEnd = windowWidth - staffStart;
+            tickDistance = (windowWidth * 0.80) / 600;
             args.TrackAsyncAction(CreateResourcesAsync(sender).AsAsyncAction());
         }
 
         private async Task CreateResourcesAsync(CanvasControl sender)
         {
             ContentPipeline.ParentCanvas = sender;
-            await ContentPipeline.AddImage("wholeNote", @"Assets/Notes/ooo.png");
-            await ContentPipeline.AddImage("halfNote", @"Assets/Notes/iwi.png");
-            await ContentPipeline.AddImage("quaterNote", @"Assets/Notes/dil.png");
-            await ContentPipeline.AddImage("eighthNote", @"Assets/Notes/owo.png");
-            await ContentPipeline.AddImage("sixteenthNote", @"Assets/Notes/par.png");
-            await ContentPipeline.AddImage("thirtySecondNote", @"Assets/Notes/uwu.png");
+            await ContentPipeline.AddImage("384", @"Assets/Notes/WholeNote.png");
+            await ContentPipeline.AddImage("192", @"Assets/Notes/HalfNote.png");
+            await ContentPipeline.AddImage("96", @"Assets/Notes/QuarterNote.png");
+            await ContentPipeline.AddImage("48", @"Assets/Notes/EighthNote.png");
+            await ContentPipeline.AddImage("24", @"Assets/Notes/SixteenthNote.png");
+            await ContentPipeline.AddImage("12", @"Assets/Notes/ThirtySecondNote.png");
 
             for (int i = 0; i < SM.notes.Count; i++)
             {
-                SM.notes[i].SetBitmap("wholeNote");
+                SM.notes[i].SetBitmap("96");
                 SM.notes[i].SetSize(30, 30);
-                SM.notes[i].Location = new Vector2(20, 20+i);
-                gameObjects.Add(SM.notes[i]);
+                SM.notes[i].Location = new Vector2(staffEnd, 55);                
             }
 
-            isLoaded = true;
+            GameTimerLogic();
         }
 
 
@@ -478,10 +503,12 @@ namespace PiaNotes.Views
             int staffWidth = windowWidth - staffStart;
 
             for (int i = 100; i <= 300; i += 50 ) args.DrawingSession.DrawLine(staffStart, i, staffWidth, i, Colors.White);
+            args.DrawingSession.DrawLine(staffStart+staffStart, 50, staffStart + staffStart, 350, Colors.White);
 
-            foreach (IGameObject gameObject in gameObjects)
+            for (int i = 0; i < gameObjects.Count; i++)
             {
-                args.DrawingSession.DrawImage(gameObject.Bitmap, gameObject.Location);
+                if(gameObjects[i] != null)
+                    args.DrawingSession.DrawImage(gameObjects[i].Bitmap, gameObjects[i].Location);
             }
         }
 
@@ -502,6 +529,14 @@ namespace PiaNotes.Views
         /// Page events
         /// </summary>
 
+        // Handler for when navigated to this page.
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            base.OnNavigatedTo(e);
+
+            SM = (SheetMusic)e.Parameter;
+        }
+
         // Handler for when the page is unloaded
         private void Page_Unloaded(object sender, RoutedEventArgs e)
         {
@@ -515,18 +550,15 @@ namespace PiaNotes.Views
             // Dispose of the Win2D resources
             this.GameCanvas.RemoveFromVisualTree();
             this.GameCanvas = null;
-        }
-        
-        protected override void OnNavigatedTo(NavigationEventArgs e)
-        {
-            base.OnNavigatedTo(e);
 
-            SM = (SheetMusic)e.Parameter;
+            // Clear the ContentPipeline
+            ContentPipeline.ImageDictionary.Clear();
         }
 
         // Handler for when the page is resized
         private void Page_SizeChanged(object sender, SizeChangedEventArgs e)
         {
+            
             if (KeyboardIsOpen)
                 // If the keyboard is shown, it will be updated.
                 UpdateKeyboard();

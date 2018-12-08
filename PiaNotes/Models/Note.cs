@@ -1,4 +1,5 @@
-﻿using Microsoft.Graphics.Canvas;
+﻿using Melanchall.DryWetMidi.Smf.Interaction;
+using Microsoft.Graphics.Canvas;
 using Microsoft.Graphics.Canvas.UI.Xaml;
 using PiaNotes.Interfaces;
 using PiaNotes.ViewModels;
@@ -14,20 +15,25 @@ namespace PiaNotes.Models
 {
     class Note : IGameObject
     {
-        public int number { get; set; }
-        public int timing { get; set; }
-        public int length { get; set; }
+        public int Number { get; set; }
+        public int Timing { get; set; }
+        public int Length { get; set; }
+        public MetricTimeSpan MetricTiming { get; set; }
+        public MetricTimeSpan MetricLength { get; set; }
 
         public CanvasBitmap Bitmap { get; set; }
         public Vector2 Location { get; set; }
         public BitmapSize Size { get; set; }
 
+
         //Creating a note can only happen if you know the number, timing and the length.
-        public Note(int n, int t, int l)
+        public Note(int number, int timing, int length, MetricTimeSpan metricTiming, MetricTimeSpan metricLength)
         {
-            number = n;
-            timing = t;
-            length = l;
+            Number = number;
+            Timing = timing;
+            Length = length;
+            MetricTiming = metricTiming;
+            MetricLength = metricLength;
         }
 
         public void Draw(CanvasControl cC)

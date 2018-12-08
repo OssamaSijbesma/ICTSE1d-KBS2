@@ -1,4 +1,5 @@
-﻿using Microsoft.Graphics.Canvas;
+﻿using Melanchall.DryWetMidi.Smf.Interaction;
+using Microsoft.Graphics.Canvas;
 using Microsoft.Graphics.Canvas.UI.Xaml;
 using System;
 using System.Collections.Generic;

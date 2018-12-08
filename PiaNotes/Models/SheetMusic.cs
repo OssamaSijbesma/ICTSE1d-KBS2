@@ -13,7 +13,6 @@ namespace PiaNotes.Models
     {
         public MidiFile MF { get; set; }
         public bool multipleClefs { get; set; }
-        
         public List<Note> notes { get; set; }
         public List<Bar> bars { get; set; }
 
