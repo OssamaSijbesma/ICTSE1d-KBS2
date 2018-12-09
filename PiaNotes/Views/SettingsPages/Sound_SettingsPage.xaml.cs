@@ -24,15 +24,67 @@ namespace PiaNotes.Views.SettingsPages
     public sealed partial class Sound_SettingsPage : Page
     {
         // Storing in Local
-        ApplicationDataContainer localSettings;
-        StorageFolder localFolder;
+        static StorageFolder localFolder = ApplicationData.Current.LocalFolder;
+        static ApplicationDataContainer localSettings = ApplicationData.Current.LocalSettings;
+        
+
+        public static double Velocity
+        {
+            get
+            {
+                if (localSettings.Values["Velocity"] != null)
+                {
+                    return (double)localSettings.Values["Velocity"];
+                }
+                else
+                {
+                    return 90;
+                }
+            }
+
+            set
+            {
+                if (value >= 0 && value <= 100)
+                {
+                    localSettings.Values["Velocity"] = value;
+                }
+                else
+                {
+                    localSettings.Values["Velocity"] = 90;
+                }
+            }
+        }
+
+        public static double Volume {
+            get
+            {
+                if (localSettings.Values["Volume"] != null)
+                {
+                    return (double)localSettings.Values["Volume"];
+                } else
+                {
+                    return 0;
+                }
+            }
+
+            set
+            {
+                if (value >= 0 && value <= 100)
+                {
+                    localSettings.Values["Volume"] = value;
+                }
+                else
+                {
+                    localSettings.Values["Volume"] = 0;
+                }
+            }
+        }
 
         public Sound_SettingsPage()
         {
             this.InitializeComponent();
 
-            localFolder = ApplicationData.Current.LocalFolder;
-            localSettings = ApplicationData.Current.LocalSettings;
+            
 
             //Set the slider back to the values the user put in and activate the correct settings
             if (localSettings.Values["Velocity"] != null)
@@ -97,14 +149,14 @@ namespace PiaNotes.Views.SettingsPages
         {
             //If the slider value changed from the velocity slider, set the new value +27
             //+27 is there so the slider goes from 0 to 100, instead of 27 to 127
-            localSettings.Values["Velocity"] = (e.NewValue + 27);
+            Velocity = (e.NewValue + 27);
         }
 
         private void Volume_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
         {
             //If the slider value changed from the volume slider, set the new value -50.
             //-50 is there so 50 = 0 and 0 = -50. This is so the volume can be lowered.
-            localSettings.Values["Volume"] = (e.NewValue - 50);
+            Volume = (e.NewValue - 50);
         }
 
         private void Velocity_Checked(object sender, RoutedEventArgs e)

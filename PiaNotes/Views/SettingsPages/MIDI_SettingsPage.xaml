@@ -15,58 +15,45 @@
                 <TextBlock Tag="MIDI_Settings">MIDI</TextBlock>
             </NavigationViewItem>
 
-            <TextBlock HorizontalAlignment="Left" Margin="35,85,0,0" Text="MIDI-In Devices" VerticalAlignment="Top" FontSize="24"/>
+            <TextBlock x:Name="TXTBL_MIDIIN" HorizontalAlignment="Left" Margin="35,85,0,0" Text="MIDI-In Devices" VerticalAlignment="Top" FontSize="24"/>
 
             <ListBox x:Name="midiInPortListBox" SelectionChanged="midiInPortListBox_SelectionChanged" MinHeight="100" MinWidth="720"
-                     Margin="35,117,0,33" HorizontalAlignment="Left" Width="1430"/>
+                     RelativePanel.Below="TXTBL_MIDIIN" Margin="35,5,0,33" HorizontalAlignment="Left" Width="1430"/>
 
-            <TextBlock HorizontalAlignment="Left" Margin="35,234,0,0" Text="MIDI-Out Devices" VerticalAlignment="Top" FontSize="24"/>
+            <TextBlock x:Name="TXTBL_MIDIOUT" HorizontalAlignment="Left" Margin="35,0,0,0" Text="MIDI-Out Devices" VerticalAlignment="Top" RelativePanel.Below="midiInPortListBox" FontSize="24"/>
 
             <ListBox x:Name="midiOutPortListBox" SelectionChanged="midiOutPortListBox_SelectionChanged" MinHeight="100" MinWidth="720"
-                     Margin="35,16,0,19" HorizontalAlignment="Left" Width="1430"
-                     RelativePanel.Below="midiInPortListBox"/>
+                     Margin="35,5,0,19" HorizontalAlignment="Left" Width="1430"
+                     RelativePanel.Below="TXTBL_MIDIOUT"/>
 
             <Button Content="Save" HorizontalAlignment="Left" Height="32.8" 
                     VerticalAlignment="Top" 
                     Width="64" 
-                    Margin="35,99,0,0"
+                    Margin="35,10,0,0"
                     Click="BTN_Save"
-                    RelativePanel.Below="midiOutPortListBox"/>
+                    RelativePanel.Below="CMB_StartingOctave"/>
 
-            <TextBlock HorizontalAlignment="Left" Margin="35,395,0,0" Text="Starting Octave" VerticalAlignment="Top" FontSize="24"/>
+            <TextBlock x:Name="TXTBL_StartingOctave" HorizontalAlignment="Left" Margin="35,10,0,0" Text="Starting Octave" VerticalAlignment="Top" RelativePanel.Below="midiOutPortListBox" FontSize="24"/>
 
-            <ComboBox x:Name="CMB_StartingOctave" HorizontalAlignment="Left" Height="32" Margin="35,428,0,0" VerticalAlignment="Top" Width="64" SelectionChanged="OctaveStart_SelectionChanged">
+            <ComboBox x:Name="CMB_StartingOctave" HorizontalAlignment="Left" Height="32" Margin="35,10,0,0" VerticalAlignment="Top" Width="64" RelativePanel.Below="TXTBL_StartingOctave" SelectionChanged="OctaveStart_SelectionChanged">
 
-                <ComboBoxItem Content="-1" />
                 <ComboBoxItem Content="0" />
-                <ComboBoxItem Content="1"/>
+                <ComboBoxItem Content="1" />
                 <ComboBoxItem Content="2" />
                 <ComboBoxItem Content="3" />
-                <ComboBoxItem Content="4"/>
+                <ComboBoxItem Content="4" />
                 <ComboBoxItem Content="5" />
                 <ComboBoxItem Content="6" />
-                <ComboBoxItem Content="7"/>
+                <ComboBoxItem Content="7" />
                 <ComboBoxItem Content="8" />
                 <ComboBoxItem Content="9" />
-                <ComboBoxItem Content="10"/>
+                <ComboBoxItem Content="10" />
 
             </ComboBox>
 
-            <TextBlock HorizontalAlignment="Left" Margin="225,395,0,0" Text="Amount of Octaves" VerticalAlignment="Top" FontSize="24"/>
+            <TextBlock x:Name="TXTBL_OctaveAmount" HorizontalAlignment="Left" Margin="225,10,0,0" Text="Amount of Octaves" VerticalAlignment="Top" RelativePanel.Below="midiOutPortListBox" FontSize="24"/>
 
-            <ComboBox x:Name="CMB_OctaveAmount"  HorizontalAlignment="Left" Height="32" Margin="225,428,0,0" VerticalAlignment="Top" Width="64" SelectionChanged="OctaveAmount_SelectionChanged">
-
-                <ComboBoxItem Content="1"/>
-                <ComboBoxItem Content="2" />
-                <ComboBoxItem Content="3" />
-                <ComboBoxItem Content="4"/>
-                <ComboBoxItem Content="5" />
-                <ComboBoxItem Content="6" />
-                <ComboBoxItem Content="7"/>
-                <ComboBoxItem Content="8" />
-                <ComboBoxItem Content="9" />
-                <ComboBoxItem Content="10"/>
-
+            <ComboBox x:Name="CMB_OctaveAmount"  HorizontalAlignment="Left" Height="32" Margin="225,10,0,0" VerticalAlignment="Top" Width="64" RelativePanel.Below="TXTBL_OctaveAmount" SelectionChanged="OctaveAmount_SelectionChanged">
             </ComboBox>
         </RelativePanel>
     </Grid>

@@ -34,8 +34,8 @@ namespace PiaNotes.Views
 
         // Length of 127 because of 127 notes
         private Rectangle[] Notes = new Rectangle[127];
-        private int Keys = Settings.OctaveAmount * 12;
-        private double oldWidth;
+        private int Keys = Views.SettingsPages.MIDI_SettingsPage.OctaveAmount * 12;
+        //private double oldWidth;
         private enum PianoKey { C = 0, D = 2, E = 4, F = 5, G = 7, A = 9, B = 11 };
         private enum PianoKeySharp { CSharp = 1, DSharp = 3, FSharp = 6, GSharp = 8, ASharp = 10 };
 
@@ -54,9 +54,9 @@ namespace PiaNotes.Views
             coreTitleBar.ExtendViewIntoTitleBar = false;
 
             //Generate the amount of Keys
-            if (Settings.OctaveAmount != 0)
+            if (Views.SettingsPages.MIDI_SettingsPage.OctaveAmount != 0)
             {
-                Keys = Views.SettingsPages.MIDI_SettingsPage.OctaveAmount * 12;
+                Keys = Settings.OctaveAmount * 12;
             }
             else Keys = 12;
 
@@ -261,7 +261,7 @@ namespace PiaNotes.Views
             int ky = 0;
 
             //First go through each Octave to make keys
-            for (int i = Views.SettingsPages.MIDI_SettingsPage.StartingOctave; i < (Views.SettingsPages.MIDI_SettingsPage.OctaveAmount + Views.SettingsPages.MIDI_SettingsPage.StartingOctave); i++)
+            for (int i = Settings.StartingOctave; i < (Settings.OctaveAmount + Settings.StartingOctave); i++)
             {
                 //In each Octave make 12 keys, 7 white and 5 black keys
                 for (int j = 0; j < 12; j++)
@@ -399,7 +399,7 @@ namespace PiaNotes.Views
             bool initialCsharp = true;
             foreach (Rectangle key in KeysBlackSP.Children)
             {
-                double keyWhiteWidth;
+                //double keyWhiteWidth;
                 try
                 {
                     // Calculates width for the black keys.
@@ -435,7 +435,7 @@ namespace PiaNotes.Views
                     }
                 } catch (Exception e)
                 {
-                    
+                    System.Diagnostics.Debug.WriteLine(e.Message);
                 }
             }
         }

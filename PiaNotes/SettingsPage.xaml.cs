@@ -18,9 +18,9 @@ namespace PiaNotes
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class Test : Page
+    public sealed partial class SettingsPage : Page
     {
-        public Test()
+        public SettingsPage()
         {
             this.InitializeComponent();
         }
@@ -65,6 +65,10 @@ namespace PiaNotes
 
         private void SettingsNV_BackRequested(NavigationView sender, NavigationViewBackRequestedEventArgs args)
         {
+            if (this.Frame.CanGoBack)
+                this.Frame.GoBack(); 
+
+            else 
             this.Frame.Navigate(typeof(Views.SelectionPage));
         }
     }

@@ -9,20 +9,22 @@ namespace PiaNotes
 {
     static class Settings
     {
-        //Input port and Output port
+        //Input port and Output port 
         public static MidiInPort midiInPort;
         public static IMidiOutPort midiOutPort;
 
         //Settings for the keyboard, such as: if feedback is turned on, what volume it is or what the set velocity is
+        public static double velocity = 90;
         public static Boolean feedback = true;
         public static double volume = 0;
-        public static double velocity = 90;
+        
 
         //Octave Settings
+        //OctaveStart is the starting frequency of the octave
+        public static int StartingOctave = Views.SettingsPages.MIDI_SettingsPage.StartingOctave;
+
         //OctaveAmount is the amount of octaves on your screen at once
-        public static int OctaveAmount = 5;
-        //OctaveStart is the starting location of the octaves frequenty
-        public static int OctaveStart = 3;
+        public static int OctaveAmount = Views.SettingsPages.MIDI_SettingsPage.OctaveAmount;
 
         //Feedback Colours in RGB
         public static byte R = 43;

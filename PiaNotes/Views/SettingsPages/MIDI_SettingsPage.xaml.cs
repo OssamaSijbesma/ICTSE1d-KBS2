@@ -31,22 +31,81 @@ namespace PiaNotes.Views.SettingsPages
         MidiDeviceWatcher outputDeviceWatcher;
 
         // Storing in Local
-        ApplicationDataContainer localSettings;
-        StorageFolder localFolder;
+        static ApplicationDataContainer localSettings = ApplicationData.Current.LocalSettings;
+        static StorageFolder localFolder = ApplicationData.Current.LocalFolder;
+
 
         //Octave Settings
-
         //OctaveStart is the starting location of the octaves frequenty
-        public static int DefaultStartingOctave = 3;
-        public static int StartingOctave { get; set; }
+        private static int DefaultStartingOctave = 7;
+        public static int StartingOctave
+        {
+            get
+            {
+                if (localSettings.Values["StartingOctave"] != null)
+                {
+                    return (int) localSettings.Values["StartingOctave"];
+                } else
+                {
+                    return DefaultStartingOctave;
+                }
+                
+            }
+
+            set
+            {
+                if (value > -1 && value < 9)
+                    localSettings.Values["StartingOctave"] = value;
+            }
+        }
+
 
         //OctaveAmount is the amount of octaves on your screen at once
-        public static int DefaultOctaveAmount = 5;
-        public static int OctaveAmount { get; set; }
+        private static int DefaultOctaveAmount = 4;
+        public static int OctaveAmount
+        {
+            get
+            {
+                if (localSettings.Values["OctaveAmount"] != null)
+                {
+                    return (int)localSettings.Values["OctaveAmount"];
+                }
+                else
+                {
+                    return DefaultOctaveAmount;
+                }
+            }
+
+            set
+            {
+                localSettings.Values["OctaveAmount"] = value;
+            }
+        }
+
+        bool selected;
 
         public MIDI_SettingsPage()
         {
             this.InitializeComponent();
+
+            CMB_OctaveAmount.IsEnabled = false;
+
+            
+            if (localSettings.Values["StartingOctave"] != null)
+            {
+                if ((int)localSettings.Values["StartingOctave"] > 0 || (int)localSettings.Values["StartingOctave"] < 9)
+                {
+                    CMB_StartingOctave.SelectedIndex = (int)localSettings.Values["StartingOctave"];
+                }
+            }
+
+            if (localSettings.Values["OctaveAmount"] != null)
+            {
+                if ((int) localSettings.Values["OctaveAmount"] > 0 || (int)localSettings.Values["OctaveAmount"] < 9)
+                {
+                    CMB_OctaveAmount.SelectedIndex = (int)localSettings.Values["OctaveAmount"];
+                } 
+            }
 
             localFolder = ApplicationData.Current.LocalFolder;
             localSettings = ApplicationData.Current.LocalSettings;
@@ -178,62 +237,183 @@ namespace PiaNotes.Views.SettingsPages
 
         private void BTN_Save(object sender, RoutedEventArgs e)
         {
+            // todo implementation, neccesary? probably not
         }
 
         private void OctaveStart_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            // TODO:
-            // - Check on max amount of octaves. If start == 8 then max can't be higher than 3 because there are only 11 octaves.
-            // - Cases for all possible selections.
-            // - Setting the actual StartingOctave to the selection.
+            selected = true;
+            CMB_OctaveAmount.IsEnabled = true;
 
-            // Setting the actual OctaveAmount to the selection.
+            // Setting the actual StartingOctave to the selection.
             if (localSettings.Values["StartingOctave"] != null)
             {
-                ComboBoxItem typeItem = (ComboBoxItem)CMB_StartingOctave.SelectedItem;
-                string value = typeItem.Content.ToString();
-                int StartingOctave = (int)localSettings.Values["StartingOctave"];
-                int selection = Int32.Parse(value);
-                StartingOctave = selection;
+                ComboBox cmb = (ComboBox)sender;
+                string selectedIndex = cmb.SelectedIndex.ToString();
+                int selectedValue = Int32.Parse(selectedIndex);
+                StartingOctave = selectedValue;
             }
             else
             {
-                localSettings.Values["StartingOctave"] = DefaultStartingOctave;
-                ComboBoxItem typeItem = (ComboBoxItem)CMB_StartingOctave.SelectedItem;
-                string value = typeItem.Content.ToString();
-                int StartingOctave = (int)localSettings.Values["StartingOctave"];
-                int selection = Int32.Parse(value);
-                StartingOctave = selection;
+                localSettings.Values["StartingOctave"] = DefaultOctaveAmount;
+                ComboBox cmb = (ComboBox)sender;
+                string selectedIndex = cmb.SelectedIndex.ToString();
+                int selectedValue = Int32.Parse(selectedIndex);
+                StartingOctave = selectedValue;
+            }
+
+            ComboBoxItem StartSelection = (ComboBoxItem)CMB_StartingOctave.SelectedValue;
+            string selString = StartSelection.Content.ToString();
+            int selInt = Int32.Parse(selString);
+
+            switch (selInt)
+            {
+                case 0:
+                    CMB_OctaveAmount.Items.Clear();
+                    for (int i = 1; i < 12; i++)
+                    {
+                        ComboboxItem item = new ComboboxItem();
+                        item.Text = "" + i;
+                        item.Value = i;
+                        CMB_OctaveAmount.Items.Add(item);
+                    }
+                    break;
+                case 1:
+                    CMB_OctaveAmount.Items.Clear();
+                    for (int i = 1; i < 11; i++)
+                    {
+                        ComboboxItem item = new ComboboxItem();
+                        item.Text = "" + i;
+                        item.Value = i;
+                        CMB_OctaveAmount.Items.Add(item);
+                    }
+                    break;
+                case 2:
+                    CMB_OctaveAmount.Items.Clear();
+                    for (int i = 1; i < 10; i++)
+                    {
+                        ComboboxItem item = new ComboboxItem();
+                        item.Text = "" + i;
+                        item.Value = i;
+                        CMB_OctaveAmount.Items.Add(item);
+                    }
+                    break;
+
+                case 3:
+                    CMB_OctaveAmount.Items.Clear();
+                    for (int i = 1; i < 9; i++)
+                    {
+                        ComboboxItem item = new ComboboxItem();
+                        item.Text = "" + i;
+                        item.Value = i;
+                        CMB_OctaveAmount.Items.Add(item);
+                    }
+                    break;
+                case 4:
+                    CMB_OctaveAmount.Items.Clear();
+                    for (int i = 1; i < 8; i++)
+                    {
+                        ComboboxItem item = new ComboboxItem();
+                        item.Text = "" + i;
+                        item.Value = i;
+                        CMB_OctaveAmount.Items.Add(item);
+                    }
+                    break;
+                case 5:
+                    CMB_OctaveAmount.Items.Clear();
+                    for (int i = 1; i < 7; i++)
+                    {
+                        ComboboxItem item = new ComboboxItem();
+                        item.Text = "" + i;
+                        item.Value = i;
+                        CMB_OctaveAmount.Items.Add(item);
+                    }
+                    break;
+                case 6:
+                    CMB_OctaveAmount.Items.Clear();
+                    for (int i = 1; i < 6; i++)
+                    {
+                        ComboboxItem item = new ComboboxItem();
+                        item.Text = "" + i;
+                        item.Value = i;
+                        CMB_OctaveAmount.Items.Add(item);
+                    }
+                    break;
+                case 7:
+                    CMB_OctaveAmount.Items.Clear();
+                    for (int i = 1; i < 5; i++)
+                    {
+                        ComboboxItem item = new ComboboxItem();
+                        item.Text = "" + i;
+                        item.Value = i;
+                        CMB_OctaveAmount.Items.Add(item);
+                    }
+                    break;
+                case 8:
+                    CMB_OctaveAmount.Items.Clear();
+                    for (int i = 1; i < 4; i++)
+                    {
+                        ComboboxItem item = new ComboboxItem();
+                        item.Text = "" + i;
+                        item.Value = i;
+                        CMB_OctaveAmount.Items.Add(item);
+                    }
+                    break;
+                case 9:
+                    CMB_OctaveAmount.Items.Clear();
+                    for (int i = 1; i < 3; i++)
+                    {
+                        ComboboxItem item = new ComboboxItem();
+                        item.Text = "" + i;
+                        item.Value = i;
+                        CMB_OctaveAmount.Items.Add(item);
+                    }
+                    break;
+                case 10:
+                    CMB_OctaveAmount.Items.Clear();
+                    for (int i = 1; i < 2; i++)
+                    {
+                        ComboboxItem item = new ComboboxItem();
+                        item.Text = "" + i;
+                        item.Value = i;
+                        CMB_OctaveAmount.Items.Add(item);
+                    }
+                    break;
             }
         }
 
 
         private void OctaveAmount_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            // TODO:
-            // - Check on starting octave. If start == 8 then max can't be higher than 3 because there are only 11 octaves.
-            // - Setting the actual OctaveAmount to the selection.
-            // - Making the keyboard get the OctaveAmount from this file instead of Settings.cs
 
             // Setting the actual OctaveAmount to the selection.
             if (localSettings.Values["OctaveAmount"] != null)
             {
-                ComboBoxItem typeItem = (ComboBoxItem)CMB_OctaveAmount.SelectedItem;
-                string value = typeItem.Content.ToString();
-                int OctaveAmount = (int)localSettings.Values["OctaveAmount"];
-                int selection = Int32.Parse(value);
-                OctaveAmount = selection;
+                ComboBox cmb = (ComboBox)sender;
+                string selectedIndex = cmb.SelectedIndex.ToString();
+                int selectedValue = Int32.Parse(selectedIndex);
+                OctaveAmount = selectedValue + 1;
             }
             else
             {
                 localSettings.Values["OctaveAmount"] = DefaultOctaveAmount;
-                ComboBoxItem typeItem = (ComboBoxItem)CMB_OctaveAmount.SelectedItem;
-                string value = typeItem.Content.ToString();
-                int OctaveAmount = (int)localSettings.Values["OctaveAmount"];
-                int selection = Int32.Parse(value);
-                OctaveAmount = selection;
+                ComboBox cmb = (ComboBox)sender;
+                string selectedIndex = cmb.SelectedIndex.ToString();
+                int selectedValue = Int32.Parse(selectedIndex);
+                OctaveAmount = selectedValue + 1;
             }
 
+        }
+    }
+
+    public class ComboboxItem
+    {
+        public string Text { get; set; }
+        public object Value { get; set; }
+
+        public override string ToString()
+        {
+            return Text;
         }
     }
 }
