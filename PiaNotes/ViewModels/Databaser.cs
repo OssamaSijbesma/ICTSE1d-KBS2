@@ -55,161 +55,7 @@ namespace PiaNotes.ViewModels
                 throw new NotImplementedException();
             }
         }
-
-        //Search a single MusicSheet in the database using an Id
-        public MusicSheet SearchId(int id)
-        {
-            try
-            {
-                //Setup connection and SQL command
-                using (MySqlConnection sqlconn = new MySqlConnection(ConnectionString))
-                using (var cmd = new MySqlCommand($"SELECT * FROM {DataTable} WHERE id = { id }", sqlconn))
-                {
-                    //Sheet to be used if search comes up empty
-                    MusicSheet result = null;
-
-                    //Open connection to database
-                    sqlconn.Open();
-
-                    //Prepare statement for execution
-                    cmd.Prepare();
-
-                    //Execute SQL command
-                    var go = cmd.ExecuteReader();
-
-                    //Read results
-                    go.Read();
-
-                    //Get found Id, Title and Path
-                    if (go.HasRows == true)
-                    {
-                        var FoundId = go.GetInt32(0); var FoundTitle = go.GetString(1); var FoundPath = go.GetString(2);
-                        //Make a new MusicSheet using found data
-                        result = new MusicSheet(FoundId, FoundTitle, FoundPath);
-                    }
-
-                    //Close connection to database and return results
-                    sqlconn.Close();
-                    return result;
-                }
-            }
-            catch
-            {
-                // Not developed yet.
-                throw new NotImplementedException();
-            }
-        }
-
-        //Search through MusicSheets in the database using a Title
-        public List<MusicSheet> SearchTitle(string title)
-        {
-            try
-            {
-                //Setup connection and SQL command
-                using (MySqlConnection sqlconn = new MySqlConnection(ConnectionString))
-                using (var cmd = new MySqlCommand($"SELECT * FROM {DataTable} WHERE Title = '{ title }'", sqlconn))
-                {
-                    //List of Searched sheets
-                    List<MusicSheet> result = new List<MusicSheet>();
-
-                    //Open connection to database
-                    sqlconn.Open();
-
-                    //Prepare statement for execution
-                    cmd.Prepare();
-
-                    //Execute SQL command
-                    var go = cmd.ExecuteReader();
-
-                    //New list to remember ids.
-                    List<int> list = new List<int>();
-
-                    bool read = true;
-                    while (read == true)
-                    {
-                        //Read results
-                        go.Read();
-                        //Check if the result is filled and if the id has not yet been added to the list.
-                        if (go.HasRows == true && list.Contains(go.GetInt32(0)) == false)
-                        {
-                            //Get found Id, Title and Path
-                            var FoundId = go.GetInt32(0); var FoundTitle = go.GetString(1); var FoundPath = go.GetString(2);
-
-                            //Make a new MusicSheet using found data and add it to the list
-                            result.Add(new MusicSheet(FoundId, FoundTitle, FoundPath));
-                            //Add id to the list to check next cycle
-                            list.Add(go.GetInt32(0));
-                        }
-                        else read = false;
-                    }
-
-                    //Close connection to database and return results
-                    sqlconn.Close();
-                    return result;
-                }
-            }
-            catch
-            {
-                // Not developed yet.
-                throw new NotImplementedException();
-            }
-        }
-
-        //Search through MusicSheets in the database with a limit
-        public List<MusicSheet> SearchNumber(int limit, int offset)
-        {
-            try
-            {
-                //Setup connection and SQL command
-                using (MySqlConnection sqlconn = new MySqlConnection(ConnectionString))
-                using (var cmd = new MySqlCommand($"SELECT * FROM {DataTable} LIMIT { limit } OFFSET {offset}", sqlconn))
-                {
-                    //List of Searched sheets
-                    List<MusicSheet> result = new List<MusicSheet>();
-
-                    //Open connection to database
-                    sqlconn.Open();
-
-                    //Prepare statement for execution
-                    cmd.Prepare();
-
-                    //Execute SQL command
-                    var go = cmd.ExecuteReader();
-
-                    //New list to remember ids.
-                    List<int> list = new List<int>();
-
-                    bool read = true;
-                    while (read == true)
-                    {
-                        //Read results
-                        go.Read();
-                        //Check if the result is filled and if the id has not yet been added to the list.
-                        if (go.HasRows == true && list.Contains(go.GetInt32(0)) == false)
-                        {
-                            //Get found Id, Title and Path
-                            var FoundId = go.GetInt32(0); var FoundTitle = go.GetString(1); var FoundPath = go.GetString(2);
-
-                            //Make a new MusicSheet using found data and add it to the list
-                            result.Add(new MusicSheet(FoundId, FoundTitle, FoundPath));
-                            //Add id to the list to check next cycle
-                            list.Add(go.GetInt32(0));
-                        }
-                        else read = false;
-                    }
-
-                    //Close connection to database and return results
-                    sqlconn.Close();
-                    return result;
-                }
-            }
-            catch
-            {
-                // Not developed yet.
-                throw new NotImplementedException();
-            }
-        }
-
+        
         //Search through MusicSheets in the database with a limit
         public List<MusicSheet> Search(string select, string whereA, string whereB, int limit, int offset)
         {
@@ -274,10 +120,10 @@ namespace PiaNotes.ViewModels
                         if (go.HasRows == true && list.Contains(go.GetInt32(0)) == false)
                         {
                             //Get found Id, Title and Path
-                            var FoundId = go.GetInt32(0); var FoundTitle = go.GetString(1); var FoundPath = go.GetString(2);
+                            var FoundId = go.GetInt32(0); var FoundTitle = go.GetString(1); var FoundFile = go.GetString(2);
 
                             //Make a new MusicSheet using found data and add it to the list
-                            result.Add(new MusicSheet(FoundId, FoundTitle, FoundPath));
+                            result.Add(new MusicSheet(FoundId, FoundTitle, FoundFile));
                             //Add id to the list to check next cycle
                             list.Add(go.GetInt32(0));
                         }

@@ -144,13 +144,15 @@ namespace PiaNotes.Views
         // MIDI file click functionality.
         private async Task MidiFile_Click(object sender, RoutedEventArgs e, MusicSheet element)  
         {
+            /*
             // Navigate to the practice page unless MIDI is not set then show a dialog and go to the settings page
             if (Settings.midiInPort == null || Settings.midiOutPort == null)
             {
                 await StaticObjects.NoMidiInOutDialog.ShowAsync();
                 this.Frame.Navigate(typeof(SettingsPage));
             }
-            // element.Id;
+            */
+            // element.File
         }
         
         // Display search changes
