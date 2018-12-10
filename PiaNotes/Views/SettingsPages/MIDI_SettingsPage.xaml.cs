@@ -54,7 +54,7 @@ namespace PiaNotes.Views.SettingsPages
 
             set
             {
-                if (value > -1 && value < 9)
+                if (value >= 0 && value < 9)
                     localSettings.Values["StartingOctave"] = value;
             }
         }
@@ -78,7 +78,8 @@ namespace PiaNotes.Views.SettingsPages
 
             set
             {
-                localSettings.Values["OctaveAmount"] = value;
+                if (value > 0 && value < 10)
+                    localSettings.Values["OctaveAmount"] = value;
             }
         }
 
@@ -103,7 +104,7 @@ namespace PiaNotes.Views.SettingsPages
             {
                 if ((int) localSettings.Values["OctaveAmount"] > 0 || (int)localSettings.Values["OctaveAmount"] < 9)
                 {
-                    // CMB_OctaveAmount.SelectedIndex = (int)localSettings.Values["OctaveAmount"];
+                    CMB_OctaveAmount.SelectedIndex = (int)localSettings.Values["OctaveAmount"] - 1;
                 } 
             }
 
@@ -240,21 +241,21 @@ namespace PiaNotes.Views.SettingsPages
             System.Diagnostics.Debug.WriteLine("b4 Starting Octave: " + StartingOctave);
             System.Diagnostics.Debug.WriteLine("b4 Amount of Octaves: " + OctaveAmount);
 
-            // Change the StartingOctave to the selection.
-            int startingSelection = CMB_StartingOctave.SelectedIndex;
-            localSettings.Values["StartingOctave"] = startingSelection;
-            StartingOctave = startingSelection;
-            Settings.StartingOctave = startingSelection;
+            //// Change the StartingOctave to the selection.
+            //int startingSelection = CMB_StartingOctave.SelectedIndex;
+            //localSettings.Values["StartingOctave"] = startingSelection;
+            //StartingOctave = startingSelection;
+            //Settings.StartingOctave = startingSelection;
 
-            // Change the OctaveAmount to the selection.
-            int amountSelection = CMB_OctaveAmount.SelectedIndex;
-            localSettings.Values["OctaveAmount"] = amountSelection;
-            OctaveAmount = amountSelection + 1;
-            Settings.OctaveAmount = amountSelection + 1;
+            //// Change the OctaveAmount to the selection.
+            //int amountSelection = CMB_OctaveAmount.SelectedIndex;
+            //localSettings.Values["OctaveAmount"] = amountSelection;
+            //OctaveAmount = amountSelection + 1;
+            //Settings.OctaveAmount = amountSelection + 1;
 
-            System.Diagnostics.Debug.WriteLine("after Starting Octave: " + StartingOctave);
-            System.Diagnostics.Debug.WriteLine("after Amount of Octaves: " + OctaveAmount);
-            await StaticObjects.SavedDialog.ShowAsync();
+            //System.Diagnostics.Debug.WriteLine("after Starting Octave: " + StartingOctave);
+            //System.Diagnostics.Debug.WriteLine("after Amount of Octaves: " + OctaveAmount);
+            //await StaticObjects.SavedDialog.ShowAsync();
         }
 
         private void OctaveStart_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -269,7 +270,7 @@ namespace PiaNotes.Views.SettingsPages
                 string selectedIndex = cmb.SelectedIndex.ToString();
                 int selectedValue = Int32.Parse(selectedIndex);
                 StartingOctave = selectedValue;
-                Settings.StartingOctave = selectedValue;
+                Settings.startingOctave = StartingOctave;
             }
             else
             {
@@ -278,7 +279,7 @@ namespace PiaNotes.Views.SettingsPages
                 string selectedIndex = cmb.SelectedIndex.ToString();
                 int selectedValue = Int32.Parse(selectedIndex);
                 StartingOctave = selectedValue;
-                Settings.StartingOctave = selectedValue;
+                Settings.startingOctave = StartingOctave;
             }
 
             ComboBoxItem StartSelection = (ComboBoxItem)CMB_StartingOctave.SelectedValue;
@@ -392,7 +393,7 @@ namespace PiaNotes.Views.SettingsPages
                 string selectedIndex = cmb.SelectedIndex.ToString();
                 int selectedValue = Int32.Parse(selectedIndex);
                 OctaveAmount = selectedValue + 1;
-                Settings.OctaveAmount = selectedValue;
+                Settings.octaveAmount = OctaveAmount;
             }
             else
             {
@@ -401,7 +402,7 @@ namespace PiaNotes.Views.SettingsPages
                 string selectedIndex = cmb.SelectedIndex.ToString();
                 int selectedValue = Int32.Parse(selectedIndex);
                 OctaveAmount = selectedValue + 1;
-                Settings.OctaveAmount = selectedValue + 1;
+                Settings.octaveAmount = OctaveAmount;
             }
 
         }

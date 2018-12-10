@@ -56,7 +56,7 @@ namespace PiaNotes.Views
             //Generate the amount of Keys
             if (Views.SettingsPages.MIDI_SettingsPage.OctaveAmount != 0)
             {
-                Keys = Settings.OctaveAmount * 12;
+                Keys = Settings.octaveAmount * 12;
             }
             else Keys = 12;
 
@@ -149,11 +149,11 @@ namespace PiaNotes.Views
                     // Colors will be pulled from Settings.cs.
                     if (Notes[note].Name.Contains("Sharp"))
                     {
-                        Notes[note].Fill = new SolidColorBrush(Windows.UI.Color.FromArgb(255, DoubleToByte(Settings.R - neg), DoubleToByte(Settings.G - neg), DoubleToByte(Settings.B - neg)));
+                        Notes[note].Fill = new SolidColorBrush(Windows.UI.Color.FromArgb(255, DoubleToByte(Settings.redValue - neg), DoubleToByte(Settings.greenValue - neg), DoubleToByte(Settings.blueValue - neg)));
                     }
                     else
                     {
-                        Notes[note].Fill = new SolidColorBrush(Windows.UI.Color.FromArgb(255, Settings.R, Settings.G, Settings.B));
+                        Notes[note].Fill = new SolidColorBrush(Windows.UI.Color.FromArgb(255, Settings.redValue, Settings.greenValue, Settings.blueValue));
                     }
                 }
                 catch (Exception e)
@@ -260,11 +260,11 @@ namespace PiaNotes.Views
             int oct = 0;
             int ky = 0;
 
-            System.Diagnostics.Debug.WriteLine("sO Practice: " + Settings.StartingOctave);
-            System.Diagnostics.Debug.WriteLine("oA Practice: " + Settings.OctaveAmount);
+            System.Diagnostics.Debug.WriteLine("sO Practice: " + Settings.startingOctave);
+            System.Diagnostics.Debug.WriteLine("oA Practice: " + Settings.octaveAmount);
 
             //First go through each Octave to make keys
-            for (int i = Settings.StartingOctave; i < (Settings.OctaveAmount + Settings.StartingOctave); i++)
+            for (int i = Settings.startingOctave; i < (Settings.octaveAmount + Settings.startingOctave); i++)
             {
                 //In each Octave make 12 keys, 7 white and 5 black keys
                 for (int j = 0; j < 12; j++)
@@ -380,7 +380,7 @@ namespace PiaNotes.Views
 
             // Counts amount of white keys.
             int keyWhiteAmount = 8;
-            if (Settings.OctaveAmount != 0) keyWhiteAmount = (Keys - (Settings.OctaveAmount * 5) + 1);
+            if (Settings.octaveAmount != 0) keyWhiteAmount = (Keys - (Settings.octaveAmount * 5) + 1);
 
             // Sets width for white keys.
             foreach (Rectangle key in KeysWhiteSP.Children)

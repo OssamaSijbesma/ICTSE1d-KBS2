@@ -21,14 +21,14 @@ namespace PiaNotes
 
         //Octave Settings
         //OctaveStart is the starting frequency of the octave
-        public static int StartingOctave = 4;
+        public static int startingOctave = 4;
 
         //OctaveAmount is the amount of octaves on your screen at once
-        public static int OctaveAmount = 2;
+        public static int octaveAmount = 2;
 
         //Feedback Colours in RGB
-        public static byte R = 43;
-        public static byte G = 60;
-        public static byte B = 73;
+        public static byte redValue = 43;
+        public static byte greenValue = 60;
+        public static byte blueValue = 73;
     }
 }

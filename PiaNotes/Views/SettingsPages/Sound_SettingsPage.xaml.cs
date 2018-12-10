@@ -26,8 +26,8 @@ namespace PiaNotes.Views.SettingsPages
         // Storing in Local
         static StorageFolder localFolder = ApplicationData.Current.LocalFolder;
         static ApplicationDataContainer localSettings = ApplicationData.Current.LocalSettings;
-        
 
+        #region Properties
         public static double Velocity
         {
             get
@@ -80,6 +80,34 @@ namespace PiaNotes.Views.SettingsPages
             }
         }
 
+        public static bool Feedback
+        {
+            get
+            {
+                if (localSettings.Values["Feedback"] != null)
+                {
+                    return (bool)localSettings.Values["Feedback"];
+                }
+                else
+                {
+                    return true;
+                }
+            }
+
+            set
+            {
+                if ((bool)localSettings.Values["Feedback"] == true && value == false)
+                {
+                    localSettings.Values["Feedback"] = false;
+                }
+                else if ((bool)localSettings.Values["Feedback"] == false && value == true)
+                {
+                    localSettings.Values["Feedback"] = true;
+                }
+            }
+        }
+        #endregion
+
         public Sound_SettingsPage()
         {
             this.InitializeComponent();
@@ -89,40 +117,45 @@ namespace PiaNotes.Views.SettingsPages
             //Set the slider back to the values the user put in and activate the correct settings
             if (localSettings.Values["Velocity"] != null)
             {
-                double velocity = (double)localSettings.Values["Velocity"];
-                velocitySlider.Value = (velocity - 27);
+                Velocity = (double) localSettings.Values["Velocity"];
+                velocitySlider.Value = (Velocity - 27);
+                Settings.velocity = Velocity;
+
             }
             else
             {
                 localSettings.Values["Velocity"] = 90;
-                double velocity = (double)localSettings.Values["Velocity"];
-                velocitySlider.Value = (velocity - 27);
+                Velocity = (double) localSettings.Values["Velocity"];
+                velocitySlider.Value = (Velocity - 27);
+                Settings.velocity = Velocity;
             }
 
             if (localSettings.Values["Volume"] != null)
             {
-                double volume = (double)localSettings.Values["Volume"];
-                volumeSlider.Value = (volume + 50);
+                Volume = (double) localSettings.Values["Volume"];
+                volumeSlider.Value = (Volume + 50);
+                Settings.volume = Volume;
             }
             else
             {
-                localSettings.Values["Volume"] = 90;
-                double volume = (double)localSettings.Values["Volume"];
-                volumeSlider.Value = (volume + 50);
+                localSettings.Values["Volume"] = 0;
+                Volume = (double) localSettings.Values["Volume"];
+                volumeSlider.Value = (Volume + 50);
+                Settings.volume = Volume;
             }
 
 
             if (localSettings.Values["Feedback"] != null)
             {
-                bool feedback = (bool)localSettings.Values["Feedback"];
-                if (feedback)
+                Feedback = (bool)localSettings.Values["Feedback"];
+                if (Feedback)
                 {
                     volumeSlider.IsEnabled = true;
                     velocitySlider.IsEnabled = false;
                 }
                 else
                 {
-                    Feedback.IsChecked = true;
+                    FeedbackCheckbox.IsChecked = true;
                     volumeSlider.IsEnabled = false;
                     velocitySlider.IsEnabled = true;
                 }
@@ -138,7 +171,7 @@ namespace PiaNotes.Views.SettingsPages
                 }
                 else
                 {
-                    Feedback.IsChecked = true;
+                    FeedbackCheckbox.IsChecked = true;
                     volumeSlider.IsEnabled = false;
                     velocitySlider.IsEnabled = true;
                 }
