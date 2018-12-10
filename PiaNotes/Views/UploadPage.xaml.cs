@@ -28,7 +28,7 @@ namespace PiaNotes.Views
     public sealed partial class UploadPage : Page
     {
         Databaser DB = new Databaser();
-        private StringBuilder sb = new StringBuilder();
+        string midiString = "";
         public bool FileSelected { get; set; } = false;
 
         public UploadPage()
@@ -41,8 +41,11 @@ namespace PiaNotes.Views
 
         }
 
+        // FilePicker for Midi File.
         private async void OnOpenFile(object sender, RoutedEventArgs e)
         {
+            TXTBox_Title.Text = "";
+
             FileOpenPicker openPicker = new FileOpenPicker();
             openPicker.ViewMode = PickerViewMode.List;
             openPicker.SuggestedStartLocation = PickerLocationId.Downloads;
@@ -52,61 +55,52 @@ namespace PiaNotes.Views
 
             if (file != null)
             {
-                var stream = await file.OpenStreamForReadAsync();
+                TXTBlock_Status.Text = "Converting MIDI file...";
                 TXTBox_Title.Text = file.DisplayName;
-                ConvertMidiToText(stream);
+                var stream = await file.OpenStreamForReadAsync();
+                MidiConverter midiConverter = new MidiConverter();
+                string midiString = midiConverter.MidiToString(stream);
+
+                if (TXTBox_Title.Text.Length > 100)
+                {
+                    FileSelected = true;
+                    TXTBox_Title.Text = TXTBox_Title.Text.Substring(0, 100);
+                    TXTBlock_Status.Text = "File name is too long! The name has been shortened.";
+                }
+                if (midiString.Length < 2000000)
+                {
+                    FileSelected = true;
+                    TXTBlock_Status.Text = "MIDI file converted.";
+                }
+                else
+                {
+                    TXTBox_Title.Text = "";
+                    TXTBlock_Status.Text = "File is too large! Please try another file.";
+                }
+            }
+        }
+        
+        // Submit midi file functionality.
+        private void OnSubmit(object sender, RoutedEventArgs e)
+        {
+            if (FileSelected && midiString.Length < 2000000 && TXTBox_Title.Text.Length <= 100)
+            {
+                DB.Upload(TXTBox_Title.Text, midiString);
+                FileSelected = false;
+                TXTBlock_Status.Text = "File uploaded.";
+            }
+            else if (!FileSelected)
+            {
+                TXTBlock_Status.Text = "Please select a file.";
+            }
+            else if (TXTBox_Title.Text.Length > 100)
+            {
+                TXTBlock_Status.Text = "The entered title is too long, please make it shorter.";
             }
             else
             {
-                //  
+                TXTBlock_Status.Text = "Something went wrong. Please try again.";
             }
-
-        }
-        
-        public async void ConvertMidiToText(Stream midiFilePath)
-        {
-            var midiFile = MidiFile.Read(midiFilePath);
-            IEnumerable<string> items = midiFile.GetNotes()
-                .Select(n => $"{n.NoteNumber} {n.Time} {n.Length}");
-            int count = items.Count();
-            int current = 0;
-            
-            // Load each notenumber, time and length
-            foreach (string i in items)
-            {
-                if (current != 0)
-                {
-                    sb.Append("-");
-                }
-                sb.Append(i);
-                
-                current++;
-                ProgressBar_MIDILoader.Value = current / count * 100;
-                // Do something with i
-            }
-
-            FileSelected = true;
-
-            ContentDialog stringDialog = new ContentDialog
-            {
-                Title = "MIDI String:",
-                Content = $"{sb.ToString().Length}",
-                CloseButtonText = "Close",
-                DefaultButton = ContentDialogButton.Primary
-            };
-
-            ContentDialogResult result = await stringDialog.ShowAsync();
-            
-        }     
-        
-        private void OnSubmit(object sender, RoutedEventArgs e)
-        {
-            if (FileSelected && sb.ToString().Length < 2000000)
-            {
-                DB.Upload(TXTBox_Title.Text, sb.ToString());
-                FileSelected = false;
-            }
-            
         }
 
         // Return to previous page

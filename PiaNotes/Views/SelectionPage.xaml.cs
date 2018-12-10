@@ -19,8 +19,6 @@ using System.Collections.Generic;
 using PiaNotes.ViewModels;
 using PiaNotes.Models;
 
-// The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
-
 namespace PiaNotes.Views
 {
     /// <summary>
@@ -75,7 +73,7 @@ namespace PiaNotes.Views
                     musicSheetButton.Height = 35;
                     musicSheetButton.Width = 260;
                     musicSheetButton.Margin = new Thickness(10, 10, 10, 10);
-                    musicSheetButton.Click += MidiFile_Click;
+                    musicSheetButton.Click += delegate (object sender, RoutedEventArgs e) { MidiFile_Click(sender, e, element); };
 
                     if (element.Title.Length > 30)
                     {
@@ -143,11 +141,9 @@ namespace PiaNotes.Views
         }
 
         // MIDI file click functionality.
-        private void MidiFile_Click(object sender, RoutedEventArgs e)
+        private void MidiFile_Click(object sender, RoutedEventArgs e, MusicSheet element)  
         {
-            //TO DO
-            var button = (Button)sender;
-            
+            // element.Id;
         }
         
         // Display search changes
