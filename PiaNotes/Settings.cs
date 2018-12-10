@@ -17,14 +17,14 @@ namespace PiaNotes
         public static double velocity = 90;
         public static Boolean feedback = true;
         public static double volume = 0;
-        
+
 
         //Octave Settings
         //OctaveStart is the starting frequency of the octave
-        public static int StartingOctave = Views.SettingsPages.MIDI_SettingsPage.StartingOctave;
+        public static int StartingOctave = 4;
 
         //OctaveAmount is the amount of octaves on your screen at once
-        public static int OctaveAmount = Views.SettingsPages.MIDI_SettingsPage.OctaveAmount;
+        public static int OctaveAmount = 2;
 
         //Feedback Colours in RGB
         public static byte R = 43;

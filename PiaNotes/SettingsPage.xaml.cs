@@ -65,10 +65,6 @@ namespace PiaNotes
 
         private void SettingsNV_BackRequested(NavigationView sender, NavigationViewBackRequestedEventArgs args)
         {
-            if (this.Frame.CanGoBack)
-                this.Frame.GoBack(); 
-
-            else 
             this.Frame.Navigate(typeof(Views.SelectionPage));
         }
     }

@@ -260,6 +260,9 @@ namespace PiaNotes.Views
             int oct = 0;
             int ky = 0;
 
+            System.Diagnostics.Debug.WriteLine("sO Practice: " + Settings.StartingOctave);
+            System.Diagnostics.Debug.WriteLine("oA Practice: " + Settings.OctaveAmount);
+
             //First go through each Octave to make keys
             for (int i = Settings.StartingOctave; i < (Settings.OctaveAmount + Settings.StartingOctave); i++)
             {

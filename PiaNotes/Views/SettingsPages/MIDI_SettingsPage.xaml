@@ -39,10 +39,15 @@
                 <ComboBoxItem Content="6" />
                 <ComboBoxItem Content="7" />
                 <ComboBoxItem Content="8" />
-                <ComboBoxItem Content="9" />
-                <ComboBoxItem Content="10" />
 
             </ComboBox>
+
+            <Button Content="Save" HorizontalAlignment="Left" 
+                    VerticalAlignment="Top" 
+                    Width="64" 
+                    RelativePanel.Below="CMB_StartingOctave"
+                    Margin="35,15,0,0"
+                    Click="BTN_Save" Height="32"/>
 
             <TextBlock x:Name="TXTBL_OctaveAmount" HorizontalAlignment="Left" Margin="225,10,0,0" Text="Amount of Octaves" VerticalAlignment="Top" RelativePanel.Below="midiOutPortListBox" FontSize="24"/>
 

@@ -93,7 +93,7 @@ namespace PiaNotes.Views.SettingsPages
             
             if (localSettings.Values["StartingOctave"] != null)
             {
-                if ((int)localSettings.Values["StartingOctave"] > 0 || (int)localSettings.Values["StartingOctave"] < 9)
+                if ((int)localSettings.Values["StartingOctave"] >= 0 || (int)localSettings.Values["StartingOctave"] < 9)
                 {
                     CMB_StartingOctave.SelectedIndex = (int)localSettings.Values["StartingOctave"];
                 }
@@ -103,7 +103,7 @@ namespace PiaNotes.Views.SettingsPages
             {
                 if ((int) localSettings.Values["OctaveAmount"] > 0 || (int)localSettings.Values["OctaveAmount"] < 9)
                 {
-                    CMB_OctaveAmount.SelectedIndex = (int)localSettings.Values["OctaveAmount"];
+                    // CMB_OctaveAmount.SelectedIndex = (int)localSettings.Values["OctaveAmount"];
                 } 
             }
 
@@ -235,9 +235,26 @@ namespace PiaNotes.Views.SettingsPages
             this.midiOutPortListBox.IsEnabled = true;
         }
 
-        private void BTN_Save(object sender, RoutedEventArgs e)
+        private async void BTN_Save(object sender, RoutedEventArgs e)
         {
-            // todo implementation, neccesary? probably not
+            System.Diagnostics.Debug.WriteLine("b4 Starting Octave: " + StartingOctave);
+            System.Diagnostics.Debug.WriteLine("b4 Amount of Octaves: " + OctaveAmount);
+
+            // Change the StartingOctave to the selection.
+            int startingSelection = CMB_StartingOctave.SelectedIndex;
+            localSettings.Values["StartingOctave"] = startingSelection;
+            StartingOctave = startingSelection;
+            Settings.StartingOctave = startingSelection;
+
+            // Change the OctaveAmount to the selection.
+            int amountSelection = CMB_OctaveAmount.SelectedIndex;
+            localSettings.Values["OctaveAmount"] = amountSelection;
+            OctaveAmount = amountSelection + 1;
+            Settings.OctaveAmount = amountSelection + 1;
+
+            System.Diagnostics.Debug.WriteLine("after Starting Octave: " + StartingOctave);
+            System.Diagnostics.Debug.WriteLine("after Amount of Octaves: " + OctaveAmount);
+            await StaticObjects.SavedDialog.ShowAsync();
         }
 
         private void OctaveStart_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -252,14 +269,16 @@ namespace PiaNotes.Views.SettingsPages
                 string selectedIndex = cmb.SelectedIndex.ToString();
                 int selectedValue = Int32.Parse(selectedIndex);
                 StartingOctave = selectedValue;
+                Settings.StartingOctave = selectedValue;
             }
             else
             {
-                localSettings.Values["StartingOctave"] = DefaultOctaveAmount;
+                localSettings.Values["StartingOctave"] = DefaultStartingOctave;
                 ComboBox cmb = (ComboBox)sender;
                 string selectedIndex = cmb.SelectedIndex.ToString();
                 int selectedValue = Int32.Parse(selectedIndex);
                 StartingOctave = selectedValue;
+                Settings.StartingOctave = selectedValue;
             }
 
             ComboBoxItem StartSelection = (ComboBoxItem)CMB_StartingOctave.SelectedValue;
@@ -270,9 +289,9 @@ namespace PiaNotes.Views.SettingsPages
             {
                 case 0:
                     CMB_OctaveAmount.Items.Clear();
-                    for (int i = 1; i < 12; i++)
+                    for (int i = 1; i < 10; i++)
                     {
-                        ComboboxItem item = new ComboboxItem();
+                        CBItem item = new CBItem();
                         item.Text = "" + i;
                         item.Value = i;
                         CMB_OctaveAmount.Items.Add(item);
@@ -280,9 +299,9 @@ namespace PiaNotes.Views.SettingsPages
                     break;
                 case 1:
                     CMB_OctaveAmount.Items.Clear();
-                    for (int i = 1; i < 11; i++)
+                    for (int i = 1; i < 9; i++)
                     {
-                        ComboboxItem item = new ComboboxItem();
+                        CBItem item = new CBItem();
                         item.Text = "" + i;
                         item.Value = i;
                         CMB_OctaveAmount.Items.Add(item);
@@ -290,9 +309,9 @@ namespace PiaNotes.Views.SettingsPages
                     break;
                 case 2:
                     CMB_OctaveAmount.Items.Clear();
-                    for (int i = 1; i < 10; i++)
+                    for (int i = 1; i < 8; i++)
                     {
-                        ComboboxItem item = new ComboboxItem();
+                        CBItem item = new CBItem();
                         item.Text = "" + i;
                         item.Value = i;
                         CMB_OctaveAmount.Items.Add(item);
@@ -301,9 +320,9 @@ namespace PiaNotes.Views.SettingsPages
 
                 case 3:
                     CMB_OctaveAmount.Items.Clear();
-                    for (int i = 1; i < 9; i++)
+                    for (int i = 1; i < 7; i++)
                     {
-                        ComboboxItem item = new ComboboxItem();
+                        CBItem item = new CBItem();
                         item.Text = "" + i;
                         item.Value = i;
                         CMB_OctaveAmount.Items.Add(item);
@@ -311,9 +330,9 @@ namespace PiaNotes.Views.SettingsPages
                     break;
                 case 4:
                     CMB_OctaveAmount.Items.Clear();
-                    for (int i = 1; i < 8; i++)
+                    for (int i = 1; i < 6; i++)
                     {
-                        ComboboxItem item = new ComboboxItem();
+                        CBItem item = new CBItem();
                         item.Text = "" + i;
                         item.Value = i;
                         CMB_OctaveAmount.Items.Add(item);
@@ -321,9 +340,9 @@ namespace PiaNotes.Views.SettingsPages
                     break;
                 case 5:
                     CMB_OctaveAmount.Items.Clear();
-                    for (int i = 1; i < 7; i++)
+                    for (int i = 1; i < 5; i++)
                     {
-                        ComboboxItem item = new ComboboxItem();
+                        CBItem item = new CBItem();
                         item.Text = "" + i;
                         item.Value = i;
                         CMB_OctaveAmount.Items.Add(item);
@@ -331,9 +350,9 @@ namespace PiaNotes.Views.SettingsPages
                     break;
                 case 6:
                     CMB_OctaveAmount.Items.Clear();
-                    for (int i = 1; i < 6; i++)
+                    for (int i = 1; i < 4; i++)
                     {
-                        ComboboxItem item = new ComboboxItem();
+                        CBItem item = new CBItem();
                         item.Text = "" + i;
                         item.Value = i;
                         CMB_OctaveAmount.Items.Add(item);
@@ -341,9 +360,9 @@ namespace PiaNotes.Views.SettingsPages
                     break;
                 case 7:
                     CMB_OctaveAmount.Items.Clear();
-                    for (int i = 1; i < 5; i++)
+                    for (int i = 1; i < 3; i++)
                     {
-                        ComboboxItem item = new ComboboxItem();
+                        CBItem item = new CBItem();
                         item.Text = "" + i;
                         item.Value = i;
                         CMB_OctaveAmount.Items.Add(item);
@@ -351,29 +370,9 @@ namespace PiaNotes.Views.SettingsPages
                     break;
                 case 8:
                     CMB_OctaveAmount.Items.Clear();
-                    for (int i = 1; i < 4; i++)
-                    {
-                        ComboboxItem item = new ComboboxItem();
-                        item.Text = "" + i;
-                        item.Value = i;
-                        CMB_OctaveAmount.Items.Add(item);
-                    }
-                    break;
-                case 9:
-                    CMB_OctaveAmount.Items.Clear();
-                    for (int i = 1; i < 3; i++)
-                    {
-                        ComboboxItem item = new ComboboxItem();
-                        item.Text = "" + i;
-                        item.Value = i;
-                        CMB_OctaveAmount.Items.Add(item);
-                    }
-                    break;
-                case 10:
-                    CMB_OctaveAmount.Items.Clear();
                     for (int i = 1; i < 2; i++)
                     {
-                        ComboboxItem item = new ComboboxItem();
+                        CBItem item = new CBItem();
                         item.Text = "" + i;
                         item.Value = i;
                         CMB_OctaveAmount.Items.Add(item);
@@ -392,7 +391,8 @@ namespace PiaNotes.Views.SettingsPages
                 ComboBox cmb = (ComboBox)sender;
                 string selectedIndex = cmb.SelectedIndex.ToString();
                 int selectedValue = Int32.Parse(selectedIndex);
-                OctaveAmount = selectedValue;
+                OctaveAmount = selectedValue + 1;
+                Settings.OctaveAmount = selectedValue;
             }
             else
             {
@@ -400,13 +400,14 @@ namespace PiaNotes.Views.SettingsPages
                 ComboBox cmb = (ComboBox)sender;
                 string selectedIndex = cmb.SelectedIndex.ToString();
                 int selectedValue = Int32.Parse(selectedIndex);
-                OctaveAmount = selectedValue;
+                OctaveAmount = selectedValue + 1;
+                Settings.OctaveAmount = selectedValue + 1;
             }
 
         }
     }
 
-    public class ComboboxItem
+    public class CBItem
     {
         public string Text { get; set; }
         public object Value { get; set; }

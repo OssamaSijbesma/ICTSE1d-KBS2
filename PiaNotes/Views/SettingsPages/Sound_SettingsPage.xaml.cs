@@ -101,13 +101,13 @@ namespace PiaNotes.Views.SettingsPages
 
             if (localSettings.Values["Volume"] != null)
             {
-                int volume = (int)localSettings.Values["Volume"];
+                double volume = (double)localSettings.Values["Volume"];
                 volumeSlider.Value = (volume + 50);
             }
             else
             {
                 localSettings.Values["Volume"] = 90;
-                int volume = (int)localSettings.Values["Volume"];
+                double volume = (double)localSettings.Values["Volume"];
                 volumeSlider.Value = (volume + 50);
             }
 
@@ -195,11 +195,6 @@ namespace PiaNotes.Views.SettingsPages
                     velocitySlider.IsEnabled = false;
                 }
             }
-        }
-
-        private void BTN_Save(object sender, RoutedEventArgs e)
-        {
-
         }
     }
 }

@@ -21,5 +21,13 @@ namespace PiaNotes
             Content = "Check your MIDI input and output device before practicing.",
             CloseButtonText = "Ok"
         };
+
+        public static ContentDialog SavedDialog = new ContentDialog
+        {
+            Title = "Saved succesfully!",
+            Content = "Settings have been saved.",
+            CloseButtonText = "Ok"
+        };
+
     }
 }
