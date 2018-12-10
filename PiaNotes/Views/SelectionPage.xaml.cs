@@ -144,15 +144,18 @@ namespace PiaNotes.Views
         // MIDI file click functionality.
         private async Task MidiFile_Click(object sender, RoutedEventArgs e, MusicSheet element)  
         {
-            /*
             // Navigate to the practice page unless MIDI is not set then show a dialog and go to the settings page
             if (Settings.midiInPort == null || Settings.midiOutPort == null)
             {
                 await StaticObjects.NoMidiInOutDialog.ShowAsync();
                 this.Frame.Navigate(typeof(SettingsPage));
             }
-            */
-            // element.File
+            // element.Id;
+
+            // Zo iets mart
+            string completeMidiStringExample = "324 40 40 - 234 40 40 - 23 50 50";
+            string[] notes = completeMidiStringExample.Split('-');
+            string[] note = notes[0].Split(' ');
         }
         
         // Display search changes
