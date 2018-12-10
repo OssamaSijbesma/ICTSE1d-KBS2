@@ -128,6 +128,7 @@
     <Compile Include="Models\Staff.cs" />
     <Compile Include="StaticObjects.cs" />
     <Compile Include="ViewModels\ContentPipeline.cs" />
+    <Compile Include="ViewModels\MidiConverter.cs" />
     <Compile Include="ViewModels\MidiParser.cs" />
     <Compile Include="Views\SelectionPage.xaml.cs">
       <DependentUpon>SelectionPage.xaml</DependentUpon>
@@ -144,6 +145,9 @@
     </Compile>
     <Compile Include="Views\SettingsPage.xaml.cs">
       <DependentUpon>SettingsPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UploadPage.xaml.cs">
+      <DependentUpon>UploadPage.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -239,6 +243,10 @@
     <Page Include="Themes\Generic.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\UploadPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>

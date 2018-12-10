@@ -19,8 +19,6 @@ using System.Collections.Generic;
 using PiaNotes.ViewModels;
 using PiaNotes.Models;
 
-// The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
-
 namespace PiaNotes.Views
 {
     /// <summary>
@@ -31,9 +29,11 @@ namespace PiaNotes.Views
         //Get Search Functionality from Databaser Class
         Databaser DB = new Databaser();
         MidiParser MP;
-        SheetMusic SM;
 
-       //Creates a list of musicsheets
+        private enum PianoKey { C = 0, D = 2, E = 4, F = 5, G = 7, A = 9, B = 11 };
+        private enum PianoKeySharp { CSharp = 1, DSharp = 3, FSharp = 6, GSharp = 8, ASharp = 10 };
+        
+        //Creates a list of musicsheets
         List<MusicSheet> Sheets = new List<MusicSheet>();
 
         public SelectionPage()
@@ -43,7 +43,7 @@ namespace PiaNotes.Views
             // Add text to titlebar.
             var appView = ApplicationView.GetForCurrentView();
             appView.Title = "Select MIDI";
-            
+
             // Adds titlebar.
             var coreTitleBar = CoreApplication.GetCurrentView().TitleBar;
             coreTitleBar.ExtendViewIntoTitleBar = false;
@@ -53,46 +53,54 @@ namespace PiaNotes.Views
 
             // Creates most recent MIDI files.
             CreateMostRecent();
+        }
 
-            
+        // Menustrip: File > New MIDI File
+        private void NewMIDIFile_Click(object sender, RoutedEventArgs e)
+        {
+            this.Frame.Navigate(typeof(UploadPage));
         }
         
         // Creates the previews of the most recent MIDI files.
-        public void CreateMostRecent()
+        public async void CreateMostRecent()
         {
-            foreach (MusicSheet l in Sheets)
+            //Checks if Database is connected
+            if (DB.CheckConnection() == true)
             {
-                // Creates StackPanel.
-                StackPanel MusicPieceSP = new StackPanel();
-                MusicPieceSP.Width = 280;
-                MusicPieceSP.Name = l.Title;
-                MusicPieceSP.Tapped += Preview_Tapped;
+                foreach (MusicSheet element in Sheets)
+                {
+                    Button musicSheetButton = new Button();
+                    musicSheetButton.Height = 35;
+                    musicSheetButton.Width = 260;
+                    musicSheetButton.Margin = new Thickness(10, 10, 10, 10);
+                    musicSheetButton.Click += delegate (object sender, RoutedEventArgs e) { MidiFile_Click(sender, e, element); };
 
-                // Creates rectangle for MIDI preview.
-                Rectangle musicSheetRectangle = new Rectangle();
-                musicSheetRectangle.Name = MusicPieceSP.Name;
-                musicSheetRectangle.Stroke = new SolidColorBrush(Colors.White);
-                musicSheetRectangle.Fill = new SolidColorBrush(Colors.Transparent);
-                musicSheetRectangle.StrokeThickness = 1;
-                musicSheetRectangle.Height = 50;
-                musicSheetRectangle.Width = 260;
-                musicSheetRectangle.Margin = new Thickness(0, 0, 0, 0);
+                    if (element.Title.Length > 30)
+                    {
+                        musicSheetButton.Content = element.Title.Substring(0, 27) + "...";
+                    }
+                    else
+                    {
+                        musicSheetButton.Content = element.Title;
+                    }
 
-                // Creates textblock for MIDI name.
-                TextBlock musicSheetTextBlock = new TextBlock();
-                musicSheetTextBlock.TextWrapping = TextWrapping.Wrap;
-                musicSheetTextBlock.TextAlignment = TextAlignment.Center;
-                musicSheetTextBlock.Height = 30;
-                musicSheetTextBlock.Margin = new Thickness(0, 10, 0, 0);
-                musicSheetTextBlock.Text = MusicPieceSP.Name;
-
-                // Adds rectangle and children to stackpanel.
-                MusicPieceSP.Children.Add(musicSheetTextBlock);
-                MusicPieceSP.Children.Add(musicSheetRectangle);
-
-                // Adds StackPanel to the VariableSizedWrapGrid.
-                MIDIFilesWG.Children.Add(MusicPieceSP);
+                    // Adds StackPanel to the VariableSizedWrapGrid.
+                    MIDIFilesWG.Children.Add(musicSheetButton);
+                }
+                //Navigates to UploadPage when Offline
+            } else
+            {
+                await StaticObjects.NoDatabaseConnectionDialog.ShowAsync();
+                this.Frame.Navigate(typeof(UploadPage));
             }
+        }
+        
+        // Search function.
+        public void Search(string search)
+        {
+            //Creates a list of results where inserted Searchbar text will be displayed with the corresponding item in Database.
+            Sheets = DB.Search(null, "MusicSheet.Title", search + "%", 0, 0);
+            CreateMostRecent();
         }
 
         // Updates the most recent MIDI files. Is used after first initializing or after resizing the window height.
@@ -101,7 +109,7 @@ namespace PiaNotes.Views
             // Creates variables for the height and width.
             int windowHeight = Convert.ToInt32(Window.Current.Bounds.Height);
             int windowWidth = Convert.ToInt32(Window.Current.Bounds.Width);
-            int amountHeight = (windowHeight - 35 - 160) / (90);
+            int amountHeight = (windowHeight - 35 - 160) / (55);
             int amountWidth = (windowWidth - 80) / (280);
             int amount = amountHeight * amountWidth;
             int count = 0;
@@ -110,17 +118,17 @@ namespace PiaNotes.Views
             foreach (object child in MIDIFilesWG.Children)
             {
                 count++;
-                if (child is StackPanel)
+                if (child is Button)
                 {
                     if (count <= amount)
                     {
                         // Makes said StackPanel visible.
-                        (child as StackPanel).Visibility = Visibility.Visible;
+                        (child as Button).Visibility = Visibility.Visible;
                     }
                     else
                     {
                         // Makes said StackPanel invisible/collapsed.
-                        (child as StackPanel).Visibility = Visibility.Collapsed;
+                        (child as Button).Visibility = Visibility.Collapsed;
                     }
                 }
             }
@@ -133,58 +141,18 @@ namespace PiaNotes.Views
         }
 
         // MIDI file click functionality.
-        private void Preview_Tapped(object sender, RoutedEventArgs e)
+        private void MidiFile_Click(object sender, RoutedEventArgs e, MusicSheet element)  
         {
-            //TO DO
+            // element.Id;
         }
-
-        // New MIDI File
-        private async void NewMIDIFile_Click(object sender, RoutedEventArgs e)
+        
+        // Display search changes
+        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            // DOING
-            var picker = new Windows.Storage.Pickers.FileOpenPicker();
-            picker.ViewMode = Windows.Storage.Pickers.PickerViewMode.Thumbnail;
-            picker.SuggestedStartLocation = Windows.Storage.Pickers.PickerLocationId.MusicLibrary;
-            picker.FileTypeFilter.Add(".mid");
-
-            Windows.Storage.StorageFile file = await picker.PickSingleFileAsync();
-            Windows.Storage.ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
-            if (file != null)
-            {
-                var stream = await file.OpenStreamForReadAsync();
-                var midiFile = MidiFile.Read(stream);
-                MP = new MidiParser(midiFile);
-                SM = MP.sheetMusic;
-                this.Frame.Navigate(typeof(PracticePage), SM);
-            }
-            else
-            {
-                // Cancel operation.
-                var dialog = new MessageDialog("Canceling operation.");
-                await dialog.ShowAsync();
-            }
+            MIDIFilesWG.Children.Clear();
+            Search(SearchBar.Text);
         }
-
-        public async void ConvertMidiToText(Stream midiFilePath)
-        {
-            /* Debug Test to see if all the items where received
-            IEnumerable<string> items = midiFile.GetNotes()
-                .Select(n => $"{n.NoteNumber} {n.Time} {n.Length}");
-
-            foreach (string i in items)
-            {
-                // Show each notenumber, time and length in dialogs.
-                //string[] split = i.Split(' ');
-                //var dialog = new MessageDialog($"{GetNote(Int32.Parse(split[0]))}");
-                var dialog = new MessageDialog($"{i}");
-                await dialog.ShowAsync();
-            }
-            */
-        }
-
-        private enum PianoKey { C = 0, D = 2, E = 4, F = 5, G = 7, A = 9, B = 11 };
-        private enum PianoKeySharp { CSharp = 1, DSharp = 3, FSharp = 6, GSharp = 8, ASharp = 10 };
-
+        
         public string GetNote(int noteNumber)
         {
             int noteNumber2 = noteNumber;
@@ -213,55 +181,6 @@ namespace PiaNotes.Views
             }
 
             return returnValue;
-        }
-
-
-        // Display search changes
-        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            MIDIFilesWG.Children.Clear();
-            Search(SearchBar.Text);
-        }
-
-        // Search function.
-        public void Search(string search)
-        {
-            //Creates a list of results where inserted Searchbar text will be displayed with the corresponding item in Database.
-            List<MusicSheet> results = DB.Search(null, "MusicSheet.Title", search + "%", 0, 0);
-
-            foreach (var element in results)
-            {
-                // Creates StackPanel.
-                StackPanel MusicPieceSP = new StackPanel();
-                MusicPieceSP.Width = 280;
-                MusicPieceSP.Name = element.Title;
-                MusicPieceSP.Tapped += Preview_Tapped;
-
-                // Creates rectangle for MIDI preview.
-                Rectangle musicSheetRectangle = new Rectangle();
-                musicSheetRectangle.Name = MusicPieceSP.Name;
-                musicSheetRectangle.Stroke = new SolidColorBrush(Colors.White);
-                musicSheetRectangle.Fill = new SolidColorBrush(Colors.Transparent);
-                musicSheetRectangle.StrokeThickness = 1;
-                musicSheetRectangle.Height = 50;
-                musicSheetRectangle.Width = 260;
-                musicSheetRectangle.Margin = new Thickness(0, 0, 0, 0);
-
-                // Creates textblock for MIDI name.
-                TextBlock musicSheetTextBlock = new TextBlock();
-                musicSheetTextBlock.TextWrapping = TextWrapping.Wrap;
-                musicSheetTextBlock.TextAlignment = TextAlignment.Center;
-                musicSheetTextBlock.Height = 30;
-                musicSheetTextBlock.Margin = new Thickness(0, 10, 0, 0);
-                musicSheetTextBlock.Text = MusicPieceSP.Name;
-
-                // Adds rectangle and children to stackpanel.
-                MusicPieceSP.Children.Add(musicSheetTextBlock);
-                MusicPieceSP.Children.Add(musicSheetRectangle);
-
-                // Adds StackPanel to the VariableSizedWrapGrid.
-                MIDIFilesWG.Children.Add(MusicPieceSP);
-            }
         }
 
         /// <summary>
