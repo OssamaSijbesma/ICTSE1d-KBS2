@@ -48,13 +48,16 @@ namespace PiaNotes.Views
         // GameCanvas
         private int windowWidth;
         private int windowHeight;
-        private int gameCanvasWidth;
-        private int gameCanvasHeight;
-        private int pos;
+
         private int staffStart;
         private int staffEnd;
         private int tickCount;
         private double tickDistance;
+
+        private double gameCanvasWidth;
+        private double gameCanvasHeight;
+
+        // Needs to become a settings
         private int FPS = 60;
         private int UPS = 100;
 
@@ -473,11 +476,17 @@ namespace PiaNotes.Views
             staffStart = windowWidth / 10;
             staffEnd = windowWidth - staffStart;
             tickDistance = (windowWidth * 0.80) / 600;
+            gameCanvasHeight = sender.ActualHeight;
+            gameCanvasWidth = sender.ActualWidth;
+
+            //Create staff
+
             args.TrackAsyncAction(CreateResourcesAsync(sender).AsAsyncAction());
         }
 
         private async Task CreateResourcesAsync(CanvasControl sender)
         {
+            // Add the resources to the ContentPipeline for reuse purposes
             ContentPipeline.ParentCanvas = sender;
             await ContentPipeline.AddImage("384", @"Assets/Notes/WholeNote.png");
             await ContentPipeline.AddImage("192", @"Assets/Notes/HalfNote.png");
@@ -486,6 +495,7 @@ namespace PiaNotes.Views
             await ContentPipeline.AddImage("24", @"Assets/Notes/SixteenthNote.png");
             await ContentPipeline.AddImage("12", @"Assets/Notes/ThirtySecondNote.png");
 
+            // Give the notes a bitmap
             for (int i = 0; i < SM.notes.Count; i++)
             {
                 SM.notes[i].SetBitmap("96");
@@ -564,9 +574,6 @@ namespace PiaNotes.Views
                 UpdateKeyboard();
 
             var bounds = ApplicationView.GetForCurrentView().VisibleBounds;
-
-            gameCanvasWidth = (int)bounds.Width;
-            gameCanvasHeight = (int)bounds.Height;
         }
     }
 }
