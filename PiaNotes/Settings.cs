@@ -15,7 +15,7 @@ namespace PiaNotes
 
         //Settings for the keyboard, such as: if feedback is turned on, what volume it is or what the set velocity is
         public static double velocity = 90;
-        public static Boolean feedback = true;
+        public static bool feedback = Views.SettingsPages.Sound_SettingsPage.Feedback;
         public static double volume = 0;
 
 

@@ -236,28 +236,6 @@ namespace PiaNotes.Views.SettingsPages
             this.midiOutPortListBox.IsEnabled = true;
         }
 
-        private async void BTN_Save(object sender, RoutedEventArgs e)
-        {
-            System.Diagnostics.Debug.WriteLine("b4 Starting Octave: " + StartingOctave);
-            System.Diagnostics.Debug.WriteLine("b4 Amount of Octaves: " + OctaveAmount);
-
-            //// Change the StartingOctave to the selection.
-            //int startingSelection = CMB_StartingOctave.SelectedIndex;
-            //localSettings.Values["StartingOctave"] = startingSelection;
-            //StartingOctave = startingSelection;
-            //Settings.StartingOctave = startingSelection;
-
-            //// Change the OctaveAmount to the selection.
-            //int amountSelection = CMB_OctaveAmount.SelectedIndex;
-            //localSettings.Values["OctaveAmount"] = amountSelection;
-            //OctaveAmount = amountSelection + 1;
-            //Settings.OctaveAmount = amountSelection + 1;
-
-            //System.Diagnostics.Debug.WriteLine("after Starting Octave: " + StartingOctave);
-            //System.Diagnostics.Debug.WriteLine("after Amount of Octaves: " + OctaveAmount);
-            //await StaticObjects.SavedDialog.ShowAsync();
-        }
-
         private void OctaveStart_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             selected = true;

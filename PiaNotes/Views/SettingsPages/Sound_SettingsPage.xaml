@@ -21,7 +21,7 @@
                        Margin="35,0,0,10" Click="Velocity_Checked" FontSize="36" RelativePanel.Below="volumeSlider" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
             </CheckBox>
             <TextBlock x:Name="ToggleVelocity"  Margin="-87,0,9,0" Text="Set Velocity" TextWrapping="Wrap" FontSize="24" RelativePanel.Below="volumeSlider" RelativePanel.RightOf="FeedbackCheckbox" />
-            <Slider x:Name="velocitySlider" Minimum ="0" Maximum="100" Header="Velocity" ValueChanged="Velocity_ValueChanged"
+            <Slider x:Name="velocitySlider" Minimum ="0" Maximum="127" Header="Velocity" ValueChanged="Velocity_ValueChanged"
                     Margin="35,29,0,6" Width="500" FontSize="24" RelativePanel.AlignLeftWithPanel="True" RelativePanel.Below="ToggleVelocity"/>
 
             

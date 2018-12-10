@@ -34,7 +34,7 @@ namespace PiaNotes.Views.SettingsPages
             {
                 if (localSettings.Values["Velocity"] != null)
                 {
-                    return (double)localSettings.Values["Velocity"];
+                    return (double) localSettings.Values["Velocity"];
                 }
                 else
                 {
@@ -44,24 +44,20 @@ namespace PiaNotes.Views.SettingsPages
 
             set
             {
-                if (value >= 0 && value <= 100)
-                {
-                    localSettings.Values["Velocity"] = value;
-                }
-                else
-                {
-                    localSettings.Values["Velocity"] = 90;
-                }
+                localSettings.Values["Velocity"] = value;
+                Settings.velocity = value;
             }
         }
 
-        public static double Volume {
+        public static double Volume
+        {
             get
             {
                 if (localSettings.Values["Volume"] != null)
                 {
-                    return (double)localSettings.Values["Volume"];
-                } else
+                    return (double) localSettings.Values["Volume"];
+                }
+                else
                 {
                     return 0;
                 }
@@ -69,14 +65,8 @@ namespace PiaNotes.Views.SettingsPages
 
             set
             {
-                if (value >= 0 && value <= 100)
-                {
-                    localSettings.Values["Volume"] = value;
-                }
-                else
-                {
-                    localSettings.Values["Volume"] = 0;
-                }
+                localSettings.Values["Volume"] = value;
+                Settings.volume = value;
             }
         }
 
@@ -96,14 +86,9 @@ namespace PiaNotes.Views.SettingsPages
 
             set
             {
-                if ((bool)localSettings.Values["Feedback"] == true && value == false)
-                {
-                    localSettings.Values["Feedback"] = false;
-                }
-                else if ((bool)localSettings.Values["Feedback"] == false && value == true)
-                {
-                    localSettings.Values["Feedback"] = true;
-                }
+
+                localSettings.Values["Feedback"] = value;
+                Settings.feedback = value;
             }
         }
         #endregion
@@ -112,36 +97,32 @@ namespace PiaNotes.Views.SettingsPages
         {
             this.InitializeComponent();
 
-            
-
             //Set the slider back to the values the user put in and activate the correct settings
             if (localSettings.Values["Velocity"] != null)
             {
+                System.Diagnostics.Debug.WriteLine("Velocity: " + localSettings.Values["Velocity"]);
+                System.Diagnostics.Debug.WriteLine("VolumeValue: " + localSettings.Values["Volume"]);
                 Velocity = (double) localSettings.Values["Velocity"];
-                velocitySlider.Value = (Velocity - 27);
-                Settings.velocity = Velocity;
+                velocitySlider.Value = Velocity;
 
             }
             else
             {
                 localSettings.Values["Velocity"] = 90;
                 Velocity = (double) localSettings.Values["Velocity"];
-                velocitySlider.Value = (Velocity - 27);
-                Settings.velocity = Velocity;
+                velocitySlider.Value = Velocity;
             }
 
             if (localSettings.Values["Volume"] != null)
             {
-                Volume = (double) localSettings.Values["Volume"];
-                volumeSlider.Value = (Volume + 50);
-                Settings.volume = Volume;
+                Velocity = (double)localSettings.Values["Volume"];
+                volumeSlider.Value = Volume;
             }
             else
             {
                 localSettings.Values["Volume"] = 0;
                 Volume = (double) localSettings.Values["Volume"];
-                volumeSlider.Value = (Volume + 50);
-                Settings.volume = Volume;
+                volumeSlider.Value = Volume;
             }
 
 
@@ -150,30 +131,29 @@ namespace PiaNotes.Views.SettingsPages
                 Feedback = (bool)localSettings.Values["Feedback"];
                 if (Feedback)
                 {
-                    volumeSlider.IsEnabled = true;
-                    velocitySlider.IsEnabled = false;
+                    volumeSlider.IsEnabled = false;
+                    velocitySlider.IsEnabled = true;
                 }
                 else
                 {
-                    FeedbackCheckbox.IsChecked = true;
-                    volumeSlider.IsEnabled = false;
-                    velocitySlider.IsEnabled = true;
+                    Feedback = true;
+                    volumeSlider.IsEnabled = true;
+                    velocitySlider.IsEnabled = false;
                 }
             }
             else
             {
-                localSettings.Values["Feedback"] = true;
-                bool feedback = (bool)localSettings.Values["Feedback"];
-                if (feedback)
+                Feedback = true;
+                if (Feedback)
                 {
-                    volumeSlider.IsEnabled = true;
-                    velocitySlider.IsEnabled = false;
+                    volumeSlider.IsEnabled = false;
+                    velocitySlider.IsEnabled = true;
                 }
                 else
                 {
-                    FeedbackCheckbox.IsChecked = true;
+                    Feedback = true;
                     volumeSlider.IsEnabled = false;
-                    velocitySlider.IsEnabled = true;
+                    velocitySlider.IsEnabled = false;
                 }
             }
         }
@@ -182,23 +162,26 @@ namespace PiaNotes.Views.SettingsPages
         {
             //If the slider value changed from the velocity slider, set the new value +27
             //+27 is there so the slider goes from 0 to 100, instead of 27 to 127
-            Velocity = (e.NewValue + 27);
+            Velocity = (e.NewValue);
+            System.Diagnostics.Debug.WriteLine("Velocity: " + localSettings.Values["Velocity"]);
         }
 
         private void Volume_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
         {
             //If the slider value changed from the volume slider, set the new value -50.
             //-50 is there so 50 = 0 and 0 = -50. This is so the volume can be lowered.
-            Volume = (e.NewValue - 50);
+            Volume = (e.NewValue);
+            System.Diagnostics.Debug.WriteLine("Volume: " + localSettings.Values["Volume"]);
         }
 
         private void Velocity_Checked(object sender, RoutedEventArgs e)
         {
+            System.Diagnostics.Debug.WriteLine("Feedback: " + localSettings.Values["Feedback"]);
             //Checking if the feedback setting is turned off or on and act accordingly
             if (localSettings.Values["Feedback"] != null)
             {
-                bool feedback = (bool)localSettings.Values["Feedback"];
-                if (feedback)
+                Feedback = (bool)localSettings.Values["Feedback"];
+                if (Feedback)
                 {
                     localSettings.Values["Feedback"] = false;
                     volumeSlider.IsEnabled = false;
@@ -214,10 +197,9 @@ namespace PiaNotes.Views.SettingsPages
             else
             {
                 localSettings.Values["Feedback"] = true;
-                bool feedback = (bool)localSettings.Values["Feedback"];
-                if (feedback)
+                Feedback = (bool)localSettings.Values["Feedback"];
+                if (Feedback)
                 {
-                    localSettings.Values["Feedback"] = false;
                     volumeSlider.IsEnabled = false;
                     velocitySlider.IsEnabled = true;
                 }
