@@ -31,6 +31,7 @@ namespace PiaNotes.Views
         //Get Search Functionality from Databaser Class
         Databaser DB = new Databaser();
         MidiParser MP;
+        private string MidiF;
 
         private enum PianoKey { C = 0, D = 2, E = 4, F = 5, G = 7, A = 9, B = 11 };
         private enum PianoKeySharp { CSharp = 1, DSharp = 3, FSharp = 6, GSharp = 8, ASharp = 10 };
@@ -151,14 +152,44 @@ namespace PiaNotes.Views
             {
                 await StaticObjects.NoMidiInOutDialog.ShowAsync();
                 this.Frame.Navigate(typeof(SettingsPage));
-            }
-            // element.Id
-            // element.File
+            } else
+            {
+                // element.Id;
+                string Examp = "324 40 40-234 40 40-23 50 50";
+                var count = Examp.Count(c => c == '-');
+                List<string> notes = new List<string>();
 
-            // Zo iets mart
-            string completeMidiStringExample = "324 40 40 - 234 40 40 - 23 50 50";
-            string[] notes = completeMidiStringExample.Split('-');
-            string[] note = notes[0].Split(' ');
+                for(int i = 0; i <= count; i++)
+                {
+                    //Initialize vars
+                    String sub;
+                    int position = Examp.IndexOf("-");
+
+                    if (i == count)
+                    //if the for loop is at the end of the string make the last substring
+                    {
+                        sub = Examp.Substring(0, (Examp.Substring(0)).Length);
+                    } else
+                    //else make a substring and redo the string so the substring is deleted
+                    {
+                        sub = Examp.Substring(0, (Examp.Substring(0, position)).Length);
+                        Examp = Examp.Substring(((Examp.Substring(0, position)).Length) + 1);
+                    }
+                    //Add substring to array of strings
+                    notes.Add(sub);
+                    //Debug line to see if substring is done correctly
+                    System.Diagnostics.Debug.WriteLine(sub);
+                }
+
+                //Send array to MidiParser
+                MP = new MidiParser(notes);
+
+                /*
+                // Zo iets mart
+                string[] notes = completeMidiStringExample.Split('-');
+                string[] note = notes[0].Split(' ');
+                */
+            }
         }
 
         // MIDI file right click functionality.
@@ -184,6 +215,7 @@ namespace PiaNotes.Views
             Search(SearchBar.Text);
         }
         
+        //Yo can this be deleted? It has 0 references
         public string GetNote(int noteNumber)
         {
             int noteNumber2 = noteNumber;

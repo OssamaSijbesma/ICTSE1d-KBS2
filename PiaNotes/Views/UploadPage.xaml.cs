@@ -87,6 +87,9 @@ namespace PiaNotes.Views
                 DB.Upload(TXTBox_Title.Text, midiString);
                 FileSelected = false;
                 TXTBlock_Status.Text = "File uploaded.";
+
+                //Added a navigation to the selection after uploading succesfully
+                this.Frame.Navigate(typeof(SelectionPage));
             }
             else if (!FileSelected)
             {
