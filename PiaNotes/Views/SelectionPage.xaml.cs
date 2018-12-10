@@ -150,13 +150,44 @@ namespace PiaNotes.Views
             {
                 await StaticObjects.NoMidiInOutDialog.ShowAsync();
                 this.Frame.Navigate(typeof(SettingsPage));
-            }
-            // element.Id;
+            } else
+            {
+                // element.Id;
+                string Examp = "324 40 40-234 40 40-23 50 50";
+                var count = Examp.Count(c => c == '-');
+                List<string> notes = new List<string>();
 
-            // Zo iets mart
-            string completeMidiStringExample = "324 40 40 - 234 40 40 - 23 50 50";
-            string[] notes = completeMidiStringExample.Split('-');
-            string[] note = notes[0].Split(' ');
+                for(int i = 0; i <= count; i++)
+                {
+                    //Initialize vars
+                    String sub;
+                    int position = Examp.IndexOf("-");
+
+                    if (i == count)
+                    //if the for loop is at the end of the string make the last substring
+                    {
+                        sub = Examp.Substring(0, (Examp.Substring(0)).Length);
+                    } else
+                    //else make a substring and redo the string so the substring is deleted
+                    {
+                        sub = Examp.Substring(0, (Examp.Substring(0, position)).Length);
+                        Examp = Examp.Substring(((Examp.Substring(0, position)).Length) + 1);
+                    }
+                    //Add substring to array of strings
+                    notes.Add(sub);
+                    //Debug line to see if substring is done correctly
+                    System.Diagnostics.Debug.WriteLine(sub);
+                }
+
+                //Send array to MidiParser
+                MP = new MidiParser(notes);
+
+                /*
+                // Zo iets mart
+                string[] notes = completeMidiStringExample.Split('-');
+                string[] note = notes[0].Split(' ');
+                */
+            }
         }
         
         // Display search changes
