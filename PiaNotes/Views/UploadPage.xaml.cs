@@ -59,7 +59,7 @@ namespace PiaNotes.Views
                 TXTBox_Title.Text = file.DisplayName;
                 var stream = await file.OpenStreamForReadAsync();
                 MidiConverter midiConverter = new MidiConverter();
-                string midiString = midiConverter.MidiToString(stream);
+                midiString = midiConverter.MidiToString(stream);
 
                 if (TXTBox_Title.Text.Length > 100)
                 {
