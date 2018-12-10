@@ -11,7 +11,7 @@ namespace PiaNotes.ViewModels
 {
     public class MidiConverter
     {
-        public StringBuilder sb = new StringBuilder();
+        private StringBuilder sb = new StringBuilder();
 
         public string MidiToString(Stream midiFilePath)
         {
@@ -31,7 +31,6 @@ namespace PiaNotes.ViewModels
                 sb.Append(i);
 
                 current++;
-                // Do something with i
             }
             
             return sb.ToString();

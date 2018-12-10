@@ -28,7 +28,7 @@ namespace PiaNotes.Views
     public sealed partial class UploadPage : Page
     {
         Databaser DB = new Databaser();
-        string midiString = "";
+        private string midiString;
         public bool FileSelected { get; set; } = false;
 
         public UploadPage()
