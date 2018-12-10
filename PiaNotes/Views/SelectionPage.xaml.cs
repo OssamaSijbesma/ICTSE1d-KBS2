@@ -151,6 +151,11 @@ namespace PiaNotes.Views
                 this.Frame.Navigate(typeof(SettingsPage));
             }
             // element.Id;
+
+            // Zo iets mart
+            string completeMidiStringExample = "324 40 40 - 234 40 40 - 23 50 50";
+            string[] notes = completeMidiStringExample.Split('-');
+            string[] note = notes[0].Split(' ');
         }
         
         // Display search changes
