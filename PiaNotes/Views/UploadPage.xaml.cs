@@ -60,13 +60,7 @@ namespace PiaNotes.Views
                 var stream = await file.OpenStreamForReadAsync();
                 MidiConverter midiConverter = new MidiConverter();
                 midiString = midiConverter.MidiToString(stream);
-
-                if (TXTBox_Title.Text.Length > 100)
-                {
-                    FileSelected = true;
-                    TXTBox_Title.Text = TXTBox_Title.Text.Substring(0, 100);
-                    TXTBlock_Status.Text = "File name is too long! The name has been shortened.";
-                }
+                
                 if (midiString.Length < 2000000)
                 {
                     FileSelected = true;
@@ -76,6 +70,11 @@ namespace PiaNotes.Views
                 {
                     TXTBox_Title.Text = "";
                     TXTBlock_Status.Text = "File is too large! Please try another file.";
+                }
+                if (FileSelected && TXTBox_Title.Text.Length > 100)
+                {
+                    TXTBox_Title.Text = TXTBox_Title.Text.Substring(0, 100);
+                    TXTBlock_Status.Text += "\nThe file name is too long, it has been shortened.";
                 }
             }
         }

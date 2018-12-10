@@ -13,13 +13,13 @@ namespace PiaNotes.Models
     {
         public int Id { get; set; }
         public string Title { get; set; }
-        public string Path { get; set; }
+        public string File { get; set; }
 
-        public MusicSheet(int id, string title, string path)
+        public MusicSheet(int id, string title, string file)
         {
             Id = id;
             Title = title;
-            Path = path;
+            File = file;
         }
     }
 }

@@ -32,7 +32,7 @@
                      RelativePanel.Below="TXTBlock_Title"
                      TextChanged="Title_TextChanged"/>
             <Button Name="BTN_Submit" Background="#253847" Content="Submit" HorizontalAlignment="Left" RelativePanel.Below="TXTBox_Title" VerticalAlignment="Stretch" Width="75" Click="OnSubmit" Margin="35,10,0,0"/>
-            <TextBlock x:Name="TXTBlock_Status" RelativePanel.RightOf="BTN_Submit" RelativePanel.Below="TXTBox_Title" RelativePanel.AlignVerticalCenterWith="BTN_Submit" HorizontalAlignment="Center" Height="20" Margin="10,10,0,0" Text="" TextWrapping="Wrap" VerticalAlignment="Center"/>
+            <TextBlock x:Name="TXTBlock_Status" RelativePanel.RightOf="BTN_Submit" RelativePanel.Below="TXTBox_Title" RelativePanel.AlignVerticalCenterWith="BTN_Submit" HorizontalAlignment="Center" Margin="10,10,0,0" Text="" TextWrapping="Wrap" VerticalAlignment="Center"/>
 
         </RelativePanel>
     </Grid>
