@@ -19,6 +19,7 @@ using System.Collections.Generic;
 using PiaNotes.ViewModels;
 using PiaNotes.Models;
 using System.Threading.Tasks;
+using Windows.UI.Xaml.Input;
 
 namespace PiaNotes.Views
 {
@@ -75,6 +76,7 @@ namespace PiaNotes.Views
                     musicSheetButton.Width = 260;
                     musicSheetButton.Margin = new Thickness(10, 10, 10, 10);
                     musicSheetButton.Click += delegate (object sender, RoutedEventArgs e) { MidiFile_Click(sender, e, element); };
+                    musicSheetButton.RightTapped += delegate (object sender, RightTappedRoutedEventArgs e) { MidiFile_RightTapped(sender, e, element); };
 
                     if (element.Title.Length > 30)
                     {
@@ -150,14 +152,31 @@ namespace PiaNotes.Views
                 await StaticObjects.NoMidiInOutDialog.ShowAsync();
                 this.Frame.Navigate(typeof(SettingsPage));
             }
-            // element.Id;
+            // element.Id
+            // element.File
 
             // Zo iets mart
             string completeMidiStringExample = "324 40 40 - 234 40 40 - 23 50 50";
             string[] notes = completeMidiStringExample.Split('-');
             string[] note = notes[0].Split(' ');
         }
-        
+
+        // MIDI file right click functionality.
+        private void MidiFile_RightTapped(object sender, RightTappedRoutedEventArgs e, MusicSheet element)
+        {
+            MenuFlyout myFlyout = new MenuFlyout();
+            MenuFlyoutItem delete = new MenuFlyoutItem { Text = "Delete" };
+            delete.Click += delegate (object delete_sender, RoutedEventArgs delete_e) { MidiFileDelete_Click(sender, e, element); };
+            myFlyout.Items.Add(delete);
+            myFlyout.ShowAt(sender as UIElement, e.GetPosition(sender as UIElement));
+        }
+
+        // MIDI file removal functionality.
+        private void MidiFileDelete_Click(object sender, RoutedEventArgs e, MusicSheet element)
+        {
+            //DB.Delete(element.Id);
+        }
+
         // Display search changes
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
