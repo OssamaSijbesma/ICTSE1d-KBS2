@@ -18,6 +18,7 @@ using System.IO;
 using System.Collections.Generic;
 using PiaNotes.ViewModels;
 using PiaNotes.Models;
+using System.Threading.Tasks;
 
 namespace PiaNotes.Views
 {
@@ -141,8 +142,14 @@ namespace PiaNotes.Views
         }
 
         // MIDI file click functionality.
-        private void MidiFile_Click(object sender, RoutedEventArgs e, MusicSheet element)  
+        private async Task MidiFile_Click(object sender, RoutedEventArgs e, MusicSheet element)  
         {
+            // Navigate to the practice page unless MIDI is not set then show a dialog and go to the settings page
+            if (Settings.midiInPort == null || Settings.midiOutPort == null)
+            {
+                await StaticObjects.NoMidiInOutDialog.ShowAsync();
+                this.Frame.Navigate(typeof(SettingsPage));
+            }
             // element.Id;
         }
         
