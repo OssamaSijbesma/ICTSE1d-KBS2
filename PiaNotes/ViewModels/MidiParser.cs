@@ -93,6 +93,7 @@ namespace PiaNotes.ViewModels
             }
 
             //Set the notes in an array and sends the array to SheetMusic
+            /*
             for (int i = 0; i < noteNumbers.Count() - 1; i++)
             {
                 notes.Add(new Models.Note(
@@ -102,6 +103,7 @@ namespace PiaNotes.ViewModels
                     noteMetricTimes[i],
                     noteMetricLengths[i]));
             }
+            */
 
             //Check if multiple clefs are needed
             CheckClefs(notes);
@@ -110,7 +112,7 @@ namespace PiaNotes.ViewModels
             CheckBars(notes);
 
             //Create SheetMusic with every element MidiParser calculated
-            sheetMusic = new SheetMusic(midiFile, notes, multipleClefs, amountBars);
+            //sheetMusic = new SheetMusic(midiFile, notes, multipleClefs, amountBars);
         }
 
         public void CheckClefs(List<Models.Note> notes)
