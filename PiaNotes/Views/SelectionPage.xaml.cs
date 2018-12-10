@@ -29,6 +29,7 @@ namespace PiaNotes.Views
         //Get Search Functionality from Databaser Class
         Databaser DB = new Databaser();
         MidiParser MP;
+        private string MidiF;
 
         private enum PianoKey { C = 0, D = 2, E = 4, F = 5, G = 7, A = 9, B = 11 };
         private enum PianoKeySharp { CSharp = 1, DSharp = 3, FSharp = 6, GSharp = 8, ASharp = 10 };
@@ -144,6 +145,8 @@ namespace PiaNotes.Views
         private void MidiFile_Click(object sender, RoutedEventArgs e, MusicSheet element)  
         {
             // element.Id;
+
+            this.Frame.Navigate(typeof(PracticePage), MidiF);
         }
         
         // Display search changes
@@ -153,6 +156,7 @@ namespace PiaNotes.Views
             Search(SearchBar.Text);
         }
         
+        //Yo can this be deleted? It has 0 references
         public string GetNote(int noteNumber)
         {
             int noteNumber2 = noteNumber;
