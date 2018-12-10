@@ -37,7 +37,7 @@ namespace PiaNotes.Views.SettingsPages
 
         //Octave Settings
         //OctaveStart is the starting location of the octaves frequenty
-        private static int DefaultStartingOctave = 7;
+        private static int DefaultStartingOctave = 6;
         public static int StartingOctave
         {
             get
@@ -392,7 +392,7 @@ namespace PiaNotes.Views.SettingsPages
                 ComboBox cmb = (ComboBox)sender;
                 string selectedIndex = cmb.SelectedIndex.ToString();
                 int selectedValue = Int32.Parse(selectedIndex);
-                OctaveAmount = selectedValue + 1;
+                OctaveAmount = selectedValue;
             }
             else
             {
@@ -400,7 +400,7 @@ namespace PiaNotes.Views.SettingsPages
                 ComboBox cmb = (ComboBox)sender;
                 string selectedIndex = cmb.SelectedIndex.ToString();
                 int selectedValue = Int32.Parse(selectedIndex);
-                OctaveAmount = selectedValue + 1;
+                OctaveAmount = selectedValue;
             }
 
         }

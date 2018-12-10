@@ -101,13 +101,13 @@ namespace PiaNotes.Views.SettingsPages
 
             if (localSettings.Values["Volume"] != null)
             {
-                double volume = (double)localSettings.Values["Volume"];
+                int volume = (int)localSettings.Values["Volume"];
                 volumeSlider.Value = (volume + 50);
             }
             else
             {
                 localSettings.Values["Volume"] = 90;
-                double volume = (double)localSettings.Values["Volume"];
+                int volume = (int)localSettings.Values["Volume"];
                 volumeSlider.Value = (volume + 50);
             }
 

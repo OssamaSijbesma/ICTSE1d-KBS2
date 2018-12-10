@@ -26,13 +26,6 @@
                      Margin="35,5,0,19" HorizontalAlignment="Left" Width="1430"
                      RelativePanel.Below="TXTBL_MIDIOUT"/>
 
-            <Button Content="Save" HorizontalAlignment="Left" Height="32.8" 
-                    VerticalAlignment="Top" 
-                    Width="64" 
-                    Margin="35,10,0,0"
-                    Click="BTN_Save"
-                    RelativePanel.Below="CMB_StartingOctave"/>
-
             <TextBlock x:Name="TXTBL_StartingOctave" HorizontalAlignment="Left" Margin="35,10,0,0" Text="Starting Octave" VerticalAlignment="Top" RelativePanel.Below="midiOutPortListBox" FontSize="24"/>
 
             <ComboBox x:Name="CMB_StartingOctave" HorizontalAlignment="Left" Height="32" Margin="35,10,0,0" VerticalAlignment="Top" Width="64" RelativePanel.Below="TXTBL_StartingOctave" SelectionChanged="OctaveStart_SelectionChanged">

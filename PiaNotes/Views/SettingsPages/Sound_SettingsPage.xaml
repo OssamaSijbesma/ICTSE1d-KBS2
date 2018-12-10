@@ -24,13 +24,6 @@
             <Slider x:Name="velocitySlider" Minimum ="0" Maximum="100" Header="Velocity" ValueChanged="Velocity_ValueChanged"
                     Margin="35,29,0,6" Width="500" FontSize="24" RelativePanel.AlignLeftWithPanel="True" RelativePanel.Below="ToggleVelocity"/>
 
-            <Button Content="Save" HorizontalAlignment="Left" Height="32.8" 
-                    VerticalAlignment="Top" 
-                    Width="64" 
-                    Margin="35,-6,0,0"
-                    Click="BTN_Save"
-                    RelativePanel.Below="velocitySlider"/>
-
         </RelativePanel>
     </Grid>
 </Page>
