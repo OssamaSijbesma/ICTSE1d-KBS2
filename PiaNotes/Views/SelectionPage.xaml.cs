@@ -90,8 +90,6 @@ namespace PiaNotes.Views
 
                     // Adds StackPanel to the VariableSizedWrapGrid.
                     MIDIFilesWG.Children.Add(musicSheetButton);
-                    MIDIFilesWG.Children.Clear();
-                    Search(SearchBar.Text);
                 }
                 //Navigates to UploadPage when Offline
             } else
