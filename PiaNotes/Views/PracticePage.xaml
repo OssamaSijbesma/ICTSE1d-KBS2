@@ -14,14 +14,6 @@
     <Grid>
         <RelativePanel Background="#162632">
 
-            <canvas:CanvasControl 
-                x:Name="GameCanvas"
-                CreateResources="GameCanvas_CreateResources"
-                Draw="GameCanvas_Draw"
-                RelativePanel.Above="BtnStop"
-                RelativePanel.Below="MenuStrip"
-                RelativePanel.AlignRightWithPanel="True"
-                RelativePanel.AlignLeftWithPanel="True"/>
             <Button x:Name ="BtnStop"
                     Content="Stop" HorizontalAlignment="Center" Height="32.8" 
                     VerticalAlignment="Center" 

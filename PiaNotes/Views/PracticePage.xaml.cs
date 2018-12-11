@@ -89,7 +89,7 @@ namespace PiaNotes.Views
 
             //Create the keyboard to show on the screen and set a timer
             CreateKeyboard();
-            GameTimerUI();
+            //GameTimerUI();
 
         }
 
@@ -412,115 +412,115 @@ namespace PiaNotes.Views
             }
         }
 
-        /// <summary>
-        /// Logic Thread where game logic gets updated
-        /// </summary>
+        ///// <summary>
+        ///// Logic Thread where game logic gets updated
+        ///// </summary>
 
-        private void GameTimerLogic()
-        {
-            // Create a timer with a sixty-fourth tick which represents the 1/64 note.
-            timerGameLogic = new Timer(1000/UPS);
-            timerGameLogic.AutoReset = true;
-            timerGameLogic.Enabled = true;
+        //private void GameTimerLogic()
+        //{
+        //    // Create a timer with a sixty-fourth tick which represents the 1/64 note.
+        //    timerGameLogic = new Timer(1000/UPS);
+        //    timerGameLogic.AutoReset = true;
+        //    timerGameLogic.Enabled = true;
 
-            // Hook up the Elapsed event for the timer. 
-            timerGameLogic.Elapsed += GameTickLogic;
-        }
+        //    // Hook up the Elapsed event for the timer. 
+        //    timerGameLogic.Elapsed += GameTickLogic;
+        //}
 
-        private void GameTickLogic(Object source, ElapsedEventArgs e)
-        {
-            tickCount += 1000000/UPS;
+        //private void GameTickLogic(Object source, ElapsedEventArgs e)
+        //{
+        //    tickCount += 1000000/UPS;
 
-            for (int i = 0; i < SM.notes.Count && i < 6; i++)
-            {
-                if (tickCount >= SM.notes[i].MetricTiming.TotalMicroseconds)
-                {
-                    gameObjects.Add(SM.notes[i]);
-                    SM.notes.Remove(SM.notes[i]);
-                }
-            }
+        //    for (int i = 0; i < SM.notes.Count && i < 6; i++)
+        //    {
+        //        if (tickCount >= SM.notes[i].MetricTiming.TotalMicroseconds)
+        //        {
+        //            gameObjects.Add(SM.notes[i]);
+        //            SM.notes.Remove(SM.notes[i]);
+        //        }
+        //    }
 
-            for (int i = 0; i < gameObjects.Count; i++)
-            {
-                if (gameObjects[i].Location.X <= staffStart)
-                { 
-                    gameObjects.Remove(gameObjects[i]);
-                    return;
-                }
-                gameObjects[i].Location = new Vector2(gameObjects[i].Location.X - (float)tickDistance,gameObjects[i].Location.Y);
-            }
-        }
+        //    for (int i = 0; i < gameObjects.Count; i++)
+        //    {
+        //        if (gameObjects[i].Location.X <= staffStart)
+        //        { 
+        //            gameObjects.Remove(gameObjects[i]);
+        //            return;
+        //        }
+        //        gameObjects[i].Location = new Vector2(gameObjects[i].Location.X - (float)tickDistance,gameObjects[i].Location.Y);
+        //    }
+        //}
 
-        /// <summary>
-        /// GameCanvas is a Win2D canvas which makes 2D graphics rendering with GPU acceleration possible.
-        /// This includes all kind of cool stuf as particles, effects etc...
-        /// </summary> 
+        ///// <summary>
+        ///// GameCanvas is a Win2D canvas which makes 2D graphics rendering with GPU acceleration possible.
+        ///// This includes all kind of cool stuf as particles, effects etc...
+        ///// </summary> 
 
-        private void GameTimerUI()
-        {
-            timerGameUI = new DispatcherTimer();
-            timerGameUI.Interval = TimeSpan.FromMilliseconds(1000/FPS);
-            timerGameUI.Tick += GameTickUI;
-            timerGameUI.Start();
-        }
+        //private void GameTimerUI()
+        //{
+        //    timerGameUI = new DispatcherTimer();
+        //    timerGameUI.Interval = TimeSpan.FromMilliseconds(1000/FPS);
+        //    timerGameUI.Tick += GameTickUI;
+        //    timerGameUI.Start();
+        //}
 
-        private void GameTickUI(object sender, object e)
-        {
-            // Redraw screen.
-            GameCanvas.Invalidate();
-        }
+        //private void GameTickUI(object sender, object e)
+        //{
+        //    // Redraw screen.
+        //    GameCanvas.Invalidate();
+        //}
 
-        // Initialize images and stuff.
-        private void GameCanvas_CreateResources(CanvasControl sender, CanvasCreateResourcesEventArgs args)
-        {
-            staffStart = windowWidth / 10;
-            staffEnd = windowWidth - staffStart;
-            tickDistance = (windowWidth * 0.80) / 600;
-            gameCanvasHeight = sender.ActualHeight;
-            gameCanvasWidth = sender.ActualWidth;
+        //// Initialize images and stuff.
+        //private void GameCanvas_CreateResources(CanvasControl sender, CanvasCreateResourcesEventArgs args)
+        //{
+        //    staffStart = windowWidth / 10;
+        //    staffEnd = windowWidth - staffStart;
+        //    tickDistance = (windowWidth * 0.80) / 600;
+        //    gameCanvasHeight = sender.ActualHeight;
+        //    gameCanvasWidth = sender.ActualWidth;
 
-            //Create staff
+        //    //Create staff
 
-            args.TrackAsyncAction(CreateResourcesAsync(sender).AsAsyncAction());
-        }
+        //    args.TrackAsyncAction(CreateResourcesAsync(sender).AsAsyncAction());
+        //}
 
-        private async Task CreateResourcesAsync(CanvasControl sender)
-        {
-            // Add the resources to the ContentPipeline for reuse purposes
-            ContentPipeline.ParentCanvas = sender;
-            await ContentPipeline.AddImage("384", @"Assets/Notes/WholeNote.png");
-            await ContentPipeline.AddImage("192", @"Assets/Notes/HalfNote.png");
-            await ContentPipeline.AddImage("96", @"Assets/Notes/QuarterNote.png");
-            await ContentPipeline.AddImage("48", @"Assets/Notes/EighthNote.png");
-            await ContentPipeline.AddImage("24", @"Assets/Notes/SixteenthNote.png");
-            await ContentPipeline.AddImage("12", @"Assets/Notes/ThirtySecondNote.png");
+        //private async Task CreateResourcesAsync(CanvasControl sender)
+        //{
+        //    // Add the resources to the ContentPipeline for reuse purposes
+        //    ContentPipeline.ParentCanvas = sender;
+        //    await ContentPipeline.AddImage("384", @"Assets/Notes/WholeNote.png");
+        //    await ContentPipeline.AddImage("192", @"Assets/Notes/HalfNote.png");
+        //    await ContentPipeline.AddImage("96", @"Assets/Notes/QuarterNote.png");
+        //    await ContentPipeline.AddImage("48", @"Assets/Notes/EighthNote.png");
+        //    await ContentPipeline.AddImage("24", @"Assets/Notes/SixteenthNote.png");
+        //    await ContentPipeline.AddImage("12", @"Assets/Notes/ThirtySecondNote.png");
 
-            // Give the notes a bitmap
-            for (int i = 0; i < SM.notes.Count; i++)
-            {
-                SM.notes[i].SetBitmap("96");
-                SM.notes[i].SetSize(30, 30);
-                SM.notes[i].Location = new Vector2(staffEnd, 55);                
-            }
+        //    // Give the notes a bitmap
+        //    for (int i = 0; i < SM.notes.Count; i++)
+        //    {
+        //        SM.notes[i].SetBitmap("96");
+        //        SM.notes[i].SetSize(30, 30);
+        //        SM.notes[i].Location = new Vector2(staffEnd, 55);                
+        //    }
 
-            GameTimerLogic();
-        }
+        //    GameTimerLogic();
+        //}
 
 
-        private void GameCanvas_Draw(CanvasControl sender, CanvasDrawEventArgs args)
-        {
-            int staffStart = windowWidth / 10;
-            int staffWidth = windowWidth - staffStart;
+        //private void GameCanvas_Draw(CanvasControl sender, CanvasDrawEventArgs args)
+        //{
+        //    int staffStart = windowWidth / 10;
+        //    int staffWidth = windowWidth - staffStart;
 
-            for (int i = 100; i <= 300; i += 50 ) args.DrawingSession.DrawLine(staffStart, i, staffWidth, i, Colors.White);
-            args.DrawingSession.DrawLine(staffStart+staffStart, 50, staffStart + staffStart, 350, Colors.White);
+        //    for (int i = 100; i <= 300; i += 50 ) args.DrawingSession.DrawLine(staffStart, i, staffWidth, i, Colors.White);
+        //    args.DrawingSession.DrawLine(staffStart+staffStart, 50, staffStart + staffStart, 350, Colors.White);
 
-            for (int i = 0; i < gameObjects.Count; i++)
-            {
-                if(gameObjects[i] != null)
-                    args.DrawingSession.DrawImage(gameObjects[i].Bitmap, gameObjects[i].Location);
-            }
-        }
+        //    for (int i = 0; i < gameObjects.Count; i++)
+        //    {
+        //        if(gameObjects[i] != null)
+        //            args.DrawingSession.DrawImage(gameObjects[i].Bitmap, gameObjects[i].Location);
+        //    }
+        //}
 
         /// <summary>
         /// On click events navigation
@@ -551,15 +551,15 @@ namespace PiaNotes.Views
         private void Page_Unloaded(object sender, RoutedEventArgs e)
         {
             // Stop the GameLoop and UIloop
-            timerGameLogic.Stop();
-            timerGameUI.Stop();
+            //timerGameLogic.Stop();
+            //timerGameUI.Stop();
 
             // Unsubscribe the MidiInPort_MessageReceived
             Settings.midiInPort.MessageReceived -= MidiInPort_MessageReceived;
 
-            // Dispose of the Win2D resources
-            this.GameCanvas.RemoveFromVisualTree();
-            this.GameCanvas = null;
+            //// Dispose of the Win2D resources
+            //this.GameCanvas.RemoveFromVisualTree();
+            //this.GameCanvas = null;
 
             // Clear the ContentPipeline
             ContentPipeline.ImageDictionary.Clear();
