@@ -11,11 +11,16 @@ namespace PiaNotes.ViewModels
 {
     public class MidiConverter
     {
+        private MidiFile midiFile;
         private StringBuilder sb = new StringBuilder();
 
-        public string MidiToString(Stream midiFilePath)
+        public void SetMidiFile(Stream midiFilePath)
         {
-            var midiFile = MidiFile.Read(midiFilePath);
+            midiFile = MidiFile.Read(midiFilePath);
+        }
+
+        public string MidiToString()
+        {
             IEnumerable<string> items = midiFile.GetNotes()
                 .Select(n => $"{n.NoteNumber} {n.Time} {n.Length}");
             int count = items.Count();
@@ -31,9 +36,27 @@ namespace PiaNotes.ViewModels
                 sb.Append(i);
 
                 current++;
+                // Do something with i
             }
-            
+
             return sb.ToString();
+        }
+
+        public string MidiTempoMapToString()
+        {
+            TempoMap tempoMap = midiFile.GetTempoMap();
+            //Tempo tempo = new Tempo(); //microsecondsPerQuarterNote!!
+            string ppqn = tempoMap.TimeDivision.ToString();
+            /*
+            StringBuilder sb2 = new StringBuilder();
+
+            foreach (object element in tempoMap.Tempo)
+            {
+                sb2.Append(element.ToString());
+            }
+            */
+            return $"ppqn: {ppqn} tmepo: ";
+            
         }
     }
 }

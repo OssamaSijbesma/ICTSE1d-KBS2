@@ -28,7 +28,7 @@ namespace PiaNotes.Views
     public sealed partial class UploadPage : Page
     {
         Databaser DB = new Databaser();
-        private string midiString;
+        private string midiString, midiTempoMap;
         public bool FileSelected { get; set; } = false;
 
         public UploadPage()
@@ -59,8 +59,9 @@ namespace PiaNotes.Views
                 TXTBox_Title.Text = file.DisplayName;
                 var stream = await file.OpenStreamForReadAsync();
                 MidiConverter midiConverter = new MidiConverter();
-                midiString = midiConverter.MidiToString(stream);
-                
+                midiConverter.SetMidiFile(stream);
+                midiString = midiConverter.MidiToString();
+
                 if (midiString.Length < 2000000)
                 {
                     FileSelected = true;
