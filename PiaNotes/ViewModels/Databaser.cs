@@ -175,7 +175,7 @@ namespace PiaNotes.ViewModels
         {
             try
             {
-                string sql = $"DELETE FROM {DataTable} WHERE Id = {id}');";
+                string sql = $"DELETE FROM {DataTable} WHERE Id = {id};";
                 //Setup connection and SQL command
                 using (MySqlConnection sqlconn = new MySqlConnection(ConnectionString))
                 using (var cmd = new MySqlCommand(sql, sqlconn))
