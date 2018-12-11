@@ -156,7 +156,6 @@
     </AppxManifest>
     <None Include="PiaNotes_TemporaryKey.pfx" />
     <PRIResource Include="Strings\nl-NL\Resources.resw" />
-    <PRIResource Include="Strings\fy-NL\Resources.resw" />
     <PRIResource Include="Strings\en-US\Resources.resw" />
   </ItemGroup>
   <ItemGroup>
