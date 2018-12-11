@@ -120,10 +120,10 @@
   <data name="Credits" xml:space="preserve">
     <value>Credits</value>
   </data>
-  <data name="File" xml:space="preserve">
+  <data name="File.Text" xml:space="preserve">
     <value>File</value>
   </data>
-  <data name="Midi_files" xml:space="preserve">
+  <data name="Midi_files.Text" xml:space="preserve">
     <value>MIDI Files</value>
   </data>
   <data name="New" xml:space="preserve">

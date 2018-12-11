@@ -16,10 +16,10 @@
                        RelativePanel.AlignLeftWithPanel="True"
                        RelativePanel.AlignRightWithPanel="True"/>
 
-            <Button x:Name="File" MinHeight="36" x:Uid="File" HorizontalAlignment="Center" VerticalAlignment="Center" Background="#253847">
+            <Button x:Name="File" MinHeight="36" Content="File" HorizontalAlignment="Center" VerticalAlignment="Center" Background="#253847">
                 <Button.Flyout>
                     <MenuFlyout>
-                        <MenuFlyoutItem x:Uid="New_Midi_File" Click="NewMIDIFile_Click" />
+                        <MenuFlyoutItem Text="New MIDI File" Click="NewMIDIFile_Click" />
                     </MenuFlyout>
                 </Button.Flyout>
             </Button>
@@ -34,7 +34,7 @@
                 </Button.Flyout>
             </Button>
 
-            <TextBlock x:Uid="Midi_files" HorizontalAlignment="Left" Height="48" Margin="35,35,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="400" FontSize="36"/>
+            <TextBlock Text="MIDI Files" HorizontalAlignment="Left" Height="48" Margin="35,35,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="400" FontSize="36"/>
 
             <TextBox x:Name="SearchBar" PlaceholderText="Search..." Height="32" Margin="0,10,30,0" Text="" MinWidth="250" HorizontalAlignment="Left" VerticalAlignment="Center" Width="71.2" Background="Transparent"
                      RelativePanel.AlignRightWithPanel="True"
