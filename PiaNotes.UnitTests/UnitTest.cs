@@ -58,9 +58,7 @@ namespace PianNotes.UnitTests
             var result = db.Search(null, null, null, 1, 1);
 
             //Assert
-            Assert.AreEqual(2, result[0].Id);
-            Assert.AreEqual("TestSheet", result[0].Title);
-            Assert.AreEqual("c//TestSheet2", result[0].File);
+            Assert.IsTrue(result.Count == 1);
         }
 
         //Depends on database
