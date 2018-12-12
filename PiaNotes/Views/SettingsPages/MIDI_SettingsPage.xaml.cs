@@ -149,6 +149,7 @@ namespace PiaNotes.Views.SettingsPages
             catch (Exception b)
             {
                 // Sets SelectedIndex to -1, making it so that whatever was previously selected will now be unselected.
+                StaticObjects.NoMidiInOutDialog.Hide();
                 midiInPortListBox.SelectedIndex = -1;
                 await StaticObjects.NoMidiInOutDialog.ShowAsync();
                 System.Diagnostics.Debug.WriteLine(b.Message);
@@ -182,9 +183,18 @@ namespace PiaNotes.Views.SettingsPages
             catch (Exception b)
             {
                 // Sets SelectedIndex to -1, making it so that whatever was previously selected will now be unselected.
-                midiInPortListBox.SelectedIndex = -1;
-                await StaticObjects.NoMidiInOutDialog.ShowAsync();
-                System.Diagnostics.Debug.WriteLine(b.Message);
+
+                var popups = VisualTreeHelper.GetOpenPopups(Window.Current);
+                foreach (var popup in popups)
+                {
+                    if (!(popup.Child is ContentDialog))
+                    {
+                        midiInPortListBox.SelectedIndex = -1;
+                        await StaticObjects.NoMidiInOutDialog.ShowAsync();
+                        System.Diagnostics.Debug.WriteLine(b.Message);
+                    }
+                }
+               
             }
         }
 

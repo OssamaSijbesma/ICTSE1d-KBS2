@@ -70,25 +70,24 @@ namespace PiaNotes.Views.SettingsPages
             }
         }
 
-        public static bool Feedback
+        public static bool DisableUserFeedback
         {
             get
             {
-                if (localSettings.Values["Feedback"] != null)
+                if (localSettings.Values["DisableUserFeedback"] != null)
                 {
-                    return (bool)localSettings.Values["Feedback"];
+                    return (bool)localSettings.Values["DisableUserFeedback"];
                 }
                 else
                 {
-                    return true;
+                    return false;
                 }
             }
 
             set
             {
-
-                localSettings.Values["Feedback"] = value;
-                Settings.feedback = value;
+                localSettings.Values["DisableUserFeedback"] = value;
+                Settings.disableUserFeedback = value;
             }
         }
         #endregion
@@ -126,35 +125,25 @@ namespace PiaNotes.Views.SettingsPages
             }
 
 
-            if (localSettings.Values["Feedback"] != null)
+            if (localSettings.Values["DisableFeedback"] != null)
             {
-                Feedback = (bool)localSettings.Values["Feedback"];
-                if (Feedback)
+                DisableUserFeedback = (bool)localSettings.Values["DisableFeedback"];
+                if (DisableUserFeedback)
                 {
                     volumeSlider.IsEnabled = false;
                     velocitySlider.IsEnabled = true;
                 }
                 else
                 {
-                    Feedback = true;
                     volumeSlider.IsEnabled = true;
                     velocitySlider.IsEnabled = false;
                 }
             }
             else
             {
-                Feedback = true;
-                if (Feedback)
-                {
-                    volumeSlider.IsEnabled = false;
-                    velocitySlider.IsEnabled = true;
-                }
-                else
-                {
-                    Feedback = true;
-                    volumeSlider.IsEnabled = false;
-                    velocitySlider.IsEnabled = false;
-                }
+                volumeSlider.IsEnabled = true;
+                velocitySlider.IsEnabled = false;
+                DisableUserFeedbackCheckbox.IsChecked = false;
             }
         }
 
@@ -174,42 +163,49 @@ namespace PiaNotes.Views.SettingsPages
             System.Diagnostics.Debug.WriteLine("Volume: " + localSettings.Values["Volume"]);
         }
 
-        private void Velocity_Checked(object sender, RoutedEventArgs e)
+        private void OnClickDisableUserFeedback(object sender, RoutedEventArgs e)
         {
-            System.Diagnostics.Debug.WriteLine("Feedback: " + localSettings.Values["Feedback"]);
+            System.Diagnostics.Debug.WriteLine("DisableUserFeedback: " + localSettings.Values["DisableUserFeedback"]);
             //Checking if the feedback setting is turned off or on and act accordingly
-            if (localSettings.Values["Feedback"] != null)
+            if (localSettings.Values["DisableUserFeedback"] != null)
             {
-                Feedback = (bool)localSettings.Values["Feedback"];
-                if (Feedback)
+                DisableUserFeedback = (bool)localSettings.Values["DisableUserFeedback"];
+                if (!DisableUserFeedback)
                 {
-                    localSettings.Values["Feedback"] = false;
                     volumeSlider.IsEnabled = false;
                     velocitySlider.IsEnabled = true;
                 }
                 else
                 {
-                    localSettings.Values["Feedback"] = true;
                     volumeSlider.IsEnabled = true;
                     velocitySlider.IsEnabled = false;
                 }
             }
             else
             {
-                localSettings.Values["Feedback"] = true;
-                Feedback = (bool)localSettings.Values["Feedback"];
-                if (Feedback)
+                localSettings.Values["DisableUserFeedback"] = true;
+                DisableUserFeedback = (bool) localSettings.Values["DisableUserFeedback"];
+                if (!DisableUserFeedback)
                 {
                     volumeSlider.IsEnabled = false;
                     velocitySlider.IsEnabled = true;
                 }
                 else
                 {
-                    localSettings.Values["Feedback"] = true;
                     volumeSlider.IsEnabled = true;
                     velocitySlider.IsEnabled = false;
                 }
             }
+
+            if ((bool)DisableUserFeedbackCheckbox.IsChecked)
+            {
+                DisableUserFeedback = true;
+            }
+            else
+            {
+                DisableUserFeedback = false;
+            }
+
         }
     }
 }

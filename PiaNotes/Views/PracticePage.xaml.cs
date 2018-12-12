@@ -86,7 +86,7 @@ namespace PiaNotes.Views
                 // If the player releases the key there should be no sound
                 if (((MidiNoteOnMessage)receivedMidiMessage).Velocity != 0)
                 {
-                    if (Settings.feedback == true)
+                    if (!Settings.disableUserFeedback)
                     {
                         // Retrieves the velocity from the played note and then adds the amount of volume the user has set.
                         velocity = ((MidiNoteOnMessage)receivedMidiMessage).Velocity;
@@ -346,11 +346,13 @@ namespace PiaNotes.Views
                                 else Notes[(j + (i * 12))] = (keyWhiteRect);
                             }
                             break;
-                            ky = 0;
                     }
                     oct = i + 1;
                 }
             }
+
+            //Adding the last C-Note
+
             Rectangle keyWhiteRect1 = new Rectangle();
             keyWhiteRect1.Name = $"{((PianoKey)ky).ToString()}{oct}";
             keyWhiteRect1.Stroke = new SolidColorBrush(Colors.Black);
@@ -359,16 +361,13 @@ namespace PiaNotes.Views
             keyWhiteRect1.Height = 200;
             KeysWhiteSP.Children.Add(keyWhiteRect1);
             System.Diagnostics.Debug.WriteLine(keyWhiteRect1.Name);
+
             if (ky == 0)
             {
                 if (oct == 0) Notes[ky] = (keyWhiteRect1);
                 else Notes[(oct * 12)] = (keyWhiteRect1);
             }
-            else
-            {
-                if (oct == 0) Notes[ky] = (keyWhiteRect1);
-                else Notes[(ky + (oct * 12))] = (keyWhiteRect1);
-            }
+
             UpdateKeyboard();
         }
 
