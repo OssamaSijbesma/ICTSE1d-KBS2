@@ -30,6 +30,7 @@ namespace PiaNotes.Views
     {
         //Get Search Functionality from Databaser Class
         Databaser DB = new Databaser();
+
         MidiParser MP;
         private string MidiF;
 

@@ -8,6 +8,7 @@ using MySql.Data.MySqlClient;
 using System.Data;
 using System.IO;
 using PiaNotes.Models;
+using Windows.Storage;
 
 namespace PiaNotes.ViewModels
 {
@@ -141,15 +142,48 @@ namespace PiaNotes.ViewModels
             }
         }
 
-        public bool Upload(string title, string file)
+        // Get a file from the database by ID
+        public async Task<StorageFile> GetAFileAsync(int id)
+        {
+            string sql = $"SELECT FileBytes, FileName FROM {DataTable} Where Id = @ID";
+
+            using (MySqlConnection sqlconn = new MySqlConnection(ConnectionString))
+            using (var cmd = new MySqlCommand(sql, sqlconn))
+            {
+                cmd.Parameters.AddWithValue("@ID", id);
+                sqlconn.Open();
+
+                var go = cmd.ExecuteReader();
+                go.Read();
+
+                var bytes = go.GetValue(0);
+
+                Byte[] byteArray = (Byte[])bytes;
+                string fileName = go.GetString(1);
+
+                sqlconn.Close();
+
+                StorageFolder storageFolder = ApplicationData.Current.LocalFolder;
+                StorageFile sampleFile = await storageFolder.CreateFileAsync(fileName, CreationCollisionOption.ReplaceExisting);
+                await FileIO.WriteBytesAsync(sampleFile, byteArray);
+                return sampleFile;
+            }
+
+            return null;
+        }
+
+        public bool Upload(string title, Byte[] fileBytes, string fileName)
         {
             try
             {
-                string sql = $"INSERT INTO {DataTable} ( Title,File ) VALUES ('{title}','{file}');";
+                string sql = $"INSERT INTO {DataTable} (Title, FileBytes, FileName ) VALUES (@title, @fileBytes, @fileName);";
                 //Setup connection and SQL command
                 using (MySqlConnection sqlconn = new MySqlConnection(ConnectionString))
                 using (var cmd = new MySqlCommand(sql, sqlconn))
                 {
+                    cmd.Parameters.Add("@title", MySqlDbType.VarChar, title.Length).Value = title;
+                    cmd.Parameters.Add("@fileBytes", MySqlDbType.VarBinary, fileBytes.Length).Value = fileBytes;
+                    cmd.Parameters.Add("@fileName", MySqlDbType.VarChar, fileName.Length).Value = fileName;
                     //Open connection to database
                     sqlconn.Open();
 
@@ -170,6 +204,8 @@ namespace PiaNotes.ViewModels
                 return false;
             }
         }
+
+        
 
         public bool Delete(int id)
         {
