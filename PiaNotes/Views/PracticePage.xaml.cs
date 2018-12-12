@@ -509,12 +509,27 @@ namespace PiaNotes.Views
 
         private void GameCanvas_Draw(CanvasControl sender, CanvasDrawEventArgs args)
         {
-            int staffStart = windowWidth / 10;
-            int staffWidth = windowWidth - staffStart;
+            int staffMargin = 24;
+            int staffWidth = (int)gameCanvasWidth - staffMargin * 2;
+            int staffSpacing = (int)gameCanvasHeight / 13;
+            Dictionary<string, int> GuidelineDictionary = new Dictionary<string, int>();
+            string[] gKey = new string[] { "A3", "G4", "F4", "E4", "D4", "C4", "B4", "A4", "G5", "F5", "E5", "D5", "C5" };
+            //string[] fKey = new string[] {  };
 
-            for (int i = 100; i <= 300; i += 50 ) args.DrawingSession.DrawLine(staffStart, i, staffWidth, i, Colors.White);
-            args.DrawingSession.DrawLine(staffStart+staffStart, 50, staffStart + staffStart, 350, Colors.White);
 
+            for (int i = 0; i < 13; i ++)
+            {
+                GuidelineDictionary.Add(gKey[i], staffSpacing*(i+1));
+            }
+               
+            for (int i = 0; i < 13; i ++)
+            {
+                if (i % 2 == 0)
+                {
+                    args.DrawingSession.DrawLine(staffMargin, staffSpacing * (i+1), staffWidth, staffSpacing * (i + 1), Colors.White);
+                }
+            }
+               
             for (int i = 0; i < gameObjects.Count; i++)
             {
                 if(gameObjects[i] != null)
