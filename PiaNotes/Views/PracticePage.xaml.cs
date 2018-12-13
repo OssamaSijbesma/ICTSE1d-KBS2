@@ -500,7 +500,7 @@ namespace PiaNotes.Views
             {
                 SM.notes[i].SetBitmap("96");
                 SM.notes[i].SetSize(30, 30);
-                SM.notes[i].Location = new Vector2(staffEnd, 55);                
+                SM.notes[i].Location = new Vector2(staffEnd, 24);                
             }
 
             GameTimerLogic();
@@ -519,28 +519,44 @@ namespace PiaNotes.Views
             for (int i = 0; i < 13; i ++)
             {
                 GuidelineDictionary.Add(gKey[i], staffSpacing*(i +1));
-                GuidelineDictionary.Add(fKey[i], staffSpacing*(i + 1) + 13 * staffSpacing);
+                GuidelineDictionary.Add(fKey[i], staffSpacing*(i + 1) + 13 * staffSpacing + staffMargin * 3);
             }
                
             for (int i = 0; i < 13; i ++)
             {
                 if (i % 2 == 0)
                 {
-                    args.DrawingSession.DrawLine(staffMargin, staffSpacing * (i+1), staffWidth, staffSpacing * (i + 1), Colors.White);
+                    int x0 = staffMargin;
+                    int x1 = staffWidth;
+                    int y = staffSpacing * (i + 1) + staffMargin;
+                    args.DrawingSession.DrawLine(x0, y, x1, y, Colors.White);
                 }
             }
-            //args.DrawingSession.DrawLine(staffMargin, staffSpacing * 13, staffWidth, staffSpacing * 17, Colors.Red);
-
+            
             for (int i = 0; i < 13; i ++)
             {
                 if (i % 2 == 0)
                 {
-                    args.DrawingSession.DrawLine(staffMargin, staffSpacing * (i + 1) + 13 * staffSpacing, staffWidth, staffSpacing * (i + 1) + 13 * staffSpacing, Colors.White);
+                    int x0 = staffMargin;
+                    int x1 = staffWidth;
+                    int y = staffSpacing * (i + 1) + 13 * staffSpacing + (staffMargin * 3);
+                    args.DrawingSession.DrawLine(x0, y, x1, y, Colors.White);
                 }
             }
 
+            args.DrawingSession.DrawLine(staffMargin * 3,
+                staffSpacing * (2 + 1) + staffMargin,
+                staffMargin * 3,
+                staffSpacing * (10 + 1) + staffMargin,
+                Colors.White);
+            
+            args.DrawingSession.DrawLine(staffMargin * 3,
+                staffSpacing * (2 + 1) + 13 * staffSpacing + (staffMargin * 3),
+                staffMargin * 3,
+                staffSpacing * (10 + 1) + 13 * staffSpacing + (staffMargin * 3),
+                Colors.White);
+        
 
-               
             for (int i = 0; i < gameObjects.Count; i++)
             {
                 if(gameObjects[i] != null)
