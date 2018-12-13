@@ -11,7 +11,9 @@
     <Grid Margin="0,0,0,0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
         <RelativePanel Background="#162632" Margin="0,0,0,0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" RenderTransformOrigin="0.464,0.506">
 
-            <NavigationViewItem Icon="Keyboard" Tag="MIDI_Settings">
+            <NavigationViewItem  
+                RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True" 
+                Icon="Keyboard" Tag="MIDI_Settings">
                 <TextBlock Tag="MIDI_Settings">MIDI</TextBlock>
             </NavigationViewItem>
 

@@ -11,7 +11,7 @@
     <Grid Margin="0,0,0,0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
         <RelativePanel Background="#162632" Margin="0,0,0,0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
 
-            <NavigationViewItem Icon="Volume" Tag="Sound_Settings" Margin="0,0,-117,0">
+            <NavigationViewItem RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True"  Icon="Volume" Tag="Sound_Settings">
                 <TextBlock Tag="Sound_Settings">Sound</TextBlock>
             </NavigationViewItem>
 

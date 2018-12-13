@@ -12,11 +12,14 @@
 
         <NavigationView x:Name="SettingsNV"
                 Loaded="SettingsNV_Loaded"
+                IsPaneOpen="False"
+                IsPaneToggleButtonVisible="False"
                 ItemInvoked="SettingsNV_ItemInvoked"
                 BackRequested="SettingsNV_BackRequested"
                 IsBackEnabled="True"
                 IsTabStop="False"
-                IsSettingsVisible="False">
+                IsSettingsVisible="False" 
+                OpenPaneLength="120">
             <NavigationView.MenuItems>
                 <NavigationViewItem Icon="Keyboard"  Tag="MIDI_SettingsPage">
                     <TextBlock Tag="MIDI_SettingsPage">MIDI</TextBlock>
