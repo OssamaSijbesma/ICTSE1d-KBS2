@@ -155,6 +155,8 @@
       <SubType>Designer</SubType>
     </AppxManifest>
     <None Include="PiaNotes_TemporaryKey.pfx" />
+    <PRIResource Include="Strings\nl-NL\Resources.resw" />
+    <PRIResource Include="Strings\en-US\Resources.resw" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assets\BadgeLogo.scale-100.png" />
