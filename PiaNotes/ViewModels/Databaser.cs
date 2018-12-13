@@ -174,8 +174,6 @@ namespace PiaNotes.ViewModels
                 await FileIO.WriteBytesAsync(sampleFile, byteArray);
                 return sampleFile;
             }
-
-            return null;
         }
 
         public bool Upload(string title, Byte[] fileBytes, string fileName)

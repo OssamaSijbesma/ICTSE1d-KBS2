@@ -21,12 +21,12 @@
             <TextBlock Text="Output devices:" Name="OutputText" Style="{StaticResource TitleTextBlockStyle}" Margin="35,35,0,0"
                        RelativePanel.AlignLeftWithPanel="True"  RelativePanel.Below="midiInPortListBox" FontSize="36" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" RenderTransformOrigin="0.614,0.632"/>
 
-            <ListBox x:Name="midiInPortListBox" SelectionChanged="midiInPortListBox_SelectionChanged" MinHeight="100" MinWidth="720"
+            <ListBox x:Name="midiInPortListBox" SelectionChanged="MidiInPortListBox_SelectionChanged" MinHeight="100" MinWidth="720"
                      Margin="70,35,35,0" HorizontalAlignment="Left"
                      RelativePanel.RightOf="InputText"
                      RelativePanel.Below="MenuStrip"
                      />
-            <ListBox x:Name="midiOutPortListBox" SelectionChanged="midiOutPortListBox_SelectionChanged" MinHeight="100" MinWidth="720"
+            <ListBox x:Name="midiOutPortListBox" SelectionChanged="MidiOutPortListBox_SelectionChanged" MinHeight="100" MinWidth="720"
                      Margin="70,35,35,0" HorizontalAlignment="Left"
                      RelativePanel.RightOf="InputText"
                      RelativePanel.Below="midiInPortListBox"

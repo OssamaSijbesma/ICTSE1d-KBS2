@@ -56,7 +56,7 @@ namespace PiaNotes.Views
             }
         }
 
-        private async void midiInPortListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private async void MidiInPortListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             //Collect device information about the input devices, if there's no info -> return
             var deviceInformationCollection = inputDeviceWatcher.DeviceInformationCollection;
@@ -103,7 +103,7 @@ namespace PiaNotes.Views
             Settings.volume = (e.NewValue - 50);
         }
 
-        private async void midiOutPortListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private async void MidiOutPortListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             //Collect device information about the output devices, if there's no info -> return
             var deviceInformationCollection = outputDeviceWatcher.DeviceInformationCollection;
