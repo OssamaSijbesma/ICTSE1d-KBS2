@@ -511,15 +511,15 @@ namespace PiaNotes.Views
         {
             int staffMargin = 24;
             int staffWidth = (int)gameCanvasWidth - staffMargin * 2;
-            int staffSpacing = (int)gameCanvasHeight / 13;
+            int staffSpacing = (int)gameCanvasHeight / 30; // 13 = guidelines * 2 + 4 extra space
             Dictionary<string, int> GuidelineDictionary = new Dictionary<string, int>();
             string[] gKey = new string[] { "A3", "G4", "F4", "E4", "D4", "C4", "B4", "A4", "G5", "F5", "E5", "D5", "C5" };
-            //string[] fKey = new string[] {  };
-
-
+            string[] fKey = new string[] { "A1", "G2", "F2", "E2", "D2", "C2", "B2", "A2", "G3", "F3", "E3", "D3", "C3" };
+            
             for (int i = 0; i < 13; i ++)
             {
-                GuidelineDictionary.Add(gKey[i], staffSpacing*(i+1));
+                GuidelineDictionary.Add(gKey[i], staffSpacing*(i +1));
+                GuidelineDictionary.Add(fKey[i], staffSpacing*(i + 1) + 13 * staffSpacing);
             }
                
             for (int i = 0; i < 13; i ++)
@@ -529,6 +529,17 @@ namespace PiaNotes.Views
                     args.DrawingSession.DrawLine(staffMargin, staffSpacing * (i+1), staffWidth, staffSpacing * (i + 1), Colors.White);
                 }
             }
+            //args.DrawingSession.DrawLine(staffMargin, staffSpacing * 13, staffWidth, staffSpacing * 17, Colors.Red);
+
+            for (int i = 0; i < 13; i ++)
+            {
+                if (i % 2 == 0)
+                {
+                    args.DrawingSession.DrawLine(staffMargin, staffSpacing * (i + 1) + 13 * staffSpacing, staffWidth, staffSpacing * (i + 1) + 13 * staffSpacing, Colors.White);
+                }
+            }
+
+
                
             for (int i = 0; i < gameObjects.Count; i++)
             {
