@@ -85,7 +85,7 @@ namespace PiaNotes.Views
             Settings.midiInPort.MessageReceived += MidiInPort_MessageReceived;
 
             //Generate the amount of Keys
-            Keys = (Settings.OctaveAmount != 0) ? Settings.OctaveAmount * 12 : 12;
+            Keys = (Settings.octaveAmount != 0) ? Settings.octaveAmount * 12 : 12;
 
             //Create the keyboard to show on the screen and set a timer
             CreateKeyboard();
@@ -177,8 +177,8 @@ namespace PiaNotes.Views
                     // If it is a black key, the color will be slightly darker (-25 on all values except A) than a white key.
                     // Colors will be pulled from Settings.cs.
                     Notes[note].Fill = (Notes[note].Name.Contains("Sharp")) ?
-                                            Notes[note].Fill = new SolidColorBrush(Color.FromArgb(255, DoubleToByte(Settings.R - neg), DoubleToByte(Settings.G - neg), DoubleToByte(Settings.B - neg))) :
-                                            Notes[note].Fill = new SolidColorBrush(Color.FromArgb(255, Settings.R, Settings.G, Settings.B));
+                                            Notes[note].Fill = new SolidColorBrush(Color.FromArgb(255, DoubleToByte(Settings.redValue - neg), DoubleToByte(Settings.greenValue - neg), DoubleToByte(Settings.blueValue - neg))) :
+                                            Notes[note].Fill = new SolidColorBrush(Color.FromArgb(255, Settings.redValue, Settings.greenValue, Settings.blueValue));
 
                 }
                 catch (Exception e)
@@ -407,7 +407,7 @@ namespace PiaNotes.Views
                     }
                 } catch (Exception e)
                 {
-
+                    System.Diagnostics.Debug.WriteLine(e.Message);
                 }
             }
         }
