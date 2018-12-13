@@ -184,16 +184,9 @@ namespace PiaNotes.Views.SettingsPages
             {
                 // Sets SelectedIndex to -1, making it so that whatever was previously selected will now be unselected.
 
-                var popups = VisualTreeHelper.GetOpenPopups(Window.Current);
-                foreach (var popup in popups)
-                {
-                    if (!(popup.Child is ContentDialog))
-                    {
                         midiInPortListBox.SelectedIndex = -1;
                         await StaticObjects.NoMidiInOutDialog.ShowAsync();
                         System.Diagnostics.Debug.WriteLine(b.Message);
-                    }
-                }
                
             }
         }
