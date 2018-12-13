@@ -30,7 +30,8 @@ namespace PiaNotes.Views
     {
         //Get Search Functionality from Databaser Class
         Databaser DB = new Databaser();
-        MidiParser MP;
+
+        MidiParser midiParser;
 
         private enum PianoKey { C = 0, D = 2, E = 4, F = 5, G = 7, A = 9, B = 11 };
         private enum PianoKeySharp { CSharp = 1, DSharp = 3, FSharp = 6, GSharp = 8, ASharp = 10 };
@@ -149,41 +150,13 @@ namespace PiaNotes.Views
                 this.Frame.Navigate(typeof(SettingsPage));
             } else
             {
-                // element.Id;
-                string Examp = "324 40 40-234 40 40-23 50 50";
-                var count = Examp.Count(c => c == '-');
-                List<string> notes = new List<string>();
+                StorageFile storageFileMIDI = await DB.GetAFileAsync(element.Id);
+                Stream streamMIDI =  await storageFileMIDI.OpenStreamForReadAsync();
+                MidiFile midiFile = MidiFile.Read(streamMIDI);
+                midiParser = new MidiParser(midiFile);
 
-                for(int i = 0; i <= count; i++)
-                {
-                    //Initialize vars
-                    String sub;
-                    int position = Examp.IndexOf("-");
-
-                    if (i == count)
-                    //if the for loop is at the end of the string make the last substring
-                    {
-                        sub = Examp.Substring(0, (Examp.Substring(0)).Length);
-                    } else
-                    //else make a substring and redo the string so the substring is deleted
-                    {
-                        sub = Examp.Substring(0, (Examp.Substring(0, position)).Length);
-                        Examp = Examp.Substring(((Examp.Substring(0, position)).Length) + 1);
-                    }
-                    //Add substring to array of strings
-                    notes.Add(sub);
-                    //Debug line to see if substring is done correctly
-                    System.Diagnostics.Debug.WriteLine(sub);
-                }
-
-                //Send array to MidiParser
-                MP = new MidiParser(notes);
-
-                /*
-                // Zo iets mart
-                string[] notes = completeMidiStringExample.Split('-');
-                string[] note = notes[0].Split(' ');
-                */
+                // Navigate to the practice page
+                this.Frame.Navigate(typeof(PracticePage), midiParser.sheetMusic);
             }
         }
 
