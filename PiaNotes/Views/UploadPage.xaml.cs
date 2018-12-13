@@ -46,9 +46,11 @@ namespace PiaNotes.Views
         {
             TXTBox_Title.Text = "";
 
-            FileOpenPicker openPicker = new FileOpenPicker();
-            openPicker.ViewMode = PickerViewMode.List;
-            openPicker.SuggestedStartLocation = PickerLocationId.Downloads;
+            FileOpenPicker openPicker = new FileOpenPicker
+            {
+                ViewMode = PickerViewMode.List,
+                SuggestedStartLocation = PickerLocationId.Downloads
+            };
             openPicker.FileTypeFilter.Add(".midi");
             openPicker.FileTypeFilter.Add(".mid");
             StorageFile file = await openPicker.PickSingleFileAsync();

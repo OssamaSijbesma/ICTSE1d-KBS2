@@ -46,8 +46,7 @@ namespace PiaNotes.Models
 
         public bool SetBitmap(string key)
         {
-            CanvasBitmap canvasBitmap = null;
-            if (ContentPipeline.ImageDictionary.TryGetValue(key, out canvasBitmap))
+            if (ContentPipeline.ImageDictionary.TryGetValue(key, out CanvasBitmap canvasBitmap))
             {
                 Bitmap = canvasBitmap;
                 Size = Bitmap.SizeInPixels;

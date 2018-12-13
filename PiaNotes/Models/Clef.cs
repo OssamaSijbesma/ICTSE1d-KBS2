@@ -10,7 +10,6 @@ namespace PiaNotes.Models
     class Clef
     {
         public enum ClefTypes {Treble, Bass, Alto, Tenor}
-
         public ClefTypes CT;
 
         public Clef(ClefTypes ct)

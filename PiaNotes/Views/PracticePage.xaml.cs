@@ -90,7 +90,6 @@ namespace PiaNotes.Views
             //Create the keyboard to show on the screen and set a timer
             CreateKeyboard();
             GameTimerUI();
-
         }
 
         private void MidiInPort_MessageReceived(MidiInPort sender, MidiMessageReceivedEventArgs args)
@@ -159,7 +158,6 @@ namespace PiaNotes.Views
                 IMidiMessage midiMessageToSend = new MidiNoteOffMessage(channel, note, velocity);
                 UnFillKey(midiMessageToSend);
             }
-
         }
 
         // Method for coloring the played key.
@@ -248,14 +246,8 @@ namespace PiaNotes.Views
             // Iterates through all keyboard items to hide/show them.
             if (KeyboardIsOpen)
             {
-                foreach (Rectangle key in KeysWhiteSP.Children)
-                {
-                    key.Width = 0;
-                }
-                foreach (Rectangle key in KeysBlackSP.Children)
-                {
-                    key.Width = 0;
-                }
+                foreach (Rectangle key in KeysWhiteSP.Children) key.Width = 0;
+                
                 KeyboardBG.MinHeight = 0;
             }
             else
@@ -312,12 +304,14 @@ namespace PiaNotes.Views
         {
             if(white)
             {
-                Rectangle keyWhiteRect = new Rectangle();
-                keyWhiteRect.Name = $"{((PianoKey)j).ToString()}{i}";
-                keyWhiteRect.Stroke = new SolidColorBrush(Colors.Black);
-                keyWhiteRect.Fill = new SolidColorBrush(Colors.White);
-                keyWhiteRect.StrokeThickness = 4;
-                keyWhiteRect.Height = 200;
+                Rectangle keyWhiteRect = new Rectangle
+                {
+                    Name = $"{((PianoKey)j).ToString()}{i}",
+                    Stroke = new SolidColorBrush(Colors.Black),
+                    Fill = new SolidColorBrush(Colors.White),
+                    StrokeThickness = 4,
+                    Height = 200
+                };
                 KeysWhiteSP.Children.Add(keyWhiteRect);
                 System.Diagnostics.Debug.WriteLine(keyWhiteRect.Name);
                 if (j == 0)
@@ -333,12 +327,14 @@ namespace PiaNotes.Views
             }
             else
             {
-                Rectangle keyBlackRect = new Rectangle();
-                keyBlackRect.Name = $"{((PianoKeySharp)j).ToString()}{i}";
-                keyBlackRect.Fill = new SolidColorBrush(Colors.Black);
-                keyBlackRect.Stroke = new SolidColorBrush(Colors.Black);
-                keyBlackRect.StrokeThickness = 4;
-                keyBlackRect.Height = 150;
+                Rectangle keyBlackRect = new Rectangle
+                {
+                    Name = $"{((PianoKeySharp)j).ToString()}{i}",
+                    Fill = new SolidColorBrush(Colors.Black),
+                    Stroke = new SolidColorBrush(Colors.Black),
+                    StrokeThickness = 4,
+                    Height = 150
+                };
                 KeysBlackSP.Children.Add(keyBlackRect);
                 if (i == 0) Notes[j] = (keyBlackRect);
                 else Notes[(j + (i * 12))] = (keyBlackRect);
@@ -374,7 +370,6 @@ namespace PiaNotes.Views
             bool initialCsharp = true;
             foreach (Rectangle key in KeysBlackSP.Children)
             {
-                double keyWhiteWidth;
                 try
                 {
                     // Calculates width for the black keys.
@@ -405,9 +400,8 @@ namespace PiaNotes.Views
                         double location = keyWidthWhite * 2 - key.Width;
                         key.Margin = new Thickness(location, 0, 0, 50);
                     }
-                } catch (Exception e)
-                {
-
+                } catch (Exception e) {
+                    System.Diagnostics.Debug.WriteLine(e.Message);
                 }
             }
         }
@@ -419,9 +413,11 @@ namespace PiaNotes.Views
         private void GameTimerLogic()
         {
             // Create a timer with a sixty-fourth tick which represents the 1/64 note.
-            timerGameLogic = new Timer(1000/UPS);
-            timerGameLogic.AutoReset = true;
-            timerGameLogic.Enabled = true;
+            timerGameLogic = new Timer(1000 / UPS)
+            {
+                AutoReset = true,
+                Enabled = true
+            };
 
             // Hook up the Elapsed event for the timer. 
             timerGameLogic.Elapsed += GameTickLogic;
@@ -431,12 +427,12 @@ namespace PiaNotes.Views
         {
             tickCount += 1000000/UPS;
 
-            for (int i = 0; i < SM.notes.Count && i < 6; i++)
+            for (int i = 0; i < SM.Notes.Count && i < 6; i++)
             {
-                if (tickCount >= SM.notes[i].MetricTiming.TotalMicroseconds)
+                if (tickCount >= SM.Notes[i].MetricTiming.TotalMicroseconds)
                 {
-                    gameObjects.Add(SM.notes[i]);
-                    SM.notes.Remove(SM.notes[i]);
+                    gameObjects.Add(SM.Notes[i]);
+                    SM.Notes.Remove(SM.Notes[i]);
                 }
             }
 
@@ -458,8 +454,10 @@ namespace PiaNotes.Views
 
         private void GameTimerUI()
         {
-            timerGameUI = new DispatcherTimer();
-            timerGameUI.Interval = TimeSpan.FromMilliseconds(1000/FPS);
+            timerGameUI = new DispatcherTimer
+            {
+                Interval = TimeSpan.FromMilliseconds(1000 / FPS)
+            };
             timerGameUI.Tick += GameTickUI;
             timerGameUI.Start();
         }
@@ -496,16 +494,14 @@ namespace PiaNotes.Views
             await ContentPipeline.AddImage("12", @"Assets/Notes/ThirtySecondNote.png");
 
             // Give the notes a bitmap
-            for (int i = 0; i < SM.notes.Count; i++)
+            for (int i = 0; i < SM.Notes.Count; i++)
             {
-                SM.notes[i].SetBitmap("96");
-                SM.notes[i].SetSize(30, 30);
-                SM.notes[i].Location = new Vector2(staffEnd, 55);                
+                SM.Notes[i].SetBitmap("96");
+                SM.Notes[i].SetSize(30, 30);
+                SM.Notes[i].Location = new Vector2(staffEnd, 55);                
             }
-
             GameTimerLogic();
         }
-
 
         private void GameCanvas_Draw(CanvasControl sender, CanvasDrawEventArgs args)
         {
@@ -543,7 +539,6 @@ namespace PiaNotes.Views
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
-
             SM = (SheetMusic)e.Parameter;
         }
 
@@ -568,7 +563,6 @@ namespace PiaNotes.Views
         // Handler for when the page is resized
         private void Page_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            
             if (KeyboardIsOpen)
                 // If the keyboard is shown, it will be updated.
                 UpdateKeyboard();

@@ -12,9 +12,9 @@ namespace PiaNotes.Models
     class SheetMusic
     {
         public MidiFile MF { get; set; }
-        public bool multipleClefs { get; set; }
-        public List<Note> notes { get; set; }
-        public List<Bar> bars { get; set; }
+        public bool MultipleClefs { get; set; }
+        public List<Note> Notes { get; set; }
+        public List<Bar> Bars { get; set; }
 
         //If there are multiple clefs there should be a List of clefs and staffs
         public List<Clef> clefs = new List<Clef>();
@@ -23,19 +23,19 @@ namespace PiaNotes.Models
         public SheetMusic(MidiFile MiFi, List<Note> Notes, bool MC, int AB)
         {
             MF = MiFi;
-            notes = Notes;
-            multipleClefs = MC;
+            this.Notes = Notes;
+            MultipleClefs = MC;
 
             if(AB > 1)
             {
-                bars = new List<Bar>();
+                Bars = new List<Bar>();
                 for (int i = AB; i > 0; i--)
                 {
-                    bars.Add(new Bar());
+                    Bars.Add(new Bar());
                 }
             } else
             {
-                bars.Add(new Bar());
+                Bars.Add(new Bar());
             }
 
             Clef cl = new Clef(Clef.ClefTypes.Treble);
@@ -46,7 +46,7 @@ namespace PiaNotes.Models
             clefs.Add(cl);
                 staffs.Add(st);
 
-            if (multipleClefs)
+            if (MultipleClefs)
             {
                 clefs.Add(ef);
                 staffs.Add(aff);

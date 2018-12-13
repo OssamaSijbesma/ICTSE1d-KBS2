@@ -14,7 +14,7 @@ namespace PiaNotes.ViewModels
     class MidiDeviceWatcher 
     {
         private DeviceWatcher deviceWatcher;
-        private string deviceSelectorString;
+        private string deviceSelectorString { get; set; }
         private ListBox deviceListBox;
         private CoreDispatcher coreDispatcher;
 

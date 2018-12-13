@@ -13,7 +13,7 @@ namespace PiaNotes.ViewModels
     class MidiParser
     {
         private List<Models.Note> notes = new List<Models.Note>();
-        private bool multipleClefs;
+        private bool multipleClefs = false;
         private int amountBars;
         public SheetMusic sheetMusic;
 

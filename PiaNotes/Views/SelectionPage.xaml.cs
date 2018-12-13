@@ -31,7 +31,6 @@ namespace PiaNotes.Views
         //Get Search Functionality from Databaser Class
         Databaser DB = new Databaser();
         MidiParser MP;
-        private string MidiF;
 
         private enum PianoKey { C = 0, D = 2, E = 4, F = 5, G = 7, A = 9, B = 11 };
         private enum PianoKeySharp { CSharp = 1, DSharp = 3, FSharp = 6, GSharp = 8, ASharp = 10 };
@@ -72,21 +71,17 @@ namespace PiaNotes.Views
             {
                 foreach (MusicSheet element in Sheets)
                 {
-                    Button musicSheetButton = new Button();
-                    musicSheetButton.Height = 35;
-                    musicSheetButton.Width = 260;
-                    musicSheetButton.Margin = new Thickness(10, 10, 10, 10);
-                    musicSheetButton.Click += delegate (object sender, RoutedEventArgs e) { MidiFile_Click(sender, e, element); };
+                    Button musicSheetButton = new Button
+                    {
+                        Height = 35,
+                        Width = 260,
+                        Margin = new Thickness(10, 10, 10, 10)
+                    };
+                    musicSheetButton.Click += async delegate (object sender, RoutedEventArgs e) { await MidiFile_Click(sender, e, element); };
                     musicSheetButton.RightTapped += delegate (object sender, RightTappedRoutedEventArgs e) { MidiFile_RightTapped(sender, e, element); };
 
-                    if (element.Title.Length > 30)
-                    {
-                        musicSheetButton.Content = element.Title.Substring(0, 27) + "...";
-                    }
-                    else
-                    {
-                        musicSheetButton.Content = element.Title;
-                    }
+                    if (element.Title.Length > 30) musicSheetButton.Content = element.Title.Substring(0, 27) + "...";
+                    else musicSheetButton.Content = element.Title;
 
                     // Adds StackPanel to the VariableSizedWrapGrid.
                     MIDIFilesWG.Children.Add(musicSheetButton);

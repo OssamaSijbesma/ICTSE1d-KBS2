@@ -29,6 +29,8 @@ namespace PiaNotes.Views
         MidiDeviceWatcher inputDeviceWatcher;
         MidiDeviceWatcher outputDeviceWatcher;
 
+        private bool showMessage = true;
+
         public SettingsPage()
         {
             this.InitializeComponent();
@@ -56,7 +58,7 @@ namespace PiaNotes.Views
             }
         }
 
-        private async void midiInPortListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private async void MidiInPortListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             //Collect device information about the input devices, if there's no info -> return
             var deviceInformationCollection = inputDeviceWatcher.DeviceInformationCollection;
@@ -84,7 +86,21 @@ namespace PiaNotes.Views
             {
                 // Sets SelectedIndex to -1, making it so that whatever was previously selected will now be unselected.
                 midiInPortListBox.SelectedIndex = -1;
-                await StaticObjects.NoMidiInOutDialog.ShowAsync();
+                var popups = VisualTreeHelper.GetOpenPopups(Window.Current);
+
+                foreach (var popup in popups)
+                {
+                    if (!(popup.Child is ContentDialog))
+                    {
+                        await StaticObjects.NoMidiInOutDialog.ShowAsync();
+                        showMessage = false;
+                    }
+                }
+                if(showMessage)
+                {
+                    await StaticObjects.NoMidiInOutDialog.ShowAsync();
+                }
+
                 System.Diagnostics.Debug.WriteLine(b.Message);
             }  
         }
@@ -103,7 +119,7 @@ namespace PiaNotes.Views
             Settings.volume = (e.NewValue - 50);
         }
 
-        private async void midiOutPortListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private async void MidiOutPortListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             //Collect device information about the output devices, if there's no info -> return
             var deviceInformationCollection = outputDeviceWatcher.DeviceInformationCollection;
