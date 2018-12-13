@@ -40,8 +40,9 @@ namespace PiaNotes.Views
         private List<Rectangle> keysBlack = new List<Rectangle>();
 
         // Length of 127 because of 127 notes
-        private int Keys;
         private Rectangle[] Notes = new Rectangle[127];
+        private int Keys = Views.SettingsPages.MIDI_SettingsPage.OctaveAmount * 12;
+        //private double oldWidth;
         private enum PianoKey { C = 0, D = 2, E = 4, F = 5, G = 7, A = 9, B = 11 };
         private enum PianoKeySharp { CSharp = 1, DSharp = 3, FSharp = 6, GSharp = 8, ASharp = 10 };
 
@@ -85,7 +86,11 @@ namespace PiaNotes.Views
             Settings.midiInPort.MessageReceived += MidiInPort_MessageReceived;
 
             //Generate the amount of Keys
-            Keys = (Settings.OctaveAmount != 0) ? Settings.OctaveAmount * 12 : 12;
+            if (Views.SettingsPages.MIDI_SettingsPage.OctaveAmount != 0)
+            {
+                Keys = Settings.octaveAmount * 12;
+            }
+            else Keys = 12;
 
             //Create the keyboard to show on the screen and set a timer
             CreateKeyboard();
@@ -102,10 +107,10 @@ namespace PiaNotes.Views
             // Checks if a key has been pressed.
             if (receivedMidiMessage.Type == MidiMessageType.NoteOn)
             {
-                //Debug lines to show the Channel Note and Velocity output from the keyboard
-                System.Diagnostics.Debug.WriteLine(((MidiNoteOnMessage)receivedMidiMessage).Channel);
-                System.Diagnostics.Debug.WriteLine(((MidiNoteOnMessage)receivedMidiMessage).Note);
-                System.Diagnostics.Debug.WriteLine(((MidiNoteOnMessage)receivedMidiMessage).Velocity);
+                // Debug lines to show the Channel Note and Velocity output from the keyboard
+                System.Diagnostics.Debug.WriteLine("Channel: " + ((MidiNoteOnMessage)receivedMidiMessage).Channel);
+                System.Diagnostics.Debug.WriteLine("Note: " + ((MidiNoteOnMessage)receivedMidiMessage).Note);
+                System.Diagnostics.Debug.WriteLine("Velocity: " + ((MidiNoteOnMessage)receivedMidiMessage).Velocity);
 
                 // Retrieves channel, note from the MidiMessage, and sets the velocity.
                 byte channel = ((MidiNoteOnMessage)receivedMidiMessage).Channel;
@@ -115,7 +120,7 @@ namespace PiaNotes.Views
                 // If the player releases the key there should be no sound
                 if (((MidiNoteOnMessage)receivedMidiMessage).Velocity != 0)
                 {
-                    if (Settings.feedback == true)
+                    if (Settings.disableUserFeedback)
                     {
                         // Retrieves the velocity from the played note and then adds the amount of volume the user has set.
                         velocity = ((MidiNoteOnMessage)receivedMidiMessage).Velocity;
@@ -162,28 +167,32 @@ namespace PiaNotes.Views
 
         }
 
-        // Method for coloring the played key.
+        // Method for coloring the played key
         private async void FillKey(IMidiMessage IM)
         {
             await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
                 byte note = ((MidiNoteOnMessage)IM).Note;
 
-                //Try colour the keys
+                // Try-catch for coloring the keys
                 try
                 {
                     byte neg = 25;
 
                     // If it is a black key, the color will be slightly darker (-25 on all values except A) than a white key.
                     // Colors will be pulled from Settings.cs.
-                    Notes[note].Fill = (Notes[note].Name.Contains("Sharp")) ?
-                                            Notes[note].Fill = new SolidColorBrush(Color.FromArgb(255, DoubleToByte(Settings.R - neg), DoubleToByte(Settings.G - neg), DoubleToByte(Settings.B - neg))) :
-                                            Notes[note].Fill = new SolidColorBrush(Color.FromArgb(255, Settings.R, Settings.G, Settings.B));
-
+                    if (Notes[note].Name.Contains("Sharp"))
+                    {
+                        Notes[note].Fill = new SolidColorBrush(Windows.UI.Color.FromArgb(255, DoubleToByte(Settings.redValue - neg), DoubleToByte(Settings.greenValue - neg), DoubleToByte(Settings.blueValue - neg)));
+                    }
+                    else
+                    {
+                        Notes[note].Fill = new SolidColorBrush(Windows.UI.Color.FromArgb(255, Settings.redValue, Settings.greenValue, Settings.blueValue));
+                    }
                 }
                 catch (Exception e)
                 {
-                    //If it doesn't work, display the error message in the debug console
+                    // If it doesn't work, display the error message in the debug console
                     System.Diagnostics.Debug.WriteLine(e.Message);
                 }
             });
@@ -208,7 +217,7 @@ namespace PiaNotes.Views
                 }
                 catch (Exception e)
                 {
-                    //If it doesn't work, display the error message in the debug console
+                    // If it doesn't work, display the error message in the debug console
                     System.Diagnostics.Debug.WriteLine(e.Message);
                 }
             });
@@ -273,7 +282,7 @@ namespace PiaNotes.Views
             int oct = 0;
 
             //First go through each Octave to make keys
-            for (int i = Settings.OctaveStart; i < (Settings.OctaveAmount + Settings.OctaveStart); i++)
+            for (int i = Settings.startingOctave; i < (Settings.octaveAmount + Settings.startingOctave); i++)
             {
                 //In each Octave make 12 keys, 7 white and 5 black keys
                 for (int j = 0; j < 12; j++)
@@ -352,7 +361,7 @@ namespace PiaNotes.Views
 
             // Counts amount of white keys.
             int keyWhiteAmount = 8;
-            if (Settings.OctaveAmount != 0) keyWhiteAmount = (Keys - (Settings.OctaveAmount * 5) + 1);
+            if (Settings.octaveAmount != 0) keyWhiteAmount = (Keys - (Settings.octaveAmount * 5) + 1);
 
             // Sets width for white keys.
             foreach (Rectangle key in KeysWhiteSP.Children)
@@ -374,7 +383,7 @@ namespace PiaNotes.Views
             bool initialCsharp = true;
             foreach (Rectangle key in KeysBlackSP.Children)
             {
-                double keyWhiteWidth;
+                //double keyWhiteWidth;
                 try
                 {
                     // Calculates width for the black keys.

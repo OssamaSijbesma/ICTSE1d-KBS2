@@ -1,0 +1,56 @@
+﻿<Page
+    x:Class="PiaNotes.Views.SettingsPages.MIDI_SettingsPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:PiaNotes.Views.SettingsPages"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Grid Margin="0,0,0,0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+        <RelativePanel Background="#162632" Margin="0,0,0,0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" RenderTransformOrigin="0.464,0.506">
+
+            <NavigationViewItem Icon="Keyboard" Tag="MIDI_Settings">
+                <TextBlock Tag="MIDI_Settings">MIDI</TextBlock>
+            </NavigationViewItem>
+
+            <TextBlock x:Name="TXTBL_MIDIIN" HorizontalAlignment="Left" Margin="35,85,0,0" Text="MIDI-In Devices" VerticalAlignment="Top" FontSize="24"/>
+
+            <ListBox x:Name="midiInPortListBox" SelectionChanged="midiInPortListBox_SelectionChanged" MinHeight="100" MinWidth="720"
+                     RelativePanel.Below="TXTBL_MIDIIN" Margin="35,5,0,33" HorizontalAlignment="Left" Width="1430"/>
+
+            <TextBlock x:Name="TXTBL_MIDIOUT" HorizontalAlignment="Left" Margin="35,0,0,0" 
+                       Text="MIDI-Out Devices" VerticalAlignment="Top" RelativePanel.Below="midiInPortListBox" FontSize="24"/>
+
+            <ListBox x:Name="midiOutPortListBox" SelectionChanged="midiOutPortListBox_SelectionChanged" MinHeight="100" MinWidth="720"
+                     Margin="35,5,0,19" HorizontalAlignment="Left" Width="1430"
+                     RelativePanel.Below="TXTBL_MIDIOUT"/>
+
+            <TextBlock x:Name="TXTBL_StartingOctave" HorizontalAlignment="Left" Margin="35,10,0,0" 
+                       Text="Starting Octave" VerticalAlignment="Top" RelativePanel.Below="midiOutPortListBox" FontSize="24"/>
+
+            <ComboBox x:Name="CMB_StartingOctave" HorizontalAlignment="Left" Height="32" Margin="35,10,0,0" 
+                      VerticalAlignment="Top" Width="64" RelativePanel.Below="TXTBL_StartingOctave" SelectionChanged="OctaveStart_SelectionChanged">
+
+                <ComboBoxItem Content="0" />
+                <ComboBoxItem Content="1" />
+                <ComboBoxItem Content="2" />
+                <ComboBoxItem Content="3" />
+                <ComboBoxItem Content="4" />
+                <ComboBoxItem Content="5" />
+                <ComboBoxItem Content="6" />
+                <ComboBoxItem Content="7" />
+                <ComboBoxItem Content="8" />
+
+            </ComboBox>
+            
+            <TextBlock x:Name="TXTBL_OctaveAmount" HorizontalAlignment="Left" Margin="225,10,0,0" Text="Amount of Octaves" 
+                       VerticalAlignment="Top" RelativePanel.Below="midiOutPortListBox" FontSize="24"/>
+
+            <ComboBox x:Name="CMB_OctaveAmount"  HorizontalAlignment="Left" Height="32" Margin="225,10,0,0" VerticalAlignment="Top" Width="64" 
+                      RelativePanel.Below="TXTBL_OctaveAmount" SelectionChanged="OctaveAmount_SelectionChanged"/>
+
+        </RelativePanel>
+    </Grid>
+</Page>
