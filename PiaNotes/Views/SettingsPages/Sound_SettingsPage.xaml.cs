@@ -34,7 +34,7 @@ namespace PiaNotes.Views.SettingsPages
             {
                 if (localSettings.Values["Velocity"] != null)
                 {
-                    return (double) localSettings.Values["Velocity"];
+                    return Convert.ToDouble(localSettings.Values["Velocity"]);
                 }
                 else
                 {
@@ -44,8 +44,8 @@ namespace PiaNotes.Views.SettingsPages
 
             set
             {
-                localSettings.Values["Velocity"] = value;
-                Settings.velocity = value;
+                localSettings.Values["Velocity"] = (double) value;
+                Settings.velocity = (double) value;
             }
         }
 
@@ -55,7 +55,7 @@ namespace PiaNotes.Views.SettingsPages
             {
                 if (localSettings.Values["Volume"] != null)
                 {
-                    return (double) localSettings.Values["Volume"];
+                    return Convert.ToDouble(localSettings.Values["Volume"]);
                 }
                 else
                 {
@@ -65,8 +65,8 @@ namespace PiaNotes.Views.SettingsPages
 
             set
             {
-                localSettings.Values["Volume"] = value;
-                Settings.volume = value;
+                localSettings.Values["Volume"] = (double)value;
+                Settings.volume = (double) value;
             }
         }
 
@@ -103,26 +103,26 @@ namespace PiaNotes.Views.SettingsPages
             {
                 System.Diagnostics.Debug.WriteLine("Velocity: " + localSettings.Values["Velocity"]);
                 System.Diagnostics.Debug.WriteLine("VolumeValue: " + localSettings.Values["Volume"]);
-                Velocity = (double)localSettings.Values["Velocity"];
+                Velocity = Convert.ToDouble(localSettings.Values["Velocity"]);
                 velocitySlider.Value = Velocity;
             }
             else
             {
                 localSettings.Values["Velocity"] = 90;
-                Velocity = (double)localSettings.Values["Velocity"];
+                Velocity = Convert.ToDouble(localSettings.Values["Velocity"]);
                 velocitySlider.Value = Velocity;
             }
 
             // Volume Slider
             if (localSettings.Values["Volume"] != null)
             {
-                Velocity = (double)localSettings.Values["Volume"];
+                Velocity = Convert.ToDouble(localSettings.Values["Volume"]);
                 volumeSlider.Value = Volume;
             }
             else
             {
                 localSettings.Values["Volume"] = 0;
-                Volume = (double)localSettings.Values["Volume"];
+                Volume = Convert.ToDouble(localSettings.Values["Volume"]);
                 volumeSlider.Value = Volume;
             }
 
