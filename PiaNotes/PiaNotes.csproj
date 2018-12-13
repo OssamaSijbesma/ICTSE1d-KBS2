@@ -121,7 +121,7 @@
     </Compile>
     <Compile Include="Models\MusicSheet.cs" />
     <Compile Include="StaticObjects.cs" />
-    <Compile Include="SettingsPage.xaml.cs">
+    <Compile Include="Views\SettingsPage.xaml.cs">
       <DependentUpon>SettingsPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\SelectionPage.xaml.cs">
@@ -215,7 +215,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="SettingsPage.xaml">
+    <Page Include="Views\SettingsPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
