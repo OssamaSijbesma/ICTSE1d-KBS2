@@ -64,7 +64,8 @@ namespace PiaNotes.Views
         {
             this.Frame.Navigate(typeof(UploadPage));
         }
-        
+
+
         // Creates the previews of the most recent MIDI files.
         public async void CreateMostRecent()
         {
@@ -73,33 +74,59 @@ namespace PiaNotes.Views
             {
                 foreach (MusicSheet element in Sheets)
                 {
+
+                    VariableSizedWrapGrid SelectionGrid = new VariableSizedWrapGrid();
+                    SelectionGrid.Width = 400;
+                    SelectionGrid.Height = 80;
+
+
                     Button musicSheetButton = new Button();
-                    musicSheetButton.Height = 35;
-                    musicSheetButton.Width = 260;
+                    musicSheetButton.Height = 50;
+                    musicSheetButton.Width = 180;
                     musicSheetButton.Margin = new Thickness(10, 10, 10, 10);
                     musicSheetButton.Click += delegate (object sender, RoutedEventArgs e) { MidiFile_Click(sender, e, element); };
                     musicSheetButton.RightTapped += delegate (object sender, RightTappedRoutedEventArgs e) { MidiFile_RightTapped(sender, e, element); };
 
-                    if (element.Title.Length > 30)
+                    if (element.Title.Length > 25)
                     {
-                        musicSheetButton.Content = element.Title.Substring(0, 27) + "...";
+                        musicSheetButton.Content = element.Title.Substring(0, 23) + "...";
                     }
                     else
                     {
                         musicSheetButton.Content = element.Title;
                     }
 
+                    Button previewButton = new Button();
+                    previewButton.Height = 50;
+                    previewButton.Width = 50;
+                    previewButton.Content = "▶";
+                    previewButton.Click += delegate (object sender, RoutedEventArgs e) {
+                        previewButton.Content = "■";
+                    };
+
+
+
+
                     // Adds StackPanel to the VariableSizedWrapGrid.
-                    MIDIFilesWG.Children.Add(musicSheetButton);
+
+                    MIDIFilesWG.Children.Add(SelectionGrid);
+                    SelectionGrid.Children.Add(musicSheetButton);
+                    SelectionGrid.Children.Add(previewButton);
+
                 }
                 //Navigates to UploadPage when Offline
-            } else
+            }
+            else
             {
                 await StaticObjects.NoDatabaseConnectionDialog.ShowAsync();
                 this.Frame.Navigate(typeof(UploadPage));
             }
         }
-        
+        private void PreviewButton_Click(object sender, RoutedEventArgs e)
+        {
+            
+        }
+
         // Search function.
         public void Search(string search)
         {
@@ -139,8 +166,8 @@ namespace PiaNotes.Views
             }
         }
 
-        // Is executed when the window is resized.
-        private void Page_SizeChanged(object sender, SizeChangedEventArgs e)
+            // Is executed when the window is resized.
+            private void Page_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             UpdateMostRecent();
         }
