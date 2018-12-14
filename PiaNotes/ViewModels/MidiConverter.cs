@@ -32,8 +32,16 @@ namespace PiaNotes.ViewModels
 
                 current++;
             }
-            
+
             return sb.ToString();
+        }
+
+        public Byte[] MidiToBytes(Stream stream)
+        {
+            var bytes = new byte[(int)stream.Length];
+            stream.Read(bytes, 0, (int)stream.Length);
+
+            return bytes;
         }
     }
 }

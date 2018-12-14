@@ -8,6 +8,7 @@ using MySql.Data.MySqlClient;
 using System.Data;
 using System.IO;
 using PiaNotes.Models;
+using Windows.Storage;
 
 namespace PiaNotes.ViewModels
 {
@@ -15,7 +16,7 @@ namespace PiaNotes.ViewModels
     {
         //Set connection string (ROOT USER IS FOR TESTING ONLY, Use system instead)
         private const string ConnectionString = "SERVER = pianotesmysql.mysql.database.azure.com; PORT=3306; DATABASE = pianotes; Uid = notesAdmin@pianotesmysql; Pwd = !Pianotes223; SslMode = Preferred;";
-
+        private const string DataTable = "musicsheet";
         //Function for checking connection status.
         public bool CheckConnection()
         {
@@ -50,160 +51,7 @@ namespace PiaNotes.ViewModels
             }
             catch
             {
-                // Not developed yet.
-                throw new NotImplementedException();
-            }
-        }
-
-        //Search a single MusicSheet in the database using an Id
-        public MusicSheet SearchId(int id)
-        {
-            try
-            {
-                //Setup connection and SQL command
-                using (MySqlConnection sqlconn = new MySqlConnection(ConnectionString))
-                using (var cmd = new MySqlCommand($"SELECT * FROM musicsheet WHERE id = { id }", sqlconn))
-                {
-                    //Sheet to be used if search comes up empty
-                    MusicSheet result = null;
-
-                    //Open connection to database
-                    sqlconn.Open();
-
-                    //Prepare statement for execution
-                    cmd.Prepare();
-
-                    //Execute SQL command
-                    var go = cmd.ExecuteReader();
-
-                    //Read results
-                    go.Read();
-
-                    //Get found Id, Title and Path
-                    if (go.HasRows == true)
-                    {
-                        var FoundId = go.GetInt32(0); var FoundTitle = go.GetString(1); var FoundPath = go.GetString(2);
-                        //Make a new MusicSheet using found data
-                        result = new MusicSheet(FoundId, FoundTitle, FoundPath);
-                    }
-
-                    //Close connection to database and return results
-                    sqlconn.Close();
-                    return result;
-                }
-            }
-            catch
-            {
-                // Not developed yet.
-                throw new NotImplementedException();
-            }
-        }
-
-        //Search through MusicSheets in the database using a Title
-        public List<MusicSheet> SearchTitle(string title)
-        {
-            try
-            {
-                //Setup connection and SQL command
-                using (MySqlConnection sqlconn = new MySqlConnection(ConnectionString))
-                using (var cmd = new MySqlCommand($"SELECT * FROM musicsheet WHERE Title = '{ title }'", sqlconn))
-                {
-                    //List of Searched sheets
-                    List<MusicSheet> result = new List<MusicSheet>();
-
-                    //Open connection to database
-                    sqlconn.Open();
-
-                    //Prepare statement for execution
-                    cmd.Prepare();
-
-                    //Execute SQL command
-                    var go = cmd.ExecuteReader();
-
-                    //New list to remember ids.
-                    List<int> list = new List<int>();
-
-                    bool read = true;
-                    while (read == true)
-                    {
-                        //Read results
-                        go.Read();
-                        //Check if the result is filled and if the id has not yet been added to the list.
-                        if (go.HasRows == true && list.Contains(go.GetInt32(0)) == false)
-                        {
-                            //Get found Id, Title and Path
-                            var FoundId = go.GetInt32(0); var FoundTitle = go.GetString(1); var FoundPath = go.GetString(2);
-
-                            //Make a new MusicSheet using found data and add it to the list
-                            result.Add(new MusicSheet(FoundId, FoundTitle, FoundPath));
-                            //Add id to the list to check next cycle
-                            list.Add(go.GetInt32(0));
-                        }
-                        else read = false;
-                    }
-
-                    //Close connection to database and return results
-                    sqlconn.Close();
-                    return result;
-                }
-            }
-            catch
-            {
-                // Not developed yet.
-                throw new NotImplementedException();
-            }
-        }
-
-        //Search through MusicSheets in the database with a limit
-        public List<MusicSheet> SearchNumber(int limit, int offset)
-        {
-            try
-            {
-                //Setup connection and SQL command
-                using (MySqlConnection sqlconn = new MySqlConnection(ConnectionString))
-                using (var cmd = new MySqlCommand($"SELECT * FROM musicsheet LIMIT { limit } OFFSET {offset}", sqlconn))
-                {
-                    //List of Searched sheets
-                    List<MusicSheet> result = new List<MusicSheet>();
-
-                    //Open connection to database
-                    sqlconn.Open();
-
-                    //Prepare statement for execution
-                    cmd.Prepare();
-
-                    //Execute SQL command
-                    var go = cmd.ExecuteReader();
-
-                    //New list to remember ids.
-                    List<int> list = new List<int>();
-
-                    bool read = true;
-                    while (read == true)
-                    {
-                        //Read results
-                        go.Read();
-                        //Check if the result is filled and if the id has not yet been added to the list.
-                        if (go.HasRows == true && list.Contains(go.GetInt32(0)) == false)
-                        {
-                            //Get found Id, Title and Path
-                            var FoundId = go.GetInt32(0); var FoundTitle = go.GetString(1); var FoundPath = go.GetString(2);
-
-                            //Make a new MusicSheet using found data and add it to the list
-                            result.Add(new MusicSheet(FoundId, FoundTitle, FoundPath));
-                            //Add id to the list to check next cycle
-                            list.Add(go.GetInt32(0));
-                        }
-                        else read = false;
-                    }
-
-                    //Close connection to database and return results
-                    sqlconn.Close();
-                    return result;
-                }
-            }
-            catch
-            {
+                return false;
                 // Not developed yet.
                 throw new NotImplementedException();
             }
@@ -215,14 +63,14 @@ namespace PiaNotes.ViewModels
             try
             {
                 //Set query standaard.
-                var Select = $"SELECT * FROM musicsheet ";
+                var Select = $"SELECT * FROM {DataTable} ";
                 var Where = $"";
                 var Limit = $"";
                 var Offset = $"";
 
                 //If function has specific selected, change it in the query.
-                if (select != null) { Select = $"SELECT {select} FROM musicsheet "; }
-                
+                if (select != null) { Select = $"SELECT {select} FROM {DataTable} "; }
+
                 //If both Wheres are specified add a WHERE to the query.
                 if (whereA != null && whereB != null)
                 {
@@ -273,10 +121,10 @@ namespace PiaNotes.ViewModels
                         if (go.HasRows == true && list.Contains(go.GetInt32(0)) == false)
                         {
                             //Get found Id, Title and Path
-                            var FoundId = go.GetInt32(0); var FoundTitle = go.GetString(1); var FoundPath = go.GetString(2);
+                            var FoundId = go.GetInt32(0); var FoundTitle = go.GetString(1); var FoundFile = go.GetString(2);
 
                             //Make a new MusicSheet using found data and add it to the list
-                            result.Add(new MusicSheet(FoundId, FoundTitle, FoundPath));
+                            result.Add(new MusicSheet(FoundId, FoundTitle, FoundFile));
                             //Add id to the list to check next cycle
                             list.Add(go.GetInt32(0));
                         }
@@ -294,11 +142,78 @@ namespace PiaNotes.ViewModels
             }
         }
 
-        public bool Upload(string title, string file)
+        // Get a file from the database by ID
+        public async Task<StorageFile> GetAFileAsync(int id)
+        {
+            //Build sql query
+            string sql = $"SELECT FileBytes, FileName FROM {DataTable} Where Id = @ID";
+
+            //Setup connection and sql command
+            using (MySqlConnection sqlconn = new MySqlConnection(ConnectionString))
+            using (var cmd = new MySqlCommand(sql, sqlconn))
+            {
+                cmd.Parameters.AddWithValue("@ID", id);
+                //Open connection
+                sqlconn.Open();
+
+                //Execute query
+                var go = cmd.ExecuteReader();
+                go.Read();
+
+                //Get values for use
+                var bytes = go.GetValue(0);
+                Byte[] byteArray = (Byte[])bytes;
+                string fileName = go.GetString(1);
+
+                //Close connection to server
+                sqlconn.Close();
+
+                //Create and return a storage file created from database
+                StorageFolder storageFolder = ApplicationData.Current.LocalFolder;
+                StorageFile sampleFile = await storageFolder.CreateFileAsync(fileName, CreationCollisionOption.ReplaceExisting);
+                await FileIO.WriteBytesAsync(sampleFile, byteArray);
+                return sampleFile;
+            }
+        }
+
+        public bool Upload(string title, Byte[] fileBytes, string fileName)
         {
             try
             {
-                string sql = $"INSERT INTO musicsheet ( Title,File ) VALUES ('{title}','{file}');";
+                string sql = $"INSERT INTO {DataTable} (Title, FileBytes, FileName ) VALUES (@title, @fileBytes, @fileName);";
+                //Setup connection and SQL command
+                using (MySqlConnection sqlconn = new MySqlConnection(ConnectionString))
+                using (var cmd = new MySqlCommand(sql, sqlconn))
+                {
+                    cmd.Parameters.Add("@title", MySqlDbType.VarChar, title.Length).Value = title;
+                    cmd.Parameters.Add("@fileBytes", MySqlDbType.VarBinary, fileBytes.Length).Value = fileBytes;
+                    cmd.Parameters.Add("@fileName", MySqlDbType.VarChar, fileName.Length).Value = fileName;
+                    //Open connection to database
+                    sqlconn.Open();
+
+                    //Prepare statement for execution
+                    cmd.Prepare();
+
+                    //Execute SQL command
+                    cmd.ExecuteNonQuery();
+
+                    //Close connection to database and return results
+                    sqlconn.Close();
+
+                    return true;
+                }
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public bool Delete(int id)
+        {
+            try
+            {
+                string sql = $"DELETE FROM {DataTable} WHERE Id = {id};";
                 //Setup connection and SQL command
                 using (MySqlConnection sqlconn = new MySqlConnection(ConnectionString))
                 using (var cmd = new MySqlCommand(sql, sqlconn))
