@@ -147,12 +147,12 @@ namespace PiaNotes.Views
             picker.SuggestedStartLocation = Windows.Storage.Pickers.PickerLocationId.MusicLibrary;
             picker.FileTypeFilter.Add(".mid");
 
-            Windows.Storage.StorageFile file = await picker.PickSingleFileAsync();
-            Windows.Storage.ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
+            StorageFile file = await picker.PickSingleFileAsync();
+            ApplicationDataContainer localSettings = ApplicationData.Current.LocalSettings;
             if (file != null)
             {
-                var stream = await file.OpenStreamForReadAsync();
-                var midiFile = MidiFile.Read(stream);
+                    var stream = await file.OpenStreamForReadAsync();
+                    var midiFile = MidiFile.Read(stream);
                 MP = new MidiParser(midiFile);
                 SM = MP.sheetMusic;
                 this.Frame.Navigate(typeof(PracticePage), SM);

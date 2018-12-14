@@ -20,6 +20,7 @@ using PiaNotes.Models;
 using System.Numerics;
 using PiaNotes.Interfaces;
 using Melanchall.DryWetMidi.Smf.Interaction;
+using System.IO;
 
 namespace PiaNotes.Views
 {
@@ -494,13 +495,13 @@ namespace PiaNotes.Views
             await ContentPipeline.AddImage("48", @"Assets/Notes/EighthNote.png");
             await ContentPipeline.AddImage("24", @"Assets/Notes/SixteenthNote.png");
             await ContentPipeline.AddImage("12", @"Assets/Notes/ThirtySecondNote.png");
-
+            
             // Give the notes a bitmap
             for (int i = 0; i < SM.notes.Count; i++)
             {
                 SM.notes[i].SetBitmap("96");
                 SM.notes[i].SetSize(30, 30);
-                SM.notes[i].Location = new Vector2(staffEnd, 24);                
+                SM.notes[i].Location = new Vector2(staffEnd, 24); 
             }
 
             GameTimerLogic();
