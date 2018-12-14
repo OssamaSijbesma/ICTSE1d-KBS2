@@ -41,7 +41,7 @@ namespace PiaNotes.Views
 
         // Length of 127 because of 127 notes
         private Rectangle[] Notes = new Rectangle[127];
-        private int Keys = Views.SettingsPages.MIDI_SettingsPage.OctaveAmount * 12;
+        private int Keys = SettingsPages.MIDI_SettingsPage.OctaveAmount * 12;
         //private double oldWidth;
         private enum PianoKey { C = 0, D = 2, E = 4, F = 5, G = 7, A = 9, B = 11 };
         private enum PianoKeySharp { CSharp = 1, DSharp = 3, FSharp = 6, GSharp = 8, ASharp = 10 };
@@ -183,11 +183,11 @@ namespace PiaNotes.Views
                     // Colors will be pulled from Settings.cs.
                     if (Notes[note].Name.Contains("Sharp"))
                     {
-                        Notes[note].Fill = new SolidColorBrush(Windows.UI.Color.FromArgb(255, DoubleToByte(Settings.redValue - neg), DoubleToByte(Settings.greenValue - neg), DoubleToByte(Settings.blueValue - neg)));
+                        Notes[note].Fill = new SolidColorBrush(Color.FromArgb(255, DoubleToByte(Settings.redValue - neg), DoubleToByte(Settings.greenValue - neg), DoubleToByte(Settings.blueValue - neg)));
                     }
                     else
                     {
-                        Notes[note].Fill = new SolidColorBrush(Windows.UI.Color.FromArgb(255, Settings.redValue, Settings.greenValue, Settings.blueValue));
+                        Notes[note].Fill = new SolidColorBrush(Color.FromArgb(255, Settings.redValue, Settings.greenValue, Settings.blueValue));
                     }
                 }
                 catch (Exception e)
@@ -231,10 +231,10 @@ namespace PiaNotes.Views
             // Double to byte conversion can overflow.
             try
             {
-                byteVal = System.Convert.ToByte(doubleVal);
+                byteVal = Convert.ToByte(doubleVal);
                 return byteVal;
             }
-            catch (System.OverflowException)
+            catch (OverflowException)
             {
                 //If it doesn't work, display the error message in the debug console
                 System.Diagnostics.Debug.WriteLine("Overflow in double-to-byte conversion.");
@@ -526,15 +526,61 @@ namespace PiaNotes.Views
 
         private void GameCanvas_Draw(CanvasControl sender, CanvasDrawEventArgs args)
         {
-            int staffStart = windowWidth / 10;
-            int staffWidth = windowWidth - staffStart;
+            int staffMargin = 24;
+            int staffWidth = (int)gameCanvasWidth - staffMargin * 2;
+            int staffSpacing = (int)gameCanvasHeight / 30; // 13 = guidelines * 2 + 4 extra space
+            Dictionary<string, int> GuidelineDictionary = new Dictionary<string, int>();
+            string[] gKey = new string[] { "A3", "G4", "F4", "E4", "D4", "C4", "B4", "A4", "G5", "F5", "E5", "D5", "C5" };
+            string[] fKey = new string[] { "A1", "G2", "F2", "E2", "D2", "C2", "B2", "A2", "G3", "F3", "E3", "D3", "C3" };
+            
+            // Add keys to dictionary
+            for (int i = 0; i < 13; i++)
+            {
+                GuidelineDictionary.Add(gKey[i], staffSpacing * (i + 1));
+                GuidelineDictionary.Add(fKey[i], staffSpacing * (i + 1) + 13 * staffSpacing + staffMargin * 3);
+            }
 
-            for (int i = 100; i <= 300; i += 50 ) args.DrawingSession.DrawLine(staffStart, i, staffWidth, i, Colors.White);
-            args.DrawingSession.DrawLine(staffStart+staffStart, 50, staffStart + staffStart, 350, Colors.White);
+            // Create lines for right hand.
+            for (int i = 0; i < 13; i++)
+            {
+                if (i % 2 == 0)
+                {
+                    int x0 = staffMargin;
+                    int x1 = staffWidth;
+                    int y = staffSpacing * (i + 1) + staffMargin;
+                    args.DrawingSession.DrawLine(x0, y, x1, y, Colors.White);
+                }
+            }
 
+            // Create lines for left hand.
+            for (int i = 0; i < 13; i++)
+            {
+                if (i % 2 == 0)
+                {
+                    int x0 = staffMargin;
+                    int x1 = staffWidth;
+                    int y = staffSpacing * (i + 1) + 13 * staffSpacing + (staffMargin * 3);
+                    args.DrawingSession.DrawLine(x0, y, x1, y, Colors.White);
+                }
+            }
+
+            // Draw step.
+            args.DrawingSession.DrawLine(staffMargin * 3,
+                staffSpacing * (2 + 1) + staffMargin,
+                staffMargin * 3,
+                staffSpacing * (10 + 1) + staffMargin,
+                Colors.White);
+
+            args.DrawingSession.DrawLine(staffMargin * 3,
+                staffSpacing * (2 + 1) + 13 * staffSpacing + (staffMargin * 3),
+                staffMargin * 3,
+                staffSpacing * (10 + 1) + 13 * staffSpacing + (staffMargin * 3),
+                Colors.White);
+
+            // Draw notes.
             for (int i = 0; i < gameObjects.Count; i++)
             {
-                if(gameObjects[i] != null)
+                if (gameObjects[i] != null)
                     args.DrawingSession.DrawImage(gameObjects[i].Bitmap, gameObjects[i].Location);
             }
         }
