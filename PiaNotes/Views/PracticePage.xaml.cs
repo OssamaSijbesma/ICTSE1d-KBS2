@@ -86,16 +86,12 @@ namespace PiaNotes.Views
             Settings.midiInPort.MessageReceived += MidiInPort_MessageReceived;
 
             //Generate the amount of Keys
-            if (Views.SettingsPages.MIDI_SettingsPage.OctaveAmount != 0)
-            {
-                Keys = Settings.octaveAmount * 12;
-            }
+            if (Views.SettingsPages.MIDI_SettingsPage.OctaveAmount != 0) Keys = Settings.octaveAmount * 12;
             else Keys = 12;
 
             //Create the keyboard to show on the screen and set a timer
             CreateKeyboard();
             GameTimerUI();
-
         }
 
         private void MidiInPort_MessageReceived(MidiInPort sender, MidiMessageReceivedEventArgs args)
@@ -126,16 +122,10 @@ namespace PiaNotes.Views
                         velocity = ((MidiNoteOnMessage)receivedMidiMessage).Velocity;
 
                         //If the velocity surpases the limits of MIDI it will go to the limit, otherwise it will act normally
-                        if (velocity + DoubleToByte(Settings.volume) <= 127 && velocity + DoubleToByte(Settings.volume) >= 0)
-                        {
-                            velocity += DoubleToByte(Settings.volume);
-                        } else if (velocity + DoubleToByte(Settings.volume) > 127)
-                        {
-                            velocity = 127;
-                        } else
-                        {
-                            velocity = 0;
-                        }
+                        if (velocity + DoubleToByte(Settings.volume) <= 127 && velocity + DoubleToByte(Settings.volume) >= 0) velocity += DoubleToByte(Settings.volume);
+                        else if (velocity + DoubleToByte(Settings.volume) > 127) velocity = 127;
+                        else velocity = 0;
+                        
                         // Else use the static velocity the user chose.
                     } else velocity = DoubleToByte(Settings.velocity);
                     // Else use velocity from the midimessage, if below a certain amount, no sound will be played.
@@ -185,10 +175,7 @@ namespace PiaNotes.Views
                     {
                         Notes[note].Fill = new SolidColorBrush(Windows.UI.Color.FromArgb(255, DoubleToByte(Settings.redValue - neg), DoubleToByte(Settings.greenValue - neg), DoubleToByte(Settings.blueValue - neg)));
                     }
-                    else
-                    {
-                        Notes[note].Fill = new SolidColorBrush(Windows.UI.Color.FromArgb(255, Settings.redValue, Settings.greenValue, Settings.blueValue));
-                    }
+                    else Notes[note].Fill = new SolidColorBrush(Windows.UI.Color.FromArgb(255, Settings.redValue, Settings.greenValue, Settings.blueValue));
                 }
                 catch (Exception e)
                 {
@@ -207,13 +194,8 @@ namespace PiaNotes.Views
                 try
                 {
                     // The keys original colour will be restored
-                    if (Notes[note].Name.Contains("Sharp"))
-                    {
-                        Notes[note].Fill = new SolidColorBrush(Windows.UI.Colors.Black);
-                    } else
-                    {
-                        Notes[note].Fill = new SolidColorBrush(Windows.UI.Colors.White);
-                    }
+                    if (Notes[note].Name.Contains("Sharp")) Notes[note].Fill = new SolidColorBrush(Windows.UI.Colors.Black);
+                    else Notes[note].Fill = new SolidColorBrush(Windows.UI.Colors.White);
                 }
                 catch (Exception e)
                 {
@@ -239,7 +221,6 @@ namespace PiaNotes.Views
                 //If it doesn't work, display the error message in the debug console
                 System.Diagnostics.Debug.WriteLine("Overflow in double-to-byte conversion.");
             }
-
             // Byte to double conversion cannot overflow.
             doubleVal = System.Convert.ToDouble(byteVal);
             return byteVal;
@@ -280,7 +261,6 @@ namespace PiaNotes.Views
         public void CreateKeyboard()
         {
             int oct = 0;
-
             //First go through each Octave to make keys
             for (int i = Settings.startingOctave; i < (Settings.octaveAmount + Settings.startingOctave); i++)
             {
@@ -288,29 +268,10 @@ namespace PiaNotes.Views
                 for (int j = 0; j < 12; j++)
                 {
                     //See if the key is a white or black key
-                    switch (j)
-                    {
-                        case 1:
-                            AddKey(false, j, i);
-                            break;
-                        case 3:
-                            AddKey(false, j, i);
-                            break;
-                        case 6:
-                            AddKey(false, j, i);
-                            break;
-                        case 8:
-                            AddKey(false, j, i);
-                            break;
-                        case 10:
-                            AddKey(false, j, i);
-                            break;
-                        default:
-                            AddKey(true, j, i);
-                            break;
-                    }
-                    oct = i + 1;
+                    if(j == 1 || j == 3 || j == 6 || j == 8 || j == 10) AddKey(false, j, i);
+                    else AddKey(true, j, i);
                 }
+                oct = i + 1;
             }
             //Add an extra C note at the end
             AddKey(true, 0, oct);
@@ -330,7 +291,6 @@ namespace PiaNotes.Views
                     Height = 200
                 };
                 KeysWhiteSP.Children.Add(keyWhiteRect);
-                System.Diagnostics.Debug.WriteLine(keyWhiteRect.Name);
                 if (j == 0)
                 {
                     if (i == 0) Notes[j] = (keyWhiteRect);
@@ -341,6 +301,7 @@ namespace PiaNotes.Views
                     if (i == 0) Notes[j] = (keyWhiteRect);
                     else Notes[(j + (i * 12))] = (keyWhiteRect);
                 }
+                System.Diagnostics.Debug.WriteLine(keyWhiteRect.Name);
             }
             else
             {
@@ -355,6 +316,7 @@ namespace PiaNotes.Views
                 KeysBlackSP.Children.Add(keyBlackRect);
                 if (i == 0) Notes[j] = (keyBlackRect);
                 else Notes[(j + (i * 12))] = (keyBlackRect);
+                System.Diagnostics.Debug.WriteLine(keyBlackRect.Name);
             }
         }
 
@@ -497,7 +459,6 @@ namespace PiaNotes.Views
             gameCanvasWidth = sender.ActualWidth;
 
             //Create staff
-
             args.TrackAsyncAction(CreateResourcesAsync(sender).AsAsyncAction());
         }
 
@@ -519,7 +480,6 @@ namespace PiaNotes.Views
                 SM.notes[i].SetSize(30, 30);
                 SM.notes[i].Location = new Vector2(staffEnd, 55);                
             }
-
             GameTimerLogic();
         }
 
@@ -585,10 +545,8 @@ namespace PiaNotes.Views
         // Handler for when the page is resized
         private void Page_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            
-            if (KeyboardIsOpen)
-                // If the keyboard is shown, it will be updated.
-                UpdateKeyboard();
+            // If the keyboard is shown, it will be updated. 
+            if (KeyboardIsOpen) UpdateKeyboard();
 
             var bounds = ApplicationView.GetForCurrentView().VisibleBounds;
         }
