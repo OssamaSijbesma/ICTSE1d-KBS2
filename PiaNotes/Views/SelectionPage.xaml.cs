@@ -97,11 +97,18 @@ namespace PiaNotes.Views
                     }
 
                     Button previewButton = new Button();
-                    previewButton.Height = 50;
-                    previewButton.Width = 50;
+                    previewButton.Height = 30;
+                    previewButton.Width = 30;
                     previewButton.Content = "▶";
                     previewButton.Click += delegate (object sender, RoutedEventArgs e) {
-                        previewButton.Content = "■";
+                        if (previewButton.Content.Equals("▶"))
+                        {
+                            previewButton.Content = "■";
+
+                        } else
+                        {
+                            previewButton.Content = "▶";
+                        }
                     };
 
 
