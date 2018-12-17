@@ -33,7 +33,12 @@ namespace PiaNotes.ViewModels
             // Convert noteLengths to metric time
             List<MetricTimeSpan> noteMetricLengths = noteLengths
                 .Select(l => TimeConverter.ConvertTo<MetricTimeSpan>(l, midiFile.GetTempoMap()))
-                .ToList();           
+                .ToList();
+
+            // Convert noteLengths to musical time
+            List<MusicalTimeSpan> noteMusicalLengths = noteLengths
+                .Select(l => TimeConverter.ConvertTo<MusicalTimeSpan>(l, midiFile.GetTempoMap()))
+                .ToList();
 
             //Set the notes in an array and sends the array to SheetMusic
             for (int i = 0; i < noteNumbers.Count() - 1; i++)
@@ -43,7 +48,8 @@ namespace PiaNotes.ViewModels
                     noteTimes[i],
                     noteLengths[i],
                     noteMetricTimes[i],
-                    noteMetricLengths[i]));
+                    noteMetricLengths[i],
+                    noteMusicalLengths[i]));
             }
             
 

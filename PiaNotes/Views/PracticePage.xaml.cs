@@ -515,10 +515,13 @@ namespace PiaNotes.Views
             // Give the notes a bitmap
             for (int i = 0; i < SM.notes.Count; i++)
             {
-                SM.notes[i].SetBitmap("96");
+                int noteType = SM.notes[i].Length / SM.TicksPerQuaterNote * 96;
+                SM.notes[i].SetBitmap(SM.TicksPerQuaterNote.ToString());
                 SM.notes[i].SetSize(30, 30);
                 SM.notes[i].Location = new Vector2(staffEnd, 55);                
             }
+
+
 
             GameTimerLogic();
         }
