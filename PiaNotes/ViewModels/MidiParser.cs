@@ -24,6 +24,7 @@ namespace PiaNotes.ViewModels
             List<int> noteNumbers = midiFile.GetNotes().Select(n => $"{n.NoteNumber}").Select(int.Parse).ToList();
             List<int> noteTimes = midiFile.GetNotes().Select(n => $"{n.Time}").Select(int.Parse).ToList();
             List<int> noteLengths = midiFile.GetNotes().Select(n => $"{n.Length}").Select(int.Parse).ToList();
+            List<string> noteLengthsS = midiFile.GetNotes().Select(n => $"{n.Length.ToString()}").ToList();
 
             // Convert noteTimes to metric time
             List<MetricTimeSpan> noteMetricTimes = noteTimes
@@ -79,7 +80,7 @@ namespace PiaNotes.ViewModels
         public void CheckBars(List<Models.Note> notes)
         {
             //Check how many bars are needed in the song
-            //There are 96 ticks for a quarternote, so in a 4/4 beat there are 384
+            //There are 96 ticks for a quarter note, so in a 4/4 beat there are 384
             int ticks = 0;
 
             foreach (Models.Note n in notes)

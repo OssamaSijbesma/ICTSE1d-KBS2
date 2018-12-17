@@ -515,7 +515,8 @@ namespace PiaNotes.Views
             // Give the notes a bitmap
             for (int i = 0; i < SM.notes.Count; i++)
             {
-                int noteType = SM.notes[i].Length / SM.TicksPerQuaterNote * 96;
+                string noteType = SM.notes[i].MusicalLength.ToString();
+                int noteYP = SM.notes[i].MetricLength.Milliseconds;
                 SM.notes[i].SetBitmap(SM.TicksPerQuaterNote.ToString());
                 SM.notes[i].SetSize(30, 30);
                 SM.notes[i].Location = new Vector2(staffEnd, 55);                
