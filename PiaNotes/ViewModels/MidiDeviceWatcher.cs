@@ -14,7 +14,7 @@ namespace PiaNotes.ViewModels
     class MidiDeviceWatcher 
     {
         private DeviceWatcher deviceWatcher;
-        private string deviceSelectorString;
+        private string DeviceSelectorString { get; set; }
         private ListBox deviceListBox;
         private CoreDispatcher coreDispatcher;
 
@@ -26,9 +26,9 @@ namespace PiaNotes.ViewModels
             deviceListBox = midiDeviceListBox;
             coreDispatcher = dispatcher;
 
-            deviceSelectorString = midiDeviceSelectorString;
+            DeviceSelectorString = midiDeviceSelectorString;
 
-            deviceWatcher = DeviceInformation.CreateWatcher(deviceSelectorString);
+            deviceWatcher = DeviceInformation.CreateWatcher(DeviceSelectorString);
             deviceWatcher.Added += DeviceWatcher_Added;
             deviceWatcher.Removed += DeviceWatcher_Removed;
             deviceWatcher.Updated += DeviceWatcher_Updated;
@@ -100,7 +100,7 @@ namespace PiaNotes.ViewModels
         private async void UpdateDevices()
         {
             // Get a list of all MIDI devices
-            this.DeviceInformationCollection = await DeviceInformation.FindAllAsync(deviceSelectorString);
+            this.DeviceInformationCollection = await DeviceInformation.FindAllAsync(DeviceSelectorString);
 
             deviceListBox.Items.Clear();
 
