@@ -20,6 +20,7 @@ using PiaNotes.ViewModels;
 using PiaNotes.Models;
 using System.Threading.Tasks;
 using Windows.UI.Xaml.Input;
+using Windows.Devices.Midi;
 
 namespace PiaNotes.Views
 {
@@ -104,6 +105,14 @@ namespace PiaNotes.Views
                         if (previewButton.Content.Equals("▶"))
                         {
                             previewButton.Content = "■";
+                            IMidiMessage receivedMidiMessage = args.Message;
+
+                            byte channel = ((MidiNoteOnMessage)receivedMidiMessage).Channel;
+                            byte note = ((MidiNoteOnMessage)receivedMidiMessage).Note;
+                            byte velocity = 100;
+
+                            IMidiMessage midiMessageToSend = new MidiNoteOnMessage(channel, note, velocity);
+
 
                         } else
                         {
