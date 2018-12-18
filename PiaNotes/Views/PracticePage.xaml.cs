@@ -490,7 +490,7 @@ namespace PiaNotes.Views
         // Initialize images and stuff.
         private void GameCanvas_CreateResources(CanvasControl sender, CanvasCreateResourcesEventArgs args)
         {
-            staffStart = windowWidth / 10;
+            staffStart = 24;
             staffEnd = windowWidth - staffStart;
             tickDistance = (windowWidth * 0.80) / 600;
             gameCanvasHeight = sender.ActualHeight;
@@ -517,7 +517,10 @@ namespace PiaNotes.Views
             {
                 SM.notes[i].SetBitmap(SM.notes[i].NoteType.ToString());
                 SM.notes[i].SetSize(30, 30);
-                SM.notes[i].Location = new Vector2(staffEnd, 55);                
+                int staffSpacing = 4; // 13 = guidelines * 2 + 4 extra space
+                int notePos = Math.Abs((-72 + SM.notes[i].Number) * staffSpacing);
+                SM.notes[i].Location = new Vector2(staffEnd, notePos + 36);
+
             }
 
             GameTimerLogic();
@@ -527,40 +530,47 @@ namespace PiaNotes.Views
         private void GameCanvas_Draw(CanvasControl sender, CanvasDrawEventArgs args)
         {
             int staffMargin = 24;
-            int staffWidth = (int)gameCanvasWidth - staffMargin * 2;
-            int staffSpacing = (int)gameCanvasHeight / 30; // 13 = guidelines * 2 + 4 extra space
-            Dictionary<string, int> GuidelineDictionary = new Dictionary<string, int>();
-            string[] gKey = new string[] { "A3", "G4", "F4", "E4", "D4", "C4", "B4", "A4", "G5", "F5", "E5", "D5", "C5" };
-            string[] fKey = new string[] { "A1", "G2", "F2", "E2", "D2", "C2", "B2", "A2", "G3", "F3", "E3", "D3", "C3" };
-            
+            int staffWidth = (int)gameCanvasWidth - staffMargin;
+            int staffSpacing = 8; // 13 = guidelines * 2 + 4 extra space
+            Dictionary<int, int> GuidelineDictionary = new Dictionary<int, int>();
+            int[] gKey = new int[] { 67, 69, 71, 72, 74, 76, 77, 79, 84, 86, 88, 89, 91 };
+            //int[] fKey = new int[] { "A1", "G2", "F2", "E2", "D2", "C2", "B2", "A2", "G3", "F3", "E3", "D3"}; // 33 - 57 // ... - B
+            // https://www.barryrudolph.com/greg/midi.html
+
+            /*
             // Add keys to dictionary
             for (int i = 0; i < 13; i++)
             {
                 GuidelineDictionary.Add(gKey[i], staffSpacing * (i + 1));
                 GuidelineDictionary.Add(fKey[i], staffSpacing * (i + 1) + 13 * staffSpacing + staffMargin * 3);
             }
-
+            */
             // Create lines for right hand.
             for (int i = 0; i < 13; i++)
             {
-                if (i % 2 == 0)
+                int y = staffSpacing * (i + 1) + staffMargin;
+                if (i == 0 || i == 12)
                 {
-                    int x0 = staffMargin;
-                    int x1 = staffWidth;
-                    int y = staffSpacing * (i + 1) + staffMargin;
-                    args.DrawingSession.DrawLine(x0, y, x1, y, Colors.White);
+                    args.DrawingSession.DrawLine(staffMargin, y, staffWidth, y, Colors.Transparent);
                 }
+                else if (i % 2 == 0)
+                {
+                    args.DrawingSession.DrawLine(staffMargin, y, staffWidth, y, Colors.White);
+                }
+
             }
 
             // Create lines for left hand.
             for (int i = 0; i < 13; i++)
             {
-                if (i % 2 == 0)
+                int y = staffSpacing * (i + 1) + 13 * staffSpacing + (staffMargin * 2);
+                if (i == 0 || i == 12)
                 {
-                    int x0 = staffMargin;
-                    int x1 = staffWidth;
-                    int y = staffSpacing * (i + 1) + 13 * staffSpacing + (staffMargin * 3);
-                    args.DrawingSession.DrawLine(x0, y, x1, y, Colors.White);
+                    args.DrawingSession.DrawLine(staffMargin, y, staffWidth, y, Colors.Transparent);
+                }
+                else if (i % 2 == 0)
+                {
+                    args.DrawingSession.DrawLine(staffMargin, y, staffWidth, y, Colors.White);
                 }
             }
 
@@ -572,9 +582,9 @@ namespace PiaNotes.Views
                 Colors.White);
 
             args.DrawingSession.DrawLine(staffMargin * 3,
-                staffSpacing * (2 + 1) + 13 * staffSpacing + (staffMargin * 3),
+                staffSpacing * (2 + 1) + 13 * staffSpacing + (staffMargin * 2),
                 staffMargin * 3,
-                staffSpacing * (10 + 1) + 13 * staffSpacing + (staffMargin * 3),
+                staffSpacing * (10 + 1) + 13 * staffSpacing + (staffMargin * 2),
                 Colors.White);
 
             // Draw notes.
