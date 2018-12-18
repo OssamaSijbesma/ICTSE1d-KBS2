@@ -24,7 +24,6 @@ namespace PiaNotes.ViewModels
             List<int> noteNumbers = midiFile.GetNotes().Select(n => $"{n.NoteNumber}").Select(int.Parse).ToList();
             List<int> noteTimes = midiFile.GetNotes().Select(n => $"{n.Time}").Select(int.Parse).ToList();
             List<int> noteLengths = midiFile.GetNotes().Select(n => $"{n.Length}").Select(int.Parse).ToList();
-            List<string> noteLengthsS = midiFile.GetNotes().Select(n => $"{n.Length.ToString()}").ToList();
 
             // Convert noteTimes to metric time
             List<MetricTimeSpan> noteMetricTimes = noteTimes
@@ -41,16 +40,24 @@ namespace PiaNotes.ViewModels
                 .Select(l => TimeConverter.ConvertTo<MusicalTimeSpan>(l, midiFile.GetTempoMap()))
                 .ToList();
 
+            List<double> noteTypes = new List<double> {0.03125, 0.0625, 0.125, 0.25, 0.5, 1 };
+
+            // Round the note length to a note
+            List<double> noteRoundedLengths = noteMusicalLengths
+                .Select(l => noteTypes.OrderBy(item => Math.Abs(((double)l.Numerator / (double)l.Denominator) - item)).First())
+                .ToList();
+
             //Set the notes in an array and sends the array to SheetMusic
             for (int i = 0; i < noteNumbers.Count() - 1; i++)
-            {
+            {              
+
                 notes.Add(new Models.Note(
                     noteNumbers[i],
                     noteTimes[i],
                     noteLengths[i],
                     noteMetricTimes[i],
-                    noteMetricLengths[i],
-                    noteMusicalLengths[i]));
+                    noteRoundedLengths[i]
+                    ));
             }
             
 
