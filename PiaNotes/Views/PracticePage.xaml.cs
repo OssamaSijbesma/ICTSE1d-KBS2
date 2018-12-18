@@ -532,7 +532,7 @@ namespace PiaNotes.Views
         private void GameCanvas_Draw(CanvasControl sender, CanvasDrawEventArgs args)
         {
             int staffMargin = 24;
-            int staffWidth = (int)gameCanvasWidth - staffMargin * 2;
+            int staffWidth = (int)gameCanvasWidth - staffMargin;
             int staffSpacing = 8; // 13 = guidelines * 2 + 4 extra space
             Dictionary<int, int> GuidelineDictionary = new Dictionary<int, int>();
             int[] gKey = new int[] { 67, 69, 71, 72, 74, 76, 77, 79, 84, 86, 88, 89, 91 };
@@ -565,7 +565,7 @@ namespace PiaNotes.Views
             // Create lines for left hand.
             for (int i = 0; i < 13; i++)
             {
-                int y = staffSpacing * (i + 1) + 13 * staffSpacing + (staffMargin * 3);
+                int y = staffSpacing * (i + 1) + 13 * staffSpacing + (staffMargin * 2);
                 if (i == 0 || i == 12)
                 {
                     args.DrawingSession.DrawLine(staffMargin, y, staffWidth, y, Colors.Transparent);
@@ -584,9 +584,9 @@ namespace PiaNotes.Views
                 Colors.White);
 
             args.DrawingSession.DrawLine(staffMargin * 3,
-                staffSpacing * (2 + 1) + 13 * staffSpacing + (staffMargin * 3),
+                staffSpacing * (2 + 1) + 13 * staffSpacing + (staffMargin * 2),
                 staffMargin * 3,
-                staffSpacing * (10 + 1) + 13 * staffSpacing + (staffMargin * 3),
+                staffSpacing * (10 + 1) + 13 * staffSpacing + (staffMargin * 2),
                 Colors.White);
 
             // Draw notes.
