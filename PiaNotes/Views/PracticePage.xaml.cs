@@ -517,7 +517,7 @@ namespace PiaNotes.Views
             {
                 string noteType = SM.notes[i].MusicalLength.ToString();
                 int noteYP = SM.notes[i].MetricLength.Milliseconds;
-                SM.notes[i].SetBitmap(SM.TicksPerQuaterNote.ToString());
+                SM.notes[i].SetBitmap("96");
                 SM.notes[i].SetSize(30, 30);
                 SM.notes[i].Location = new Vector2(staffEnd, 55);                
             }
