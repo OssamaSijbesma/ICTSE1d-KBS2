@@ -226,7 +226,7 @@ namespace PiaNotes.Views
                 }
 
                 //Send array to MidiParser
-                MP = new MidiParser(notes);
+                /*0MP = new MidiParser(notes);
 
                 /*
                 // Zo iets mart
