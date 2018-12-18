@@ -24,6 +24,7 @@ namespace PiaNotes.ViewModels
             List<int> noteNumbers = midiFile.GetNotes().Select(n => $"{n.NoteNumber}").Select(int.Parse).ToList();
             List<int> noteTimes = midiFile.GetNotes().Select(n => $"{n.Time}").Select(int.Parse).ToList();
             List<int> noteLengths = midiFile.GetNotes().Select(n => $"{n.Length}").Select(int.Parse).ToList();
+            List<string> noteLengthsS = midiFile.GetNotes().Select(n => $"{n.Length.ToString()}").ToList();
 
             // Convert noteTimes to metric time
             List<MetricTimeSpan> noteMetricTimes = noteTimes
@@ -33,7 +34,12 @@ namespace PiaNotes.ViewModels
             // Convert noteLengths to metric time
             List<MetricTimeSpan> noteMetricLengths = noteLengths
                 .Select(l => TimeConverter.ConvertTo<MetricTimeSpan>(l, midiFile.GetTempoMap()))
-                .ToList();           
+                .ToList();
+
+            // Convert noteLengths to musical time
+            List<MusicalTimeSpan> noteMusicalLengths = noteLengths
+                .Select(l => TimeConverter.ConvertTo<MusicalTimeSpan>(l, midiFile.GetTempoMap()))
+                .ToList();
 
             //Set the notes in an array and sends the array to SheetMusic
             for (int i = 0; i < noteNumbers.Count() - 1; i++)
@@ -43,7 +49,8 @@ namespace PiaNotes.ViewModels
                     noteTimes[i],
                     noteLengths[i],
                     noteMetricTimes[i],
-                    noteMetricLengths[i]));
+                    noteMetricLengths[i],
+                    noteMusicalLengths[i]));
             }
             
 
@@ -73,7 +80,7 @@ namespace PiaNotes.ViewModels
         public void CheckBars(List<Models.Note> notes)
         {
             //Check how many bars are needed in the song
-            //There are 96 ticks for a quarternote, so in a 4/4 beat there are 384
+            //There are 96 ticks for a quarter note, so in a 4/4 beat there are 384
             int ticks = 0;
 
             foreach (Models.Note n in notes)

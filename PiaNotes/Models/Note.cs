@@ -20,6 +20,7 @@ namespace PiaNotes.Models
         public int Length { get; set; }
         public MetricTimeSpan MetricTiming { get; set; }
         public MetricTimeSpan MetricLength { get; set; }
+        public MusicalTimeSpan MusicalLength { get; set; }
 
         public CanvasBitmap Bitmap { get; set; }
         public Vector2 Location { get; set; }
@@ -27,13 +28,14 @@ namespace PiaNotes.Models
 
 
         //Creating a note can only happen if you know the number, timing and the length.
-        public Note(int number, int timing, int length, MetricTimeSpan metricTiming, MetricTimeSpan metricLength)
+        public Note(int number, int timing, int length, MetricTimeSpan metricTiming, MetricTimeSpan metricLength, MusicalTimeSpan musicalLength)
         {
             Number = number;
             Timing = timing;
             Length = length;
             MetricTiming = metricTiming;
             MetricLength = metricLength;
+            MusicalLength = musicalLength;
         }
 
         public void Draw(CanvasControl cC)

@@ -516,13 +516,15 @@ namespace PiaNotes.Views
             // Give the notes a bitmap
             for (int i = 0; i < SM.notes.Count; i++)
             {
+                string noteType = SM.notes[i].MusicalLength.ToString();
+                int noteYP = SM.notes[i].MetricLength.Milliseconds;
                 SM.notes[i].SetBitmap("96");
                 int staffSpacing = 4; // 13 = guidelines * 2 + 4 extra space
                 int notePos = Math.Abs((-72 + SM.notes[i].Number) * staffSpacing);
                 SM.notes[i].Location = new Vector2(staffEnd, notePos + 36);
                 
             }
-            
+
             GameTimerLogic();
         }
 
