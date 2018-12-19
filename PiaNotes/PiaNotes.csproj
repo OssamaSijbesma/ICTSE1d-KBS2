@@ -127,6 +127,9 @@
     <Compile Include="Models\SheetMusic.cs" />
     <Compile Include="Models\Staff.cs" />
     <Compile Include="StaticObjects.cs" />
+    <Compile Include="Views\SettingsPage.xaml.cs">
+      <DependentUpon>SettingsPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ViewModels\ContentPipeline.cs" />
     <Compile Include="ViewModels\MidiConverter.cs" />
     <Compile Include="ViewModels\MidiParser.cs" />
@@ -143,8 +146,14 @@
     <Compile Include="Views\PracticePage.xaml.cs">
       <DependentUpon>PracticePage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\SettingsPage.xaml.cs">
-      <DependentUpon>SettingsPage.xaml</DependentUpon>
+    <Compile Include="Views\SettingsPages\MIDI_SettingsPage.xaml.cs">
+      <DependentUpon>MIDI_SettingsPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SettingsPages\Sound_SettingsPage.xaml.cs">
+      <DependentUpon>Sound_SettingsPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SettingsPages\Theme_SettingsPage.xaml.cs">
+      <DependentUpon>Theme_SettingsPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\UploadPage.xaml.cs">
       <DependentUpon>UploadPage.xaml</DependentUpon>
@@ -226,6 +235,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="Views\SettingsPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\SelectionPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -238,12 +251,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\SettingsPage.xaml">
+    <Page Include="Themes\Generic.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\SettingsPages\MIDI_SettingsPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Themes\Generic.xaml">
+    <Page Include="Views\SettingsPages\Sound_SettingsPage.xaml">
+      <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\SettingsPages\Theme_SettingsPage.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\UploadPage.xaml">
