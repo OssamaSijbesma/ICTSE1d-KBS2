@@ -96,6 +96,12 @@ namespace PiaNotes.Views
             CreateKeyboard();
             GameTimerUI();
 
+            // Sets the decimal seperator to a dot.
+            System.Globalization.CultureInfo customCulture = (System.Globalization.CultureInfo)System.Threading.Thread.CurrentThread.CurrentCulture.Clone();
+            customCulture.NumberFormat.NumberDecimalSeparator = ".";
+
+            System.Threading.Thread.CurrentThread.CurrentCulture = customCulture;
+
         }
 
         private void MidiInPort_MessageReceived(MidiInPort sender, MidiMessageReceivedEventArgs args)
@@ -507,11 +513,11 @@ namespace PiaNotes.Views
             ContentPipeline.ParentCanvas = sender;
             
             await ContentPipeline.AddImage("1", @"Assets/Notes/WholeNote.png");
-            await ContentPipeline.AddImage("0,5", @"Assets/Notes/HalfNote.png");
-            await ContentPipeline.AddImage("0,25", @"Assets/Notes/QuarterNote.png");
-            await ContentPipeline.AddImage("0,125", @"Assets/Notes/EighthNote.png");
-            await ContentPipeline.AddImage("0,0625", @"Assets/Notes/SixteenthNote.png");
-            await ContentPipeline.AddImage("0,03125", @"Assets/Notes/ThirtySecondNote.png");
+            await ContentPipeline.AddImage("0.5", @"Assets/Notes/HalfNote.png");
+            await ContentPipeline.AddImage("0.25", @"Assets/Notes/QuarterNote.png");
+            await ContentPipeline.AddImage("0.125", @"Assets/Notes/EighthNote.png");
+            await ContentPipeline.AddImage("0.0625", @"Assets/Notes/SixteenthNote.png");
+            await ContentPipeline.AddImage("0.03125", @"Assets/Notes/ThirtySecondNote.png");
             
             int tpqn = SM.TicksPerQuaterNote;
             
@@ -564,7 +570,6 @@ namespace PiaNotes.Views
             for (int i = 0; i < SM.notes.Count; i++)
             {
                 SM.notes[i].SetBitmap(SM.notes[i].NoteType.ToString());
-                //SM.notes[i].SetBitmap("0.25");
                 SM.notes[i].SetSize(30, 30);
                 int staffSpacing = 8;
                 int key = 0;
