@@ -104,19 +104,5 @@ namespace PianNotes.UnitTests
             //Assert
             Assert.IsInstanceOfType(result, typeof(Task<StorageFile>));
         }
-
-        //Depends on database
-        [TestMethod]
-        public void GetAFileAsync_SearchIdThatDoesNotExist_IsNull()
-        {
-            //Arange
-            var db = new PiaNotes.ViewModels.Databaser();
-
-            //Act
-            var result = db.GetAFileAsync(999999);
-
-            //Assert
-            Assert.Equals(result.Result, null);
-        }
     }
 }
