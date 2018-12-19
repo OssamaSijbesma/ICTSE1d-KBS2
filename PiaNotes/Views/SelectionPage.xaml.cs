@@ -21,6 +21,7 @@ using PiaNotes.Models;
 using System.Threading.Tasks;
 using Windows.UI.Xaml.Input;
 using Windows.Devices.Midi;
+using System.Timers;
 
 namespace PiaNotes.Views
 {
@@ -34,10 +35,14 @@ namespace PiaNotes.Views
 
         MidiParser MP;
         private string MidiF;
+        private static Timer timerGameLogic;
 
         private enum PianoKey { C = 0, D = 2, E = 4, F = 5, G = 7, A = 9, B = 11 };
         private enum PianoKeySharp { CSharp = 1, DSharp = 3, FSharp = 6, GSharp = 8, ASharp = 10 };
-        
+
+        private int UPS = 100;
+        private bool isPlaying = false;
+
         //Creates a list of musicsheets
         List<MusicSheet> Sheets = new List<MusicSheet>();
 
@@ -78,7 +83,7 @@ namespace PiaNotes.Views
 
                     VariableSizedWrapGrid SelectionGrid = new VariableSizedWrapGrid();
                     SelectionGrid.Width = 400;
-                    SelectionGrid.Height = 80;
+                    SelectionGrid.Height = 60;
 
 
                     Button musicSheetButton = new Button();
@@ -87,6 +92,7 @@ namespace PiaNotes.Views
                     musicSheetButton.Margin = new Thickness(10, 10, 10, 10);
                     musicSheetButton.Click += delegate (object sender, RoutedEventArgs e) { MidiFile_Click(sender, e, element); };
                     musicSheetButton.RightTapped += delegate (object sender, RightTappedRoutedEventArgs e) { MidiFile_RightTapped(sender, e, element); };
+
 
                     if (element.Title.Length > 25)
                     {
@@ -97,30 +103,32 @@ namespace PiaNotes.Views
                         musicSheetButton.Content = element.Title;
                     }
 
+                    //Creates a preview button to preview a MIDI file
                     Button previewButton = new Button();
                     previewButton.Height = 30;
                     previewButton.Width = 30;
                     previewButton.Content = "▶";
-                    previewButton.Click += delegate (object sender, RoutedEventArgs e) {
-                        if (previewButton.Content.Equals("▶"))
-                        {
-                            previewButton.Content = "■";
-                            IMidiMessage receivedMidiMessage = args.Message;
-
-                            byte channel = ((MidiNoteOnMessage)receivedMidiMessage).Channel;
-                            byte note = ((MidiNoteOnMessage)receivedMidiMessage).Note;
-                            byte velocity = 100;
-
-                            IMidiMessage midiMessageToSend = new MidiNoteOnMessage(channel, note, velocity);
+                    previewButton.Click += async delegate (object sender, RoutedEventArgs e)
+                    {
 
 
-                        } else
+                        //Checks if another MIDI file is already being previewed
+                        if (previewButton.Content.Equals("■") && isPlaying == true)
                         {
                             previewButton.Content = "▶";
+                            musicSheetButton.Background = new SolidColorBrush(Color.FromArgb(0, 255, 0, 0));
+                            isPlaying = false;
                         }
+                        else if (previewButton.Content.Equals("▶") && isPlaying == false)
+                        {
+                            previewButton.Content = "■";
+                            musicSheetButton.Background = new SolidColorBrush(Color.FromArgb(150, 255, 0, 0));
+                            isPlaying = true;
+                        } else if (previewButton.Content.Equals("▶") && isPlaying == true)
+                        {
+                            await StaticObjects.AlreadyPreviewed.ShowAsync();
+                        } 
                     };
-
-
 
 
                     // Adds StackPanel to the VariableSizedWrapGrid.
@@ -138,9 +146,15 @@ namespace PiaNotes.Views
                 this.Frame.Navigate(typeof(UploadPage));
             }
         }
-        private void PreviewButton_Click(object sender, RoutedEventArgs e)
+
+        private void GameTimerLogic()
         {
-            
+            // Create a timer with a sixty-fourth tick which represents the 1/64 note.
+            timerGameLogic = new Timer(1000 / UPS)
+            {
+                AutoReset = true,
+                Enabled = true
+            };
         }
 
         // Search function.
@@ -184,9 +198,9 @@ namespace PiaNotes.Views
 
             // Is executed when the window is resized.
             private void Page_SizeChanged(object sender, SizeChangedEventArgs e)
-        {
+            {
             UpdateMostRecent();
-        }
+            }
 
         // MIDI file click functionality.
         private async Task MidiFile_Click(object sender, RoutedEventArgs e, MusicSheet element)  
@@ -306,6 +320,14 @@ namespace PiaNotes.Views
             }
             else
                 this.Frame.Navigate(typeof(PracticePage));
+
+        }
+
+        // Handler for when the page is unloaded
+        private void Page_Unloaded(object sender, RoutedEventArgs e)
+        {
+            // Stop the GameLoop for previews
+            timerGameLogic.Stop();
         }
 
         // Navigate to the settings page

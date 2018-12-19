@@ -29,5 +29,12 @@ namespace PiaNotes
             Content = "Add a local MIDI file before practicing.",
             CloseButtonText = "Ok"
         };
+
+        public static ContentDialog AlreadyPreviewed = new ContentDialog
+        {
+            Title = "There is another MIDI file being previewed!",
+            Content = "Stop the previewing MIDI to play another.",
+            CloseButtonText = "Ok"
+        };
     }
 }
