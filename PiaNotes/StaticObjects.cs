@@ -30,6 +30,7 @@ namespace PiaNotes
             CloseButtonText = "Ok"
         };
 
+        //Popup Dialog when another file is already being previewed
         public static ContentDialog AlreadyPreviewed = new ContentDialog
         {
             Title = "There is another MIDI file being previewed!",

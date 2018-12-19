@@ -110,20 +110,22 @@ namespace PiaNotes.Views
                     previewButton.Content = "▶";
                     previewButton.Click += async delegate (object sender, RoutedEventArgs e)
                     {
-
-
                         //Checks if another MIDI file is already being previewed
+
+                        //Stops a previewed file
                         if (previewButton.Content.Equals("■") && isPlaying == true)
                         {
                             previewButton.Content = "▶";
                             musicSheetButton.Background = new SolidColorBrush(Color.FromArgb(0, 255, 0, 0));
                             isPlaying = false;
                         }
+                        //Plays a non-previewed file
                         else if (previewButton.Content.Equals("▶") && isPlaying == false)
                         {
                             previewButton.Content = "■";
-                            musicSheetButton.Background = new SolidColorBrush(Color.FromArgb(150, 255, 0, 0));
+                            musicSheetButton.Background = new SolidColorBrush(Color.FromArgb(150, 255, 0, 3));
                             isPlaying = true;
+                        //Gives an error if trying to play a non-previewed file but another file is already being previewed
                         } else if (previewButton.Content.Equals("▶") && isPlaying == true)
                         {
                             await StaticObjects.AlreadyPreviewed.ShowAsync();
@@ -131,7 +133,7 @@ namespace PiaNotes.Views
                     };
 
 
-                    // Adds StackPanel to the VariableSizedWrapGrid.
+                    // Adds StackPanel to the VariableSizedWrapGrid. 
 
                     MIDIFilesWG.Children.Add(SelectionGrid);
                     SelectionGrid.Children.Add(musicSheetButton);
