@@ -505,6 +505,12 @@ namespace PiaNotes.Views
         {
             // Add the resources to the ContentPipeline for reuse purposes
             ContentPipeline.ParentCanvas = sender;
+            await ContentPipeline.AddImage("1", @"Assets/Notes/WholeNote.png");
+            await ContentPipeline.AddImage("0.5", @"Assets/Notes/HalfNote.png");
+            await ContentPipeline.AddImage("0.25", @"Assets/Notes/QuarterNote.png");
+            await ContentPipeline.AddImage("0.125", @"Assets/Notes/EighthNote.png");
+            await ContentPipeline.AddImage("0.0625", @"Assets/Notes/SixteenthNote.png");
+            await ContentPipeline.AddImage("0.03125", @"Assets/Notes/ThirtySecondNote.png");
             await ContentPipeline.AddImage("384", @"Assets/Notes/WholeNote.png");
             await ContentPipeline.AddImage("192", @"Assets/Notes/HalfNote.png");
             await ContentPipeline.AddImage("96", @"Assets/Notes/QuarterNote.png");
@@ -584,6 +590,14 @@ namespace PiaNotes.Views
                 int notePos = Math.Abs(negativeNote * staffSpacing) - 27;
                 SM.notes[i].Location = new Vector2(staffEnd, notePos);
             }
+                SM.notes[i].SetBitmap(SM.notes[i].NoteType.ToString());
+                SM.notes[i].SetSize(30, 30);
+                int staffSpacing = 4; // 13 = guidelines * 2 + 4 extra space
+                int notePos = Math.Abs((-72 + SM.notes[i].Number) * staffSpacing);
+                SM.notes[i].Location = new Vector2(staffEnd, notePos + 36);
+
+            }
+
             GameTimerLogic();
         }
         
