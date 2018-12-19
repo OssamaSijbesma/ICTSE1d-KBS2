@@ -511,12 +511,6 @@ namespace PiaNotes.Views
             await ContentPipeline.AddImage("0.125", @"Assets/Notes/EighthNote.png");
             await ContentPipeline.AddImage("0.0625", @"Assets/Notes/SixteenthNote.png");
             await ContentPipeline.AddImage("0.03125", @"Assets/Notes/ThirtySecondNote.png");
-            await ContentPipeline.AddImage("384", @"Assets/Notes/WholeNote.png");
-            await ContentPipeline.AddImage("192", @"Assets/Notes/HalfNote.png");
-            await ContentPipeline.AddImage("96", @"Assets/Notes/QuarterNote.png");
-            await ContentPipeline.AddImage("48", @"Assets/Notes/EighthNote.png");
-            await ContentPipeline.AddImage("24", @"Assets/Notes/SixteenthNote.png");
-            await ContentPipeline.AddImage("12", @"Assets/Notes/ThirtySecondNote.png");
             
             // Create array with all flat keys in one octave.
             int[] keyFlatOctave = new int[] { 0, 2, 4, 5, 7, 9, 11 };
@@ -566,9 +560,8 @@ namespace PiaNotes.Views
             // Give the notes a bitmap
             for (int i = 0; i < SM.notes.Count; i++)
             {
-                string noteType = SM.notes[i].MusicalLength.ToString();
-                int noteYP = SM.notes[i].MetricLength.Milliseconds;
-                SM.notes[i].SetBitmap("96");
+                SM.notes[i].SetBitmap(SM.notes[i].NoteType.ToString());
+                SM.notes[i].SetSize(30, 30);
                 int staffSpacing = 8;
                 int key = 0;
 
@@ -590,14 +583,6 @@ namespace PiaNotes.Views
                 int notePos = Math.Abs(negativeNote * staffSpacing) - 27;
                 SM.notes[i].Location = new Vector2(staffEnd, notePos);
             }
-                SM.notes[i].SetBitmap(SM.notes[i].NoteType.ToString());
-                SM.notes[i].SetSize(30, 30);
-                int staffSpacing = 4; // 13 = guidelines * 2 + 4 extra space
-                int notePos = Math.Abs((-72 + SM.notes[i].Number) * staffSpacing);
-                SM.notes[i].Location = new Vector2(staffEnd, notePos + 36);
-
-            }
-
             GameTimerLogic();
         }
         
@@ -647,9 +632,9 @@ namespace PiaNotes.Views
 
             // Draw line.
             args.DrawingSession.DrawLine(staffMargin * 3,
-                staffSpacing * (2 + 1) + 13 * staffSpacing + (staffMargin * 2),
+                staffSpacing * (2 + 1) + 12 * staffSpacing + staffMargin,
                 staffMargin * 3,
-                staffSpacing * (10 + 1) + 13 * staffSpacing + (staffMargin * 2),
+                staffSpacing * (10 + 1) + 12 * staffSpacing + staffMargin,
                 Colors.White);
             
             // Draw notes.
