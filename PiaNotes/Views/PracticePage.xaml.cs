@@ -505,12 +505,15 @@ namespace PiaNotes.Views
         {
             // Add the resources to the ContentPipeline for reuse purposes
             ContentPipeline.ParentCanvas = sender;
+            
             await ContentPipeline.AddImage("1", @"Assets/Notes/WholeNote.png");
             await ContentPipeline.AddImage("0.5", @"Assets/Notes/HalfNote.png");
             await ContentPipeline.AddImage("0.25", @"Assets/Notes/QuarterNote.png");
             await ContentPipeline.AddImage("0.125", @"Assets/Notes/EighthNote.png");
             await ContentPipeline.AddImage("0.0625", @"Assets/Notes/SixteenthNote.png");
             await ContentPipeline.AddImage("0.03125", @"Assets/Notes/ThirtySecondNote.png");
+            
+            int tpqn = SM.TicksPerQuaterNote;
             
             // Create array with all flat keys in one octave.
             int[] keyFlatOctave = new int[] { 0, 2, 4, 5, 7, 9, 11 };
@@ -560,7 +563,10 @@ namespace PiaNotes.Views
             // Give the notes a bitmap
             for (int i = 0; i < SM.notes.Count; i++)
             {
-                SM.notes[i].SetBitmap(SM.notes[i].NoteType.ToString());
+                //Line underneath expects "NoteType" to be 1, 0.5, 0.25, etc., which isn't always the case...
+                //SM.notes[i].SetBitmap(SM.notes[i].NoteType.ToString());
+
+                SM.notes[i].SetBitmap("0.25");
                 SM.notes[i].SetSize(30, 30);
                 int staffSpacing = 8;
                 int key = 0;
@@ -577,11 +583,14 @@ namespace PiaNotes.Views
                     key = SM.notes[i].Number - 1;
                 }
                 
+                
                 // Set location of each note.
                 int index = flatKeysAll.IndexOf(SM.notes[i].Number);
                 int negativeNote = (highestOctave * 7 * -1) + index;
                 int notePos = Math.Abs(negativeNote * staffSpacing) - 27;
                 SM.notes[i].Location = new Vector2(staffEnd, notePos);
+                
+                
             }
             GameTimerLogic();
         }
@@ -591,8 +600,6 @@ namespace PiaNotes.Views
             int staffMargin = 24;
             int staffWidth = (int)gameCanvasWidth - staffMargin;
             int staffSpacing = 8;
-            Dictionary<int, int> GuidelineDictionary = new Dictionary<int, int>();
-            int[] gKey = new int[] { 67, 69, 71, 72, 74, 76, 77, 79, 84, 86, 88, 89, 91 };
             
             // Create lines for right hand.
             for (int i = 0; i < 13; i++)
