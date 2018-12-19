@@ -512,6 +512,50 @@ namespace PiaNotes.Views
             await ContentPipeline.AddImage("24", @"Assets/Notes/SixteenthNote.png");
             await ContentPipeline.AddImage("12", @"Assets/Notes/ThirtySecondNote.png");
             
+            // Create array with all flat keys in one octave.
+            int[] keyFlatOctave = new int[] { 0, 2, 4, 5, 7, 9, 11 };
+            // Create list for all flat keys.
+            List<int> flatKeysAll = new List<int>();
+            // Add all flat key numbers to list.
+            for (int i = 0; i < 11; i++)
+            {
+                for (int j = 0; j < keyFlatOctave.Length; j++)
+                {
+                    flatKeysAll.Add(keyFlatOctave[j] + 12*(i+1));
+                }
+            }
+            // Get highest and lowest notes.
+            int max = 0;
+            int min = 127;
+            for (int i = 0; i < SM.notes.Count; i++)
+            {
+                if (SM.notes[i].Number > max)
+                {
+                    max = SM.notes[i].Number;
+                }
+                if (SM.notes[i].Number < min)
+                {
+                    min = SM.notes[i].Number;
+                }
+            }
+
+            // Get highest and lowest octave.
+            int highestOctave = 0;
+            int lowestOctave = 9;
+            for (int i = 0; i < 10; i++)
+            {
+                if (i*12 < max)
+                {
+                    highestOctave = i + 1;
+                }
+            }
+            for (int i = 10; i > 0; i--)
+            {
+                if (i * 12 > min)
+                {
+                    lowestOctave = i + 1;
+                }
+            }
 
             // Give the notes a bitmap
             for (int i = 0; i < SM.notes.Count; i++)
@@ -519,34 +563,38 @@ namespace PiaNotes.Views
                 string noteType = SM.notes[i].MusicalLength.ToString();
                 int noteYP = SM.notes[i].MetricLength.Milliseconds;
                 SM.notes[i].SetBitmap("96");
-                int staffSpacing = 4; // 13 = guidelines * 2 + 4 extra space
-                int notePos = Math.Abs((-72 + SM.notes[i].Number) * staffSpacing);
-                SM.notes[i].Location = new Vector2(staffEnd, notePos + 36);
-                
-            }
+                int staffSpacing = 8;
+                int key = 0;
 
+                // Check if key is flat.
+                if (flatKeysAll.Contains(SM.notes[i].Number))
+                {
+                    // Key is flat.
+                    key = SM.notes[i].Number;
+                }
+                else
+                {
+                    // Key is not flat.
+                    key = SM.notes[i].Number - 1;
+                }
+                
+                // Set location of each note.
+                int index = flatKeysAll.IndexOf(SM.notes[i].Number);
+                int negativeNote = (highestOctave * 7 * -1) + index;
+                int notePos = Math.Abs(negativeNote * staffSpacing) - 27;
+                SM.notes[i].Location = new Vector2(staffEnd, notePos);
+            }
             GameTimerLogic();
         }
-
-
+        
         private void GameCanvas_Draw(CanvasControl sender, CanvasDrawEventArgs args)
         {
             int staffMargin = 24;
             int staffWidth = (int)gameCanvasWidth - staffMargin;
-            int staffSpacing = 8; // 13 = guidelines * 2 + 4 extra space
+            int staffSpacing = 8;
             Dictionary<int, int> GuidelineDictionary = new Dictionary<int, int>();
             int[] gKey = new int[] { 67, 69, 71, 72, 74, 76, 77, 79, 84, 86, 88, 89, 91 };
-            //int[] fKey = new int[] { "A1", "G2", "F2", "E2", "D2", "C2", "B2", "A2", "G3", "F3", "E3", "D3"}; // 33 - 57 // ... - B
-            // https://www.barryrudolph.com/greg/midi.html
-
-            /*
-            // Add keys to dictionary
-            for (int i = 0; i < 13; i++)
-            {
-                GuidelineDictionary.Add(gKey[i], staffSpacing * (i + 1));
-                GuidelineDictionary.Add(fKey[i], staffSpacing * (i + 1) + 13 * staffSpacing + staffMargin * 3);
-            }
-            */
+            
             // Create lines for right hand.
             for (int i = 0; i < 13; i++)
             {
@@ -559,13 +607,20 @@ namespace PiaNotes.Views
                 {
                     args.DrawingSession.DrawLine(staffMargin, y, staffWidth, y, Colors.White);
                 }
-
             }
 
+            // Draw line.
+            args.DrawingSession.DrawLine(staffMargin * 3,
+                staffSpacing * (2 + 1) + staffMargin,
+                staffMargin * 3,
+                staffSpacing * (10 + 1) + staffMargin,
+                Colors.White);
+            
+            
             // Create lines for left hand.
             for (int i = 0; i < 13; i++)
             {
-                int y = staffSpacing * (i + 1) + 13 * staffSpacing + (staffMargin * 2);
+                int y = staffSpacing * (i + 1) + 12 * staffSpacing + (staffMargin);
                 if (i == 0 || i == 12)
                 {
                     args.DrawingSession.DrawLine(staffMargin, y, staffWidth, y, Colors.Transparent);
@@ -576,19 +631,13 @@ namespace PiaNotes.Views
                 }
             }
 
-            // Draw step.
-            args.DrawingSession.DrawLine(staffMargin * 3,
-                staffSpacing * (2 + 1) + staffMargin,
-                staffMargin * 3,
-                staffSpacing * (10 + 1) + staffMargin,
-                Colors.White);
-
+            // Draw line.
             args.DrawingSession.DrawLine(staffMargin * 3,
                 staffSpacing * (2 + 1) + 13 * staffSpacing + (staffMargin * 2),
                 staffMargin * 3,
                 staffSpacing * (10 + 1) + 13 * staffSpacing + (staffMargin * 2),
                 Colors.White);
-
+            
             // Draw notes.
             for (int i = 0; i < gameObjects.Count; i++)
             {
