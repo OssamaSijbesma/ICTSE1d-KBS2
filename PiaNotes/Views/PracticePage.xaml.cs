@@ -507,11 +507,11 @@ namespace PiaNotes.Views
             ContentPipeline.ParentCanvas = sender;
             
             await ContentPipeline.AddImage("1", @"Assets/Notes/WholeNote.png");
-            await ContentPipeline.AddImage("0.5", @"Assets/Notes/HalfNote.png");
-            await ContentPipeline.AddImage("0.25", @"Assets/Notes/QuarterNote.png");
-            await ContentPipeline.AddImage("0.125", @"Assets/Notes/EighthNote.png");
-            await ContentPipeline.AddImage("0.0625", @"Assets/Notes/SixteenthNote.png");
-            await ContentPipeline.AddImage("0.03125", @"Assets/Notes/ThirtySecondNote.png");
+            await ContentPipeline.AddImage("0,5", @"Assets/Notes/HalfNote.png");
+            await ContentPipeline.AddImage("0,25", @"Assets/Notes/QuarterNote.png");
+            await ContentPipeline.AddImage("0,125", @"Assets/Notes/EighthNote.png");
+            await ContentPipeline.AddImage("0,0625", @"Assets/Notes/SixteenthNote.png");
+            await ContentPipeline.AddImage("0,03125", @"Assets/Notes/ThirtySecondNote.png");
             
             int tpqn = SM.TicksPerQuaterNote;
             
@@ -563,10 +563,8 @@ namespace PiaNotes.Views
             // Give the notes a bitmap
             for (int i = 0; i < SM.notes.Count; i++)
             {
-                //Line underneath expects "NoteType" to be 1, 0.5, 0.25, etc., which isn't always the case...
-                //SM.notes[i].SetBitmap(SM.notes[i].NoteType.ToString());
-
-                SM.notes[i].SetBitmap("0.25");
+                SM.notes[i].SetBitmap(SM.notes[i].NoteType.ToString());
+                //SM.notes[i].SetBitmap("0.25");
                 SM.notes[i].SetSize(30, 30);
                 int staffSpacing = 8;
                 int key = 0;
