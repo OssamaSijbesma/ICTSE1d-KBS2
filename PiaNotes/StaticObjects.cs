@@ -37,5 +37,15 @@ namespace PiaNotes
             Content = "Stop the previewing MIDI to play another.",
             CloseButtonText = "Ok"
         };
+
+        //Popup Dialog if MIDI octaves are out of range.
+        public static ContentDialog MidiOutOfRange = new ContentDialog
+        {
+            Title = "MIDI file is out of range!",
+            Content = "The selected MIDI file has octaves too far from each other to be loaded properly. Please select a different file.",
+            CloseButtonText = "Ok"
+        };
+
+
     }
 }

@@ -34,6 +34,7 @@ namespace PiaNotes.Views
         private SheetMusic SM;
 
         public bool KeyboardIsOpen { get; set; } = true;
+        public bool LoadPage { get; set; } = false;
 
         //List for White keys and Black keys of the keyboard
         private List<Rectangle> keysWhite = new List<Rectangle>();
@@ -41,7 +42,7 @@ namespace PiaNotes.Views
 
         // Length of 127 because of 127 notes
         private Rectangle[] Notes = new Rectangle[127];
-        private int Keys = Views.SettingsPages.MIDI_SettingsPage.OctaveAmount * 12;
+        private int Keys = SettingsPages.MIDI_SettingsPage.OctaveAmount * 12;
         //private double oldWidth;
         private enum PianoKey { C = 0, D = 2, E = 4, F = 5, G = 7, A = 9, B = 11 };
         private enum PianoKeySharp { CSharp = 1, DSharp = 3, FSharp = 6, GSharp = 8, ASharp = 10 };
@@ -92,6 +93,13 @@ namespace PiaNotes.Views
             //Create the keyboard to show on the screen and set a timer
             CreateKeyboard();
             GameTimerUI();
+
+            // Sets the decimal seperator to a dot.
+            System.Globalization.CultureInfo customCulture = (System.Globalization.CultureInfo)System.Threading.Thread.CurrentThread.CurrentCulture.Clone();
+            customCulture.NumberFormat.NumberDecimalSeparator = ".";
+
+            System.Threading.Thread.CurrentThread.CurrentCulture = customCulture;
+
         }
 
         private void MidiInPort_MessageReceived(MidiInPort sender, MidiMessageReceivedEventArgs args)
@@ -173,9 +181,12 @@ namespace PiaNotes.Views
                     // Colors will be pulled from Settings.cs.
                     if (Notes[note].Name.Contains("Sharp"))
                     {
-                        Notes[note].Fill = new SolidColorBrush(Windows.UI.Color.FromArgb(255, DoubleToByte(Settings.redValue - neg), DoubleToByte(Settings.greenValue - neg), DoubleToByte(Settings.blueValue - neg)));
+                        Notes[note].Fill = new SolidColorBrush(Color.FromArgb(255, DoubleToByte(Settings.redValue - neg), DoubleToByte(Settings.greenValue - neg), DoubleToByte(Settings.blueValue - neg)));
                     }
-                    else Notes[note].Fill = new SolidColorBrush(Windows.UI.Color.FromArgb(255, Settings.redValue, Settings.greenValue, Settings.blueValue));
+                    else
+                    {
+                        Notes[note].Fill = new SolidColorBrush(Color.FromArgb(255, Settings.redValue, Settings.greenValue, Settings.blueValue));
+                    }
                 }
                 catch (Exception e)
                 {
@@ -213,10 +224,10 @@ namespace PiaNotes.Views
             // Double to byte conversion can overflow.
             try
             {
-                byteVal = System.Convert.ToByte(doubleVal);
+                byteVal = Convert.ToByte(doubleVal);
                 return byteVal;
             }
-            catch (System.OverflowException)
+            catch (OverflowException)
             {
                 //If it doesn't work, display the error message in the debug console
                 System.Diagnostics.Debug.WriteLine("Overflow in double-to-byte conversion.");
@@ -452,7 +463,7 @@ namespace PiaNotes.Views
         // Initialize images and stuff.
         private void GameCanvas_CreateResources(CanvasControl sender, CanvasCreateResourcesEventArgs args)
         {
-            staffStart = windowWidth / 10;
+            staffStart = 24;
             staffEnd = windowWidth - staffStart;
             tickDistance = (windowWidth * 0.80) / 600;
             gameCanvasHeight = sender.ActualHeight;
@@ -466,36 +477,157 @@ namespace PiaNotes.Views
         {
             // Add the resources to the ContentPipeline for reuse purposes
             ContentPipeline.ParentCanvas = sender;
-            await ContentPipeline.AddImage("384", @"Assets/Notes/WholeNote.png");
-            await ContentPipeline.AddImage("192", @"Assets/Notes/HalfNote.png");
-            await ContentPipeline.AddImage("96", @"Assets/Notes/QuarterNote.png");
-            await ContentPipeline.AddImage("48", @"Assets/Notes/EighthNote.png");
-            await ContentPipeline.AddImage("24", @"Assets/Notes/SixteenthNote.png");
-            await ContentPipeline.AddImage("12", @"Assets/Notes/ThirtySecondNote.png");
-
-            // Give the notes a bitmap
+            
+            await ContentPipeline.AddImage("1", @"Assets/Notes/WholeNote.png");
+            await ContentPipeline.AddImage("0.5", @"Assets/Notes/HalfNote.png");
+            await ContentPipeline.AddImage("0.25", @"Assets/Notes/QuarterNote.png");
+            await ContentPipeline.AddImage("0.125", @"Assets/Notes/EighthNote.png");
+            await ContentPipeline.AddImage("0.0625", @"Assets/Notes/SixteenthNote.png");
+            await ContentPipeline.AddImage("0.03125", @"Assets/Notes/ThirtySecondNote.png");
+            
+            int tpqn = SM.TicksPerQuaterNote;
+            
+            // Create array with all flat keys in one octave.
+            int[] keyFlatOctave = new int[] { 0, 2, 4, 5, 7, 9, 11 };
+            // Create list for all flat keys.
+            List<int> flatKeysAll = new List<int>();
+            // Add all flat key numbers to list.
+            for (int i = 0; i < 11; i++)
+            {
+                for (int j = 0; j < keyFlatOctave.Length; j++)
+                {
+                    flatKeysAll.Add(keyFlatOctave[j] + 12*(i+1));
+                }
+            }
+            // Get highest and lowest notes.
+            int max = 0;
+            int min = 127;
             for (int i = 0; i < SM.notes.Count; i++)
             {
-                SM.notes[i].SetBitmap("96");
-                SM.notes[i].SetSize(30, 30);
-                SM.notes[i].Location = new Vector2(staffEnd, 55);                
+                if (SM.notes[i].Number > max)
+                {
+                    max = SM.notes[i].Number;
+                }
+                if (SM.notes[i].Number < min)
+                {
+                    min = SM.notes[i].Number;
+                }
+            }
+
+            // Get highest and lowest octave.
+            int highestOctave = 0;
+            int lowestOctave = 9;
+            for (int i = 0; i < 10; i++)
+            {
+                if (i*12 < max)
+                {
+                    highestOctave = i + 1;
+                }
+            }
+            for (int i = 10; i > 0; i--)
+            {
+                if (i * 12 > min)
+                {
+                    lowestOctave = i + 1;
+                }
+            }
+
+
+            if (Math.Abs(highestOctave - lowestOctave) > 3)
+            {
+                await StaticObjects.MidiOutOfRange.ShowAsync();
+                this.Frame.Navigate(typeof(SelectionPage));
+            }
+            else
+            {
+                LoadPage = true;
+                // Give the notes a bitmap
+                for (int i = 0; i < SM.notes.Count; i++)
+                {
+                    SM.notes[i].SetBitmap(SM.notes[i].NoteType.ToString());
+                    SM.notes[i].SetSize(30, 30);
+                    int staffSpacing = 8;
+                    int key = 0;
+
+                    // Check if key is flat.
+                    if (flatKeysAll.Contains(SM.notes[i].Number))
+                    {
+                        // Key is flat.
+                        key = SM.notes[i].Number;
+                    }
+                    else
+                    {
+                        // Key is not flat.
+                        key = SM.notes[i].Number - 1;
+                    }
+
+                    // Set location of each note.
+                    int index = flatKeysAll.IndexOf(SM.notes[i].Number);
+                    int negativeNote = (highestOctave * 7 * -1) + index;
+                    int notePos = Math.Abs(negativeNote * staffSpacing) - 28;
+                    SM.notes[i].Location = new Vector2(staffEnd, notePos);
+                }
             }
             GameTimerLogic();
         }
-
-
+        
         private void GameCanvas_Draw(CanvasControl sender, CanvasDrawEventArgs args)
         {
-            int staffStart = windowWidth / 10;
-            int staffWidth = windowWidth - staffStart;
-
-            for (int i = 100; i <= 300; i += 50 ) args.DrawingSession.DrawLine(staffStart, i, staffWidth, i, Colors.White);
-            args.DrawingSession.DrawLine(staffStart+staffStart, 50, staffStart + staffStart, 350, Colors.White);
-
-            for (int i = 0; i < gameObjects.Count; i++)
+            if (LoadPage)
             {
-                if(gameObjects[i] != null)
-                    args.DrawingSession.DrawImage(gameObjects[i].Bitmap, gameObjects[i].Location);
+                int staffMargin = 24;
+                int staffWidth = (int)gameCanvasWidth - staffMargin;
+                int staffSpacing = 8;
+
+                // Create lines for right hand.
+                for (int i = 0; i < 13; i++)
+                {
+                    int y = staffSpacing * (i + 1) + staffMargin;
+                    if (i == 0 || i == 12)
+                    {
+                        args.DrawingSession.DrawLine(staffMargin, y, staffWidth, y, Colors.Transparent);
+                    }
+                    else if (i % 2 == 0)
+                    {
+                        args.DrawingSession.DrawLine(staffMargin, y, staffWidth, y, Colors.White);
+                    }
+                }
+
+                // Draw line.
+                args.DrawingSession.DrawLine(staffMargin * 3,
+                    staffSpacing * (2 + 1) + staffMargin,
+                    staffMargin * 3,
+                    staffSpacing * (10 + 1) + staffMargin,
+                    Colors.White);
+
+
+                // Create lines for left hand.
+                for (int i = 0; i < 13; i++)
+                {
+                    int y = staffSpacing * (i + 1) + 12 * staffSpacing + (staffMargin);
+                    if (i == 0 || i == 12)
+                    {
+                        args.DrawingSession.DrawLine(staffMargin, y, staffWidth, y, Colors.Transparent);
+                    }
+                    else if (i % 2 == 0)
+                    {
+                        args.DrawingSession.DrawLine(staffMargin, y, staffWidth, y, Colors.White);
+                    }
+                }
+
+                // Draw line.
+                args.DrawingSession.DrawLine(staffMargin * 3,
+                    staffSpacing * (2 + 1) + 12 * staffSpacing + staffMargin,
+                    staffMargin * 3,
+                    staffSpacing * (10 + 1) + 12 * staffSpacing + staffMargin,
+                    Colors.White);
+
+                // Draw notes.
+                for (int i = 0; i < gameObjects.Count; i++)
+                {
+                    if (gameObjects[i] != null)
+                        args.DrawingSession.DrawImage(gameObjects[i].Bitmap, gameObjects[i].Location);
+                }
             }
         }
 
