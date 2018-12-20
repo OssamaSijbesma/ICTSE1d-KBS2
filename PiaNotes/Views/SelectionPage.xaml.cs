@@ -82,13 +82,13 @@ namespace PiaNotes.Views
                 {
 
                     VariableSizedWrapGrid SelectionGrid = new VariableSizedWrapGrid();
-                    SelectionGrid.Width = 400;
+                    SelectionGrid.Width = 450;
                     SelectionGrid.Height = 60;
 
 
                     Button musicSheetButton = new Button();
                     musicSheetButton.Height = 50;
-                    musicSheetButton.Width = 180;
+                    musicSheetButton.Width = 200;
                     musicSheetButton.Margin = new Thickness(10, 10, 10, 10);
                     musicSheetButton.Click += delegate (object sender, RoutedEventArgs e) { MidiFile_Click(sender, e, element); };
                     musicSheetButton.RightTapped += delegate (object sender, RightTappedRoutedEventArgs e) { MidiFile_RightTapped(sender, e, element); };
@@ -96,7 +96,7 @@ namespace PiaNotes.Views
 
                     if (element.Title.Length > 25)
                     {
-                        musicSheetButton.Content = element.Title.Substring(0, 23) + "...";
+                        musicSheetButton.Content = element.Title.Substring(0, 22) + "...";
                     }
                     else
                     {
@@ -110,14 +110,13 @@ namespace PiaNotes.Views
                     previewButton.Content = "▶";
                     previewButton.Click += async delegate (object sender, RoutedEventArgs e)
                     {
-                        //Checks if another MIDI file is already being previewed
-
                         //Stops a previewed file
                         if (previewButton.Content.Equals("■") && isPlaying == true)
                         {
                             previewButton.Content = "▶";
-                            musicSheetButton.Background = new SolidColorBrush(Color.FromArgb(0, 255, 0, 0));
+                            musicSheetButton.Background = new SolidColorBrush(Color.FromArgb(204, 77, 255, 1));
                             isPlaying = false;
+                            timerGameLogic.Stop();
                         }
                         //Plays a non-previewed file
                         else if (previewButton.Content.Equals("▶") && isPlaying == false)
@@ -125,10 +124,24 @@ namespace PiaNotes.Views
                             previewButton.Content = "■";
                             musicSheetButton.Background = new SolidColorBrush(Color.FromArgb(150, 255, 0, 3));
                             isPlaying = true;
-                        //Gives an error if trying to play a non-previewed file but another file is already being previewed
+                            async Task Preview_Click(MidiMessageReceivedEventArgs args)
+                            {
+                                {
+                                    IMidiMessage receivedMidiMessage = args.Message;
+
+                                    byte channel = ((MidiNoteOnMessage)receivedMidiMessage).Channel;
+                                    byte note = ((MidiNoteOnMessage)receivedMidiMessage).Note;
+                                    byte velocity = 20;
+
+                                    IMidiMessage midiMessageToSend = new MidiNoteOnMessage(channel, note, velocity);
+                                }
+                                timerGameLogic.Start();
+                            }
+                            //Gives an error if trying to play a non-previewed file but another file is already being previewed
                         } else if (previewButton.Content.Equals("▶") && isPlaying == true)
                         {
                             await StaticObjects.AlreadyPreviewed.ShowAsync();
+
                         } 
                     };
 
@@ -141,11 +154,11 @@ namespace PiaNotes.Views
 
                 }
                 //Navigates to UploadPage when Offline
-            }
-            else
+            } else
             {
-                await StaticObjects.NoDatabaseConnectionDialog.ShowAsync();
-                this.Frame.Navigate(typeof(UploadPage));
+
+                    await StaticObjects.NoDatabaseConnectionDialog.ShowAsync();
+                    this.Frame.Navigate(typeof(UploadPage));
             }
         }
 
@@ -158,6 +171,7 @@ namespace PiaNotes.Views
                 Enabled = true
             };
         }
+
 
         // Search function.
         public void Search(string search)
