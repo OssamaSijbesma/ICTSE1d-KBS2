@@ -116,7 +116,6 @@ namespace PiaNotes.Views
                             previewButton.Content = "▶";
                             musicSheetButton.Background = new SolidColorBrush(Color.FromArgb(204, 77, 255, 1));
                             isPlaying = false;
-                            timerGameLogic.Stop();
                         }
                         //Plays a non-previewed file
                         else if (previewButton.Content.Equals("▶") && isPlaying == false)
