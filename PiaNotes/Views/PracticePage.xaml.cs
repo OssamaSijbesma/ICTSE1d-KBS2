@@ -616,7 +616,7 @@ namespace PiaNotes.Views
                     // Set location of each note.
                     int index = flatKeysAll.IndexOf(SM.notes[i].Number);
                     int negativeNote = (highestOctave * 7 * -1) + index;
-                    int notePos = Math.Abs(negativeNote * staffSpacing) - 28;
+                    int notePos = Math.Abs(negativeNote * staffSpacing) - 4;
                     SM.notes[i].Location = new Vector2(staffEnd, notePos);
                 }
             }
@@ -634,7 +634,7 @@ namespace PiaNotes.Views
                 // Create lines for right hand.
                 for (int i = 0; i < 13; i++)
                 {
-                    int y = staffSpacing * (i + 1) + staffMargin;
+                    int y = staffSpacing * (i + 1) + staffMargin * 2;
                     if (i == 0 || i == 12)
                     {
                         args.DrawingSession.DrawLine(staffMargin, y, staffWidth, y, Colors.Transparent);
@@ -647,16 +647,16 @@ namespace PiaNotes.Views
 
                 // Draw line.
                 args.DrawingSession.DrawLine(staffMargin * 3,
-                    staffSpacing * (2 + 1) + staffMargin,
+                    staffSpacing * (2 + 1) + staffMargin * 2,
                     staffMargin * 3,
-                    staffSpacing * (10 + 1) + staffMargin,
+                    staffSpacing * (10 + 1) + staffMargin * 2,
                     Colors.White);
 
 
                 // Create lines for left hand.
                 for (int i = 0; i < 13; i++)
                 {
-                    int y = staffSpacing * (i + 1) + 12 * staffSpacing + (staffMargin);
+                    int y = staffSpacing * (i + 1) + 12 * staffSpacing + (staffMargin * 2);
                     if (i == 0 || i == 12)
                     {
                         args.DrawingSession.DrawLine(staffMargin, y, staffWidth, y, Colors.Transparent);
@@ -669,9 +669,9 @@ namespace PiaNotes.Views
 
                 // Draw line.
                 args.DrawingSession.DrawLine(staffMargin * 3,
-                    staffSpacing * (2 + 1) + 12 * staffSpacing + staffMargin,
+                    staffSpacing * (2 + 1) + 12 * staffSpacing + staffMargin * 2,
                     staffMargin * 3,
-                    staffSpacing * (10 + 1) + 12 * staffSpacing + staffMargin,
+                    staffSpacing * (10 + 1) + 12 * staffSpacing + staffMargin * 2,
                     Colors.White);
 
                 // Draw notes.

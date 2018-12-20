@@ -225,19 +225,7 @@ namespace PiaNotes.Views
         /// <summary>
         /// On click standard navigation
         /// </summary>
-
-        private async void NavPractice_Click(object sender, RoutedEventArgs e)
-        {
-            // Navigate to the practice page unless MIDI is not set then show a dialog and go to the settings page
-            if (Settings.midiInPort == null || Settings.midiOutPort == null)
-            {
-                await StaticObjects.NoMidiInOutDialog.ShowAsync();
-                this.Frame.Navigate(typeof(SettingsPage));
-            }
-            else
-                this.Frame.Navigate(typeof(PracticePage));
-        }
-
+        
         // Navigate to the settings page
         private void NavSettings_Click(object sender, RoutedEventArgs e) => this.Frame.Navigate(typeof(SettingsPage));
 
