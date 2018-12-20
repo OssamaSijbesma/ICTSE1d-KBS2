@@ -556,18 +556,31 @@ namespace PiaNotes.Views
             {
                 if (i*12 < max)
                 {
-                    highestOctave = i + 1;
+                    if (i % 2 == 0)
+                    {
+                        lowestOctave = highestOctave = i;
+                    }
+                    else
+                    {
+                        lowestOctave = highestOctave = i + 1;
+                    }
                 }
             }
             for (int i = 10; i > 0; i--)
             {
                 if (i * 12 > min)
                 {
-                    lowestOctave = i + 1;
+                    if (i % 2 == 0)
+                    {
+                        lowestOctave = i;
+                    }
+                    else
+                    {
+                        lowestOctave = i + 1;
+                    }
                 }
             }
-
-
+            
             if (Math.Abs(highestOctave - lowestOctave) > 3)
             {
                 await StaticObjects.MidiOutOfRange.ShowAsync();
