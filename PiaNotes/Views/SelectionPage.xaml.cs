@@ -33,7 +33,7 @@ namespace PiaNotes.Views
         //Get Search Functionality from Databaser Class
         Databaser DB = new Databaser();
 
-        MidiParser MP;
+        MidiParser midiParser;
         private string MidiF;
         private static Timer timerGameLogic;
 
@@ -204,55 +204,29 @@ namespace PiaNotes.Views
             private void Page_SizeChanged(object sender, SizeChangedEventArgs e)
             {
             UpdateMostRecent();
-            }
+        }
 
-        // MIDI file click functionality.
-        private async Task MidiFile_Click(object sender, RoutedEventArgs e, MusicSheet element)  
+ // MIDI file click functionality.
+        private async Task MidiFile_Click(object sender, RoutedEventArgs e, MusicSheet element)
         {
             // Navigate to the practice page unless MIDI is not set then show a dialog and go to the settings page
             if (Settings.midiInPort == null || Settings.midiOutPort == null)
             {
                 await StaticObjects.NoMidiInOutDialog.ShowAsync();
                 this.Frame.Navigate(typeof(SettingsPage));
-            } else
+            }
+            else
             {
-                // element.Id;
-                string Examp = "324 40 40-234 40 40-23 50 50";
-                var count = Examp.Count(c => c == '-');
-                List<string> notes = new List<string>();
+                StorageFile storageFileMIDI = await DB.GetAFileAsync(element.Id);
+                Stream streamMIDI = await storageFileMIDI.OpenStreamForReadAsync();
+                MidiFile midiFile = MidiFile.Read(streamMIDI);
+                midiParser = new MidiParser(midiFile);
 
-                for(int i = 0; i <= count; i++)
-                {
-                    //Initialize vars
-                    String sub;
-                    int position = Examp.IndexOf("-");
-
-                    if (i == count)
-                    //if the for loop is at the end of the string make the last substring
-                    {
-                        sub = Examp.Substring(0, (Examp.Substring(0)).Length);
-                    } else
-                    //else make a substring and redo the string so the substring is deleted
-                    {
-                        sub = Examp.Substring(0, (Examp.Substring(0, position)).Length);
-                        Examp = Examp.Substring(((Examp.Substring(0, position)).Length) + 1);
-                    }
-                    //Add substring to array of strings
-                    notes.Add(sub);
-                    //Debug line to see if substring is done correctly
-                    System.Diagnostics.Debug.WriteLine(sub);
-                }
-
-                //Send array to MidiParser
-                /*0MP = new MidiParser(notes);
-
-                /*
-                // Zo iets mart
-                string[] notes = completeMidiStringExample.Split('-');
-                string[] note = notes[0].Split(' ');
-                */
+                // Navigate to the practice page
+                this.Frame.Navigate(typeof(PracticePage), midiParser.sheetMusic);
             }
         }
+
 
         // MIDI file right click functionality.
         private void MidiFile_RightTapped(object sender, RightTappedRoutedEventArgs e, MusicSheet element)
