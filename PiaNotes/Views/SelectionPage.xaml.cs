@@ -123,19 +123,8 @@ namespace PiaNotes.Views
                             previewButton.Content = "■";
                             musicSheetButton.Background = new SolidColorBrush(Color.FromArgb(150, 255, 0, 3));
                             isPlaying = true;
-                            async Task Preview_Click(MidiMessageReceivedEventArgs args)
-                            {
-                                {
-                                    IMidiMessage receivedMidiMessage = args.Message;
+                            MidiMessageReceivedEventArgs args;
 
-                                    byte channel = ((MidiNoteOnMessage)receivedMidiMessage).Channel;
-                                    byte note = ((MidiNoteOnMessage)receivedMidiMessage).Note;
-                                    byte velocity = 20;
-
-                                    IMidiMessage midiMessageToSend = new MidiNoteOnMessage(channel, note, velocity);
-                                }
-                                timerGameLogic.Start();
-                            }
                             //Gives an error if trying to play a non-previewed file but another file is already being previewed
                         } else if (previewButton.Content.Equals("▶") && isPlaying == true)
                         {

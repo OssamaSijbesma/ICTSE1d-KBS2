@@ -94,12 +94,45 @@ namespace PiaNotes.Views
         {
             if (FileSelected && midiString.Length < 2000000 && TXTBox_Title.Text.Length <= 100)
             {
-                DB.Upload(TXTBox_Title.Text, fileByte, fileName);
-                FileSelected = false;
-                TXTBlock_Status.Text = "File uploaded.";
+                if (DB.CheckConnection() == true)
+                {
+                    DB.Upload(TXTBox_Title.Text, fileByte, fileName);
+                    FileSelected = false;
+                    TXTBlock_Status.Text = "File uploaded.";
 
-                //Added a navigation to the selection after uploading succesfully
-                this.Frame.Navigate(typeof(SelectionPage));
+                    //Added a navigation to the selection after uploading succesfully
+                    this.Frame.Navigate(typeof(SelectionPage));
+                } else if (DB.CheckConnection() == false)
+                {
+                    // element.Id;
+                    string Examp = "324 40 40-234 40 40-23 50 50";
+                    var count = Examp.Count(c => c == '-');
+                    List<string> notes = new List<string>();
+
+                    for (int i = 0; i <= count; i++)
+                    {
+                        //Initialize vars
+                        String sub;
+                        int position = Examp.IndexOf("-");
+
+                        if (i == count)
+                        //if the for loop is at the end of the string make the last substring
+                        {
+                            sub = Examp.Substring(0, (Examp.Substring(0)).Length);
+                        }
+                        else
+                        //else make a substring and redo the string so the substring is deleted
+                        {
+                            sub = Examp.Substring(0, (Examp.Substring(0, position)).Length);
+                            Examp = Examp.Substring(((Examp.Substring(0, position)).Length) + 1);
+                        }
+                        //Add substring to array of strings
+                        notes.Add(sub);
+                        //Debug line to see if substring is done correctly
+                        System.Diagnostics.Debug.WriteLine(sub);
+                        this.Frame.Navigate(typeof(PracticePage));
+                    } 
+                    }
             }
             else if (!FileSelected)
             {
