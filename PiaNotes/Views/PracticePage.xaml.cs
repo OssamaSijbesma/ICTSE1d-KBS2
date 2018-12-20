@@ -34,6 +34,7 @@ namespace PiaNotes.Views
         private SheetMusic SM;
 
         public bool KeyboardIsOpen { get; set; } = true;
+        public bool LoadPage { get; set; } = false;
 
         //List for White keys and Black keys of the keyboard
         private List<Rectangle> keysWhite = new List<Rectangle>();
@@ -566,92 +567,102 @@ namespace PiaNotes.Views
                 }
             }
 
-            // Give the notes a bitmap
-            for (int i = 0; i < SM.notes.Count; i++)
-            {
-                SM.notes[i].SetBitmap(SM.notes[i].NoteType.ToString());
-                SM.notes[i].SetSize(30, 30);
-                int staffSpacing = 8;
-                int key = 0;
 
-                // Check if key is flat.
-                if (flatKeysAll.Contains(SM.notes[i].Number))
+            if (Math.Abs(highestOctave - lowestOctave) > 3)
+            {
+                await StaticObjects.MidiOutOfRange.ShowAsync();
+                this.Frame.Navigate(typeof(SelectionPage));
+            }
+            else
+            {
+                LoadPage = true;
+                // Give the notes a bitmap
+                for (int i = 0; i < SM.notes.Count; i++)
                 {
-                    // Key is flat.
-                    key = SM.notes[i].Number;
+                    SM.notes[i].SetBitmap(SM.notes[i].NoteType.ToString());
+                    SM.notes[i].SetSize(30, 30);
+                    int staffSpacing = 8;
+                    int key = 0;
+
+                    // Check if key is flat.
+                    if (flatKeysAll.Contains(SM.notes[i].Number))
+                    {
+                        // Key is flat.
+                        key = SM.notes[i].Number;
+                    }
+                    else
+                    {
+                        // Key is not flat.
+                        key = SM.notes[i].Number - 1;
+                    }
+
+                    // Set location of each note.
+                    int index = flatKeysAll.IndexOf(SM.notes[i].Number);
+                    int negativeNote = (highestOctave * 7 * -1) + index;
+                    int notePos = Math.Abs(negativeNote * staffSpacing) - 28;
+                    SM.notes[i].Location = new Vector2(staffEnd, notePos);
                 }
-                else
-                {
-                    // Key is not flat.
-                    key = SM.notes[i].Number - 1;
-                }
-                
-                
-                // Set location of each note.
-                int index = flatKeysAll.IndexOf(SM.notes[i].Number);
-                int negativeNote = (highestOctave * 7 * -1) + index;
-                int notePos = Math.Abs(negativeNote * staffSpacing) - 27;
-                SM.notes[i].Location = new Vector2(staffEnd, notePos);
-                
-                
             }
             GameTimerLogic();
         }
         
         private void GameCanvas_Draw(CanvasControl sender, CanvasDrawEventArgs args)
         {
-            int staffMargin = 24;
-            int staffWidth = (int)gameCanvasWidth - staffMargin;
-            int staffSpacing = 8;
-            
-            // Create lines for right hand.
-            for (int i = 0; i < 13; i++)
+            if (LoadPage)
             {
-                int y = staffSpacing * (i + 1) + staffMargin;
-                if (i == 0 || i == 12)
-                {
-                    args.DrawingSession.DrawLine(staffMargin, y, staffWidth, y, Colors.Transparent);
-                }
-                else if (i % 2 == 0)
-                {
-                    args.DrawingSession.DrawLine(staffMargin, y, staffWidth, y, Colors.White);
-                }
-            }
+                int staffMargin = 24;
+                int staffWidth = (int)gameCanvasWidth - staffMargin;
+                int staffSpacing = 8;
 
-            // Draw line.
-            args.DrawingSession.DrawLine(staffMargin * 3,
-                staffSpacing * (2 + 1) + staffMargin,
-                staffMargin * 3,
-                staffSpacing * (10 + 1) + staffMargin,
-                Colors.White);
-            
-            
-            // Create lines for left hand.
-            for (int i = 0; i < 13; i++)
-            {
-                int y = staffSpacing * (i + 1) + 12 * staffSpacing + (staffMargin);
-                if (i == 0 || i == 12)
+                // Create lines for right hand.
+                for (int i = 0; i < 13; i++)
                 {
-                    args.DrawingSession.DrawLine(staffMargin, y, staffWidth, y, Colors.Transparent);
+                    int y = staffSpacing * (i + 1) + staffMargin;
+                    if (i == 0 || i == 12)
+                    {
+                        args.DrawingSession.DrawLine(staffMargin, y, staffWidth, y, Colors.Transparent);
+                    }
+                    else if (i % 2 == 0)
+                    {
+                        args.DrawingSession.DrawLine(staffMargin, y, staffWidth, y, Colors.White);
+                    }
                 }
-                else if (i % 2 == 0)
-                {
-                    args.DrawingSession.DrawLine(staffMargin, y, staffWidth, y, Colors.White);
-                }
-            }
 
-            // Draw line.
-            args.DrawingSession.DrawLine(staffMargin * 3,
-                staffSpacing * (2 + 1) + 12 * staffSpacing + staffMargin,
-                staffMargin * 3,
-                staffSpacing * (10 + 1) + 12 * staffSpacing + staffMargin,
-                Colors.White);
-            
-            // Draw notes.
-            for (int i = 0; i < gameObjects.Count; i++)
-            {
-                if (gameObjects[i] != null)
-                    args.DrawingSession.DrawImage(gameObjects[i].Bitmap, gameObjects[i].Location);
+                // Draw line.
+                args.DrawingSession.DrawLine(staffMargin * 3,
+                    staffSpacing * (2 + 1) + staffMargin,
+                    staffMargin * 3,
+                    staffSpacing * (10 + 1) + staffMargin,
+                    Colors.White);
+
+
+                // Create lines for left hand.
+                for (int i = 0; i < 13; i++)
+                {
+                    int y = staffSpacing * (i + 1) + 12 * staffSpacing + (staffMargin);
+                    if (i == 0 || i == 12)
+                    {
+                        args.DrawingSession.DrawLine(staffMargin, y, staffWidth, y, Colors.Transparent);
+                    }
+                    else if (i % 2 == 0)
+                    {
+                        args.DrawingSession.DrawLine(staffMargin, y, staffWidth, y, Colors.White);
+                    }
+                }
+
+                // Draw line.
+                args.DrawingSession.DrawLine(staffMargin * 3,
+                    staffSpacing * (2 + 1) + 12 * staffSpacing + staffMargin,
+                    staffMargin * 3,
+                    staffSpacing * (10 + 1) + 12 * staffSpacing + staffMargin,
+                    Colors.White);
+
+                // Draw notes.
+                for (int i = 0; i < gameObjects.Count; i++)
+                {
+                    if (gameObjects[i] != null)
+                        args.DrawingSession.DrawImage(gameObjects[i].Bitmap, gameObjects[i].Location);
+                }
             }
         }
 
