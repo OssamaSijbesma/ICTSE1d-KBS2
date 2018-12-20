@@ -517,23 +517,40 @@ namespace PiaNotes.Views
             // Get highest and lowest octave.
             int highestOctave = 0;
             int lowestOctave = 9;
+            int octavesUsed = 0;
             for (int i = 0; i < 10; i++)
             {
                 if (i*12 < max)
                 {
-                    highestOctave = i + 1;
+                    if (i % 2 == 0)
+                    {
+                        highestOctave = i;
+                    }
+                    else
+                    {
+                        highestOctave = i + 1;
+                    }
                 }
             }
             for (int i = 10; i > 0; i--)
             {
                 if (i * 12 > min)
                 {
-                    lowestOctave = i + 1;
+                    if (i % 2 == 0)
+                    {
+                        lowestOctave = i;
+                    }
+                    else
+                    {
+                        lowestOctave = i + 1;
+                    }
+
+                    octavesUsed = Math.Abs(highestOctave - i);
                 }
             }
+            
 
-
-            if (Math.Abs(highestOctave - lowestOctave) > 3)
+            if (octavesUsed > 2)
             {
                 await StaticObjects.MidiOutOfRange.ShowAsync();
                 this.Frame.Navigate(typeof(SelectionPage));
