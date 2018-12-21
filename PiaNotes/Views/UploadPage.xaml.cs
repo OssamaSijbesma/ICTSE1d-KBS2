@@ -28,10 +28,13 @@ namespace PiaNotes.Views
     public sealed partial class UploadPage : Page
     {
         Databaser DB = new Databaser();
+        MidiParser midiParser;
+
         private string midiString;
         private Byte[] fileByte;
         private string fileName;
         public bool FileSelected { get; set; } = false;
+        private StorageFile file;
 
         public UploadPage()
         {
@@ -55,7 +58,7 @@ namespace PiaNotes.Views
             };
             openPicker.FileTypeFilter.Add(".midi");
             openPicker.FileTypeFilter.Add(".mid");
-            StorageFile file = await openPicker.PickSingleFileAsync();
+            file = await openPicker.PickSingleFileAsync();
 
             if (file != null)
             {
@@ -88,18 +91,32 @@ namespace PiaNotes.Views
                 }
             }
         }
-        
+
         // Submit midi file functionality.
-        private void OnSubmit(object sender, RoutedEventArgs e)
+        private async void OnSubmit(object sender, RoutedEventArgs e)
         {
             if (FileSelected && midiString.Length < 2000000 && TXTBox_Title.Text.Length <= 100)
             {
-                DB.Upload(TXTBox_Title.Text, fileByte, fileName);
-                FileSelected = false;
-                TXTBlock_Status.Text = "File uploaded.";
+                if (DB.CheckConnection() == true)
+                {
+                    DB.Upload(TXTBox_Title.Text, fileByte, fileName);
+                    TXTBlock_Status.Text = "File uploaded.";
 
-                //Added a navigation to the selection after uploading succesfully
-                this.Frame.Navigate(typeof(SelectionPage));
+                    //Added a navigation to the selection after uploading succesfully
+                    this.Frame.Navigate(typeof(SelectionPage));
+                }
+                else if (DB.CheckConnection() == false)
+                {
+                    // Navigate to the practice page unless MIDI is not set then show a dialog and go to the settings page
+                    StorageFile storageFileMIDI = file;
+                    Stream streamMIDI = await storageFileMIDI.OpenStreamForReadAsync();
+                    MidiFile midiFile = MidiFile.Read(streamMIDI);
+                    midiParser = new MidiParser(midiFile);
+
+                    // Navigate to the practice page
+                    this.Frame.Navigate(typeof(PracticePage), midiParser.sheetMusic);
+                }
+                FileSelected = false;
             }
             else if (!FileSelected)
             {
