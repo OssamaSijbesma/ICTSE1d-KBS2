@@ -52,8 +52,6 @@ namespace PiaNotes.ViewModels
             catch
             {
                 return false;
-                // Not developed yet.
-                throw new NotImplementedException();
             }
         }
         
