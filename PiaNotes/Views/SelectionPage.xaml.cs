@@ -156,13 +156,21 @@ namespace PiaNotes.Views
                 this.Frame.Navigate(typeof(SettingsPage));
             } else
             {
-                StorageFile storageFileMIDI = await DB.GetAFileAsync(element.Id);
-                Stream streamMIDI =  await storageFileMIDI.OpenStreamForReadAsync();
-                MidiFile midiFile = MidiFile.Read(streamMIDI);
-                midiParser = new MidiParser(midiFile);
+                if (DB.CheckConnection() == true)
+                {
+                    StorageFile storageFileMIDI = await DB.GetAFileAsync(element.Id);
+                    Stream streamMIDI = await storageFileMIDI.OpenStreamForReadAsync();
+                    MidiFile midiFile = MidiFile.Read(streamMIDI);
+                    midiParser = new MidiParser(midiFile);
 
-                // Navigate to the practice page
-                this.Frame.Navigate(typeof(PracticePage), midiParser.sheetMusic);
+                    // Navigate to the practice page 
+                    this.Frame.Navigate(typeof(PracticePage), midiParser.sheetMusic);
+                } else
+                {
+                    //uploads local file if offline
+                    await StaticObjects.NoDatabaseConnectionDialog.ShowAsync();
+                    this.Frame.Navigate(typeof(UploadPage));
+                }
             }
         }
 
