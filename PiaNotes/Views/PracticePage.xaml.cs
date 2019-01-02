@@ -79,6 +79,11 @@ namespace PiaNotes.Views
             var coreTitleBar = CoreApplication.GetCurrentView().TitleBar;
             coreTitleBar.ExtendViewIntoTitleBar = false;
 
+            // Sets the decimal seperator to a dot.
+            System.Globalization.CultureInfo customCulture = (System.Globalization.CultureInfo)System.Threading.Thread.CurrentThread.CurrentCulture.Clone();
+            customCulture.NumberFormat.NumberDecimalSeparator = ".";
+            System.Threading.Thread.CurrentThread.CurrentCulture = customCulture;
+
             // Initialize variables
             windowWidth = Convert.ToInt32(Window.Current.Bounds.Width);
             windowHeight = Convert.ToInt32(Window.Current.Bounds.Height);
@@ -87,21 +92,13 @@ namespace PiaNotes.Views
             Settings.midiInPort.MessageReceived += MidiInPort_MessageReceived;
 
             //Generate the amount of Keys
-            if (Views.SettingsPages.MIDI_SettingsPage.OctaveAmount != 0)
-            {
-                Keys = Settings.octaveAmount * 12;
-            }
-            else Keys = 12;
+            Keys = (SettingsPages.MIDI_SettingsPage.OctaveAmount != 0) ? Settings.octaveAmount * 12 : Settings.octaveAmount * 12;
 
             //Create the keyboard to show on the screen and set a timer
             CreateKeyboard();
             GameTimerUI();
 
-            // Sets the decimal seperator to a dot.
-            System.Globalization.CultureInfo customCulture = (System.Globalization.CultureInfo)System.Threading.Thread.CurrentThread.CurrentCulture.Clone();
-            customCulture.NumberFormat.NumberDecimalSeparator = ".";
 
-            System.Threading.Thread.CurrentThread.CurrentCulture = customCulture;
 
         }
 
@@ -133,10 +130,10 @@ namespace PiaNotes.Views
                         velocity = ((MidiNoteOnMessage)receivedMidiMessage).Velocity;
 
                         //If the velocity surpases the limits of MIDI it will go to the limit, otherwise it will act normally
-                        if (velocity + DoubleToByte(Settings.volume) <= 127 && velocity + DoubleToByte(Settings.volume) >= 0)
+                        if (velocity + Utilities.DoubleToByte(Settings.volume) <= 127 && velocity + Utilities.DoubleToByte(Settings.volume) >= 0)
                         {
-                            velocity += DoubleToByte(Settings.volume);
-                        } else if (velocity + DoubleToByte(Settings.volume) > 127)
+                            velocity += Utilities.DoubleToByte(Settings.volume);
+                        } else if (velocity + Utilities.DoubleToByte(Settings.volume) > 127)
                         {
                             velocity = 127;
                         } else
@@ -144,7 +141,7 @@ namespace PiaNotes.Views
                             velocity = 0;
                         }
                         // Else use the static velocity the user chose.
-                    } else velocity = DoubleToByte(Settings.velocity);
+                    } else velocity = Utilities.DoubleToByte(Settings.velocity);
                     // Else use velocity from the midimessage, if below a certain amount, no sound will be played.
                 } else velocity = ((MidiNoteOnMessage)receivedMidiMessage).Velocity;
 
@@ -180,22 +177,13 @@ namespace PiaNotes.Views
             await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
                 byte note = ((MidiNoteOnMessage)IM).Note;
+                SolidColorBrush primaryColor = new SolidColorBrush(Color.FromArgb(255, Settings.redPrimary, Settings.greenPrimary, Settings.bluePrimary));
+                SolidColorBrush secondaryColor = new SolidColorBrush(Color.FromArgb(255, Settings.redSecondary, Settings.greenSecondary, Settings.blueSecondary));
 
-                // Try-catch for coloring the keys
                 try
                 {
-                    byte neg = 25;
-
                     // If it is a black key, the color will be slightly darker (-25 on all values except A) than a white key.
-                    // Colors will be pulled from Settings.cs.
-                    if (Notes[note].Name.Contains("Sharp"))
-                    {
-                        Notes[note].Fill = new SolidColorBrush(Color.FromArgb(255, DoubleToByte(Settings.redValue - neg), DoubleToByte(Settings.greenValue - neg), DoubleToByte(Settings.blueValue - neg)));
-                    }
-                    else
-                    {
-                        Notes[note].Fill = new SolidColorBrush(Color.FromArgb(255, Settings.redValue, Settings.greenValue, Settings.blueValue));
-                    }
+                    Notes[note].Fill = Notes[note].Name.Contains("Sharp") ? primaryColor : secondaryColor;
                 }
                 catch (Exception e)
                 {
@@ -211,16 +199,11 @@ namespace PiaNotes.Views
             await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
                 byte note = ((MidiNoteOffMessage)IM).Note;
+
                 try
                 {
                     // The keys original colour will be restored
-                    if (Notes[note].Name.Contains("Sharp"))
-                    {
-                        Notes[note].Fill = new SolidColorBrush(Windows.UI.Colors.Black);
-                    } else
-                    {
-                        Notes[note].Fill = new SolidColorBrush(Windows.UI.Colors.White);
-                    }
+                    Notes[note].Fill = Notes[note].Name.Contains("Sharp") ? new SolidColorBrush(Colors.Black) : new SolidColorBrush(Colors.White);
                 }
                 catch (Exception e)
                 {
@@ -228,28 +211,6 @@ namespace PiaNotes.Views
                     System.Diagnostics.Debug.WriteLine(e.Message);
                 }
             });
-        }
-
-        // Method for converting a double to byte.
-        public static byte DoubleToByte(double doubleVal)
-        {
-            byte byteVal = 0;
-
-            // Double to byte conversion can overflow.
-            try
-            {
-                byteVal = Convert.ToByte(doubleVal);
-                return byteVal;
-            }
-            catch (OverflowException)
-            {
-                //If it doesn't work, display the error message in the debug console
-                System.Diagnostics.Debug.WriteLine("Overflow in double-to-byte conversion.");
-            }
-
-            // Byte to double conversion cannot overflow.
-            doubleVal = System.Convert.ToDouble(byteVal);
-            return byteVal;
         }
 
         // Menustrip: View > Keyboard

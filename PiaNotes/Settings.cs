@@ -27,8 +27,13 @@ namespace PiaNotes
         public static int octaveAmount = 2;
 
         //Feedback Colours in RGB
-        public static byte redValue = 43;
-        public static byte greenValue = 60;
-        public static byte blueValue = 73;
+        public static byte redPrimary = 43;
+        public static byte greenPrimary = 60;
+        public static byte bluePrimary = 73;
+
+        //Feedback Colours in RGB Secondary
+        public static byte redSecondary = 43;
+        public static byte greenSecondary = 60;
+        public static byte blueSecondary = 73;
     }
 }
