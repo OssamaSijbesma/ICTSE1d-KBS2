@@ -19,7 +19,6 @@ using Windows.UI.Xaml.Shapes;
 using PiaNotes.Models;
 using System.Numerics;
 using PiaNotes.Interfaces;
-using Melanchall.DryWetMidi.Smf.Interaction;
 
 namespace PiaNotes.Views
 {
@@ -105,77 +104,42 @@ namespace PiaNotes.Views
         {
             // Converts received message into IMidiMessage.
             IMidiMessage receivedMidiMessage = args.Message;
-            System.Diagnostics.Debug.WriteLine(receivedMidiMessage.Timestamp.ToString());
 
             // Checks if a key has been pressed.
             if (receivedMidiMessage.Type == MidiMessageType.NoteOn)
             {
-                // Debug lines to show the Channel Note and Velocity output from the keyboard
-                System.Diagnostics.Debug.WriteLine("Channel: " + ((MidiNoteOnMessage)receivedMidiMessage).Channel);
-                System.Diagnostics.Debug.WriteLine("Note: " + ((MidiNoteOnMessage)receivedMidiMessage).Note);
-                System.Diagnostics.Debug.WriteLine("Velocity: " + ((MidiNoteOnMessage)receivedMidiMessage).Velocity);
-
                 // Retrieves channel, note from the MidiMessage, and sets the velocity.
                 byte channel = ((MidiNoteOnMessage)receivedMidiMessage).Channel;
                 byte note = ((MidiNoteOnMessage)receivedMidiMessage).Note;
-                byte velocity;
+                byte velocity = ((MidiNoteOnMessage) receivedMidiMessage).Velocity;
 
-                // If the player releases the key there should be no sound
-                if (((MidiNoteOnMessage)receivedMidiMessage).Velocity != 0)
+                if (Settings.disableUserFeedback)
                 {
-                    if (Settings.disableUserFeedback)
-                    {
-                        // Retrieves the velocity from the played note and then adds the amount of volume the user has set.
-                        velocity = ((MidiNoteOnMessage)receivedMidiMessage).Velocity;
+                    if (velocity + Utilities.DoubleToByte(Settings.volume) <= 127 && velocity + Utilities.DoubleToByte(Settings.volume) >= 0)
+                        velocity += Utilities.DoubleToByte(Settings.volume);
+                    else
+                        velocity = 127;
+                } else
+                    velocity = Utilities.DoubleToByte(Settings.velocity);
 
-                        //If the velocity surpases the limits of MIDI it will go to the limit, otherwise it will act normally
-                        if (velocity + Utilities.DoubleToByte(Settings.volume) <= 127 && velocity + Utilities.DoubleToByte(Settings.volume) >= 0)
-                        {
-                            velocity += Utilities.DoubleToByte(Settings.volume);
-                        } else if (velocity + Utilities.DoubleToByte(Settings.volume) > 127)
-                        {
-                            velocity = 127;
-                        } else
-                        {
-                            velocity = 0;
-                        }
-                        // Else use the static velocity the user chose.
-                    } else velocity = Utilities.DoubleToByte(Settings.velocity);
-                    // Else use velocity from the midimessage, if below a certain amount, no sound will be played.
-                } else velocity = ((MidiNoteOnMessage)receivedMidiMessage).Velocity;
 
                 // Creates the message that will be send to play.
                 IMidiMessage midiMessageToSend = new MidiNoteOnMessage(channel, note, velocity);
-                FillKey(midiMessageToSend);
                 Settings.midiOutPort.SendMessage(midiMessageToSend);
+                FillKey(note);
+
             }
 
-            // Checks if note has been released.
+            // Checks if note has been released if so unfill the key.
             if (receivedMidiMessage.Type == MidiMessageType.NoteOff)
-            {
-                //Debug lines to show the Channel Note and Velocity output from the keyboard
-                System.Diagnostics.Debug.WriteLine(((MidiNoteOffMessage)receivedMidiMessage).Channel);
-                System.Diagnostics.Debug.WriteLine(((MidiNoteOffMessage)receivedMidiMessage).Note);
-                System.Diagnostics.Debug.WriteLine(((MidiNoteOffMessage)receivedMidiMessage).Velocity);
-
-                // Retrieves channel, note and velocity from the MidiMessage.
-                byte channel = ((MidiNoteOffMessage)receivedMidiMessage).Channel;
-                byte note = ((MidiNoteOffMessage)receivedMidiMessage).Note;
-                byte velocity = ((MidiNoteOffMessage)receivedMidiMessage).Velocity;
-
-                // Creates a message solely for the purpose of changing the key-color back to its default color.
-                IMidiMessage midiMessageToSend = new MidiNoteOffMessage(channel, note, velocity);
-                UnFillKey(midiMessageToSend);
-            }
-
+                UnFillKey(((MidiNoteOffMessage)receivedMidiMessage).Note);
         }
 
         // Method for coloring the played key
-        private async void FillKey(IMidiMessage IM)
+        private async void FillKey(byte note)
         {
             await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
-                byte note = ((MidiNoteOnMessage)IM).Note;
                 SolidColorBrush primaryColor = new SolidColorBrush(Color.FromArgb(255, Settings.redPrimary, Settings.greenPrimary, Settings.bluePrimary));
                 SolidColorBrush secondaryColor = new SolidColorBrush(Color.FromArgb(255, Settings.redSecondary, Settings.greenSecondary, Settings.blueSecondary));
 
@@ -193,12 +157,10 @@ namespace PiaNotes.Views
         }
 
         // Method for changing the color of the played key back to its default color.
-        private async void UnFillKey(IMidiMessage IM)
+        private async void UnFillKey(byte note)
         {
             await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
-                byte note = ((MidiNoteOffMessage)IM).Note;
-
                 try
                 {
                     // The keys original colour will be restored
