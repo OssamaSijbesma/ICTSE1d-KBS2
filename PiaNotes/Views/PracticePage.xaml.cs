@@ -480,105 +480,39 @@ namespace PiaNotes.Views
             await ContentPipeline.AddImage("0.03125", @"Assets/Notes/ThirtySecondNote.png");
             
             int tpqn = SM.TicksPerQuaterNote;
+
+            MidiConverter midiConverter = new MidiConverter();
+
+            List<int> flatKeysAll = midiConverter.GetFlatKeys();
             
-            // Create array with all flat keys in one octave.
-            int[] keyFlatOctave = new int[] { 0, 2, 4, 5, 7, 9, 11 };
-            // Create list for all flat keys.
-            List<int> flatKeysAll = new List<int>();
-            // Add all flat key numbers to list.
-            for (int i = 0; i < 11; i++)
-            {
-                for (int j = 0; j < keyFlatOctave.Length; j++)
-                {
-                    flatKeysAll.Add(keyFlatOctave[j] + 12*(i+1));
-                }
-            }
-            // Get highest and lowest notes.
-            int max = 0;
-            int min = 127;
+            LoadPage = true;
+            // Give the notes a bitmap
             for (int i = 0; i < SM.notes.Count; i++)
             {
-                if (SM.notes[i].Number > max)
+                SM.notes[i].SetBitmap(SM.notes[i].NoteType.ToString());
+                SM.notes[i].SetSize(30, 30);
+                int staffSpacing = 8;
+                int key = 0;
+                
+                // Check if key is flat.
+                if (flatKeysAll.Contains(SM.notes[i].Number))
                 {
-                    max = SM.notes[i].Number;
+                    // Key is flat.
+                    key = SM.notes[i].Number;
                 }
-                if (SM.notes[i].Number < min)
+                else
                 {
-                    min = SM.notes[i].Number;
+                    // Key is not flat.
+                    key = SM.notes[i].Number - 1;
                 }
-            }
 
-            // Get highest and lowest octave.
-            int highestOctave = 0;
-            int lowestOctave = 9;
-            int octavesUsed = 0;
-            for (int i = 0; i < 10; i++)
-            {
-                if (i*12 < max)
-                {
-                    if (i % 2 == 0)
-                    {
-                        highestOctave = i;
-                    }
-                    else
-                    {
-                        highestOctave = i + 1;
-                    }
-                }
-            }
-            for (int i = 10; i > 0; i--)
-            {
-                if (i * 12 > min)
-                {
-                    if (i % 2 == 0)
-                    {
-                        lowestOctave = i;
-                    }
-                    else
-                    {
-                        lowestOctave = i + 1;
-                    }
-
-                    octavesUsed = Math.Abs(highestOctave - i);
-                }
+                // Set location of each note.
+                int index = flatKeysAll.IndexOf(SM.notes[i].Number);
+                int negativeNote = (midiConverter.GetOctaveInfo(SM).Item1 * 7 * -1) + index;
+                int notePos = Math.Abs(negativeNote * staffSpacing) - 4;
+                SM.notes[i].Location = new Vector2(staffEnd, notePos);
             }
             
-
-            if (octavesUsed > 2)
-            {
-                await StaticObjects.MidiOutOfRange.ShowAsync();
-                this.Frame.Navigate(typeof(SelectionPage));
-            }
-            else
-            {
-                LoadPage = true;
-                // Give the notes a bitmap
-                for (int i = 0; i < SM.notes.Count; i++)
-                {
-                    SM.notes[i].SetBitmap(SM.notes[i].NoteType.ToString());
-                    SM.notes[i].SetSize(30, 30);
-                    int staffSpacing = 8;
-                    int key = 0;
-
-                    // Check if key is flat.
-                    if (flatKeysAll.Contains(SM.notes[i].Number))
-                    {
-                        // Key is flat.
-                        key = SM.notes[i].Number;
-                    }
-                    else
-                    {
-                        // Key is not flat.
-                        key = SM.notes[i].Number - 1;
-                    }
-
-                    // Set location of each note.
-                    int index = flatKeysAll.IndexOf(SM.notes[i].Number);
-                    int negativeNote = (highestOctave * 7 * -1) + index;
-                    int notePos = Math.Abs(negativeNote * staffSpacing) - 4;
-                    SM.notes[i].Location = new Vector2(staffEnd, notePos);
-                }
-            }
             GameTimerLogic();
         }
         
