@@ -98,8 +98,6 @@ namespace PiaNotes.Views
             CreateKeyboard();
             GameTimerUI();
 
-
-
         }
 
         private void MidiInPort_MessageReceived(MidiInPort sender, MidiMessageReceivedEventArgs args)
