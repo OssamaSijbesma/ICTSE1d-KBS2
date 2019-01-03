@@ -22,6 +22,8 @@ using System.Threading.Tasks;
 using Windows.UI.Xaml.Input;
 using Windows.Devices.Midi;
 using System.Timers;
+using Windows.Media.Playback;
+using Windows.Media.Core;
 
 namespace PiaNotes.Views
 {
@@ -42,6 +44,7 @@ namespace PiaNotes.Views
 
         private int UPS = 100;
         private bool isPlaying = false;
+        MediaPlayer player = new MediaPlayer();
 
         //Creates a list of musicsheets
         List<MusicSheet> Sheets = new List<MusicSheet>();
@@ -103,6 +106,7 @@ namespace PiaNotes.Views
                         musicSheetButton.Content = element.Title;
                     }
 
+
                     //Creates a preview button to preview a MIDI file
                     Button previewButton = new Button();
                     previewButton.Height = 30;
@@ -123,7 +127,11 @@ namespace PiaNotes.Views
                             previewButton.Content = "■";
                             musicSheetButton.Background = new SolidColorBrush(Color.FromArgb(150, 255, 0, 3));
                             isPlaying = true;
-                            MidiMessageReceivedEventArgs args;
+                            StorageFile storageFileMIDI = await DB.GetAFileAsync(element.Id);
+                            player.AutoPlay = false;
+                            player.Source = MediaSource.CreateFromStorageFile(storageFileMIDI);
+                            player.Play();
+
 
                             //Gives an error if trying to play a non-previewed file but another file is already being previewed
                         } else if (previewButton.Content.Equals("▶") && isPlaying == true)
@@ -148,16 +156,6 @@ namespace PiaNotes.Views
                     await StaticObjects.NoDatabaseConnectionDialog.ShowAsync();
                     this.Frame.Navigate(typeof(UploadPage));
             }
-        }
-
-        private void GameTimerLogic()
-        {
-            // Create a timer with a sixty-fourth tick which represents the 1/64 note.
-            timerGameLogic = new Timer(1000 / UPS)
-            {
-                AutoReset = true,
-                Enabled = true
-            };
         }
 
 

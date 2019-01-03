@@ -180,6 +180,7 @@
     <Content Include="Assets\LargeTile.scale-400.png" />
     <Content Include="Assets\Notes\EighthNote.png" />
     <Content Include="Assets\Notes\HalfNote.png" />
+    <Content Include="Assets\file.mp3" />
     <Content Include="Assets\Notes\QuarterNote.png" />
     <Content Include="Assets\Notes\SixteenthNote.png" />
     <Content Include="Assets\Notes\ThirtySecondNote.png" />
@@ -216,6 +217,7 @@
     <Content Include="Assets\StoreLogo.scale-150.png" />
     <Content Include="Assets\StoreLogo.scale-200.png" />
     <Content Include="Assets\StoreLogo.scale-400.png" />
+    <Content Include="Assets\vaderjacob.mid" />
     <Content Include="Assets\Wide310x150Logo.scale-100.png" />
     <Content Include="Assets\Wide310x150Logo.scale-125.png" />
     <Content Include="Assets\Wide310x150Logo.scale-150.png" />
