@@ -64,7 +64,8 @@ namespace PiaNotes.Views
         private int UPS = 100;
 
 
-        // Assets
+        // UI Assets
+        List<Models.Line> lines = new List<Models.Line>();
         List<IGameObject> gameObjects = new List<IGameObject>();
 
         public PracticePage()
@@ -469,6 +470,10 @@ namespace PiaNotes.Views
 
         private async Task CreateResourcesAsync(CanvasControl sender)
         {
+            int staffMargin = 24;
+            int staffWidth = (int)gameCanvasWidth - staffMargin;
+            int staffSpacing = 8;
+  
             // Add the resources to the ContentPipeline for reuse purposes
             ContentPipeline.ParentCanvas = sender;
             
@@ -491,7 +496,6 @@ namespace PiaNotes.Views
             {
                 SM.notes[i].SetBitmap(SM.notes[i].NoteType.ToString());
                 SM.notes[i].SetSize(30, 30);
-                int staffSpacing = 8;
                 int key = 0;
                 
                 // Check if key is flat.
@@ -512,7 +516,36 @@ namespace PiaNotes.Views
                 int notePos = Math.Abs(negativeNote * staffSpacing) - 4;
                 SM.notes[i].Location = new Vector2(staffEnd, notePos);
             }
-            
+
+            // Create staff
+            for (int i = 0; i < 13; i++)
+            {
+                int y = staffSpacing * (i + 1) + staffMargin * 2;
+
+                if (i % 2 == 0 && i != 0 && i != 12)
+                    lines.Add(new Models.Line(staffMargin, y, staffWidth, y));
+            }
+
+            for (int i = 0; i < 13; i++)
+            {
+                int y =  staffSpacing * (i + 1) + 12 * staffSpacing + (staffMargin * 2);
+
+                if (i % 2 == 0 && i != 0 && i != 12)
+                    lines.Add(new Models.Line(staffMargin, y, staffWidth, y));
+            }
+
+            // Create Guidelines
+            lines.Add(new Models.Line(staffMargin * 3,
+                    staffSpacing * (2 + 1) + staffMargin * 2,
+                    staffMargin * 3,
+                    staffSpacing * (10 + 1) + staffMargin * 2));
+
+            lines.Add(new Models.Line(staffMargin * 3,
+                    staffSpacing * (2 + 1) + 12 * staffSpacing + staffMargin * 2,
+                    staffMargin * 3,
+                    staffSpacing * (10 + 1) + 12 * staffSpacing + staffMargin * 2));
+
+
             GameTimerLogic();
         }
         
@@ -520,52 +553,11 @@ namespace PiaNotes.Views
         {
             if (LoadPage)
             {
-                int staffMargin = 24;
-                int staffWidth = (int)gameCanvasWidth - staffMargin;
-                int staffSpacing = 8;
-
-                // Create lines for right hand.
-                for (int i = 0; i < 13; i++)
+                // Draw staff and guidelines.
+                for (int i = 0; i < lines.Count; i++)
                 {
-                    int y = staffSpacing * (i + 1) + staffMargin * 2;
-                    if (i == 0 || i == 12)
-                    {
-                        args.DrawingSession.DrawLine(staffMargin, y, staffWidth, y, Colors.Transparent);
-                    }
-                    else if (i % 2 == 0)
-                    {
-                        args.DrawingSession.DrawLine(staffMargin, y, staffWidth, y, Colors.White);
-                    }
+                    args.DrawingSession.DrawLine(lines[i].StartPoint, lines[i].EndPoint, Colors.White);
                 }
-
-                // Draw line.
-                args.DrawingSession.DrawLine(staffMargin * 3,
-                    staffSpacing * (2 + 1) + staffMargin * 2,
-                    staffMargin * 3,
-                    staffSpacing * (10 + 1) + staffMargin * 2,
-                    Colors.White);
-
-
-                // Create lines for left hand.
-                for (int i = 0; i < 13; i++)
-                {
-                    int y = staffSpacing * (i + 1) + 12 * staffSpacing + (staffMargin * 2);
-                    if (i == 0 || i == 12)
-                    {
-                        args.DrawingSession.DrawLine(staffMargin, y, staffWidth, y, Colors.Transparent);
-                    }
-                    else if (i % 2 == 0)
-                    {
-                        args.DrawingSession.DrawLine(staffMargin, y, staffWidth, y, Colors.White);
-                    }
-                }
-
-                // Draw line.
-                args.DrawingSession.DrawLine(staffMargin * 3,
-                    staffSpacing * (2 + 1) + 12 * staffSpacing + staffMargin * 2,
-                    staffMargin * 3,
-                    staffSpacing * (10 + 1) + 12 * staffSpacing + staffMargin * 2,
-                    Colors.White);
 
                 // Draw notes.
                 for (int i = 0; i < gameObjects.Count; i++)

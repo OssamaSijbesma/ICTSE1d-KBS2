@@ -122,10 +122,10 @@
     <Compile Include="Interfaces\IGameObject.cs" />
     <Compile Include="Models\Bar.cs" />
     <Compile Include="Models\Clef.cs" />
+    <Compile Include="Models\Line.cs" />
     <Compile Include="Models\MusicSheet.cs" />
     <Compile Include="Models\Note.cs" />
     <Compile Include="Models\SheetMusic.cs" />
-    <Compile Include="Models\Staff.cs" />
     <Compile Include="StaticObjects.cs" />
     <Compile Include="Utilities.cs" />
     <Compile Include="Views\SettingsPage.xaml.cs">

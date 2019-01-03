@@ -20,7 +20,6 @@ namespace PiaNotes.Models
 
         //If there are multiple clefs there should be a List of clefs and staffs
         public List<Clef> clefs = new List<Clef>();
-        public List<Staff> staffs = new List<Staff>();
 
         public SheetMusic(MidiFile midiFile, List<Note> Notes, bool MC, int AB)
         {
@@ -45,16 +44,12 @@ namespace PiaNotes.Models
 
             Clef cl = new Clef(Clef.ClefTypes.Treble);
             Clef ef = new Clef(Clef.ClefTypes.Bass);
-            Staff st = new Staff();
-            Staff aff = new Staff();
 
             clefs.Add(cl);
-                staffs.Add(st);
 
             if (multipleClefs)
             {
                 clefs.Add(ef);
-                staffs.Add(aff);
             }
         }
     }
