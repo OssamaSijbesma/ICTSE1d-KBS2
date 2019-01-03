@@ -13,7 +13,7 @@ using Windows.Graphics.Imaging;
 
 namespace PiaNotes.Models
 {
-    class Note : IGameObject
+    public class Note : IGameObject
     {
         public int Number { get; set; }
         public int Timing { get; set; }

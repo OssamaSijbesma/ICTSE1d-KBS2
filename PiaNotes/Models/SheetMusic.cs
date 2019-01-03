@@ -10,7 +10,7 @@ using System.Text.RegularExpressions;
 
 namespace PiaNotes.Models
 {
-    class SheetMusic
+    public class SheetMusic
     {
         public MidiFile MF { get; set; }
         public bool multipleClefs { get; set; }
