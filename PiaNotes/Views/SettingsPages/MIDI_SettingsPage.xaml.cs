@@ -98,6 +98,9 @@ namespace PiaNotes.Views.SettingsPages
                 {
                     CMB_StartingOctave.SelectedIndex = (int)localSettings.Values["StartingOctave"];
                 }
+            } else
+            {
+                CMB_StartingOctave.SelectedIndex = Settings.startingOctave;
             }
 
             if (localSettings.Values["OctaveAmount"] != null)
@@ -107,6 +110,11 @@ namespace PiaNotes.Views.SettingsPages
                     CMB_OctaveAmount.SelectedIndex = (int)localSettings.Values["OctaveAmount"] - 1;
                 } 
             }
+            else
+            {
+                CMB_OctaveAmount.SelectedIndex = Settings.octaveAmount;
+            }
+
 
             localFolder = ApplicationData.Current.LocalFolder;
             localSettings = ApplicationData.Current.LocalSettings;
