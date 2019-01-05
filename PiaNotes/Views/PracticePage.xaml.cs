@@ -50,8 +50,11 @@ namespace PiaNotes.Views
         private int windowWidth;
         private int windowHeight;
 
+        private int staffMargin;
         private int staffStart;
         private int staffEnd;
+        private int staffWidth;
+        private int staffSpacing;
         private int tickCount;
         private float tickDistance;
 
@@ -400,23 +403,58 @@ namespace PiaNotes.Views
         // Initialize images and stuff.
         private void GameCanvas_CreateResources(CanvasControl sender, CanvasCreateResourcesEventArgs args)
         {
-            staffStart = 24;
-            staffEnd = windowWidth - staffStart;
-            // tickdistance is now 12 seconds for the entire line: distance / (time in milliseconds / ticks per millisecons)
-            tickDistance = (windowWidth) / 1536;
             gameCanvasHeight = sender.ActualHeight;
             gameCanvasWidth = sender.ActualWidth;
 
-            //Create staff
+            // Canvas values
+            staffMargin = 24;
+            staffStart = staffMargin;
+            staffEnd = (int)gameCanvasWidth - staffMargin;
+            staffWidth = (int)gameCanvasWidth - staffMargin * 2;
+            staffSpacing = 8;
+
+            // Tickdistance is now 12/24 seconds for the entire line: distance / (time in milliseconds / ticks per millisecons)
+            //tickDistance = (windowWidth-staffStart*2) / 1536;
+            tickDistance = (windowWidth - staffStart * 2) / 768;
+
+
+            // Create staff
+            for (int i = 0; i < 13; i++)
+            {
+                int y = staffSpacing * (i + 1) + staffMargin * 2;
+
+                if (i % 2 == 0 && i != 0 && i != 12)
+                    lines.Add(new Models.Line(staffStart, y, staffEnd, y));
+            }
+
+            for (int i = 0; i < 13; i++)
+            {
+                int y = staffSpacing * (i + 1) + 12 * staffSpacing + (staffMargin * 2);
+
+                if (i % 2 == 0 && i != 0 && i != 12)
+                    lines.Add(new Models.Line(staffStart, y, staffEnd, y));
+            }
+
+            // Create Guidelines
+            lines.Add(new Models.Line(staffWidth / 4,
+                    staffSpacing * 2 + staffMargin * 2,
+                    staffWidth / 4,
+                    staffSpacing * 12 + staffMargin * 2));
+
+            lines.Add(new Models.Line(staffWidth / 4,
+                    staffSpacing * 14 + staffMargin * 2,
+                    staffWidth / 4,
+                    staffSpacing * 25 + staffMargin * 2));
+
+            //Set images inside of the ContentPipeline for futher re-use.
             args.TrackAsyncAction(CreateResourcesAsync(sender).AsAsyncAction());
+
+            // Start GameTimer
+            GameTimerLogic();
         }
 
         private async Task CreateResourcesAsync(CanvasControl sender)
-        {
-            int staffMargin = 24;
-            int staffWidth = (int)gameCanvasWidth - staffMargin;
-            int staffSpacing = 8;
-  
+        {  
             // Add the resources to the ContentPipeline for reuse purposes
             ContentPipeline.ParentCanvas = sender;
             
@@ -427,31 +465,19 @@ namespace PiaNotes.Views
             await ContentPipeline.AddImage("0.0625", @"Assets/Notes/SixteenthNote.png");
             await ContentPipeline.AddImage("0.03125", @"Assets/Notes/ThirtySecondNote.png");
             
-            int tpqn = SM.TicksPerQuaterNote;
-
             MidiConverter midiConverter = new MidiConverter();
-
             List<int> flatKeysAll = midiConverter.GetFlatKeys();
-            
             LoadPage = true;
+
             // Give the notes a bitmap
             for (int i = 0; i < SM.notes.Count; i++)
             {
                 SM.notes[i].SetBitmap(SM.notes[i].NoteType.ToString());
                 SM.notes[i].SetSize(30, 30);
                 int key = 0;
-                
+
                 // Check if key is flat.
-                if (flatKeysAll.Contains(SM.notes[i].Number))
-                {
-                    // Key is flat.
-                    key = SM.notes[i].Number;
-                }
-                else
-                {
-                    // Key is not flat.
-                    key = SM.notes[i].Number - 1;
-                }
+                key = (flatKeysAll.Contains(SM.notes[i].Number)) ? key = SM.notes[i].Number : key = SM.notes[i].Number - 1;
 
                 // Set location of each note.
                 int index = flatKeysAll.IndexOf(SM.notes[i].Number);
@@ -459,37 +485,6 @@ namespace PiaNotes.Views
                 int notePos = Math.Abs(negativeNote * staffSpacing) - 4;
                 SM.notes[i].Location = new Vector2(staffEnd, notePos);
             }
-
-            // Create staff
-            for (int i = 0; i < 13; i++)
-            {
-                int y = staffSpacing * (i + 1) + staffMargin * 2;
-
-                if (i % 2 == 0 && i != 0 && i != 12)
-                    lines.Add(new Models.Line(staffMargin, y, staffWidth, y));
-            }
-
-            for (int i = 0; i < 13; i++)
-            {
-                int y =  staffSpacing * (i + 1) + 12 * staffSpacing + (staffMargin * 2);
-
-                if (i % 2 == 0 && i != 0 && i != 12)
-                    lines.Add(new Models.Line(staffMargin, y, staffWidth, y));
-            }
-
-            // Create Guidelines
-            lines.Add(new Models.Line(staffMargin * 3,
-                    staffSpacing * (2 + 1) + staffMargin * 2,
-                    staffMargin * 3,
-                    staffSpacing * (10 + 1) + staffMargin * 2));
-
-            lines.Add(new Models.Line(staffMargin * 3,
-                    staffSpacing * (2 + 1) + 12 * staffSpacing + staffMargin * 2,
-                    staffMargin * 3,
-                    staffSpacing * (10 + 1) + 12 * staffSpacing + staffMargin * 2));
-
-
-            GameTimerLogic();
         }
         
         private void GameCanvas_Draw(CanvasControl sender, CanvasDrawEventArgs args)
