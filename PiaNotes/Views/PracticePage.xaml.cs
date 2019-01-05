@@ -53,7 +53,7 @@ namespace PiaNotes.Views
         private int staffStart;
         private int staffEnd;
         private int tickCount;
-        private double tickDistance;
+        private float tickDistance;
 
         private double gameCanvasWidth;
         private double gameCanvasHeight;
@@ -340,8 +340,8 @@ namespace PiaNotes.Views
 
         private void GameTimerLogic()
         {
-            // Create a timer with a sixty-fourth tick which represents the 1/64 note.
-            timerGameLogic = new Timer(1000 / UPS)
+            // Create a timer with a sixty-fourth tick which represents the 1/64 note which is the smallest note we support.
+            timerGameLogic = new Timer(15.625)
             {
                 AutoReset = true,
                 Enabled = true
@@ -353,7 +353,7 @@ namespace PiaNotes.Views
 
         private void GameTickLogic(Object source, ElapsedEventArgs e)
         {
-            tickCount += 1000000/UPS;
+            tickCount += 15625;
 
             for (int i = 0; i < SM.notes.Count && i < 6; i++)
             {
@@ -371,7 +371,8 @@ namespace PiaNotes.Views
                     gameObjects.Remove(gameObjects[i]);
                     return;
                 }
-                gameObjects[i].Location = new Vector2(gameObjects[i].Location.X - (float)tickDistance,gameObjects[i].Location.Y);
+                
+                gameObjects[i].Location = new Vector2(gameObjects[i].Location.X - tickDistance, gameObjects[i].Location.Y);
             }
         }
 
@@ -401,7 +402,8 @@ namespace PiaNotes.Views
         {
             staffStart = 24;
             staffEnd = windowWidth - staffStart;
-            tickDistance = (windowWidth * 0.80) / 600;
+            // tickdistance is now 12 seconds for the entire line: distance / (time in milliseconds / ticks per millisecons)
+            tickDistance = (windowWidth) / 1536;
             gameCanvasHeight = sender.ActualHeight;
             gameCanvasWidth = sender.ActualWidth;
 
