@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Windows.Storage;
 
 namespace PianNotes.UnitTests
 {
@@ -41,7 +43,7 @@ namespace PianNotes.UnitTests
             var db = new PiaNotes.ViewModels.Databaser();
 
             //Act
-            var result = db.Search("Id,Title,File", "Id", "1", 0, 0);
+            var result = db.Search("Id,Title,FileName", "Id", "14", 0, 0);
 
             //Assert
             Assert.IsTrue(result.Count == 1);
@@ -87,6 +89,20 @@ namespace PianNotes.UnitTests
 
             //Assert
             Assert.AreEqual(null, result);
+        }
+
+        //Depends on database
+        [TestMethod]
+        public void GetAFileAsync_SearchId14_IsStorageFile()
+        {
+            //Arange
+            var db = new PiaNotes.ViewModels.Databaser();
+
+            //Act
+            var result = db.GetAFileAsync(14);
+
+            //Assert
+            Assert.IsInstanceOfType(result, typeof(Task<StorageFile>));
         }
     }
 }

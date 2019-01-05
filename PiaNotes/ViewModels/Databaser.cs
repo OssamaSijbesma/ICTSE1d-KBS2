@@ -143,34 +143,40 @@ namespace PiaNotes.ViewModels
         // Get a file from the database by ID
         public async Task<StorageFile> GetAFileAsync(int id)
         {
+            try { 
             //Build sql query
             string sql = $"SELECT FileBytes, FileName FROM {DataTable} Where Id = @ID";
 
-            //Setup connection and sql command
-            using (MySqlConnection sqlconn = new MySqlConnection(ConnectionString))
-            using (var cmd = new MySqlCommand(sql, sqlconn))
+                //Setup connection and sql command
+                using (MySqlConnection sqlconn = new MySqlConnection(ConnectionString))
+                using (var cmd = new MySqlCommand(sql, sqlconn))
+                {
+                    cmd.Parameters.AddWithValue("@ID", id);
+                    //Open connection
+                    sqlconn.Open();
+
+                    //Execute query
+                    var go = cmd.ExecuteReader();
+                    go.Read();
+
+                    //Get values for use
+                    var bytes = go.GetValue(0);
+                    Byte[] byteArray = (Byte[])bytes;
+                    string fileName = go.GetString(1);
+
+                    //Close connection to server
+                    sqlconn.Close();
+
+                    //Create and return a storage file created from database
+                    StorageFolder storageFolder = ApplicationData.Current.LocalFolder;
+                    StorageFile sampleFile = await storageFolder.CreateFileAsync(fileName, CreationCollisionOption.ReplaceExisting);
+                    await FileIO.WriteBytesAsync(sampleFile, byteArray);
+                    return sampleFile;
+                }
+            }
+            catch
             {
-                cmd.Parameters.AddWithValue("@ID", id);
-                //Open connection
-                sqlconn.Open();
-
-                //Execute query
-                var go = cmd.ExecuteReader();
-                go.Read();
-
-                //Get values for use
-                var bytes = go.GetValue(0);
-                Byte[] byteArray = (Byte[])bytes;
-                string fileName = go.GetString(1);
-
-                //Close connection to server
-                sqlconn.Close();
-
-                //Create and return a storage file created from database
-                StorageFolder storageFolder = ApplicationData.Current.LocalFolder;
-                StorageFile sampleFile = await storageFolder.CreateFileAsync(fileName, CreationCollisionOption.ReplaceExisting);
-                await FileIO.WriteBytesAsync(sampleFile, byteArray);
-                return sampleFile;
+                return null;
             }
         }
 
