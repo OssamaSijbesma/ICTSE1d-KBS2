@@ -453,8 +453,8 @@ namespace PiaNotes.Views
                     key = SM.notes[i].Number - 1;
                 }
 
-                // Set location of each note.
-                int index = flatKeysAll.IndexOf(SM.notes[i].Number);
+                // Set height of each note.
+                int index = flatKeysAll.IndexOf(key);
                 int negativeNote = (midiConverter.GetOctaveInfo(SM).Item1 * 7 * -1) + index;
                 int notePos = Math.Abs(negativeNote * staffSpacing) - 4;
                 SM.notes[i].Location = new Vector2(staffEnd, notePos);
