@@ -122,13 +122,22 @@ namespace PiaNotes.Views
                     velocity = Utilities.DoubleToByte(Settings.velocity);
 
 
-                // Creates the message that will be send to play.
-                IMidiMessage midiMessageToSend = new MidiNoteOnMessage(channel, note, velocity);
-                Settings.midiOutPort.SendMessage(midiMessageToSend);
-                FillKey(note);
-
+                for (int i = 0; i < SM.notes.Count && i < 6; i++)
+                {
+                    // hier de applicatie stoppen -> resume in de if zodra de goede noot gespeeld is
+                    if (note == SM.notes[i].Number)
+                    {
+                        // Creates the message that will be send to play.
+                        IMidiMessage midiMessageToSend = new MidiNoteOnMessage(channel, note, velocity);
+                        Settings.midiOutPort.SendMessage(midiMessageToSend);
+                        FillKey(note);
+                    } else
+                    {
+                        System.Diagnostics.Debug.WriteLine($"{note} != {SM.notes[i].Number}");
+                    }
+                }
+             
             }
-
             // Checks if note has been released if so unfill the key.
             if (receivedMidiMessage.Type == MidiMessageType.NoteOff)
                 UnFillKey(((MidiNoteOffMessage)receivedMidiMessage).Note);
