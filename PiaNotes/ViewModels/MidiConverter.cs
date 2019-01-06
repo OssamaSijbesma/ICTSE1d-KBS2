@@ -80,7 +80,6 @@ namespace PiaNotes.ViewModels
                     min = SM.notes[i].Number;
                 }
             }
-
             return (max, min);
         }
         
