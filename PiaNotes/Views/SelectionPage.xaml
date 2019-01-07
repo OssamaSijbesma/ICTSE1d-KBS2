@@ -24,7 +24,10 @@
                 </Button.Flyout>
             </Button>
 
-            <Button x:Name="Options" MinHeight="36" Content="Options" HorizontalAlignment="Center" VerticalAlignment="Center" Background="#253847" RelativePanel.RightOf="File">
+            <Button x:Name="Tutorial" MinHeight="36" Content="Tutorial" HorizontalAlignment="Center" VerticalAlignment="Center" Background="#253847" Click="NavTutorial_Click" RelativePanel.RightOf="File">
+            </Button>
+
+            <Button x:Name="Options" MinHeight="36" Content="Options" HorizontalAlignment="Center" VerticalAlignment="Center" Background="#253847" RelativePanel.RightOf="Tutorial">
                 <Button.Flyout>
                     <MenuFlyout>
                         <MenuFlyoutItem x:Name="nav_settings" Text="Settings" Click="NavSettings_Click" />

@@ -1,0 +1,46 @@
+﻿<Page
+    x:Class="PiaNotes.Views.TutorialPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:PiaNotes"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" RequestedTheme="Dark">
+
+    <Grid>
+        <NavigationView x:Name="TutorialNV"
+                Loaded="TutorialNV_Loaded"
+                IsPaneOpen="False"
+                IsPaneToggleButtonVisible="False"
+                ItemInvoked="TutorialNV_ItemInvoked"
+                BackRequested="TutorialNV_BackRequested"
+                IsBackEnabled="True"
+                IsTabStop="False"
+                IsSettingsVisible="False" 
+                OpenPaneLength="120">
+            <NavigationView.MenuItems>
+                <NavigationViewItem Icon="More"  Tag="First_Tutorial">
+                    <TextBlock Tag="First_Tutorial">One</TextBlock>
+                </NavigationViewItem>
+                <NavigationViewItem Icon="More"  Tag="Second_Tutorial">
+                    <TextBlock Tag="Second_Tutorial">Two</TextBlock>
+                </NavigationViewItem>
+                <NavigationViewItem Icon="More"  Tag="Third_Tutorial">
+                    <TextBlock Tag="Third_Tutorial">Three</TextBlock>
+                </NavigationViewItem>
+                <NavigationViewItem Icon="More"  Tag="Fourth_Tutorial">
+                    <TextBlock Tag="Fourth_Tutorial">Four</TextBlock>
+                </NavigationViewItem>
+                <NavigationViewItem Icon="More"  Tag="Fifth_Tutorial">
+                    <TextBlock Tag="Fifth_Tutorial">Five</TextBlock>
+                </NavigationViewItem>
+                <NavigationViewItem Icon="More"  Tag="Sixth_Tutorial">
+                    <TextBlock Tag="Sixth_Tutorial">Six</TextBlock>
+                </NavigationViewItem>
+            </NavigationView.MenuItems>
+            <Frame x:Name="contentFrame" Margin="0,-60,0,0"/>
+        </NavigationView>
+
+    </Grid>
+</Page>
