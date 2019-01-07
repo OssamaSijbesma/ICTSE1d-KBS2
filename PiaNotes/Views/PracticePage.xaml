@@ -40,8 +40,6 @@
             <StackPanel x:Name="KeysWhiteSP" Orientation="Horizontal" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignBottomWithPanel="True" HorizontalAlignment="Center"/>
             <StackPanel x:Name="KeysBlackSP" Orientation="Horizontal" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignBottomWithPanel="True" HorizontalAlignment="Center"/>
 
-            <Rectangle x:Name="Cursor" MinHeight="300" MinWidth="40" Margin="350,40,-352.6,-66"/>
-
             <Rectangle x:Name="Progress" Fill="#2b3c49"
                        MinHeight="30"
                        RelativePanel.AlignLeftWithPanel="True"
@@ -70,7 +68,6 @@
                     </MenuFlyout>
                 </Button.Flyout>
             </Button>
-            <TextBlock x:Name="correctCount"  HorizontalAlignment="Left" Height="42" Text="COUNTER:" TextWrapping="Wrap" VerticalAlignment="Top" Width="259" Margin="793,540,0,0" FontSize="36"/>
 
 
         </RelativePanel>
