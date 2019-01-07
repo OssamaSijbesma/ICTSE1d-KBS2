@@ -21,6 +21,9 @@ namespace PiaNotes.Models
         public double NoteType { get; set; }
         public MetricTimeSpan MetricTiming { get; set; }
 
+        public bool Active { get; set; }
+        public bool Played { get; set; }
+
         public CanvasBitmap Bitmap { get; set; }
         public Vector2 BitmapLocation { get; set; }
         public Size BitmapSize { get; set; }
@@ -33,6 +36,7 @@ namespace PiaNotes.Models
             Length = length;
             MetricTiming = metricTiming;
             NoteType = roundedLength;
+            Active = false;
         }
 
         public bool SetBitmap(string key)

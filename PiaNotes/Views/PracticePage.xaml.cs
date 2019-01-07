@@ -19,6 +19,7 @@ using PiaNotes.Models;
 using System.Numerics;
 using Windows.Foundation;
 using System.Diagnostics;
+using Windows.UI.Xaml.Media.Imaging;
 
 namespace PiaNotes.Views
 {
@@ -55,6 +56,7 @@ namespace PiaNotes.Views
         private int staffEnd;
         private int staffWidth;
         private int staffSpacing;
+        private int guidlinePos;
         private int tickCount;
         private float tickDistance;
 
@@ -72,7 +74,9 @@ namespace PiaNotes.Views
         // UI Assets
         List<Models.Line> lines = new List<Models.Line>();
         List<Note> notes = new List<Note>();
+        List<Note> activeNotes = new List<Note>();
         Clef[] clefs = new Clef[2];
+        private int correctCounter;
 
         public PracticePage()
         {
@@ -100,6 +104,11 @@ namespace PiaNotes.Views
 
             //Generate the amount of Keys
             Keys = (SettingsPages.MIDI_SettingsPage.OctaveAmount != 0) ? Settings.octaveAmount * 12 : Settings.octaveAmount * 12;
+
+            //Cursor.Fill = new ImageBrush
+            //{
+            //    ImageSource = new BitmapImage(new Uri("ms-appx:///Assets/Cursor_White.png"))
+            //};
 
             //Create the keyboard to show on the screen and set a timer
             CreateKeyboard();
@@ -152,6 +161,18 @@ namespace PiaNotes.Views
                         velocity = 127;
                 } else
                     velocity = Utilities.DoubleToByte(Settings.velocity);
+
+                for (int i = 0; i < notes.Count; i++)
+                {
+                    if (notes[i].Active == true && notes[i].Number == note)
+                    {
+                        notes[i].Played = true;
+                        notes[i].Active = false;
+                        System.Diagnostics.Debug.WriteLine("Correct: " + note);
+                        notes[i].SetBitmap("c" + notes[i].NoteType.ToString());
+                    }
+
+                }
 
 
                 // Creates the message that will be send to play.
@@ -280,7 +301,7 @@ namespace PiaNotes.Views
                     if (i == 0) Notes[j] = (keyWhiteRect);
                     else Notes[(j + (i * 12))] = (keyWhiteRect);
                 }
-                System.Diagnostics.Debug.WriteLine(keyWhiteRect.Name);
+                //System.Diagnostics.Debug.WriteLine(keyWhiteRect.Name);
             }
             else
             {
@@ -295,7 +316,7 @@ namespace PiaNotes.Views
                 KeysBlackSP.Children.Add(keyBlackRect);
                 if (i == 0) Notes[j] = (keyBlackRect);
                 else Notes[(j + (i * 12))] = (keyBlackRect);
-                System.Diagnostics.Debug.WriteLine(keyBlackRect.Name);
+                //System.Diagnostics.Debug.WriteLine(keyBlackRect.Name);
             }
         }
 
@@ -404,6 +425,15 @@ namespace PiaNotes.Views
                     return;
                 }
 
+                if (notes[i].BitmapLocation.X <= guidlinePos + tickDistance*10 && notes[i].BitmapLocation.X >= guidlinePos - tickDistance*10  && notes[i].Played == false)
+                    notes[i].Active = true;
+
+                if (notes[i].BitmapLocation.X < guidlinePos - tickDistance * 10 && notes[i].Active == true && notes[i].Played == false)
+                {
+                    notes[i].Active = false;
+                    notes[i].SetBitmap("i" + notes[i].NoteType.ToString());
+                }
+
                 notes[i].BitmapLocation = new Vector2(notes[i].BitmapLocation.X - tickDistance, notes[i].BitmapLocation.Y);
             }
         }
@@ -441,10 +471,11 @@ namespace PiaNotes.Views
             staffEnd = (int)gameCanvasWidth - staffMargin;
             staffWidth = (int)gameCanvasWidth - staffMargin * 2;
             staffSpacing = 8;
+            guidlinePos = staffWidth / 4;
 
             // Tickdistance is now 12/24 seconds for the entire line: distance / (time in milliseconds / ticks per millisecons)
-            //tickDistance = (windowWidth-staffStart*2) / 1536;
-            tickDistance = (windowWidth - staffStart * 2) / 768;
+            tickDistance = (windowWidth-staffStart*2) / 1536;
+            //tickDistance = (windowWidth - staffStart * 2) / 768;
 
 
             // Create staff
@@ -499,7 +530,21 @@ namespace PiaNotes.Views
             await ContentPipeline.AddImage("0.125", @"Assets/Notes/EighthNote.png");
             await ContentPipeline.AddImage("0.0625", @"Assets/Notes/SixteenthNote.png");
             await ContentPipeline.AddImage("0.03125", @"Assets/Notes/ThirtySecondNote.png");
-            
+
+            await ContentPipeline.AddImage("c1", @"Assets/Notes/WholeNote_correct.png");
+            await ContentPipeline.AddImage("c0.5", @"Assets/Notes/HalfNote_correct.png");
+            await ContentPipeline.AddImage("c0.25", @"Assets/Notes/QuarterNote_correct.png");
+            await ContentPipeline.AddImage("c0.125", @"Assets/Notes/EighthNote_correct.png");
+            await ContentPipeline.AddImage("c0.0625", @"Assets/Notes/SixteenthNote_correct.png");
+            await ContentPipeline.AddImage("c0.03125", @"Assets/Notes/ThirtySecondNote_correct.png");
+
+            await ContentPipeline.AddImage("i1", @"Assets/Notes/WholeNote_incorrect.png");
+            await ContentPipeline.AddImage("i0.5", @"Assets/Notes/HalfNote_incorrect.png");
+            await ContentPipeline.AddImage("i0.25", @"Assets/Notes/QuarterNote_incorrect.png");
+            await ContentPipeline.AddImage("i0.125", @"Assets/Notes/EighthNote_incorrect.png");
+            await ContentPipeline.AddImage("i0.0625", @"Assets/Notes/SixteenthNote_incorrect.png");
+            await ContentPipeline.AddImage("i0.03125", @"Assets/Notes/ThirtySecondNote_incorrect.png");
+
             MidiConverter midiConverter = new MidiConverter();
             List<int> flatKeysAll = midiConverter.GetFlatKeys();
             LoadPage = true;
@@ -548,6 +593,11 @@ namespace PiaNotes.Views
                         args.DrawingSession.DrawImage(notes[i].Bitmap, notes[i].BitmapLocation);
                         // size 
                         //args.DrawingSession.DrawImage(notes[i].Bitmap, notes[i].BitmapLocation, new Rect(new Point(0, 0), notes[i].BitmapSize));
+                }
+                for (int i = 0; i < activeNotes.Count; i++)
+                {
+                    if (activeNotes[i] != null)
+                        args.DrawingSession.DrawImage(activeNotes[i].Bitmap, activeNotes[i].BitmapLocation);
                 }
             }
         }
