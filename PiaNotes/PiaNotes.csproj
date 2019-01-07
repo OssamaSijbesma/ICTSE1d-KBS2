@@ -122,11 +122,12 @@
     <Compile Include="Interfaces\IGameObject.cs" />
     <Compile Include="Models\Bar.cs" />
     <Compile Include="Models\Clef.cs" />
+    <Compile Include="Models\Line.cs" />
     <Compile Include="Models\MusicSheet.cs" />
     <Compile Include="Models\Note.cs" />
     <Compile Include="Models\SheetMusic.cs" />
-    <Compile Include="Models\Staff.cs" />
     <Compile Include="StaticObjects.cs" />
+    <Compile Include="Utilities.cs" />
     <Compile Include="Views\SettingsPage.xaml.cs">
       <DependentUpon>SettingsPage.xaml</DependentUpon>
     </Compile>
@@ -173,6 +174,9 @@
     <Content Include="Assets\BadgeLogo.scale-150.png" />
     <Content Include="Assets\BadgeLogo.scale-200.png" />
     <Content Include="Assets\BadgeLogo.scale-400.png" />
+    <Content Include="Assets\Clef\CClef.png" />
+    <Content Include="Assets\Clef\FClef.png" />
+    <Content Include="Assets\Clef\GClef.png" />
     <Content Include="Assets\LargeTile.scale-100.png" />
     <Content Include="Assets\LargeTile.scale-125.png" />
     <Content Include="Assets\LargeTile.scale-150.png" />

@@ -1,5 +1,6 @@
 ﻿using Melanchall.DryWetMidi.Smf;
 using Melanchall.DryWetMidi.Smf.Interaction;
+using PiaNotes.Models;
 using PiaNotes.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -28,10 +29,14 @@ namespace PiaNotes.Views
     public sealed partial class UploadPage : Page
     {
         Databaser DB = new Databaser();
+        MidiParser midiParser;
+
         private string midiString;
         private Byte[] fileByte;
         private string fileName;
         public bool FileSelected { get; set; } = false;
+        private StorageFile file;
+        private SheetMusic SM;
 
         public UploadPage()
         {
@@ -55,7 +60,7 @@ namespace PiaNotes.Views
             };
             openPicker.FileTypeFilter.Add(".midi");
             openPicker.FileTypeFilter.Add(".mid");
-            StorageFile file = await openPicker.PickSingleFileAsync();
+            file = await openPicker.PickSingleFileAsync();
 
             if (file != null)
             {
@@ -69,18 +74,26 @@ namespace PiaNotes.Views
                 //Change for midiUpload
                 fileByte = midiConverter.MidiToBytes(stream2);
                 fileName = file.Name;
-
-
-                if (midiString.Length < 2000000)
+                
+                // Check range of MIDI file.
+                Stream streamMIDI = await file.OpenStreamForReadAsync();
+                MidiFile midiFile = MidiFile.Read(streamMIDI);
+                midiParser = new MidiParser(midiFile);
+                SM = midiParser.sheetMusic;
+                
+                // MIDI file not in range, not usable.
+                if (midiConverter.GetOctaveInfo(SM).Item3 > 2)
                 {
-                    FileSelected = true;
-                    TXTBlock_Status.Text = "MIDI file converted.";
+                    TXTBlock_Status.Text = "MIDI file is out of range! Please try another file.";
+                    TXTBox_Title.Text = "";
                 }
+                // MIDI file in range, usable.
                 else
                 {
-                    TXTBox_Title.Text = "";
-                    TXTBlock_Status.Text = "File is too large! Please try another file.";
+                    TXTBlock_Status.Text = "MIDI file converted.";
+                    FileSelected = true;
                 }
+                // Check uploaded file's name length and shorten it if necessary.
                 if (FileSelected && TXTBox_Title.Text.Length > 100)
                 {
                     TXTBox_Title.Text = TXTBox_Title.Text.Substring(0, 100);
@@ -88,18 +101,32 @@ namespace PiaNotes.Views
                 }
             }
         }
-        
+
         // Submit midi file functionality.
-        private void OnSubmit(object sender, RoutedEventArgs e)
+        private async void OnSubmit(object sender, RoutedEventArgs e)
         {
             if (FileSelected && midiString.Length < 2000000 && TXTBox_Title.Text.Length <= 100)
             {
-                DB.Upload(TXTBox_Title.Text, fileByte, fileName);
-                FileSelected = false;
-                TXTBlock_Status.Text = "File uploaded.";
+                if (DB.CheckConnection() == true)
+                {
+                    DB.Upload(TXTBox_Title.Text, fileByte, fileName);
+                    TXTBlock_Status.Text = "File uploaded.";
 
-                //Added a navigation to the selection after uploading succesfully
-                this.Frame.Navigate(typeof(SelectionPage));
+                    //Added a navigation to the selection after uploading succesfully
+                    this.Frame.Navigate(typeof(SelectionPage));
+                }
+                else if (DB.CheckConnection() == false)
+                {
+                    // Navigate to the practice page unless MIDI is not set then show a dialog and go to the settings page
+                    StorageFile storageFileMIDI = file;
+                    Stream streamMIDI = await storageFileMIDI.OpenStreamForReadAsync();
+                    MidiFile midiFile = MidiFile.Read(streamMIDI);
+                    midiParser = new MidiParser(midiFile);
+
+                    // Navigate to the practice page
+                    this.Frame.Navigate(typeof(PracticePage), midiParser.sheetMusic);
+                }
+                FileSelected = false;
             }
             else if (!FileSelected)
             {

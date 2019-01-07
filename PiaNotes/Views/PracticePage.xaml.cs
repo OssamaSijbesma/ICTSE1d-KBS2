@@ -19,7 +19,6 @@ using Windows.UI.Xaml.Shapes;
 using PiaNotes.Models;
 using System.Numerics;
 using PiaNotes.Interfaces;
-using Melanchall.DryWetMidi.Smf.Interaction;
 
 namespace PiaNotes.Views
 {
@@ -34,6 +33,7 @@ namespace PiaNotes.Views
         private SheetMusic SM;
 
         public bool KeyboardIsOpen { get; set; } = true;
+        public bool LoadPage { get; set; } = false;
 
         //List for White keys and Black keys of the keyboard
         private List<Rectangle> keysWhite = new List<Rectangle>();
@@ -41,7 +41,7 @@ namespace PiaNotes.Views
 
         // Length of 127 because of 127 notes
         private Rectangle[] Notes = new Rectangle[127];
-        private int Keys = Views.SettingsPages.MIDI_SettingsPage.OctaveAmount * 12;
+        private int Keys = SettingsPages.MIDI_SettingsPage.OctaveAmount * 12;
         //private double oldWidth;
         private enum PianoKey { C = 0, D = 2, E = 4, F = 5, G = 7, A = 9, B = 11 };
         private enum PianoKeySharp { CSharp = 1, DSharp = 3, FSharp = 6, GSharp = 8, ASharp = 10 };
@@ -63,7 +63,8 @@ namespace PiaNotes.Views
         private int UPS = 100;
 
 
-        // Assets
+        // UI Assets
+        List<Models.Line> lines = new List<Models.Line>();
         List<IGameObject> gameObjects = new List<IGameObject>();
 
         public PracticePage()
@@ -78,6 +79,11 @@ namespace PiaNotes.Views
             var coreTitleBar = CoreApplication.GetCurrentView().TitleBar;
             coreTitleBar.ExtendViewIntoTitleBar = false;
 
+            // Sets the decimal seperator to a dot.
+            System.Globalization.CultureInfo customCulture = (System.Globalization.CultureInfo)System.Threading.Thread.CurrentThread.CurrentCulture.Clone();
+            customCulture.NumberFormat.NumberDecimalSeparator = ".";
+            System.Threading.Thread.CurrentThread.CurrentCulture = customCulture;
+
             // Initialize variables
             windowWidth = Convert.ToInt32(Window.Current.Bounds.Width);
             windowHeight = Convert.ToInt32(Window.Current.Bounds.Height);
@@ -86,8 +92,7 @@ namespace PiaNotes.Views
             Settings.midiInPort.MessageReceived += MidiInPort_MessageReceived;
 
             //Generate the amount of Keys
-            if (Views.SettingsPages.MIDI_SettingsPage.OctaveAmount != 0) Keys = Settings.octaveAmount * 12;
-            else Keys = 12;
+            Keys = (SettingsPages.MIDI_SettingsPage.OctaveAmount != 0) ? Settings.octaveAmount * 12 : Settings.octaveAmount * 12;
 
             //Create the keyboard to show on the screen and set a timer
             CreateKeyboard();
@@ -98,84 +103,49 @@ namespace PiaNotes.Views
         {
             // Converts received message into IMidiMessage.
             IMidiMessage receivedMidiMessage = args.Message;
-            System.Diagnostics.Debug.WriteLine(receivedMidiMessage.Timestamp.ToString());
 
             // Checks if a key has been pressed.
             if (receivedMidiMessage.Type == MidiMessageType.NoteOn)
             {
-                // Debug lines to show the Channel Note and Velocity output from the keyboard
-                System.Diagnostics.Debug.WriteLine("Channel: " + ((MidiNoteOnMessage)receivedMidiMessage).Channel);
-                System.Diagnostics.Debug.WriteLine("Note: " + ((MidiNoteOnMessage)receivedMidiMessage).Note);
-                System.Diagnostics.Debug.WriteLine("Velocity: " + ((MidiNoteOnMessage)receivedMidiMessage).Velocity);
-
                 // Retrieves channel, note from the MidiMessage, and sets the velocity.
                 byte channel = ((MidiNoteOnMessage)receivedMidiMessage).Channel;
                 byte note = ((MidiNoteOnMessage)receivedMidiMessage).Note;
-                byte velocity;
+                byte velocity = ((MidiNoteOnMessage) receivedMidiMessage).Velocity;
 
-                // If the player releases the key there should be no sound
-                if (((MidiNoteOnMessage)receivedMidiMessage).Velocity != 0)
+                if (Settings.disableUserFeedback)
                 {
-                    if (Settings.disableUserFeedback)
-                    {
-                        // Retrieves the velocity from the played note and then adds the amount of volume the user has set.
-                        velocity = ((MidiNoteOnMessage)receivedMidiMessage).Velocity;
+                    if (velocity + Utilities.DoubleToByte(Settings.volume) <= 127 && velocity + Utilities.DoubleToByte(Settings.volume) >= 0)
+                        velocity += Utilities.DoubleToByte(Settings.volume);
+                    else
+                        velocity = 127;
+                } else
+                    velocity = Utilities.DoubleToByte(Settings.velocity);
 
-                        //If the velocity surpases the limits of MIDI it will go to the limit, otherwise it will act normally
-                        if (velocity + DoubleToByte(Settings.volume) <= 127 && velocity + DoubleToByte(Settings.volume) >= 0) velocity += DoubleToByte(Settings.volume);
-                        else if (velocity + DoubleToByte(Settings.volume) > 127) velocity = 127;
-                        else velocity = 0;
-                        
-                        // Else use the static velocity the user chose.
-                    } else velocity = DoubleToByte(Settings.velocity);
-                    // Else use velocity from the midimessage, if below a certain amount, no sound will be played.
-                } else velocity = ((MidiNoteOnMessage)receivedMidiMessage).Velocity;
 
                 // Creates the message that will be send to play.
                 IMidiMessage midiMessageToSend = new MidiNoteOnMessage(channel, note, velocity);
-                FillKey(midiMessageToSend);
                 Settings.midiOutPort.SendMessage(midiMessageToSend);
+                FillKey(note);
+
             }
 
-            // Checks if note has been released.
+            // Checks if note has been released if so unfill the key.
             if (receivedMidiMessage.Type == MidiMessageType.NoteOff)
-            {
-                //Debug lines to show the Channel Note and Velocity output from the keyboard
-                System.Diagnostics.Debug.WriteLine(((MidiNoteOffMessage)receivedMidiMessage).Channel);
-                System.Diagnostics.Debug.WriteLine(((MidiNoteOffMessage)receivedMidiMessage).Note);
-                System.Diagnostics.Debug.WriteLine(((MidiNoteOffMessage)receivedMidiMessage).Velocity);
-
-                // Retrieves channel, note and velocity from the MidiMessage.
-                byte channel = ((MidiNoteOffMessage)receivedMidiMessage).Channel;
-                byte note = ((MidiNoteOffMessage)receivedMidiMessage).Note;
-                byte velocity = ((MidiNoteOffMessage)receivedMidiMessage).Velocity;
-
-                // Creates a message solely for the purpose of changing the key-color back to its default color.
-                IMidiMessage midiMessageToSend = new MidiNoteOffMessage(channel, note, velocity);
-                UnFillKey(midiMessageToSend);
-            }
-
+                UnFillKey(((MidiNoteOffMessage)receivedMidiMessage).Note);
         }
 
         // Method for coloring the played key
-        private async void FillKey(IMidiMessage IM)
+        private async void FillKey(byte note)
         {
             await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
-                byte note = ((MidiNoteOnMessage)IM).Note;
+                SolidColorBrush primaryColor = new SolidColorBrush(Color.FromArgb(255, Settings.redPrimary, Settings.greenPrimary, Settings.bluePrimary));
+                SolidColorBrush secondaryColor = new SolidColorBrush(Color.FromArgb(255, Settings.redSecondary, Settings.greenSecondary, Settings.blueSecondary));
 
-                // Try-catch for coloring the keys
                 try
                 {
-                    byte neg = 25;
-
                     // If it is a black key, the color will be slightly darker (-25 on all values except A) than a white key.
-                    // Colors will be pulled from Settings.cs.
-                    if (Notes[note].Name.Contains("Sharp"))
-                    {
-                        Notes[note].Fill = new SolidColorBrush(Windows.UI.Color.FromArgb(255, DoubleToByte(Settings.redValue - neg), DoubleToByte(Settings.greenValue - neg), DoubleToByte(Settings.blueValue - neg)));
-                    }
-                    else Notes[note].Fill = new SolidColorBrush(Windows.UI.Color.FromArgb(255, Settings.redValue, Settings.greenValue, Settings.blueValue));
+                    Notes[note].Fill = Notes[note].Name.Contains("Sharp") ? primaryColor : secondaryColor;
                 }
                 catch (Exception e)
                 {
@@ -186,16 +156,14 @@ namespace PiaNotes.Views
         }
 
         // Method for changing the color of the played key back to its default color.
-        private async void UnFillKey(IMidiMessage IM)
+        private async void UnFillKey(byte note)
         {
             await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
-                byte note = ((MidiNoteOffMessage)IM).Note;
                 try
                 {
                     // The keys original colour will be restored
-                    if (Notes[note].Name.Contains("Sharp")) Notes[note].Fill = new SolidColorBrush(Windows.UI.Colors.Black);
-                    else Notes[note].Fill = new SolidColorBrush(Windows.UI.Colors.White);
+                    Notes[note].Fill = Notes[note].Name.Contains("Sharp") ? new SolidColorBrush(Colors.Black) : new SolidColorBrush(Colors.White);
                 }
                 catch (Exception e)
                 {
@@ -203,27 +171,6 @@ namespace PiaNotes.Views
                     System.Diagnostics.Debug.WriteLine(e.Message);
                 }
             });
-        }
-
-        // Method for converting a double to byte.
-        public static byte DoubleToByte(double doubleVal)
-        {
-            byte byteVal = 0;
-
-            // Double to byte conversion can overflow.
-            try
-            {
-                byteVal = System.Convert.ToByte(doubleVal);
-                return byteVal;
-            }
-            catch (System.OverflowException)
-            {
-                //If it doesn't work, display the error message in the debug console
-                System.Diagnostics.Debug.WriteLine("Overflow in double-to-byte conversion.");
-            }
-            // Byte to double conversion cannot overflow.
-            doubleVal = System.Convert.ToDouble(byteVal);
-            return byteVal;
         }
 
         // Menustrip: View > Keyboard
@@ -452,7 +399,7 @@ namespace PiaNotes.Views
         // Initialize images and stuff.
         private void GameCanvas_CreateResources(CanvasControl sender, CanvasCreateResourcesEventArgs args)
         {
-            staffStart = windowWidth / 10;
+            staffStart = 24;
             staffEnd = windowWidth - staffStart;
             tickDistance = (windowWidth * 0.80) / 600;
             gameCanvasHeight = sender.ActualHeight;
@@ -464,38 +411,101 @@ namespace PiaNotes.Views
 
         private async Task CreateResourcesAsync(CanvasControl sender)
         {
+            int staffMargin = 24;
+            int staffWidth = (int)gameCanvasWidth - staffMargin;
+            int staffSpacing = 8;
+  
             // Add the resources to the ContentPipeline for reuse purposes
             ContentPipeline.ParentCanvas = sender;
-            await ContentPipeline.AddImage("384", @"Assets/Notes/WholeNote.png");
-            await ContentPipeline.AddImage("192", @"Assets/Notes/HalfNote.png");
-            await ContentPipeline.AddImage("96", @"Assets/Notes/QuarterNote.png");
-            await ContentPipeline.AddImage("48", @"Assets/Notes/EighthNote.png");
-            await ContentPipeline.AddImage("24", @"Assets/Notes/SixteenthNote.png");
-            await ContentPipeline.AddImage("12", @"Assets/Notes/ThirtySecondNote.png");
+            
+            await ContentPipeline.AddImage("1", @"Assets/Notes/WholeNote.png");
+            await ContentPipeline.AddImage("0.5", @"Assets/Notes/HalfNote.png");
+            await ContentPipeline.AddImage("0.25", @"Assets/Notes/QuarterNote.png");
+            await ContentPipeline.AddImage("0.125", @"Assets/Notes/EighthNote.png");
+            await ContentPipeline.AddImage("0.0625", @"Assets/Notes/SixteenthNote.png");
+            await ContentPipeline.AddImage("0.03125", @"Assets/Notes/ThirtySecondNote.png");
+            
+            int tpqn = SM.TicksPerQuaterNote;
 
+            MidiConverter midiConverter = new MidiConverter();
+
+            List<int> flatKeysAll = midiConverter.GetFlatKeys();
+            
+            LoadPage = true;
             // Give the notes a bitmap
             for (int i = 0; i < SM.notes.Count; i++)
             {
-                SM.notes[i].SetBitmap("96");
+                SM.notes[i].SetBitmap(SM.notes[i].NoteType.ToString());
                 SM.notes[i].SetSize(30, 30);
-                SM.notes[i].Location = new Vector2(staffEnd, 55);                
+                int key = 0;
+                
+                // Check if key is flat.
+                if (flatKeysAll.Contains(SM.notes[i].Number))
+                {
+                    // Key is flat.
+                    key = SM.notes[i].Number;
+                }
+                else
+                {
+                    // Key is not flat.
+                    key = SM.notes[i].Number - 1;
+                }
+
+                // Set location of each note.
+                int index = flatKeysAll.IndexOf(SM.notes[i].Number);
+                int negativeNote = (midiConverter.GetOctaveInfo(SM).Item1 * 7 * -1) + index;
+                int notePos = Math.Abs(negativeNote * staffSpacing) - 4;
+                SM.notes[i].Location = new Vector2(staffEnd, notePos);
             }
+
+            // Create staff
+            for (int i = 0; i < 13; i++)
+            {
+                int y = staffSpacing * (i + 1) + staffMargin * 2;
+
+                if (i % 2 == 0 && i != 0 && i != 12)
+                    lines.Add(new Models.Line(staffMargin, y, staffWidth, y));
+            }
+
+            for (int i = 0; i < 13; i++)
+            {
+                int y =  staffSpacing * (i + 1) + 12 * staffSpacing + (staffMargin * 2);
+
+                if (i % 2 == 0 && i != 0 && i != 12)
+                    lines.Add(new Models.Line(staffMargin, y, staffWidth, y));
+            }
+
+            // Create Guidelines
+            lines.Add(new Models.Line(staffMargin * 3,
+                    staffSpacing * (2 + 1) + staffMargin * 2,
+                    staffMargin * 3,
+                    staffSpacing * (10 + 1) + staffMargin * 2));
+
+            lines.Add(new Models.Line(staffMargin * 3,
+                    staffSpacing * (2 + 1) + 12 * staffSpacing + staffMargin * 2,
+                    staffMargin * 3,
+                    staffSpacing * (10 + 1) + 12 * staffSpacing + staffMargin * 2));
+
+
             GameTimerLogic();
         }
-
-
+        
         private void GameCanvas_Draw(CanvasControl sender, CanvasDrawEventArgs args)
         {
-            int staffStart = windowWidth / 10;
-            int staffWidth = windowWidth - staffStart;
-
-            for (int i = 100; i <= 300; i += 50 ) args.DrawingSession.DrawLine(staffStart, i, staffWidth, i, Colors.White);
-            args.DrawingSession.DrawLine(staffStart+staffStart, 50, staffStart + staffStart, 350, Colors.White);
-
-            for (int i = 0; i < gameObjects.Count; i++)
+            if (LoadPage)
             {
-                if(gameObjects[i] != null)
-                    args.DrawingSession.DrawImage(gameObjects[i].Bitmap, gameObjects[i].Location);
+                // Draw staff and guidelines.
+                for (int i = 0; i < lines.Count; i++)
+                {
+                    args.DrawingSession.DrawLine(lines[i].StartPoint, lines[i].EndPoint, Colors.White);
+                }
+
+                // Draw notes.
+                for (int i = 0; i < gameObjects.Count; i++)
+                {
+                    if (gameObjects[i] != null)
+                        args.DrawingSession.DrawImage(gameObjects[i].Bitmap, gameObjects[i].Location);
+                }
             }
         }
 
