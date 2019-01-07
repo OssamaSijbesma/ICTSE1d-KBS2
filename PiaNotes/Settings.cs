@@ -21,10 +21,10 @@ namespace PiaNotes
 
         //Octave Settings
         //OctaveStart is the starting frequency of the octave
-        public static int startingOctave = 4;
+        public static int startingOctave = Views.SettingsPages.MIDI_SettingsPage.StartingOctave;
 
         //OctaveAmount is the amount of octaves on your screen at once
-        public static int octaveAmount = 2;
+        public static int octaveAmount = Views.SettingsPages.MIDI_SettingsPage.OctaveAmount;
 
         //Feedback Colours in RGB
         public static byte redPrimary = 43;
