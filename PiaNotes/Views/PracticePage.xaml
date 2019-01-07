@@ -69,6 +69,7 @@
                     </MenuFlyout>
                 </Button.Flyout>
             </Button>
+            <TextBlock x:Name="correctCount"  HorizontalAlignment="Left" Height="42" Text="COUNTER:" TextWrapping="Wrap" VerticalAlignment="Top" Width="259" Margin="793,540,0,0" FontSize="36"/>
 
 
         </RelativePanel>

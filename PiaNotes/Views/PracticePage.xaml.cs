@@ -70,6 +70,7 @@ namespace PiaNotes.Views
         List<Note> notes = new List<Note>();
         List<Note> activeNotes = new List<Note>();
         Clef[] clefs = new Clef[2];
+        private int correctCounter;
 
         public PracticePage()
         {
@@ -124,6 +125,18 @@ namespace PiaNotes.Views
                         velocity = 127;
                 } else
                     velocity = Utilities.DoubleToByte(Settings.velocity);
+
+                for (int i = 0; i < notes.Count; i++)
+                {
+                    if (notes[i].Active == true && notes[i].Number == note)
+                    {
+                        notes[i].Played = true;
+                        notes[i].Active = false;
+                        System.Diagnostics.Debug.WriteLine("Ah");
+
+                    }
+
+                }
 
 
                 // Creates the message that will be send to play.
@@ -376,26 +389,13 @@ namespace PiaNotes.Views
                     return;
                 }
 
-                if (notes[i].BitmapLocation.X <= guidlinePos + tickDistance && notes[i].BitmapLocation.X >= guidlinePos - tickDistance)
-                {
-                    activeNotes.Add(notes[i]);
-                    notes.Remove(notes[i]);
-                    return;
-                }
+                if (notes[i].BitmapLocation.X <= guidlinePos + tickDistance && notes[i].BitmapLocation.X >= guidlinePos - tickDistance  && notes[i].Played == false)
+                    notes[i].Active = true;
+
+                if (notes[i].BitmapLocation.X < guidlinePos - tickDistance && notes[i].Active == true)
+                    notes[i].Active = false;
 
                 notes[i].BitmapLocation = new Vector2(notes[i].BitmapLocation.X - tickDistance, notes[i].BitmapLocation.Y);
-            }
-            for (int i = 0; i < activeNotes.Count; i++)
-            {
-                if (activeNotes[i].BitmapLocation.X < guidlinePos - tickDistance)
-                {
-                    notes.Add(activeNotes[i]);
-                    activeNotes.Remove(activeNotes[i]);
-                    return;
-                }
-
-                activeNotes[i].BitmapLocation = new Vector2(activeNotes[i].BitmapLocation.X - tickDistance, activeNotes[i].BitmapLocation.Y);
-
             }
         }
 
