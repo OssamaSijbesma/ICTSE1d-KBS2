@@ -16,7 +16,8 @@ namespace PiaNotes.Models
         public bool multipleClefs { get; set; }
         public List<Note> notes { get; set; }
         public List<Bar> bars { get; set; }
-        public int TicksPerQuaterNote;
+        public int TicksPerQuaterNote { get; set; }
+        public MetricTimeSpan midiFileDuration { get; set; }
 
         //If there are multiple clefs there should be a List of clefs and staffs
         public List<Clef> clefs = new List<Clef>();
@@ -29,6 +30,12 @@ namespace PiaNotes.Models
 
             string ttq = MF.GetTempoMap().TimeDivision.ToString();
             TicksPerQuaterNote = Int32.Parse(Regex.Match(ttq, @"\d+").Value);
+
+            var tempoMap = midiFile.GetTempoMap();
+            midiFileDuration = midiFile.GetTimedEvents()
+                                           .LastOrDefault(e => e.Event is NoteOffEvent)
+                                          ?.TimeAs<MetricTimeSpan>(tempoMap)
+                                          ?? new MetricTimeSpan();
 
             if (AB > 1)
             {
