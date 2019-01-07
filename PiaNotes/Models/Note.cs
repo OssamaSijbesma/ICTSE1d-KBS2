@@ -1,7 +1,6 @@
 ﻿using Melanchall.DryWetMidi.Smf.Interaction;
 using Microsoft.Graphics.Canvas;
 using Microsoft.Graphics.Canvas.UI.Xaml;
-using PiaNotes.Interfaces;
 using PiaNotes.ViewModels;
 using System;
 using System.Collections.Generic;

@@ -17,7 +17,6 @@ using Windows.UI.Xaml.Navigation;
 using Windows.UI.Xaml.Shapes;
 using PiaNotes.Models;
 using System.Numerics;
-using PiaNotes.Interfaces;
 using Windows.Foundation;
 
 namespace PiaNotes.Views
@@ -502,13 +501,13 @@ namespace PiaNotes.Views
                 {
                     args.DrawingSession.DrawLine(lines[i].StartPoint, lines[i].EndPoint, Colors.White);
                 }
-
+                /*
                 // Draw clef.
                 for (int i = 0; i < 2; i++)
                 {
                     args.DrawingSession.DrawImage(clefs[i].Bitmap, clefs[i].BitmapLocation, new Rect(new Point(0, 0), clefs[i].BitmapSize));
                 }
-
+                */
                 // Draw notes.
                 for (int i = 0; i < notes.Count; i++)
                 {
