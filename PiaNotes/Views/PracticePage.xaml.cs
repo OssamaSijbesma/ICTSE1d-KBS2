@@ -18,8 +18,6 @@ using Windows.UI.Xaml.Shapes;
 using PiaNotes.Models;
 using System.Numerics;
 using Windows.Foundation;
-using System.Diagnostics;
-using Windows.UI.Xaml.Media.Imaging;
 
 namespace PiaNotes.Views
 {
@@ -62,11 +60,10 @@ namespace PiaNotes.Views
 
         private double gameCanvasWidth;
         private double gameCanvasHeight;
-        
+
         // Needs to become a settings
         private int FPS = 60;
         private int UPS = 100;
-        private int current = 0, pre = 0;
 
         private DispatcherTimer timer1 = new DispatcherTimer();
         private DispatcherTimer timer2 = new DispatcherTimer();
@@ -114,12 +111,6 @@ namespace PiaNotes.Views
             //Create the keyboard to show on the screen and set a timer
             CreateKeyboard();
             GameTimerUI();
-
-            // Timer info
-            DataContext = this;
-            timer1.Tick += Timer1_Tick;
-            timer1.Interval = new TimeSpan(0, 0, 1);
-            timer1.Start();
         }
 
         private void Timer1_Tick(object sender, object e)

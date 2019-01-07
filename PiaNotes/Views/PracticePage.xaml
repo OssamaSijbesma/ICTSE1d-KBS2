@@ -41,13 +41,12 @@
             <StackPanel x:Name="KeysBlackSP" Orientation="Horizontal" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignBottomWithPanel="True" HorizontalAlignment="Center"/>
 
 
-            <ProgressBar x:Name="Progress"
-                       Height="30" Background="#2b3c49" Value="0"
+            <Rectangle x:Name="Progress" Fill="#2b3c49"
+                       MinHeight="30"
                        RelativePanel.AlignLeftWithPanel="True"
                        RelativePanel.AlignRightWithPanel="True"
-                       RelativePanel.Above="KeyboardBG" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
-                         />
-            
+                       RelativePanel.Above="KeyboardBG" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+
             <Rectangle x:Name="MenuStrip" Fill="#253847"
                        MinHeight="36" MinWidth="250"
                        RelativePanel.AlignLeftWithPanel="True"
@@ -71,12 +70,6 @@
                 </Button.Flyout>
             </Button>
 
-            <TextBlock x:Name="TXTBlock_Timer"
-                Text="00:00" TextAlignment="Right"
-                RelativePanel.AlignRightWithPanel="True"
-                RelativePanel.AlignTopWithPanel="True" HorizontalAlignment="Stretch" Margin="0,7,5,0" VerticalAlignment="Stretch">
-                
-            </TextBlock>
 
         </RelativePanel>
     </Grid>
