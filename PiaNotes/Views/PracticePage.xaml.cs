@@ -54,6 +54,7 @@ namespace PiaNotes.Views
         private int staffEnd;
         private int staffWidth;
         private int staffSpacing;
+        private int guidlinePos;
         private int tickCount;
         private float tickDistance;
 
@@ -67,6 +68,7 @@ namespace PiaNotes.Views
         // UI Assets
         List<Models.Line> lines = new List<Models.Line>();
         List<Note> notes = new List<Note>();
+        List<Note> activeNotes = new List<Note>();
         Clef[] clefs = new Clef[2];
 
         public PracticePage()
@@ -374,7 +376,26 @@ namespace PiaNotes.Views
                     return;
                 }
 
+                if (notes[i].BitmapLocation.X <= guidlinePos + tickDistance && notes[i].BitmapLocation.X >= guidlinePos - tickDistance)
+                {
+                    activeNotes.Add(notes[i]);
+                    notes.Remove(notes[i]);
+                    return;
+                }
+
                 notes[i].BitmapLocation = new Vector2(notes[i].BitmapLocation.X - tickDistance, notes[i].BitmapLocation.Y);
+            }
+            for (int i = 0; i < activeNotes.Count; i++)
+            {
+                if (activeNotes[i].BitmapLocation.X < guidlinePos - tickDistance)
+                {
+                    notes.Add(activeNotes[i]);
+                    activeNotes.Remove(activeNotes[i]);
+                    return;
+                }
+
+                activeNotes[i].BitmapLocation = new Vector2(activeNotes[i].BitmapLocation.X - tickDistance, activeNotes[i].BitmapLocation.Y);
+
             }
         }
 
@@ -411,6 +432,7 @@ namespace PiaNotes.Views
             staffEnd = (int)gameCanvasWidth - staffMargin;
             staffWidth = (int)gameCanvasWidth - staffMargin * 2;
             staffSpacing = 8;
+            guidlinePos = staffWidth / 4;
 
             // Tickdistance is now 12/24 seconds for the entire line: distance / (time in milliseconds / ticks per millisecons)
             //tickDistance = (windowWidth-staffStart*2) / 1536;
@@ -515,6 +537,11 @@ namespace PiaNotes.Views
                         args.DrawingSession.DrawImage(notes[i].Bitmap, notes[i].BitmapLocation);
                         // size 
                         //args.DrawingSession.DrawImage(notes[i].Bitmap, notes[i].BitmapLocation, new Rect(new Point(0, 0), notes[i].BitmapSize));
+                }
+                for (int i = 0; i < activeNotes.Count; i++)
+                {
+                    if (activeNotes[i] != null)
+                        args.DrawingSession.DrawImage(activeNotes[i].Bitmap, activeNotes[i].BitmapLocation);
                 }
             }
         }
