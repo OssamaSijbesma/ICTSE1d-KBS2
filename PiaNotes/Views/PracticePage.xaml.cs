@@ -70,6 +70,7 @@ namespace PiaNotes.Views
 
         private DispatcherTimer timer1 = new DispatcherTimer();
         private DispatcherTimer timer2 = new DispatcherTimer();
+        private long midiDuration = 0;
 
         // UI Assets
         List<Models.Line> lines = new List<Models.Line>();
@@ -123,13 +124,15 @@ namespace PiaNotes.Views
 
         private void Timer1_Tick(object sender, object e)
         {
+            pre++;
             if (pre == 16)
             {
                 timer2.Tick += Timer2_Tick;
                 timer2.Interval = new TimeSpan(0, 0, 1);
                 timer2.Start();
+                timer1.Stop();
             }
-            pre++;
+            
         }
         
         private void Timer2_Tick(object sender, object e)
@@ -138,6 +141,10 @@ namespace PiaNotes.Views
             TimeSpan currentTime = TimeSpan.FromSeconds(current);
             TXTBlock_Timer.Text = currentTime.ToString(@"mm\:ss"); ;
             Progress.Value = current;
+            if ((int)midiDuration != 0 && current > (int)midiDuration)
+            {
+                timer2.Stop();
+            }
         }
 
         private void MidiInPort_MessageReceived(MidiInPort sender, MidiMessageReceivedEventArgs args)
@@ -567,7 +574,8 @@ namespace PiaNotes.Views
             }
 
             // Set maximum of progressbar to MIDI length in microseconds.
-            Progress.Maximum = (SM.midiFileDuration.TotalMicroseconds / 1000000) + 1;
+            midiDuration = SM.midiFileDuration.TotalMicroseconds / 1000000;
+            Progress.Maximum = midiDuration + 1;
         }
         
         private void GameCanvas_Draw(CanvasControl sender, CanvasDrawEventArgs args)
