@@ -30,8 +30,7 @@ namespace PiaNotes.Views
     {
         Databaser DB = new Databaser();
         MidiParser midiParser;
-
-        private string midiString;
+        
         private Byte[] fileByte;
         private string fileName;
         public bool FileSelected { get; set; } = false;
@@ -64,16 +63,15 @@ namespace PiaNotes.Views
 
             if (file != null)
             {
-                TXTBlock_Status.Text = "Converting MIDI file...";
+                TXTBlock_Status.Text = "Converting MIDI file, please wait...";
                 TXTBox_Title.Text = file.DisplayName;
-                var stream = await file.OpenStreamForReadAsync();
                 var stream2 = await file.OpenStreamForReadAsync();
 
                 MidiConverter midiConverter = new MidiConverter();
-                midiString = midiConverter.MidiToString(stream);
                 //Change for midiUpload
                 fileByte = midiConverter.MidiToBytes(stream2);
                 fileName = file.Name;
+
                 
                 // Check range of MIDI file.
                 Stream streamMIDI = await file.OpenStreamForReadAsync();
@@ -105,7 +103,7 @@ namespace PiaNotes.Views
         // Submit midi file functionality.
         private async void OnSubmit(object sender, RoutedEventArgs e)
         {
-            if (FileSelected && midiString.Length < 2000000 && TXTBox_Title.Text.Length <= 100)
+            if (FileSelected && TXTBox_Title.Text.Length <= 100)
             {
                 if (DB.CheckConnection() == true)
                 {
