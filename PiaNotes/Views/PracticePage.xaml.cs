@@ -18,6 +18,7 @@ using Windows.UI.Xaml.Shapes;
 using PiaNotes.Models;
 using System.Numerics;
 using Windows.Foundation;
+using Windows.UI.Xaml.Media.Imaging;
 
 namespace PiaNotes.Views
 {
@@ -95,6 +96,11 @@ namespace PiaNotes.Views
 
             //Generate the amount of Keys
             Keys = (SettingsPages.MIDI_SettingsPage.OctaveAmount != 0) ? Settings.octaveAmount * 12 : Settings.octaveAmount * 12;
+
+            Cursor.Fill = new ImageBrush
+            {
+                ImageSource = new BitmapImage(new Uri("ms-appx:///Assets/Cursor_White.png"))
+            };
 
             //Create the keyboard to show on the screen and set a timer
             CreateKeyboard();

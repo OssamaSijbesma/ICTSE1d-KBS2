@@ -176,6 +176,7 @@
     <Content Include="Assets\Clefs\CClef.png" />
     <Content Include="Assets\Clefs\FClef.png" />
     <Content Include="Assets\Clefs\GClef.png" />
+    <Content Include="Assets\Cursor_White.png" />
     <Content Include="Assets\LargeTile.scale-100.png" />
     <Content Include="Assets\LargeTile.scale-125.png" />
     <Content Include="Assets\LargeTile.scale-150.png" />

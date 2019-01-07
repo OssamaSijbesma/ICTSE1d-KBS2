@@ -40,6 +40,7 @@
             <StackPanel x:Name="KeysWhiteSP" Orientation="Horizontal" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignBottomWithPanel="True" HorizontalAlignment="Center"/>
             <StackPanel x:Name="KeysBlackSP" Orientation="Horizontal" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignBottomWithPanel="True" HorizontalAlignment="Center"/>
 
+            <Rectangle x:Name="Cursor" MinHeight="300" MinWidth="40" Margin="350,40,-352.6,-66"/>
 
             <Rectangle x:Name="Progress" Fill="#2b3c49"
                        MinHeight="30"
