@@ -45,12 +45,7 @@ namespace PiaNotes.Views
         {
             this.InitializeComponent();
         }
-
-        private void Title_TextChanged(object sender, TextChangedEventArgs e)
-        {
-
-        }
-
+        
         // FilePicker for Midi File.
         private async void OnOpenFile(object sender, RoutedEventArgs e)
         {
