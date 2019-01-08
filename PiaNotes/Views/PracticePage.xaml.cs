@@ -119,6 +119,12 @@ namespace PiaNotes.Views
                 timer2.Interval = new TimeSpan(0, 0, 1);
                 timer2.Start();
             }
+
+            if (current >= Progress.Maximum)
+            {
+                timer2.Stop();
+            }
+
             pre++;
         }
 

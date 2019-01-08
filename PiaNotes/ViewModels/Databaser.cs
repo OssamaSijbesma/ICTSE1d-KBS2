@@ -15,7 +15,7 @@ namespace PiaNotes.ViewModels
     public class Databaser
     {
         //Set connection string (ROOT USER IS FOR TESTING ONLY, Use system instead)
-        private const string ConnectionString = "SERVER = pianotesmysql.mysql.database.azure.com; PORT=3306; DATABASE = pianotes; Uid = notesAdmin@pianotesmysql; Pwd = !Pianotes223; SslMode = Preferred;";
+        private const string ConnectionString = "SERVER = pianotesql.mysql.database.azure.com; PORT=3306; DATABASE = pianotes; Uid = epicadmin@pianotesql; Pwd = PiaNote$; SslMode = Preferred;";
         private const string DataTable = "musicsheet";
         //Function for checking connection status.
         public bool CheckConnection()
@@ -63,6 +63,7 @@ namespace PiaNotes.ViewModels
                 //Set query standaard.
                 var Select = $"SELECT * FROM {DataTable} ";
                 var Where = $"";
+                var OrderBy = $" ORDER BY MusicSheet.UploadDate DESC ";
                 var Limit = $"";
                 var Offset = $"";
 
@@ -74,14 +75,14 @@ namespace PiaNotes.ViewModels
                 {
                     if (whereA == "Id")
                     {
-                        Where = $"WHERE UPPER({whereA}) LIKE UPPER('{whereB}') ";
+                        Where = $"WHERE UPPER({whereA}) LIKE UPPER('%{whereB}') ";
                     }
                     else
                     {
-                        Where = $"WHERE UPPER({whereA}) LIKE UPPER('{whereB}%') ";
+                        Where = $"WHERE UPPER({whereA}) LIKE UPPER('%{whereB}%') ";
                     }
                 }
-
+                
                 //If a limit is specified, add a LIMIT to the query
                 if (limit != 0) { Limit = $"LIMIT {limit} "; }
 
@@ -89,7 +90,7 @@ namespace PiaNotes.ViewModels
                 if (offset != 0 && limit != 0) { Offset = $"OFFSET {offset} "; }
 
                 //Build the sql into a string
-                string sql = Select + Where + Limit + Offset;
+                string sql = Select + Where + OrderBy + Limit + Offset;
 
                 //Setup connection and SQL command
                 using (MySqlConnection sqlconn = new MySqlConnection(ConnectionString))
