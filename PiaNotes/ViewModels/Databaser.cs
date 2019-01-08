@@ -15,7 +15,7 @@ namespace PiaNotes.ViewModels
     public class Databaser
     {
         //Set connection string (ROOT USER IS FOR TESTING ONLY, Use system instead)
-        private const string ConnectionString = "SERVER = pianotesmysql.mysql.database.azure.com; PORT=3306; DATABASE = pianotes; Uid = notesAdmin@pianotesmysql; Pwd = !Pianotes223; SslMode = Preferred;";
+        private const string ConnectionString = "SERVER = pianotesql.mysql.database.azure.com; PORT=3306; DATABASE = pianotes; Uid = epicadmin@pianotesql; Pwd = PiaNote$; SslMode = Preferred;";
         private const string DataTable = "musicsheet";
         //Function for checking connection status.
         public bool CheckConnection()
@@ -75,11 +75,11 @@ namespace PiaNotes.ViewModels
                 {
                     if (whereA == "Id")
                     {
-                        Where = $"WHERE UPPER({whereA}) LIKE UPPER('{whereB}') ";
+                        Where = $"WHERE UPPER({whereA}) LIKE UPPER('%{whereB}') ";
                     }
                     else
                     {
-                        Where = $"WHERE UPPER({whereA}) LIKE UPPER('{whereB}%') ";
+                        Where = $"WHERE UPPER({whereA}) LIKE UPPER('%{whereB}%') ";
                     }
                 }
                 
