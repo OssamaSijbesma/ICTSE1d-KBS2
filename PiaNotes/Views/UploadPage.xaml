@@ -29,8 +29,7 @@
                        RelativePanel.AlignLeftWith="BTN_OpenFile" RelativePanel.Below="BTN_OpenFile" FontSize="36" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
 
             <TextBox x:Name="TXTBox_Title" PlaceholderText="Insert title here..." Height="26" Margin="35,10,0,0" Text="" MinWidth="250" HorizontalAlignment="Right" VerticalAlignment="Top" Width="400" Background="Transparent"
-                     RelativePanel.Below="TXTBlock_Title"
-                     TextChanged="Title_TextChanged"/>
+                     RelativePanel.Below="TXTBlock_Title"/>
             <Button Name="BTN_Submit" Background="#253847" Content="Submit" HorizontalAlignment="Left" RelativePanel.Below="TXTBox_Title" VerticalAlignment="Stretch" Width="75" Click="OnSubmit" Margin="35,10,0,0"/>
             <TextBlock x:Name="TXTBlock_Status" RelativePanel.RightOf="BTN_Submit" RelativePanel.Below="TXTBox_Title" RelativePanel.AlignVerticalCenterWith="BTN_Submit" HorizontalAlignment="Center" Margin="10,10,0,0" Text="" TextWrapping="Wrap" VerticalAlignment="Center"/>
 
