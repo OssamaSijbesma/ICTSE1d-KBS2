@@ -28,9 +28,8 @@ namespace PiaNotes.Views
         //DispatcherTimer is the regular timer. It fires its Tick event on the UI thread, you can do anything you want with the UI. System.Timers.Timer is an asynchronous timer, its Elapsed event runs on a thread pool thread. You have to be very careful in your event handler, you are not allowed to touch any UI component or data-bound variables. And you'll need to use the lock statement where ever you access class members that are also used on the UI thread.
         private DispatcherTimer timerGameUI;
         private static Timer timerGameLogic;
-
-        private DispatcherTimer timer1 = new DispatcherTimer();
-        private DispatcherTimer timer2 = new DispatcherTimer();
+        
+        private DispatcherTimer timer = new DispatcherTimer();
 
         private SheetMusic SM;
 
@@ -106,35 +105,20 @@ namespace PiaNotes.Views
 
             // Timer info
             DataContext = this;
-            timer1.Tick += Timer1_Tick;
-            timer1.Interval = new TimeSpan(0, 0, 1);
-            timer1.Start();
+            timer.Tick += Timer_Tick;
+            timer.Interval = new TimeSpan(0, 0, 1);
         }
 
-        private void Timer1_Tick(object sender, object e)
+        private void Timer_Tick(object sender, object e)
         {
-            if (pre == 16)
-            {
-                timer2.Tick += Timer2_Tick;
-                timer2.Interval = new TimeSpan(0, 0, 1);
-                timer2.Start();
-            }
-
             if (current >= Progress.Maximum)
             {
-                timer2.Stop();
+                timer.Stop();
             }
 
             pre++;
         }
 
-        private void Timer2_Tick(object sender, object e)
-        {
-            current++;
-            TimeSpan currentTime = TimeSpan.FromSeconds(current);
-            TXTBlock_Timer.Text = currentTime.ToString(@"mm\:ss"); ;
-            Progress.Value = current;
-        }
 
         private void MidiInPort_MessageReceived(MidiInPort sender, MidiMessageReceivedEventArgs args)
         {
@@ -159,7 +143,18 @@ namespace PiaNotes.Views
                 else
                     velocity = Utilities.DoubleToByte(Settings.velocity);
 
+                for (int i = 0; i < notes.Count; i++)
+                {
+                    if (notes[i].Active == true && notes[i].Number == note)
+                    {
+                        notes[i].Played = true;
+                        notes[i].Active = false;
+                        System.Diagnostics.Debug.WriteLine("Correct: " + note);
+                        notes[i].SetBitmap("c" + notes[i].NoteType.ToString());
+                    }
 
+                }
+                
                 // Creates the message that will be send to play.
                 IMidiMessage midiMessageToSend = new MidiNoteOnMessage(channel, note, velocity);
                 Settings.midiOutPort.SendMessage(midiMessageToSend);
