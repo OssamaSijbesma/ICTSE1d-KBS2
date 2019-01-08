@@ -29,12 +29,14 @@ namespace PiaNotes.Views
         private DispatcherTimer timerGameUI;
         private static Timer timerGameLogic;
         
-        private DispatcherTimer timer = new DispatcherTimer();
+        private DispatcherTimer durationTimer = new DispatcherTimer();
+        private DispatcherTimer preTimer = new DispatcherTimer();
 
         private SheetMusic SM;
 
         public bool KeyboardIsOpen { get; set; } = true;
         public bool LoadPage { get; set; } = false;
+        public bool StartTimer { get; set; } = false;
 
         //List for White keys and Black keys of the keyboard
         private List<Rectangle> keysWhite = new List<Rectangle>();
@@ -61,8 +63,7 @@ namespace PiaNotes.Views
 
         private double gameCanvasWidth;
         private double gameCanvasHeight;
-
-
+        
         private int current = 0, pre = 0;
 
         // UI Assets
@@ -105,21 +106,44 @@ namespace PiaNotes.Views
 
             // Timer info
             DataContext = this;
-            timer.Tick += Timer_Tick;
-            timer.Interval = new TimeSpan(0, 0, 1);
+            preTimer.Tick += PreTimer_Tick;
+            preTimer.Interval = new TimeSpan(0, 0, 0, 0, 1);
+            preTimer.Start();
+            durationTimer.Tick += DurationTimer_Tick;
+            durationTimer.Interval = new TimeSpan(0, 0, 1);
         }
 
-        private void Timer_Tick(object sender, object e)
+        private void PreTimer_Tick(object sender, object e)
         {
-            if (current >= Progress.Maximum)
+            if (StartTimer && !durationTimer.IsEnabled)
             {
-                timer.Stop();
+                durationTimer.Start();
+                preTimer.Stop();
             }
 
             pre++;
         }
 
+        private void DurationTimer_Tick(object sender, object e)
+        {
+            // Check if current time is higher than the maximum.
+            if (current >= Progress.Maximum)
+            {
+                durationTimer.Stop();
+            }
 
+            current++;
+            TimeSpan currentTime = TimeSpan.FromSeconds(current);
+            TXTBlock_Timer.Text = currentTime.ToString(@"mm\:ss");
+
+            // Reset current after an hour.
+            if (current == 3600)
+            {
+                current = 0;
+            }
+            Progress.Value = current;
+        }
+        
         private void MidiInPort_MessageReceived(MidiInPort sender, MidiMessageReceivedEventArgs args)
         {
             // Converts received message into IMidiMessage.
@@ -152,14 +176,12 @@ namespace PiaNotes.Views
                         System.Diagnostics.Debug.WriteLine("Correct: " + note);
                         notes[i].SetBitmap("c" + notes[i].NoteType.ToString());
                     }
-
                 }
                 
                 // Creates the message that will be send to play.
                 IMidiMessage midiMessageToSend = new MidiNoteOnMessage(channel, note, velocity);
                 Settings.midiOutPort.SendMessage(midiMessageToSend);
                 FillKey(note);
-
             }
 
             // Checks if note has been released if so unfill the key.
@@ -405,9 +427,17 @@ namespace PiaNotes.Views
                     notes.Remove(notes[i]);
                     return;
                 }
-
+                
                 if (notes[i].BitmapLocation.X <= guidlinePos + tickDistance * 10 && notes[i].BitmapLocation.X >= guidlinePos - tickDistance * 10 && notes[i].Played == false)
+                {
                     notes[i].Active = true;
+
+                    // Start Timer
+                    if (!StartTimer)
+                    {
+                        StartTimer = true;
+                    }
+                }
 
                 if (notes[i].BitmapLocation.X < guidlinePos - tickDistance * 10 && notes[i].Active == true && notes[i].Played == false)
                 {
@@ -416,7 +446,8 @@ namespace PiaNotes.Views
                 }
 
                 notes[i].BitmapLocation = new Vector2(notes[i].BitmapLocation.X - tickDistance, notes[i].BitmapLocation.Y);
-            }
+            
+}
         }
 
         /// <summary>
@@ -547,7 +578,7 @@ namespace PiaNotes.Views
             }
             
             // Set maximum of progressbar to MIDI length in microseconds.
-            Progress.Maximum = (SM.midiFileDuration.TotalMicroseconds / 1000000) + 1;
+            Progress.Maximum = (SM.midiFileDuration.TotalMicroseconds / 1000000);
 
             // Start GameTimer
             GameTimerLogic();

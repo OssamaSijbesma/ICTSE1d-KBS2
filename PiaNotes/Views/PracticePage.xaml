@@ -71,7 +71,7 @@
                 </Button.Flyout>
             </Button>
 
-            <TextBlock x:Name="TXTBlock_Timer" Text="00:00" Visibility="Collapsed"
+            <TextBlock x:Name="TXTBlock_Timer" Text="00:00"
                        TextAlignment="Right" 
                        RelativePanel.AlignRightWithPanel="True" 
                        RelativePanel.AlignTopWithPanel="True" HorizontalAlignment="Stretch"
