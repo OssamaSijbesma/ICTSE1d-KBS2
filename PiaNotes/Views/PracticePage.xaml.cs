@@ -397,10 +397,7 @@ namespace PiaNotes.Views
                 if (tickCount >= SM.notes[i].MetricTiming.TotalMicroseconds)
                 {
                     notes.Add(SM.notes[i]);
-                    if (i != 0)
-                    {
-                        SM.notes.Remove(SM.notes[i]);
-                    }
+                    SM.notes.Remove(SM.notes[i]);
                 }
             }
 
