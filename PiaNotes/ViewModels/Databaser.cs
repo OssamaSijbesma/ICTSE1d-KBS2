@@ -79,7 +79,7 @@ namespace PiaNotes.ViewModels
                     }
                     else
                     {
-                        Where = $"WHERE UPPER({whereA}) LIKE UPPER('{whereB}%') ";
+                        Where = $"WHERE UPPER({whereA}) LIKE UPPER('%{whereB}%') ";
                     }
                 }
 
