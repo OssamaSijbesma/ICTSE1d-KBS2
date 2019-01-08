@@ -17,8 +17,6 @@ using Windows.UI.Xaml.Navigation;
 using Windows.UI.Xaml.Shapes;
 using PiaNotes.Models;
 using System.Numerics;
-using Windows.Foundation;
-using System.Diagnostics;
 
 namespace PiaNotes.Views
 {
@@ -42,7 +40,6 @@ namespace PiaNotes.Views
         // Length of 127 because of 127 notes
         private Rectangle[] Notes = new Rectangle[127];
         private int Keys = SettingsPages.MIDI_SettingsPage.OctaveAmount * 12;
-        //private double oldWidth;
         private enum PianoKey { C = 0, D = 2, E = 4, F = 5, G = 7, A = 9, B = 11 };
         private enum PianoKeySharp { CSharp = 1, DSharp = 3, FSharp = 6, GSharp = 8, ASharp = 10 };
 
@@ -73,7 +70,6 @@ namespace PiaNotes.Views
         // UI Assets
         List<Models.Line> lines = new List<Models.Line>();
         List<Note> notes = new List<Note>();
-        List<Note> activeNotes = new List<Note>();
         Clef[] clefs = new Clef[2];
         private int correctCounter;
 
@@ -558,6 +554,12 @@ namespace PiaNotes.Views
         {
             if (LoadPage)
             {
+                // Draw notes.
+                for (int i = 0; i < notes.Count; i++)
+                {
+                    args.DrawingSession.DrawImage(notes[i].Bitmap, notes[i].BitmapLocation);
+                }
+
                 // Draw staff and guidelines.
                 for (int i = 0; i < lines.Count; i++)
                 {
@@ -570,19 +572,6 @@ namespace PiaNotes.Views
                     args.DrawingSession.DrawImage(clefs[i].Bitmap, clefs[i].BitmapLocation, new Rect(new Point(0, 0), clefs[i].BitmapSize));
                 }
                 */
-                // Draw notes.
-                for (int i = 0; i < notes.Count; i++)
-                {
-                    if (notes[i] != null)
-                        args.DrawingSession.DrawImage(notes[i].Bitmap, notes[i].BitmapLocation);
-                    // size 
-                    //args.DrawingSession.DrawImage(notes[i].Bitmap, notes[i].BitmapLocation, new Rect(new Point(0, 0), notes[i].BitmapSize));
-                }
-                for (int i = 0; i < activeNotes.Count; i++)
-                {
-                    if (activeNotes[i] != null)
-                        args.DrawingSession.DrawImage(activeNotes[i].Bitmap, activeNotes[i].BitmapLocation);
-                }
             }
         }
 
