@@ -21,22 +21,22 @@
                 OpenPaneLength="120">
             <NavigationView.MenuItems>
                 <NavigationViewItem Icon="More"  Tag="First_Tutorial">
-                    <TextBlock Tag="First_Tutorial">One</TextBlock>
+                    <TextBlock Tag="First_Tutorial">Eén</TextBlock>
                 </NavigationViewItem>
                 <NavigationViewItem Icon="More"  Tag="Second_Tutorial">
-                    <TextBlock Tag="Second_Tutorial">Two</TextBlock>
+                    <TextBlock Tag="Second_Tutorial">Twee</TextBlock>
                 </NavigationViewItem>
                 <NavigationViewItem Icon="More"  Tag="Third_Tutorial">
-                    <TextBlock Tag="Third_Tutorial">Three</TextBlock>
+                    <TextBlock Tag="Third_Tutorial">Drie</TextBlock>
                 </NavigationViewItem>
                 <NavigationViewItem Icon="More"  Tag="Fourth_Tutorial">
-                    <TextBlock Tag="Fourth_Tutorial">Four</TextBlock>
+                    <TextBlock Tag="Fourth_Tutorial">Vier</TextBlock>
                 </NavigationViewItem>
                 <NavigationViewItem Icon="More"  Tag="Fifth_Tutorial">
-                    <TextBlock Tag="Fifth_Tutorial">Five</TextBlock>
+                    <TextBlock Tag="Fifth_Tutorial">Vijf</TextBlock>
                 </NavigationViewItem>
                 <NavigationViewItem Icon="More"  Tag="Sixth_Tutorial">
-                    <TextBlock Tag="Sixth_Tutorial">Six</TextBlock>
+                    <TextBlock Tag="Sixth_Tutorial">Zes</TextBlock>
                 </NavigationViewItem>
             </NavigationView.MenuItems>
             <Frame x:Name="contentFrame" Margin="0,-60,0,0"/>

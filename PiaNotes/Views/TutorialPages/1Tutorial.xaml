@@ -9,16 +9,19 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" RequestedTheme="Dark">
 
     <Grid Margin="0,0,0,0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-        <StackPanel Background="#162632" Margin="0,0,0,0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+        <StackPanel Background="#162632">
 
-            <NavigationViewItem RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True"  Tag="First_Tutorial">
-                <TextBlock Tag="First_Tutorial">Tutorial One: Toonhoogte</TextBlock>
+            <NavigationViewItem RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True" Tag="First_Tutorial">
+                <TextBlock Tag="First_Tutorial">Oefening één: Toonhoogte</TextBlock>
             </NavigationViewItem>
 
-            <StackPanel RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True">
-                <TextBlock>Test</TextBlock>
-                <TextBlock>Test2</TextBlock>
+            <StackPanel RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True" Margin="16,0,0,0">
+                <TextBlock>Een piano bestaat uit meerdere octaven, elk octaaf bestaat uit 7 noten, de witte toetsen.</TextBlock>
+                <TextBlock> Een octaaf begint bij noot A en gaat door tot en met noot G, daarna herhaalt het zich in een ander octaaf.</TextBlock>
+                <TextBlock></TextBlock>
+                <TextBlock>Voor de eerste oefening moet je noot A tot en met G achter elkaar spelen op het ritme van de oefening.</TextBlock>
             </StackPanel>
         </StackPanel>
+        <Button Click="Exercise_Click" Margin="16,0,0,0">Play Exercise</Button>
     </Grid>
 </Page>
