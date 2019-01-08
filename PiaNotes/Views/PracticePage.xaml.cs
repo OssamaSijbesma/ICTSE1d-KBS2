@@ -28,6 +28,10 @@ namespace PiaNotes.Views
         //DispatcherTimer is the regular timer. It fires its Tick event on the UI thread, you can do anything you want with the UI. System.Timers.Timer is an asynchronous timer, its Elapsed event runs on a thread pool thread. You have to be very careful in your event handler, you are not allowed to touch any UI component or data-bound variables. And you'll need to use the lock statement where ever you access class members that are also used on the UI thread.
         private DispatcherTimer timerGameUI;
         private static Timer timerGameLogic;
+
+        private DispatcherTimer timer1 = new DispatcherTimer();
+        private DispatcherTimer timer2 = new DispatcherTimer();
+
         private SheetMusic SM;
 
         public bool KeyboardIsOpen { get; set; } = true;
@@ -59,12 +63,7 @@ namespace PiaNotes.Views
         private double gameCanvasWidth;
         private double gameCanvasHeight;
 
-        // Needs to become a settings
-        private int FPS = 60;
-        private int UPS = 100;
-        
-        private DispatcherTimer timer1 = new DispatcherTimer();
-        private DispatcherTimer timer2 = new DispatcherTimer();
+
         private int current = 0, pre = 0;
 
         // UI Assets
@@ -102,6 +101,7 @@ namespace PiaNotes.Views
 
             //Create the keyboard to show on the screen and set a timer
             CreateKeyboard();
+
             GameTimerUI();
 
             // Timer info
@@ -427,7 +427,7 @@ namespace PiaNotes.Views
         {
             timerGameUI = new DispatcherTimer
             {
-                Interval = TimeSpan.FromMilliseconds(1000 / FPS)
+                Interval = TimeSpan.FromMilliseconds(15)
             };
             timerGameUI.Tick += GameTickUI;
             timerGameUI.Start();
@@ -492,8 +492,7 @@ namespace PiaNotes.Views
             //Set images inside of the ContentPipeline for futher re-use.
             args.TrackAsyncAction(CreateResourcesAsync(sender).AsAsyncAction());
 
-            // Start GameTimer
-            GameTimerLogic();
+
         }
 
         private async Task CreateResourcesAsync(CanvasControl sender)
@@ -548,6 +547,9 @@ namespace PiaNotes.Views
             
             // Set maximum of progressbar to MIDI length in microseconds.
             Progress.Maximum = (SM.midiFileDuration.TotalMicroseconds / 1000000) + 1;
+
+            // Start GameTimer
+            GameTimerLogic();
         }
 
         private void GameCanvas_Draw(CanvasControl sender, CanvasDrawEventArgs args)
