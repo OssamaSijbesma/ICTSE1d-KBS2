@@ -12,15 +12,16 @@
         <StackPanel Background="#162632">
 
             <NavigationViewItem RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True"  Tag="Third_Tutorial">
-                <TextBlock Tag="Third_Tutorial">Fifth Exercise: Kinds of notes</TextBlock>
+                <TextBlock Tag="Third_Tutorial">Fifth Exercise: Clefs</TextBlock>
             </NavigationViewItem>
 
             <StackPanel RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True" Margin="16,0,0,0">
-                <TextBlock>Some notes have to be played faster than other notes. A song usually contains multiple kinds of notes. </TextBlock>
-                <TextBlock>To name a few: the full note (4 beats), the half note (2 beats), the quarter notes (1 beat), the eighth note(½ beat), the sixteenth note(¼ beat). </TextBlock>
-                <TextBlock>These beats are as described in the previous exercise.</TextBlock>
+                <TextBlock>A clef gives an indication as to what pitch and octave to play in.</TextBlock>
+                <TextBlock>The default clef, the Treble Clef, is drawn on the G, and plays on the 4th or 5th octave, the default octaves.</TextBlock>
+                <TextBlock>Apart from this there is a Bass Clef, which is drawn on the G but is not the same as the treble clef.</TextBlock>
+                <TextBlock>All notes that go with the bass clef are often played with the left hand.</TextBlock>
                 <TextBlock></TextBlock>
-                <TextBlock>For this exercise you will practice playing on tempo again, but this time with different kinds of notes.</TextBlock>
+                <TextBlock>In this exercise you will have to play a song with two hands, so remember well where the notes are supposed to be.</TextBlock>
             </StackPanel>
         </StackPanel>
     </Grid>

@@ -20,22 +20,22 @@
                 IsSettingsVisible="False" 
                 OpenPaneLength="120">
             <NavigationView.MenuItems>
-                <NavigationViewItem Icon="More"  Tag="First_Tutorial">
+                <NavigationViewItem Icon="Placeholder"  Tag="First_Tutorial">
                     <TextBlock Tag="First_Tutorial">One</TextBlock>
                 </NavigationViewItem>
-                <NavigationViewItem Icon="More"  Tag="Second_Tutorial">
+                <NavigationViewItem Icon="Placeholder"  Tag="Second_Tutorial">
                     <TextBlock Tag="Second_Tutorial">Two</TextBlock>
                 </NavigationViewItem>
-                <NavigationViewItem Icon="More"  Tag="Third_Tutorial">
+                <NavigationViewItem Icon="Placeholder"  Tag="Third_Tutorial">
                     <TextBlock Tag="Third_Tutorial">Three</TextBlock>
                 </NavigationViewItem>
-                <NavigationViewItem Icon="More"  Tag="Fourth_Tutorial">
+                <NavigationViewItem Icon="Placeholder"  Tag="Fourth_Tutorial">
                     <TextBlock Tag="Fourth_Tutorial">Four</TextBlock>
                 </NavigationViewItem>
-                <NavigationViewItem Icon="More"  Tag="Fifth_Tutorial">
+                <NavigationViewItem Icon="Placeholder"  Tag="Fifth_Tutorial">
                     <TextBlock Tag="Fifth_Tutorial">Five</TextBlock>
                 </NavigationViewItem>
-                <NavigationViewItem Icon="More"  Tag="Sixth_Tutorial">
+                <NavigationViewItem Icon="Placeholder"  Tag="Sixth_Tutorial">
                     <TextBlock Tag="Sixth_Tutorial">Six</TextBlock>
                 </NavigationViewItem>
                 <NavigationViewItem></NavigationViewItem>

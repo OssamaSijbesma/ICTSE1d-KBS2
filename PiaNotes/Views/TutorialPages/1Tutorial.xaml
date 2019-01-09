@@ -11,15 +11,18 @@
     <Grid Margin="0,0,0,0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
         <StackPanel Background="#162632">
 
-            <NavigationViewItem RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True" Tag="First_Tutorial">
-                <TextBlock Tag="First_Tutorial">First Exercise: Pitch</TextBlock>
+            <NavigationViewItem RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True"  Tag="Third_Tutorial">
+                <TextBlock Tag="Third_Tutorial">First Exercise: Tempo and bars</TextBlock>
             </NavigationViewItem>
 
             <StackPanel RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True" Margin="16,0,0,0">
-                <TextBlock>A piano contains multiple octaves, each octave consisting of a7 notes, the white keys.</TextBlock>
-                <TextBlock>An octave begins at note A and continues through note G, afterwards repeating in another octave.</TextBlock>
+                <TextBlock>When playing a song you will have to play at a certain speed, we call this speed the tempo. The tempo can be different for all kind of songs.</TextBlock>
+                <TextBlock>For convenience, PiaNotes will set the original tempo of the song automatically. A song consists of different bars of the tempo.</TextBlock>
+                <TextBlock>Other than that, there are also a few beats in a bar. 4/4, the first 4 stands for the amount of notes in a bar,</TextBlock>
+                <TextBlock>whereas the second 4 stands for the kind of notes that will be played. With the 4/4 there are 4 quarter notes per bar, while the 6/8 consists of 6 8th notes per bar.</TextBlock>
                 <TextBlock></TextBlock>
-                <TextBlock>For the first exercise you will practice playing the note A through G in sequence to the rythm of the exercise.</TextBlock>
+                <TextBlock>For the following exercises there will be notes you have to play in a certain tempo.</TextBlock>
+                <TextBlock>For convenience, there will not be any different kinds of notes or bars as of now. We will focus more on those topics after this exercise.</TextBlock>
             </StackPanel>
         </StackPanel>
     </Grid>
