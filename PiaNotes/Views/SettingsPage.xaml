@@ -27,7 +27,7 @@
                 <NavigationViewItem Icon="Volume"    Tag="Sound_SettingsPage">
                     <TextBlock Tag="Sound_SettingsPage">Sound</TextBlock>
                 </NavigationViewItem>
-                <NavigationViewItem Icon="Shop"     Tag="Theme_SettingsPage">
+                <NavigationViewItem Icon="Shop"     Tag="Theme_SettingsPage" IsEnabled="False">
                     <TextBlock Tag="Theme_SettingsPage">Theme</TextBlock>
                 </NavigationViewItem>
             </NavigationView.MenuItems>
