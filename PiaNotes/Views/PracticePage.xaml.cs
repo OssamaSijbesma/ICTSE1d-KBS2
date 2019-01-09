@@ -525,7 +525,7 @@ namespace PiaNotes.Views
             args.TrackAsyncAction(CreateResourcesAsync(sender).AsAsyncAction());
 
             //Set cursor position
-            Cursor.Margin = new Thickness(guidlinePos, 0, 0, 200);
+            Cursor.Margin = new Thickness(guidlinePos, 0, 0, guidlinePos);
         }
 
         private async Task CreateResourcesAsync(CanvasControl sender)
