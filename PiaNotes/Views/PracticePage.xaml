@@ -41,7 +41,7 @@
             <StackPanel x:Name="KeysBlackSP" Orientation="Horizontal" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignBottomWithPanel="True" HorizontalAlignment="Center"/>
 
             <Rectangle x:Name="Cursor" MinHeight="250" MinWidth="5" Stroke="White" StrokeThickness="5" Fill="White" StrokeLineJoin="Round" Opacity="0.5" />
-            
+
             <ProgressBar x:Name="Progress"
                        Height="30" Background="#2b3c49" Value="0"
                        RelativePanel.AlignLeftWithPanel="True"
@@ -77,8 +77,17 @@
                        RelativePanel.AlignRightWithPanel="True" 
                        RelativePanel.AlignTopWithPanel="True" HorizontalAlignment="Stretch"
                        Margin="0,7,5,0" VerticalAlignment="Stretch">
-
             </TextBlock>
+
+            <TextBlock x:Name="TXTBlock_Score" Text="0"
+                       TextAlignment="Right" 
+                       RelativePanel.AlignRightWithPanel="True" 
+                       RelativePanel.AlignTopWithPanel="True" HorizontalAlignment="Stretch"
+                       Margin="0,7,75,0" VerticalAlignment="Stretch">
+            </TextBlock>
+
+
+
 
         </RelativePanel>
     </Grid>

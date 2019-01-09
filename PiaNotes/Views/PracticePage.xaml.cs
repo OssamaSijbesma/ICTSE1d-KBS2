@@ -30,6 +30,7 @@ namespace PiaNotes.Views
         private static Timer timerGameLogic;
         
         private DispatcherTimer durationTimer = new DispatcherTimer();
+        private DispatcherTimer waitingTimer = new DispatcherTimer();
 
         private SheetMusic SM;
 
@@ -64,12 +65,13 @@ namespace PiaNotes.Views
         private double gameCanvasHeight;
         
         private int current = 0, pre = 0;
+        private int waiting = 0;
+        private int score = 0;
 
         // UI Assets
         List<Models.Line> lines = new List<Models.Line>();
         List<Note> notes = new List<Note>();
         Clef[] clefs = new Clef[2];
-        private int correctCounter;
 
         public PracticePage()
         {
@@ -93,7 +95,7 @@ namespace PiaNotes.Views
             windowHeight = Convert.ToInt32(Window.Current.Bounds.Height);
 
             // Subscribes a handler for the MessageReceived event.
-            Settings.midiInPort.MessageReceived += MidiInPort_MessageReceived;
+            Settings.midiInPort.MessageReceived += MidiInPort_MessageReceivedAsync;
 
             //Generate the amount of Keys
             Keys = (SettingsPages.MIDI_SettingsPage.OctaveAmount != 0) ? Settings.octaveAmount * 12 : Settings.octaveAmount * 12;
@@ -108,6 +110,11 @@ namespace PiaNotes.Views
             durationTimer.Tick += DurationTimer_Tick;
             durationTimer.Interval = new TimeSpan(0, 0, 1);
             durationTimer.Start();
+
+            // WaitingTimer info
+            DataContext = this;
+            waitingTimer.Tick += WaitingTimer_Tick;
+            waitingTimer.Interval = new TimeSpan(0, 0, 1);
         }
         
         private void DurationTimer_Tick(object sender, object e)
@@ -118,6 +125,7 @@ namespace PiaNotes.Views
                 if (current >= Progress.Maximum)
                 {
                     durationTimer.Stop();
+                    waitingTimer.Start();
                 }
 
                 current++;
@@ -132,8 +140,32 @@ namespace PiaNotes.Views
                 Progress.Value = current;
             }
         }
-        
-        private void MidiInPort_MessageReceived(MidiInPort sender, MidiMessageReceivedEventArgs args)
+
+        private void WaitingTimer_Tick(object sender, object e)
+        {
+            if (StartTimer)
+            {
+                // Check if user has been waiting for longer than 3 seconds after completing the objective.
+                if (waiting >= 2)
+                {
+                    waitingTimer.Stop();
+                    this.Frame.Navigate(typeof(SelectionPage));
+                }
+
+                waiting++;
+                TimeSpan waitingTime = TimeSpan.FromSeconds(waiting);
+
+                // Reset current after an hour.
+                if (waiting == 3600)
+                {
+                    waiting = 0;
+                }
+            }
+        }
+
+
+
+        private async void MidiInPort_MessageReceivedAsync(MidiInPort sender, MidiMessageReceivedEventArgs args)
         {
             // Converts received message into IMidiMessage.
             IMidiMessage receivedMidiMessage = args.Message;
@@ -164,6 +196,16 @@ namespace PiaNotes.Views
                         notes[i].Active = false;
                         System.Diagnostics.Debug.WriteLine("Correct: " + note);
                         notes[i].SetBitmap("c" + notes[i].NoteType.ToString());
+                        score += 50;
+
+                        await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
+                            () =>
+                            {
+                                TXTBlock_Score.Text = "" + score;
+                            }
+                            );
+
+                        
                     }
                 }
                 
@@ -632,7 +674,7 @@ namespace PiaNotes.Views
             timerGameUI.Stop();
 
             // Unsubscribe the MidiInPort_MessageReceived
-            Settings.midiInPort.MessageReceived -= MidiInPort_MessageReceived;
+            Settings.midiInPort.MessageReceived -= MidiInPort_MessageReceivedAsync;
 
             // Dispose of the Win2D resources
             this.GameCanvas.RemoveFromVisualTree();
