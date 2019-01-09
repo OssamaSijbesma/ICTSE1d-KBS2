@@ -30,7 +30,6 @@ namespace PiaNotes.Views
         private static Timer timerGameLogic;
         
         private DispatcherTimer durationTimer = new DispatcherTimer();
-        private DispatcherTimer preTimer = new DispatcherTimer();
 
         private SheetMusic SM;
 
@@ -106,42 +105,32 @@ namespace PiaNotes.Views
 
             // Timer info
             DataContext = this;
-            preTimer.Tick += PreTimer_Tick;
-            preTimer.Interval = new TimeSpan(0, 0, 0, 0, 1);
-            preTimer.Start();
             durationTimer.Tick += DurationTimer_Tick;
             durationTimer.Interval = new TimeSpan(0, 0, 1);
+            durationTimer.Start();
         }
-
-        private void PreTimer_Tick(object sender, object e)
-        {
-            if (StartTimer && !durationTimer.IsEnabled)
-            {
-                durationTimer.Start();
-                preTimer.Stop();
-            }
-
-            pre++;
-        }
-
+        
         private void DurationTimer_Tick(object sender, object e)
         {
-            // Check if current time is higher than the maximum.
-            if (current >= Progress.Maximum)
+            if (StartTimer)
             {
-                durationTimer.Stop();
-            }
+                // Check if current time is higher than the maximum.
+                if (current >= Progress.Maximum)
+                {
+                    durationTimer.Stop();
+                }
 
-            current++;
-            TimeSpan currentTime = TimeSpan.FromSeconds(current);
-            TXTBlock_Timer.Text = currentTime.ToString(@"mm\:ss");
+                current++;
+                TimeSpan currentTime = TimeSpan.FromSeconds(current);
+                TXTBlock_Timer.Text = currentTime.ToString(@"mm\:ss");
 
-            // Reset current after an hour.
-            if (current == 3600)
-            {
-                current = 0;
+                // Reset current after an hour.
+                if (current == 3600)
+                {
+                    current = 0;
+                }
+                Progress.Value = current;
             }
-            Progress.Value = current;
         }
         
         private void MidiInPort_MessageReceived(MidiInPort sender, MidiMessageReceivedEventArgs args)
