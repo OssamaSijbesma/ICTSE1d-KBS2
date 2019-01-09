@@ -524,7 +524,8 @@ namespace PiaNotes.Views
             //Set images inside of the ContentPipeline for futher re-use.
             args.TrackAsyncAction(CreateResourcesAsync(sender).AsAsyncAction());
 
-
+            
+            Cursor.Margin = new Thickness(guidlinePos, 0, 0, 200);
         }
 
         private async Task CreateResourcesAsync(CanvasControl sender)
