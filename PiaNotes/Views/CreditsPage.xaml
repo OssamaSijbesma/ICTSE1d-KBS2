@@ -17,6 +17,12 @@
 
             <Button x:Name="Return" MinHeight="36" Content="Return" Click="NavBack_Click" HorizontalAlignment="Center" VerticalAlignment="Center" Background="#253847" />
 
+            <TextBlock x:Name="TXTBlock_Title" Text="Credits" HorizontalAlignment="Left" Height="48" Margin="35,35,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="400" FontSize="36"/>
+
+
+            <StackPanel x:Name="SPCredits"
+                        HorizontalAlignment="Center" RelativePanel.Below="TXTBlock_Title" Margin="35,10,0,0" VerticalAlignment="Center"/>
+
         </RelativePanel>
     </Grid>
 </Page>

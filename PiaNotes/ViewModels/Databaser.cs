@@ -55,31 +55,45 @@ namespace PiaNotes.ViewModels
                 return false;
             }
         }
-        
+
         //Search through MusicSheets in the database with a limit
-        public List<MusicSheet> Search(string select, string whereA, string whereB, int limit, int offset)
+        public List<MusicSheet> Search(string select, string whereA1, string whereB1, string whereA2, string whereB2, int limit, int offset)
         {
             try
             {
                 //Set query standaard.
                 var Select = $"SELECT * FROM {DataTable} ";
                 var Where = $"";
+                var And = $"";
+                var OrderBy = $" ORDER BY MusicSheet.UploadDate DESC ";
                 var Limit = $"";
                 var Offset = $"";
 
                 //If function has specific selected, change it in the query.
                 if (select != null) { Select = $"SELECT {select} FROM {DataTable} "; }
-                
+
                 //If both Wheres are specified add a WHERE to the query.
-                if (whereA != null && whereB != null)
+                if (whereA1 != null && whereB1 != null)
                 {
-                    if (whereA == "Id")
+                    if (whereA1 == "Id")
                     {
-                        Where = $"WHERE UPPER({whereA}) LIKE UPPER({whereB})";
+                        Where = $"WHERE UPPER({whereA1}) LIKE UPPER('{whereB1}') ";
                     }
                     else
                     {
-                        Where = $"WHERE UPPER({whereA}) LIKE UPPER('%{whereB}%')";
+                        Where = $"WHERE UPPER({whereA1}) LIKE UPPER('%{whereB1}%') ";
+                    }
+                }
+
+                if (whereA2 != null && whereB2 != null)
+                {
+                    if (whereA2 == "Id")
+                    {
+                        And = $" AND UPPER({whereA2}) LIKE UPPER('{whereB2}') ";
+                    }
+                    else
+                    {
+                        And = $" AND UPPER({whereA2}) LIKE UPPER('%{whereB2}%') ";
                     }
                 }
 
@@ -90,7 +104,7 @@ namespace PiaNotes.ViewModels
                 if (offset != 0 && limit != 0) { Offset = $"OFFSET {offset} "; }
 
                 //Build the sql into a string
-                string sql = Select + Where + Limit + Offset;
+                string sql = Select + Where + And + OrderBy + Limit + Offset;
 
                 //Setup connection and SQL command
                 using (MySqlConnection sqlconn = new MySqlConnection(ConnectionString))
@@ -141,6 +155,11 @@ namespace PiaNotes.ViewModels
             }
         }
 
+        public List<MusicSheet> Search(string select, string whereA, string whereB, int limit, int offset)
+        {
+           return Search(select, whereA, whereB,null,null, limit, offset);
+        }
+
         // Get a file from the database by ID
         public async Task<StorageFile> GetAFileAsync(int id)
         {
@@ -181,11 +200,11 @@ namespace PiaNotes.ViewModels
             }
         }
 
-        public bool Upload(string title, Byte[] fileBytes, string fileName, int showMIDI)
+        public bool Upload(string title, Byte[] fileBytes, string fileName)
         {
             try
             {
-                string sql = $"INSERT INTO {DataTable} (Title, FileBytes, FileName, Show ) VALUES (@title, @fileBytes, @fileName, @showMIDI);";
+                string sql = $"INSERT INTO {DataTable} (Title, FileBytes, FileName ) VALUES (@title, @fileBytes, @fileName);";
                 //Setup connection and SQL command
                 using (MySqlConnection sqlconn = new MySqlConnection(ConnectionString))
                 using (var cmd = new MySqlCommand(sql, sqlconn))
@@ -193,8 +212,6 @@ namespace PiaNotes.ViewModels
                     cmd.Parameters.Add("@title", MySqlDbType.VarChar, title.Length).Value = title;
                     cmd.Parameters.Add("@fileBytes", MySqlDbType.VarBinary, fileBytes.Length).Value = fileBytes;
                     cmd.Parameters.Add("@fileName", MySqlDbType.VarChar, fileName.Length).Value = fileName;
-                    cmd.Parameters.Add("@showMIDI", MySqlDbType.Int32, showMIDI).Value = showMIDI;
-
                     //Open connection to database
                     sqlconn.Open();
 

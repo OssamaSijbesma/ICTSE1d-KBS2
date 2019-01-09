@@ -9,12 +9,18 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" RequestedTheme="Dark">
 
     <Grid Margin="0,0,0,0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-        <RelativePanel Background="#162632" Margin="0,0,0,0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+        <StackPanel Background="#162632">
 
-            <NavigationViewItem RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True"  Icon="Pictures" Tag="Sixth_Tutorial">
-                <TextBlock Tag="Sixth_Tutorial">Six</TextBlock>
+            <NavigationViewItem RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True"  Tag="Third_Tutorial">
+                <TextBlock Tag="Third_Tutorial">All together</TextBlock>
             </NavigationViewItem>
 
-        </RelativePanel>
+            <StackPanel RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True" Margin="16,0,0,0">
+                <TextBlock>For the sixth and final exercise we will combine all previous exercises. </TextBlock>
+                <TextBlock>Don’t worry if you don’t yet know everything just well enough. </TextBlock>
+                <TextBlock>Feel free to go back to any exercise by clicking on the respective exercise. </TextBlock>
+                <TextBlock>If you are convinced you are up to the challenge, try your hand at this exercise!</TextBlock>
+            </StackPanel>
+        </StackPanel>
     </Grid>
 </Page>

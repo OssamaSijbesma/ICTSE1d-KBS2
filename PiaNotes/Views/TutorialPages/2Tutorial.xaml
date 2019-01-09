@@ -11,21 +11,17 @@
     <Grid Margin="0,0,0,0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
         <StackPanel Background="#162632">
 
-            <NavigationViewItem RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True" Tag="Second_Tutorial">
-                <TextBlock Tag="Second_Tutorial">Oefening twee: Kruisen en Mollen</TextBlock>
+            <NavigationViewItem RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True"  Tag="Third_Tutorial">
+                <TextBlock Tag="Third_Tutorial">Second Exercise: Kinds of notes</TextBlock>
             </NavigationViewItem>
 
             <StackPanel RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True" Margin="16,0,0,0">
-                <TextBlock>Een noot kan ook een kruis of een mol erachter hebben staan. Dit betekent dat het een halve noot omhoog, kruis, of omlaag, mol, gaat.</TextBlock>
-                <TextBlock>Bij een A kruis, speel je niet de witte toets van A maar de zwarte toets daar rechtsboven van.</TextBlock>
-                <TextBlock>Voor de A mol speel je de zwarte toets linksboven van de witte A toets.</TextBlock>
-                <TextBlock>Bij noten waar geen zwarte toets rechts van zit maar je moet wel een kruis spelen speel je de witte toets daar rechts van.</TextBlock>
-                <TextBlock>Bij noten waar geen zwarte toets links van zit moet je de witte toets daar links van spelen.</TextBlock>
+                <TextBlock>Some notes have to be played faster than other notes. A song usually contains multiple kinds of notes.</TextBlock>
+                <TextBlock>To name a few: the full note (4 beats), the half note (2 beats), the quarter notes (1 beat), the eighth note(½ beat), the sixteenth note(¼ beat).</TextBlock>
+                <TextBlock>These beats are as described in the previous exercise.</TextBlock>
                 <TextBlock></TextBlock>
-                <TextBlock>Voor deze oefening speel je wat noten met een kruis of mol.</TextBlock>
-                <TextBlock>(Hierbij zullen eerst makkelijke kruisen en mollen komen en daarna wat kruisen en mollen waarbij de witte toets gespeeld moet worden.)</TextBlock>
+                <TextBlock>For this exercise you will practice playing on tempo again, but this time with different kinds of notes.</TextBlock>
             </StackPanel>
         </StackPanel>
-        <Button Click="Exercise_Click" Margin="16,0,0,0">Play Exercise</Button>
     </Grid>
 </Page>

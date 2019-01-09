@@ -9,12 +9,18 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" RequestedTheme="Dark">
 
     <Grid Margin="0,0,0,0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-        <RelativePanel Background="#162632" Margin="0,0,0,0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+        <StackPanel Background="#162632">
 
-            <NavigationViewItem RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True"  Icon="Pictures" Tag="Third_Tutorial">
-                <TextBlock Tag="Third_Tutorial">Three</TextBlock>
+            <NavigationViewItem RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True" Tag="First_Tutorial">
+                <TextBlock Tag="First_Tutorial">Third Exercise: Pitch</TextBlock>
             </NavigationViewItem>
 
-        </RelativePanel>
+            <StackPanel RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True" Margin="16,0,0,0">
+                <TextBlock>A piano contains multiple octaves, each octave consisting of a7 notes, the white keys.</TextBlock>
+                <TextBlock>An octave begins at note A and continues through note G, afterwards repeating in another octave.</TextBlock>
+                <TextBlock></TextBlock>
+                <TextBlock>For the first exercise you will practice playing the note A through G in sequence to the rythm of the exercise.</TextBlock>
+            </StackPanel>
+        </StackPanel>
     </Grid>
 </Page>

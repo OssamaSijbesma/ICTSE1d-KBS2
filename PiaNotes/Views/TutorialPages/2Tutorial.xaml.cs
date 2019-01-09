@@ -35,42 +35,9 @@ namespace PiaNotes.Views.TutorialPages
     /// </summary>
     public sealed partial class _2Tutorial : Page
     {
-        Databaser DB = new Databaser();
-
-        MidiParser midiParser;
-
         public _2Tutorial()
         {
             this.InitializeComponent();
-        }
-
-        public async void Exercise_Click(object sender, RoutedEventArgs e)
-        {
-            // Navigate to the practice page unless MIDI is not set then show a dialog and go to the settings page
-            if (Settings.midiInPort == null || Settings.midiOutPort == null)
-            {
-                await StaticObjects.NoMidiInOutDialog.ShowAsync();
-                this.Frame.Navigate(typeof(SettingsPage));
-            }
-            else
-            {
-                if (DB.CheckConnection() == true)
-                {
-                    StorageFile storageFileMIDI = await DB.GetAFileAsync(29);
-                    Stream streamMIDI = await storageFileMIDI.OpenStreamForReadAsync();
-                    MidiFile midiFile = MidiFile.Read(streamMIDI);
-                    midiParser = new MidiParser(midiFile);
-
-                    // Navigate to the practice page 
-                    this.Frame.Navigate(typeof(PracticePage), midiParser.sheetMusic);
-                }
-                else
-                {
-                    //uploads local file if offline
-                    await StaticObjects.NoDatabaseConnectionDialog.ShowAsync();
-                    this.Frame.Navigate(typeof(UploadPage));
-                }
-            }
         }
     }
 }
