@@ -52,7 +52,7 @@ namespace PiaNotes.Views
             coreTitleBar.ExtendViewIntoTitleBar = false;
 
             // Adds all items from Database in list of musicsheets
-            Sheets = DB.Search(null, null, null, 0, 0);
+            Sheets = DB.Search(null, "ShowMIDI", "1", 0, 0);
 
             // Creates most recent MIDI files.
             CreateMostRecent();

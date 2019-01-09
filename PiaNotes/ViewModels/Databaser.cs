@@ -75,11 +75,11 @@ namespace PiaNotes.ViewModels
                 {
                     if (whereA == "Id")
                     {
-                        Where = $"WHERE UPPER({whereA}) LIKE UPPER('{whereB}') ";
+                        Where = $"WHERE UPPER({whereA}) LIKE UPPER({whereB})";
                     }
                     else
                     {
-                        Where = $"WHERE UPPER({whereA}) LIKE UPPER('%{whereB}%') ";
+                        Where = $"WHERE UPPER({whereA}) LIKE UPPER('%{whereB}%')";
                     }
                 }
 
@@ -181,11 +181,11 @@ namespace PiaNotes.ViewModels
             }
         }
 
-        public bool Upload(string title, Byte[] fileBytes, string fileName)
+        public bool Upload(string title, Byte[] fileBytes, string fileName, int showMIDI)
         {
             try
             {
-                string sql = $"INSERT INTO {DataTable} (Title, FileBytes, FileName ) VALUES (@title, @fileBytes, @fileName);";
+                string sql = $"INSERT INTO {DataTable} (Title, FileBytes, FileName, Show ) VALUES (@title, @fileBytes, @fileName, @showMIDI);";
                 //Setup connection and SQL command
                 using (MySqlConnection sqlconn = new MySqlConnection(ConnectionString))
                 using (var cmd = new MySqlCommand(sql, sqlconn))
@@ -193,6 +193,8 @@ namespace PiaNotes.ViewModels
                     cmd.Parameters.Add("@title", MySqlDbType.VarChar, title.Length).Value = title;
                     cmd.Parameters.Add("@fileBytes", MySqlDbType.VarBinary, fileBytes.Length).Value = fileBytes;
                     cmd.Parameters.Add("@fileName", MySqlDbType.VarChar, fileName.Length).Value = fileName;
+                    cmd.Parameters.Add("@showMIDI", MySqlDbType.Int32, showMIDI).Value = showMIDI;
+
                     //Open connection to database
                     sqlconn.Open();
 

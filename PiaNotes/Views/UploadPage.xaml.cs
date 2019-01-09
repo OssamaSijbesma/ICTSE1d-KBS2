@@ -109,7 +109,7 @@ namespace PiaNotes.Views
             {
                 if (DB.CheckConnection() == true)
                 {
-                    DB.Upload(TXTBox_Title.Text, fileByte, fileName);
+                    DB.Upload(TXTBox_Title.Text, fileByte, fileName, 1);
                     TXTBlock_Status.Text = "File uploaded.";
 
                     //Added a navigation to the selection after uploading succesfully
