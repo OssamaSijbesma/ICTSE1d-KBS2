@@ -204,7 +204,7 @@ namespace PiaNotes.ViewModels
         {
             try
             {
-                string sql = $"INSERT INTO {DataTable} (Title, FileBytes, FileName ) VALUES (@title, @fileBytes, @fileName);";
+                string sql = $"INSERT INTO {DataTable} (Title, FileBytes, FileName) VALUES (@title, @fileBytes, @fileName);";
                 //Setup connection and SQL command
                 using (MySqlConnection sqlconn = new MySqlConnection(ConnectionString))
                 using (var cmd = new MySqlCommand(sql, sqlconn))
