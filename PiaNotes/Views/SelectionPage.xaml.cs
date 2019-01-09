@@ -237,6 +237,9 @@ namespace PiaNotes.Views
         // Navigate to the settings page
         private void NavSettings_Click(object sender, RoutedEventArgs e) => this.Frame.Navigate(typeof(SettingsPage));
 
+        // Navigate to the Tutorial page
+        private void NavTutorial_Click(object sender, RoutedEventArgs e) => this.Frame.Navigate(typeof(TutorialPage));
+
         // Navigate to the credits page
         private void NavCredits_Click(object sender, RoutedEventArgs e) => this.Frame.Navigate(typeof(CreditsPage));
 
