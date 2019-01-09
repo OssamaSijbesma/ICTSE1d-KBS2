@@ -1,0 +1,26 @@
+﻿<Page
+    x:Class="PiaNotes.Views.TutorialPages._3Tutorial"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:PiaNotes.Views.TutorialPages"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" RequestedTheme="Dark">
+
+    <Grid Margin="0,0,0,0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+        <StackPanel Background="#162632">
+
+            <NavigationViewItem RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True" Tag="First_Tutorial">
+                <TextBlock Tag="First_Tutorial">Third Exercise: Pitch</TextBlock>
+            </NavigationViewItem>
+
+            <StackPanel RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True" Margin="16,0,0,0">
+                <TextBlock>A piano contains multiple octaves, each octave consisting of a7 notes, the white keys.</TextBlock>
+                <TextBlock>An octave begins at note A and continues through note G, afterwards repeating in another octave.</TextBlock>
+                <TextBlock></TextBlock>
+                <TextBlock>For the first exercise you will practice playing the note A through G in sequence to the rythm of the exercise.</TextBlock>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</Page>

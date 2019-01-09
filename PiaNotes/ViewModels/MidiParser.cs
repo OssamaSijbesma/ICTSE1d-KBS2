@@ -59,7 +59,6 @@ namespace PiaNotes.ViewModels
                     noteRoundedLengths[i]
                     ));
             }
-            
 
             // Check if multiple clefs are needed
             CheckClefs(notes);
@@ -76,10 +75,7 @@ namespace PiaNotes.ViewModels
             foreach(Models.Note n in notes)
             {
                 //Check if a note is lower than the treble clef supports, if not the bass cleff will be added
-                if(n.Number <= 60)
-                {
-                    doubleClef = true;
-                }
+                if(n.Number <= 60) doubleClef = true;
             }
             doubleClef = false;
         }

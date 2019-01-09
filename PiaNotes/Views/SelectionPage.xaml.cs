@@ -52,7 +52,7 @@ namespace PiaNotes.Views
             coreTitleBar.ExtendViewIntoTitleBar = false;
 
             // Adds all items from Database in list of musicsheets
-            Sheets = DB.Search(null, null, null, 0, 0);
+            Sheets = DB.Search(null, "ShowMIDI", "1", 0, 0);
 
             // Creates most recent MIDI files.
             CreateMostRecent();
@@ -105,7 +105,7 @@ namespace PiaNotes.Views
         public void Search(string search)
         {
             //Creates a list of results where inserted Searchbar text will be displayed with the corresponding item in Database.
-            Sheets = DB.Search(null, "MusicSheet.Title", search + "%", 0, 0);
+            Sheets = DB.Search(null, "MusicSheet.Title", search + "%", "MusicSheet.ShowMIDI", "1%", 0, 0);
             CreateMostRecent();
         }
 
@@ -236,6 +236,9 @@ namespace PiaNotes.Views
         
         // Navigate to the settings page
         private void NavSettings_Click(object sender, RoutedEventArgs e) => this.Frame.Navigate(typeof(SettingsPage));
+
+        // Navigate to the Tutorial page
+        private void NavTutorial_Click(object sender, RoutedEventArgs e) => this.Frame.Navigate(typeof(TutorialPage));
 
         // Navigate to the credits page
         private void NavCredits_Click(object sender, RoutedEventArgs e) => this.Frame.Navigate(typeof(CreditsPage));

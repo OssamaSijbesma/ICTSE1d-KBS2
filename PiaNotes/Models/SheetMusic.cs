@@ -46,7 +46,6 @@ namespace PiaNotes.Models
                 }
             } else
             {
-                bars.Add(new Bar());
             }
         }
     }

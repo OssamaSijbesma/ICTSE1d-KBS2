@@ -1,0 +1,30 @@
+﻿<Page
+    x:Class="PiaNotes.Views.TutorialPages._4Tutorial"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:PiaNotes.Views.TutorialPages"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" RequestedTheme="Dark">
+
+    <Grid Margin="0,0,0,0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+        <StackPanel Background="#162632">
+
+            <NavigationViewItem RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True" Tag="Second_Tutorial">
+                <TextBlock Tag="Second_Tutorial">Fourth exercise: Sharps and Flats</TextBlock>
+            </NavigationViewItem>
+
+            <StackPanel RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True" Margin="16,0,0,0">
+                <TextBlock>A note can also have a sharp or flat set next to it. This means that the note will go a half note up, sharp, or a half note down, flat.</TextBlock>
+                <TextBlock>With an A sharp, you don’t play the white key of A but instead the black key to the upper right of it.</TextBlock>
+                <TextBlock>As for an A flat you play the black key to the upper left of the white A key.</TextBlock>
+                <TextBlock>If there is no black key to the right of your note but still have to play it sharp, you will have to play the white key next to it.</TextBlock>
+                <TextBlock>The opposite goes for notes where there is no black key to the left of it, as you will have to play the white key to the left of the note.</TextBlock>
+                <TextBlock></TextBlock>
+                <TextBlock>For this exercise you will practice playing some notes with a sharp or flat.</TextBlock>
+                <TextBlock>(The exercise will start off with some easy sharps and flats and continue with sharps and flats where white keys will have to be played)</TextBlock>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</Page>

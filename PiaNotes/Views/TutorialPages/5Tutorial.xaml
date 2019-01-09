@@ -1,0 +1,28 @@
+﻿<Page
+    x:Class="PiaNotes.Views.TutorialPages._5Tutorial"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:PiaNotes.Views.TutorialPages"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" RequestedTheme="Dark">
+
+    <Grid Margin="0,0,0,0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+        <StackPanel Background="#162632">
+
+            <NavigationViewItem RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True"  Tag="Third_Tutorial">
+                <TextBlock Tag="Third_Tutorial">Fifth Exercise: Clefs</TextBlock>
+            </NavigationViewItem>
+
+            <StackPanel RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True" Margin="16,0,0,0">
+                <TextBlock>A clef gives an indication as to what pitch and octave to play in.</TextBlock>
+                <TextBlock>The default clef, the Treble Clef, is drawn on the G, and plays on the 4th or 5th octave, the default octaves.</TextBlock>
+                <TextBlock>Apart from this there is a Bass Clef, which is drawn on the G but is not the same as the treble clef.</TextBlock>
+                <TextBlock>All notes that go with the bass clef are often played with the left hand.</TextBlock>
+                <TextBlock></TextBlock>
+                <TextBlock>In this exercise you will have to play a song with two hands, so remember well where the notes are supposed to be.</TextBlock>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</Page>

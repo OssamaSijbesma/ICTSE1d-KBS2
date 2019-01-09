@@ -1,0 +1,26 @@
+﻿<Page
+    x:Class="PiaNotes.Views.TutorialPages._6Tutorial"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:PiaNotes.Views.TutorialPages"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" RequestedTheme="Dark">
+
+    <Grid Margin="0,0,0,0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+        <StackPanel Background="#162632">
+
+            <NavigationViewItem RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True"  Tag="Third_Tutorial">
+                <TextBlock Tag="Third_Tutorial">All together</TextBlock>
+            </NavigationViewItem>
+
+            <StackPanel RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True" Margin="16,0,0,0">
+                <TextBlock>For the sixth and final exercise we will combine all previous exercises. </TextBlock>
+                <TextBlock>Don’t worry if you don’t yet know everything just well enough. </TextBlock>
+                <TextBlock>Feel free to go back to any exercise by clicking on the respective exercise. </TextBlock>
+                <TextBlock>If you are convinced you are up to the challenge, try your hand at this exercise!</TextBlock>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</Page>
