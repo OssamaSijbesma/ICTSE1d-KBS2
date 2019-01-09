@@ -34,6 +34,7 @@ namespace PiaNotes.ViewModels
 
             // load the bitmap from file
             CanvasBitmap cb = await CanvasBitmap.LoadAsync(ParentCanvas, file_path);
+            
 
             // null check
             if (cb == null)

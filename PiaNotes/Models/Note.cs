@@ -1,7 +1,6 @@
 ﻿using Melanchall.DryWetMidi.Smf.Interaction;
 using Microsoft.Graphics.Canvas;
 using Microsoft.Graphics.Canvas.UI.Xaml;
-using PiaNotes.Interfaces;
 using PiaNotes.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -9,11 +8,12 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.Foundation;
 using Windows.Graphics.Imaging;
 
 namespace PiaNotes.Models
 {
-    public class Note : IGameObject
+    public class Note
     {
         public int Number { get; set; }
         public int Timing { get; set; }
@@ -22,9 +22,8 @@ namespace PiaNotes.Models
         public MetricTimeSpan MetricTiming { get; set; }
 
         public CanvasBitmap Bitmap { get; set; }
-        public Vector2 Location { get; set; }
-        public BitmapSize Size { get; set; }
-
+        public Vector2 BitmapLocation { get; set; }
+        public Size BitmapSize { get; set; }
 
         //Creating a note can only happen if you know the number, timing and the length.
         public Note(int number, int timing, int length,  MetricTimeSpan metricTiming, double roundedLength)
@@ -36,32 +35,17 @@ namespace PiaNotes.Models
             NoteType = roundedLength;
         }
 
-        public void Draw(CanvasControl cC)
-        {
-            if (Bitmap == null)
-                return;
-
-            //cC.DrawingSession.DrawImage(Bitmap, Location);
-        }
-
         public bool SetBitmap(string key)
         {
             CanvasBitmap canvasBitmap = null;
             if (ContentPipeline.ImageDictionary.TryGetValue(key, out canvasBitmap))
             {
                 Bitmap = canvasBitmap;
-                Size = Bitmap.SizeInPixels;
+                BitmapSize bitmapSize = Bitmap.SizeInPixels;
+                BitmapSize = new Size(bitmapSize.Height, bitmapSize.Width);
                 return true;
             }
             return false;
-        }
-
-        public void SetSize(uint width, uint height)
-        {
-            BitmapSize bitmapSize;
-            bitmapSize.Width = width;
-            bitmapSize.Height = height;
-            Size = bitmapSize;
         }
     }
 }

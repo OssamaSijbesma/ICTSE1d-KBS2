@@ -64,7 +64,7 @@
             </VariableSizedWrapGrid>
 
 
-            <Button x:Name="New" Content="New" Click="NewMIDIFile_Click"
+            <Button x:Name="New" Content="New MIDI File" Click="NewMIDIFile_Click"
                     HorizontalAlignment="Center" VerticalAlignment="Center" Background="#253847"
                     RelativePanel.AlignBottomWith="MIDIFiles"
                     RelativePanel.AlignRightWith="MIDIFiles"

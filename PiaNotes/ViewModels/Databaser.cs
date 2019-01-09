@@ -64,6 +64,7 @@ namespace PiaNotes.ViewModels
                 //Set query standaard.
                 var Select = $"SELECT * FROM {DataTable} ";
                 var Where = $"";
+                var OrderBy = $" ORDER BY MusicSheet.UploadDate DESC ";
                 var Limit = $"";
                 var Offset = $"";
 
@@ -82,7 +83,7 @@ namespace PiaNotes.ViewModels
                         Where = $"WHERE UPPER({whereA}) LIKE UPPER('%{whereB}%') ";
                     }
                 }
-
+                
                 //If a limit is specified, add a LIMIT to the query
                 if (limit != 0) { Limit = $"LIMIT {limit} "; }
 
@@ -90,7 +91,7 @@ namespace PiaNotes.ViewModels
                 if (offset != 0 && limit != 0) { Offset = $"OFFSET {offset} "; }
 
                 //Build the sql into a string
-                string sql = Select + Where + Limit + Offset;
+                string sql = Select + Where + OrderBy + Limit + Offset;
 
                 //Setup connection and SQL command
                 using (MySqlConnection sqlconn = new MySqlConnection(ConnectionString))

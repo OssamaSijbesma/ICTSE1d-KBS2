@@ -40,16 +40,6 @@ namespace PiaNotes.Models
             } else
             {
             }
-
-            Clef cl = new Clef(Clef.ClefTypes.Treble);
-            Clef ef = new Clef(Clef.ClefTypes.Bass);
-
-            clefs.Add(cl);
-
-            if (multipleClefs)
-            {
-                clefs.Add(ef);
-            }
         }
     }
 }
