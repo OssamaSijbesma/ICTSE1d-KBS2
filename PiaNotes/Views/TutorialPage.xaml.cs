@@ -26,7 +26,6 @@ using Windows.UI.ViewManagement;
 using Windows.UI.Xaml.Shapes;
 using PiaNotes.Models;
 using System.Numerics;
-using PiaNotes.Interfaces;
 using Windows.UI.Popups;
 using Windows.Storage.Streams;
 using Windows.Storage;

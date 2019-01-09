@@ -12,14 +12,14 @@
         <StackPanel Background="#162632">
 
             <NavigationViewItem RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True" Tag="First_Tutorial">
-                <TextBlock Tag="First_Tutorial">Oefening één: Toonhoogte</TextBlock>
+                <TextBlock Tag="First_Tutorial">First Exercise: Pitch</TextBlock>
             </NavigationViewItem>
 
             <StackPanel RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True" Margin="16,0,0,0">
-                <TextBlock>Een piano bestaat uit meerdere octaven, elk octaaf bestaat uit 7 noten, de witte toetsen.</TextBlock>
-                <TextBlock> Een octaaf begint bij noot A en gaat door tot en met noot G, daarna herhaalt het zich in een ander octaaf.</TextBlock>
+                <TextBlock>A piano contains multiple octaves, each octave consisting of a7 notes, the white keys.</TextBlock>
+                <TextBlock>An octave begins at note A and continues through note G, afterwards repeating in another octave.</TextBlock>
                 <TextBlock></TextBlock>
-                <TextBlock>Voor de eerste oefening moet je noot A tot en met G achter elkaar spelen op het ritme van de oefening.</TextBlock>
+                <TextBlock>For the first exercise you will practice playing the note A through G in sequence to the rythm of the exercise.</TextBlock>
             </StackPanel>
         </StackPanel>
     </Grid>

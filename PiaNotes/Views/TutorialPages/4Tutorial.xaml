@@ -9,12 +9,21 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" RequestedTheme="Dark">
 
     <Grid Margin="0,0,0,0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-        <RelativePanel Background="#162632" Margin="0,0,0,0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+        <StackPanel Background="#162632">
 
-            <NavigationViewItem RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True"  Icon="Pictures" Tag="Fourth_Tutorial">
-                <TextBlock Tag="Fourth_Tutorial">Four</TextBlock>
+            <NavigationViewItem RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True"  Tag="Third_Tutorial">
+                <TextBlock Tag="Third_Tutorial">Fourth Exercise:Tempo and bars</TextBlock>
             </NavigationViewItem>
 
-        </RelativePanel>
+            <StackPanel RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True" Margin="16,0,0,0">
+                <TextBlock>When playing a song you will have to play at a certain speed, we call this speed the tempo. The tempo can be different for all kind of songs. </TextBlock>
+                <TextBlock>For convenience, PiaNotes will set the original tempo of the song automatically. A song consists of different bars of the tempo. </TextBlock>
+                <TextBlock>Other than that, there are also a few beats in a bar. 4/4, the first 4 stands for the amount of notes in a bar, </TextBlock>
+                <TextBlock>whereas the second 4 stands for the kind of notes that will be played. With the 4/4 there are 4 quarter notes per bar, while the 6/8 consists of 6 8th notes per bar.</TextBlock>
+                <TextBlock></TextBlock>
+                <TextBlock>For the following exercises there will be notes you have to play in a certain tempo. </TextBlock>
+                <TextBlock>For convenience, there will not be any different kinds of notes or bars as of now. We will focus more on those topics after this exercise.</TextBlock>
+            </StackPanel>
+        </StackPanel>
     </Grid>
 </Page>

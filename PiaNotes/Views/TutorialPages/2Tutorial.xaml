@@ -12,18 +12,18 @@
         <StackPanel Background="#162632">
 
             <NavigationViewItem RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True" Tag="Second_Tutorial">
-                <TextBlock Tag="Second_Tutorial">Oefening twee: Kruisen en Mollen</TextBlock>
+                <TextBlock Tag="Second_Tutorial">Second exercise: Sharps and Flats</TextBlock>
             </NavigationViewItem>
 
             <StackPanel RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True" Margin="16,0,0,0">
-                <TextBlock>Een noot kan ook een kruis of een mol erachter hebben staan. Dit betekent dat het een halve noot omhoog, kruis, of omlaag, mol, gaat.</TextBlock>
-                <TextBlock>Bij een A kruis, speel je niet de witte toets van A maar de zwarte toets daar rechtsboven van.</TextBlock>
-                <TextBlock>Voor de A mol speel je de zwarte toets linksboven van de witte A toets.</TextBlock>
-                <TextBlock>Bij noten waar geen zwarte toets rechts van zit maar je moet wel een kruis spelen speel je de witte toets daar rechts van.</TextBlock>
-                <TextBlock>Bij noten waar geen zwarte toets links van zit moet je de witte toets daar links van spelen.</TextBlock>
+                <TextBlock>A note can also have a sharp or flat set next to it. This means that the note will go a half note up, sharp, or a half note down, flat. </TextBlock>
+                <TextBlock>With an A sharp, you don’t play the white key of A but instead the black key to the upper right of it. </TextBlock>
+                <TextBlock>As for an A flat you play the black key to the upper left of the white A key. </TextBlock>
+                <TextBlock>If there is no black key to the right of your note but still have to play it sharp, you will have to play the white key next to it. </TextBlock>
+                <TextBlock>The opposite goes for notes where there is no black key to the left of it, as you will have to play the white key to the left of the note.</TextBlock>
                 <TextBlock></TextBlock>
-                <TextBlock>Voor deze oefening speel je wat noten met een kruis of mol.</TextBlock>
-                <TextBlock>(Hierbij zullen eerst makkelijke kruisen en mollen komen en daarna wat kruisen en mollen waarbij de witte toets gespeeld moet worden.)</TextBlock>
+                <TextBlock>For this exercise you will practice playing some notes with a sharp or flat. </TextBlock>
+                <TextBlock>(The exercise will start off with some easy sharps and flats and continue with sharps and flats where white keys will have to be played)</TextBlock>
             </StackPanel>
         </StackPanel>
     </Grid>
