@@ -38,9 +38,12 @@
                 <NavigationViewItem Icon="More"  Tag="Sixth_Tutorial">
                     <TextBlock Tag="Sixth_Tutorial">Zes</TextBlock>
                 </NavigationViewItem>
+                <NavigationViewItem></NavigationViewItem>
+                <NavigationViewItem Tag="Play">
+                    <TextBlock Tag="Play">Play Exercise</TextBlock>
+                </NavigationViewItem>
             </NavigationView.MenuItems>
             <Frame x:Name="contentFrame" Margin="0,-60,0,0"/>
         </NavigationView>
-
     </Grid>
 </Page>

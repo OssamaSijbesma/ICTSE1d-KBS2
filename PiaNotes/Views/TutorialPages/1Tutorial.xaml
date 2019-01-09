@@ -22,6 +22,5 @@
                 <TextBlock>Voor de eerste oefening moet je noot A tot en met G achter elkaar spelen op het ritme van de oefening.</TextBlock>
             </StackPanel>
         </StackPanel>
-        <Button Click="Exercise_Click" Margin="16,0,0,0">Play Exercise</Button>
     </Grid>
 </Page>

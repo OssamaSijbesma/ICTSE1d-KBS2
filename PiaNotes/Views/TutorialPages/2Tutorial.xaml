@@ -26,6 +26,5 @@
                 <TextBlock>(Hierbij zullen eerst makkelijke kruisen en mollen komen en daarna wat kruisen en mollen waarbij de witte toets gespeeld moet worden.)</TextBlock>
             </StackPanel>
         </StackPanel>
-        <Button Click="Exercise_Click" Margin="16,0,0,0">Play Exercise</Button>
     </Grid>
 </Page>

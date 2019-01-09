@@ -39,7 +39,6 @@ namespace PiaNotes.Models
                 }
             } else
             {
-                bars.Add(new Bar());
             }
 
             Clef cl = new Clef(Clef.ClefTypes.Treble);
