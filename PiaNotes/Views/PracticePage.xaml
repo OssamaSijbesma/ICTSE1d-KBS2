@@ -40,7 +40,7 @@
             <StackPanel x:Name="KeysWhiteSP" Orientation="Horizontal" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignBottomWithPanel="True" HorizontalAlignment="Center"/>
             <StackPanel x:Name="KeysBlackSP" Orientation="Horizontal" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignBottomWithPanel="True" HorizontalAlignment="Center"/>
 
-            <Rectangle x:Name="Cursor" MinHeight="250" MinWidth="5" Stroke="White" StrokeThickness="5" Fill="White" StrokeLineJoin="Round" Opacity="0.5" />
+            <Rectangle x:Name="Cursor" MinHeight="300" MinWidth="5" Stroke="White" StrokeThickness="5" Fill="White" StrokeLineJoin="Round" RelativePanel.AlignTopWith="MenuStrip" Opacity="0.5"/>
             
             <ProgressBar x:Name="Progress"
                        Height="30" Background="#2b3c49" Value="0"
