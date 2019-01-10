@@ -17,6 +17,7 @@ using Windows.UI.Xaml.Navigation;
 using Windows.UI.Xaml.Shapes;
 using PiaNotes.Models;
 using System.Numerics;
+using Windows.Foundation;
 
 namespace PiaNotes.Views
 {
@@ -515,8 +516,8 @@ namespace PiaNotes.Views
                     staffWidth / 4,
                     staffSpacing * 25 + staffMargin * 2));
 
-            clefs[0] = new Clef(new Vector2(10, 10));
-            clefs[1] = new Clef(new Vector2(10, 10));
+            clefs[0] = new Clef(new Point(staffMargin*2, staffSpacing * 4 + staffMargin),staffSpacing*7-3);
+            clefs[1] = new Clef(new Point(staffMargin*2, staffSpacing * 18 + staffMargin ),staffSpacing*7);
 
             //Set images inside of the ContentPipeline for futher re-use.
             args.TrackAsyncAction(CreateResourcesAsync(sender).AsAsyncAction());
@@ -527,7 +528,7 @@ namespace PiaNotes.Views
 
         private async Task CreateResourcesAsync(CanvasControl sender)
         {
-            await clefs[0].SetBitmap(sender, @"Assets/Clefs/CClef.png");
+            await clefs[0].SetBitmap(sender, @"Assets/Clefs/GClef.png");
             await clefs[1].SetBitmap(sender, @"Assets/Clefs/FClef.png");
 
             // Add the resources to the ContentPipeline for reuse purposes
@@ -586,24 +587,23 @@ namespace PiaNotes.Views
         {
             if (LoadPage)
             {
-                // Draw notes.
-                for (int i = 0; i < notes.Count; i++)
-                {
-                    args.DrawingSession.DrawImage(notes[i].Bitmap, notes[i].BitmapLocation);
-                }
-
                 // Draw staff and guidelines.
                 for (int i = 0; i < lines.Count; i++)
                 {
                     args.DrawingSession.DrawLine(lines[i].StartPoint, lines[i].EndPoint, Colors.White);
                 }
-                /*
+
                 // Draw clef.
                 for (int i = 0; i < 2; i++)
                 {
-                    args.DrawingSession.DrawImage(clefs[i].Bitmap, clefs[i].BitmapLocation, new Rect(new Point(0, 0), clefs[i].BitmapSize));
+                    args.DrawingSession.DrawImage(clefs[i].Bitmap, new Rect(clefs[i].BitmapLocation, clefs[i].BitmapSize));
                 }
-                */
+
+                // Draw notes.
+                for (int i = 0; i < notes.Count; i++)
+                {
+                    args.DrawingSession.DrawImage(notes[i].Bitmap, notes[i].BitmapLocation);
+                }                
             }
         }
 
