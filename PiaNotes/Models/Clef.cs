@@ -19,12 +19,15 @@ namespace PiaNotes.Models
         public ClefTypes CT;
 
         public CanvasBitmap Bitmap { get; set; }
-        public Vector2 BitmapLocation { get; set; }
+        public Point BitmapLocation { get; set; }
         public Size BitmapSize { get; set; }
 
-        public Clef(Vector2 location)
+        private int clefHeight;
+
+        public Clef(Point location, int height)
         {
             BitmapLocation = location;
+            clefHeight = height;
         }
 
         public async Task<bool> SetBitmap(CanvasControl ParentCanvas, string file_path)
@@ -35,7 +38,7 @@ namespace PiaNotes.Models
 
             Bitmap = await CanvasBitmap.LoadAsync(ParentCanvas, file_path);
             BitmapSize bitmapSize = Bitmap.SizeInPixels;
-            BitmapSize = new Size(bitmapSize.Height/7, bitmapSize.Width/7);
+            BitmapSize = new Size( bitmapSize.Width/ bitmapSize.Width*clefHeight, bitmapSize.Height / bitmapSize.Width*clefHeight);
             return true;
         }
     }
