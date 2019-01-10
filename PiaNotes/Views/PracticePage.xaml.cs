@@ -576,7 +576,7 @@ namespace PiaNotes.Views
             }
             
             // Set maximum of progressbar to MIDI length in microseconds.
-            Progress.Maximum = (SM.midiFileDuration.TotalMicroseconds / 1000000);
+            Progress.Maximum = (SM.midiFileDuration.TotalMicroseconds / 1000000) + 1;
 
             // Start GameTimer
             GameTimerLogic();
