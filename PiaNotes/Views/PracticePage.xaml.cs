@@ -456,8 +456,16 @@ namespace PiaNotes.Views
 
         private void GameTickUI(object sender, object e)
         {
-            // Redraw screen.
-            GameCanvas.Invalidate();
+            try
+            {
+                // Redraw screen.
+                GameCanvas.Invalidate();
+            }
+            catch (Exception)
+            {
+                // Can't invalidate.
+                System.Diagnostics.Debug.WriteLine("Invalidating Error");
+            }
         }
 
         // Initialize images and stuff.
