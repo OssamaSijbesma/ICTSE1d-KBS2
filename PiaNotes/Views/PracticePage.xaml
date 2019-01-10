@@ -79,7 +79,7 @@
                        Margin="0,7,5,0" VerticalAlignment="Stretch">
             </TextBlock>
 
-            <TextBlock x:Name="TXTBlock_Score" Text="0"
+            <TextBlock x:Name="TXTBlock_Score" Text="Score: "
                        TextAlignment="Right" 
                        RelativePanel.AlignRightWithPanel="True" 
                        RelativePanel.AlignTopWithPanel="True" HorizontalAlignment="Stretch"

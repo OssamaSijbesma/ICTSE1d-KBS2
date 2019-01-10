@@ -17,6 +17,7 @@ using Windows.UI.Xaml.Navigation;
 using Windows.UI.Xaml.Shapes;
 using PiaNotes.Models;
 using System.Numerics;
+using System.Linq;
 
 namespace PiaNotes.Views
 {
@@ -63,10 +64,11 @@ namespace PiaNotes.Views
 
         private double gameCanvasWidth;
         private double gameCanvasHeight;
-        
-        private int current = 0, pre = 0;
+
+        private int current = 0;
         private int waiting = 0;
         private int score = 0;
+        private int notesHit = 0;
 
         // UI Assets
         List<Models.Line> lines = new List<Models.Line>();
@@ -76,6 +78,8 @@ namespace PiaNotes.Views
         public PracticePage()
         {
             this.InitializeComponent();
+
+            
 
             // Initialize the page.
             var appView = ApplicationView.GetForCurrentView();
@@ -149,7 +153,9 @@ namespace PiaNotes.Views
                 if (waiting >= 2)
                 {
                     waitingTimer.Stop();
-                    this.Frame.Navigate(typeof(SelectionPage));
+                    Scores.score = score;
+                    Scores.notesHit = notesHit;
+                    this.Frame.Navigate(typeof(ScorePage));
                 }
 
                 waiting++;
@@ -178,6 +184,8 @@ namespace PiaNotes.Views
                 byte note = ((MidiNoteOnMessage)receivedMidiMessage).Note;
                 byte velocity = ((MidiNoteOnMessage)receivedMidiMessage).Velocity;
 
+                
+
                 if (Settings.disableUserFeedback)
                 {
                     if (velocity + Utilities.DoubleToByte(Settings.volume) <= 127 && velocity + Utilities.DoubleToByte(Settings.volume) >= 0)
@@ -194,18 +202,16 @@ namespace PiaNotes.Views
                     {
                         notes[i].Played = true;
                         notes[i].Active = false;
-                        System.Diagnostics.Debug.WriteLine("Correct: " + note);
                         notes[i].SetBitmap("c" + notes[i].NoteType.ToString());
                         score += 50;
+                        notesHit++;
 
                         await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
                             () =>
                             {
                                 TXTBlock_Score.Text = "" + score;
                             }
-                            );
-
-                        
+                            ); 
                     }
                 }
                 
@@ -334,7 +340,6 @@ namespace PiaNotes.Views
                     if (i == 0) Notes[j] = (keyWhiteRect);
                     else Notes[(j + (i * 12))] = (keyWhiteRect);
                 }
-                System.Diagnostics.Debug.WriteLine(keyWhiteRect.Name);
             }
             else
             {
@@ -349,7 +354,6 @@ namespace PiaNotes.Views
                 KeysBlackSP.Children.Add(keyBlackRect);
                 if (i == 0) Notes[j] = (keyBlackRect);
                 else Notes[(j + (i * 12))] = (keyBlackRect);
-                System.Diagnostics.Debug.WriteLine(keyBlackRect.Name);
             }
         }
 
@@ -441,7 +445,7 @@ namespace PiaNotes.Views
         private void GameTickLogic(Object source, ElapsedEventArgs e)
         {
             tickCount += 15625;
-
+            
             for (int i = 0; i < SM.notes.Count && i < 6; i++)
             {
                 if (tickCount >= SM.notes[i].MetricTiming.TotalMicroseconds)
@@ -664,6 +668,7 @@ namespace PiaNotes.Views
             base.OnNavigatedTo(e);
 
             SM = (SheetMusic)e.Parameter;
+            Scores.notesAmount = SM.notes.Count();
         }
 
         // Handler for when the page is unloaded

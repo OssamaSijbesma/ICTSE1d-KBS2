@@ -125,6 +125,7 @@
     <Compile Include="Models\MusicSheet.cs" />
     <Compile Include="Models\Note.cs" />
     <Compile Include="Models\SheetMusic.cs" />
+    <Compile Include="Scores.cs" />
     <Compile Include="StaticObjects.cs" />
     <Compile Include="Utilities.cs" />
     <Compile Include="Views\SettingsPage.xaml.cs">
@@ -175,6 +176,9 @@
     </Compile>
     <Compile Include="Views\TutorialPages\6Tutorial.xaml.cs">
       <DependentUpon>6Tutorial.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ScorePage.xaml.cs">
+      <DependentUpon>ScorePage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\UploadPage.xaml.cs">
       <DependentUpon>UploadPage.xaml</DependentUpon>
@@ -330,6 +334,10 @@
     <Page Include="Views\TutorialPages\6Tutorial.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ScorePage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\UploadPage.xaml">
       <SubType>Designer</SubType>
