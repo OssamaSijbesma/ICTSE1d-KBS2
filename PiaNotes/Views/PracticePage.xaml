@@ -54,24 +54,6 @@
                        RelativePanel.AlignLeftWithPanel="True"
                        RelativePanel.AlignRightWithPanel="True"/>
 
-            <Button x:Name="View" MinHeight="36" Content="View" HorizontalAlignment="Center" VerticalAlignment="Center" Background="#253847" >
-                <Button.Flyout>
-                    <MenuFlyout>
-                        <MenuFlyoutItem Text="Keyboard" Click="ViewKeyboard_Click" />
-                    </MenuFlyout>
-                </Button.Flyout>
-            </Button>
-
-            <Button x:Name="Options" MinHeight="36" Content="Options" HorizontalAlignment="Center" VerticalAlignment="Center" Background="#253847" RelativePanel.RightOf="View">
-                <Button.Flyout>
-                    <MenuFlyout>
-                        <MenuFlyoutItem Text="Open Selection Menu" Click="NavSelection_Click" />
-                        <MenuFlyoutItem Text="Settings" Click="NavSettings_Click" />
-                        <MenuFlyoutItem Text="Credits" Click="NavCredits_Click" />
-                    </MenuFlyout>
-                </Button.Flyout>
-            </Button>
-
             <TextBlock x:Name="TXTBlock_Timer" Text="00:00"
                        TextAlignment="Right" 
                        RelativePanel.AlignRightWithPanel="True" 

@@ -218,37 +218,6 @@ namespace PiaNotes.Views
             });
         }
 
-        // Menustrip: View > Keyboard
-        private void ViewKeyboard_Click(object sender, RoutedEventArgs e)
-        {
-            ToggleKeyboard();
-        }
-
-        // Toggles the keyboard to show/hide.
-        public void ToggleKeyboard()
-        {
-            // Iterates through all keyboard items to hide/show them.
-            if (KeyboardIsOpen)
-            {
-                foreach (Rectangle key in KeysWhiteSP.Children)
-                {
-                    key.Width = 0;
-                }
-                foreach (Rectangle key in KeysBlackSP.Children)
-                {
-                    key.Width = 0;
-                }
-                KeyboardBG.MinHeight = 0;
-            }
-            else
-            {
-                CreateKeyboard();
-                KeyboardBG.MinHeight = 200;
-            }
-            KeyboardIsOpen = !KeyboardIsOpen;
-        }
-
-
         // Creates the keyboard.
         public void CreateKeyboard()
         {
@@ -610,12 +579,6 @@ namespace PiaNotes.Views
         /// <summary>
         /// On click events navigation
         /// </summary>
-
-        // Navigate to the settings page
-        private void NavSettings_Click(object sender, RoutedEventArgs e) => this.Frame.Navigate(typeof(SettingsPage));
-
-        // Navigate to the credits page
-        private void NavCredits_Click(object sender, RoutedEventArgs e) => this.Frame.Navigate(typeof(CreditsPage));
 
         // Navigate to the selection page
         private void NavSelection_Click(object sender, RoutedEventArgs e) => this.Frame.Navigate(typeof(SelectionPage));
