@@ -48,7 +48,7 @@ namespace PiaNotes.ViewModels
                 .ToList();
 
             // Set the notes in an array and sends the array to SheetMusic
-            for (int i = 0; i < noteNumbers.Count() - 1; i++)
+            for (int i = 0; i < noteNumbers.Count(); i++)
             {              
 
                 notes.Add(new Models.Note(

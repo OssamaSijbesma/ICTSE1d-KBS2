@@ -17,7 +17,6 @@ using Windows.UI.Xaml.Navigation;
 using Windows.UI.Xaml.Shapes;
 using PiaNotes.Models;
 using System.Numerics;
-using Windows.Foundation;
 
 namespace PiaNotes.Views
 {
@@ -29,10 +28,14 @@ namespace PiaNotes.Views
         //DispatcherTimer is the regular timer. It fires its Tick event on the UI thread, you can do anything you want with the UI. System.Timers.Timer is an asynchronous timer, its Elapsed event runs on a thread pool thread. You have to be very careful in your event handler, you are not allowed to touch any UI component or data-bound variables. And you'll need to use the lock statement where ever you access class members that are also used on the UI thread.
         private DispatcherTimer timerGameUI;
         private static Timer timerGameLogic;
+        
+        private DispatcherTimer durationTimer = new DispatcherTimer();
+
         private SheetMusic SM;
 
         public bool KeyboardIsOpen { get; set; } = true;
         public bool LoadPage { get; set; } = false;
+        public bool StartTimer { get; set; } = false;
 
         //List for White keys and Black keys of the keyboard
         private List<Rectangle> keysWhite = new List<Rectangle>();
@@ -41,7 +44,6 @@ namespace PiaNotes.Views
         // Length of 127 because of 127 notes
         private Rectangle[] Notes = new Rectangle[127];
         private int Keys = SettingsPages.MIDI_SettingsPage.OctaveAmount * 12;
-        //private double oldWidth;
         private enum PianoKey { C = 0, D = 2, E = 4, F = 5, G = 7, A = 9, B = 11 };
         private enum PianoKeySharp { CSharp = 1, DSharp = 3, FSharp = 6, GSharp = 8, ASharp = 10 };
 
@@ -54,20 +56,20 @@ namespace PiaNotes.Views
         private int staffEnd;
         private int staffWidth;
         private int staffSpacing;
+        private int guidlinePos;
         private int tickCount;
         private float tickDistance;
 
         private double gameCanvasWidth;
         private double gameCanvasHeight;
-
-        // Needs to become a settings
-        private int FPS = 60;
-        private int UPS = 100;
+        
+        private int current = 0, pre = 0;
 
         // UI Assets
         List<Models.Line> lines = new List<Models.Line>();
         List<Note> notes = new List<Note>();
         Clef[] clefs = new Clef[2];
+        private int correctCounter;
 
         public PracticePage()
         {
@@ -98,9 +100,39 @@ namespace PiaNotes.Views
 
             //Create the keyboard to show on the screen and set a timer
             CreateKeyboard();
-            GameTimerUI();
-        }
 
+            GameTimerUI();
+
+            // Timer info
+            DataContext = this;
+            durationTimer.Tick += DurationTimer_Tick;
+            durationTimer.Interval = new TimeSpan(0, 0, 1);
+            durationTimer.Start();
+        }
+        
+        private void DurationTimer_Tick(object sender, object e)
+        {
+            if (StartTimer)
+            {
+                // Check if current time is higher than the maximum.
+                if (current >= Progress.Maximum)
+                {
+                    durationTimer.Stop();
+                }
+
+                current++;
+                TimeSpan currentTime = TimeSpan.FromSeconds(current);
+                TXTBlock_Timer.Text = currentTime.ToString(@"mm\:ss");
+
+                // Reset current after an hour.
+                if (current == 3600)
+                {
+                    current = 0;
+                }
+                Progress.Value = current;
+            }
+        }
+        
         private void MidiInPort_MessageReceived(MidiInPort sender, MidiMessageReceivedEventArgs args)
         {
             // Converts received message into IMidiMessage.
@@ -112,7 +144,7 @@ namespace PiaNotes.Views
                 // Retrieves channel, note from the MidiMessage, and sets the velocity.
                 byte channel = ((MidiNoteOnMessage)receivedMidiMessage).Channel;
                 byte note = ((MidiNoteOnMessage)receivedMidiMessage).Note;
-                byte velocity = ((MidiNoteOnMessage) receivedMidiMessage).Velocity;
+                byte velocity = ((MidiNoteOnMessage)receivedMidiMessage).Velocity;
 
                 if (Settings.disableUserFeedback)
                 {
@@ -120,15 +152,25 @@ namespace PiaNotes.Views
                         velocity += Utilities.DoubleToByte(Settings.volume);
                     else
                         velocity = 127;
-                } else
+                }
+                else
                     velocity = Utilities.DoubleToByte(Settings.velocity);
 
-
+                for (int i = 0; i < notes.Count; i++)
+                {
+                    if (notes[i].Active == true && notes[i].Number == note)
+                    {
+                        notes[i].Played = true;
+                        notes[i].Active = false;
+                        System.Diagnostics.Debug.WriteLine("Correct: " + note);
+                        notes[i].SetBitmap("c" + notes[i].NoteType.ToString());
+                    }
+                }
+                
                 // Creates the message that will be send to play.
                 IMidiMessage midiMessageToSend = new MidiNoteOnMessage(channel, note, velocity);
                 Settings.midiOutPort.SendMessage(midiMessageToSend);
                 FillKey(note);
-
             }
 
             // Checks if note has been released if so unfill the key.
@@ -217,7 +259,7 @@ namespace PiaNotes.Views
                 for (int j = 0; j < 12; j++)
                 {
                     //See if the key is a white or black key
-                    if(j == 1 || j == 3 || j == 6 || j == 8 || j == 10) AddKey(false, j, i);
+                    if (j == 1 || j == 3 || j == 6 || j == 8 || j == 10) AddKey(false, j, i);
                     else AddKey(true, j, i);
                 }
                 oct = i + 1;
@@ -229,7 +271,7 @@ namespace PiaNotes.Views
 
         public void AddKey(bool white, int j, int i)
         {
-            if(white)
+            if (white)
             {
                 Rectangle keyWhiteRect = new Rectangle
                 {
@@ -329,7 +371,8 @@ namespace PiaNotes.Views
                         double location = keyWidthWhite * 2 - key.Width;
                         key.Margin = new Thickness(location, 0, 0, 50);
                     }
-                } catch (Exception e)
+                }
+                catch (Exception e)
                 {
                     System.Diagnostics.Debug.WriteLine(e.Message);
                 }
@@ -373,9 +416,27 @@ namespace PiaNotes.Views
                     notes.Remove(notes[i]);
                     return;
                 }
+                
+                if (notes[i].BitmapLocation.X <= guidlinePos + tickDistance * 10 && notes[i].BitmapLocation.X >= guidlinePos - tickDistance * 10 && notes[i].Played == false)
+                {
+                    notes[i].Active = true;
+
+                    // Start Timer
+                    if (!StartTimer)
+                    {
+                        StartTimer = true;
+                    }
+                }
+
+                if (notes[i].BitmapLocation.X < guidlinePos - tickDistance * 10 && notes[i].Active == true && notes[i].Played == false)
+                {
+                    notes[i].Active = false;
+                    notes[i].SetBitmap("i" + notes[i].NoteType.ToString());
+                }
 
                 notes[i].BitmapLocation = new Vector2(notes[i].BitmapLocation.X - tickDistance, notes[i].BitmapLocation.Y);
-            }
+            
+}
         }
 
         /// <summary>
@@ -387,7 +448,7 @@ namespace PiaNotes.Views
         {
             timerGameUI = new DispatcherTimer
             {
-                Interval = TimeSpan.FromMilliseconds(1000 / FPS)
+                Interval = TimeSpan.FromMilliseconds(15)
             };
             timerGameUI.Tick += GameTickUI;
             timerGameUI.Start();
@@ -395,8 +456,16 @@ namespace PiaNotes.Views
 
         private void GameTickUI(object sender, object e)
         {
-            // Redraw screen.
-            GameCanvas.Invalidate();
+            try
+            {
+                // Redraw screen.
+                GameCanvas.Invalidate();
+            }
+            catch (Exception)
+            {
+                // Can't invalidate.
+                System.Diagnostics.Debug.WriteLine("Invalidating Error");
+            }
         }
 
         // Initialize images and stuff.
@@ -411,9 +480,10 @@ namespace PiaNotes.Views
             staffEnd = (int)gameCanvasWidth - staffMargin;
             staffWidth = (int)gameCanvasWidth - staffMargin * 2;
             staffSpacing = 8;
+            guidlinePos = staffWidth / 4;
 
             // Tickdistance is now 12/24 seconds for the entire line: distance / (time in milliseconds / ticks per millisecons)
-            //tickDistance = (windowWidth-staffStart*2) / 1536;
+            //tickDistance = (windowWidth - staffStart * 2) / 1536;
             tickDistance = (windowWidth - staffStart * 2) / 768;
 
 
@@ -445,14 +515,14 @@ namespace PiaNotes.Views
                     staffWidth / 4,
                     staffSpacing * 25 + staffMargin * 2));
 
-            clefs[0] = new Clef(new Vector2(10,10));
-            clefs[1] = new Clef(new Vector2(10,10));
+            clefs[0] = new Clef(new Vector2(10, 10));
+            clefs[1] = new Clef(new Vector2(10, 10));
 
             //Set images inside of the ContentPipeline for futher re-use.
             args.TrackAsyncAction(CreateResourcesAsync(sender).AsAsyncAction());
 
-            // Start GameTimer
-            GameTimerLogic();
+            //Set cursor position
+            Cursor.Margin = new Thickness(guidlinePos, 0, 0, guidlinePos);
         }
 
         private async Task CreateResourcesAsync(CanvasControl sender)
@@ -462,14 +532,28 @@ namespace PiaNotes.Views
 
             // Add the resources to the ContentPipeline for reuse purposes
             ContentPipeline.ParentCanvas = sender;
-            
+
             await ContentPipeline.AddImage("1", @"Assets/Notes/WholeNote.png");
             await ContentPipeline.AddImage("0.5", @"Assets/Notes/HalfNote.png");
             await ContentPipeline.AddImage("0.25", @"Assets/Notes/QuarterNote.png");
             await ContentPipeline.AddImage("0.125", @"Assets/Notes/EighthNote.png");
             await ContentPipeline.AddImage("0.0625", @"Assets/Notes/SixteenthNote.png");
             await ContentPipeline.AddImage("0.03125", @"Assets/Notes/ThirtySecondNote.png");
-            
+
+            await ContentPipeline.AddImage("c1", @"Assets/Notes/WholeNote_correct.png");
+            await ContentPipeline.AddImage("c0.5", @"Assets/Notes/HalfNote_correct.png");
+            await ContentPipeline.AddImage("c0.25", @"Assets/Notes/QuarterNote_correct.png");
+            await ContentPipeline.AddImage("c0.125", @"Assets/Notes/EighthNote_correct.png");
+            await ContentPipeline.AddImage("c0.0625", @"Assets/Notes/SixteenthNote_correct.png");
+            await ContentPipeline.AddImage("c0.03125", @"Assets/Notes/ThirtySecondNote_correct.png");
+
+            await ContentPipeline.AddImage("i1", @"Assets/Notes/WholeNote_incorrect.png");
+            await ContentPipeline.AddImage("i0.5", @"Assets/Notes/HalfNote_incorrect.png");
+            await ContentPipeline.AddImage("i0.25", @"Assets/Notes/QuarterNote_incorrect.png");
+            await ContentPipeline.AddImage("i0.125", @"Assets/Notes/EighthNote_incorrect.png");
+            await ContentPipeline.AddImage("i0.0625", @"Assets/Notes/SixteenthNote_incorrect.png");
+            await ContentPipeline.AddImage("i0.03125", @"Assets/Notes/ThirtySecondNote_incorrect.png");
+
             MidiConverter midiConverter = new MidiConverter();
             List<int> flatKeysAll = midiConverter.GetFlatKeys();
             LoadPage = true;
@@ -490,12 +574,24 @@ namespace PiaNotes.Views
                 int notePos = Math.Abs(negativeNote * staffSpacing) - 4;
                 SM.notes[i].BitmapLocation = new Vector2(staffEnd, notePos);
             }
+            
+            // Set maximum of progressbar to MIDI length in microseconds.
+            Progress.Maximum = (SM.midiFileDuration.TotalMicroseconds / 1000000) + 1;
+
+            // Start GameTimer
+            GameTimerLogic();
         }
-        
+
         private void GameCanvas_Draw(CanvasControl sender, CanvasDrawEventArgs args)
         {
             if (LoadPage)
             {
+                // Draw notes.
+                for (int i = 0; i < notes.Count; i++)
+                {
+                    args.DrawingSession.DrawImage(notes[i].Bitmap, notes[i].BitmapLocation);
+                }
+
                 // Draw staff and guidelines.
                 for (int i = 0; i < lines.Count; i++)
                 {
@@ -508,14 +604,6 @@ namespace PiaNotes.Views
                     args.DrawingSession.DrawImage(clefs[i].Bitmap, clefs[i].BitmapLocation, new Rect(new Point(0, 0), clefs[i].BitmapSize));
                 }
                 */
-                // Draw notes.
-                for (int i = 0; i < notes.Count; i++)
-                {
-                    if (notes[i] != null)
-                        args.DrawingSession.DrawImage(notes[i].Bitmap, notes[i].BitmapLocation);
-                        // size 
-                        //args.DrawingSession.DrawImage(notes[i].Bitmap, notes[i].BitmapLocation, new Rect(new Point(0, 0), notes[i].BitmapSize));
-                }
             }
         }
 
