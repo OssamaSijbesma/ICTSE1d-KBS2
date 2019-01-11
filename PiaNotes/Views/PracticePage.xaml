@@ -59,8 +59,17 @@
                        RelativePanel.AlignRightWithPanel="True" 
                        RelativePanel.AlignTopWithPanel="True" HorizontalAlignment="Stretch"
                        Margin="0,7,5,0" VerticalAlignment="Stretch">
-
             </TextBlock>
+
+            <TextBlock x:Name="TXTBlock_Score" Text="Score: "
+                       TextAlignment="Right" 
+                       RelativePanel.AlignRightWithPanel="True" 
+                       RelativePanel.AlignTopWithPanel="True" HorizontalAlignment="Stretch"
+                       Margin="0,7,75,0" VerticalAlignment="Stretch">
+            </TextBlock>
+
+
+
 
         </RelativePanel>
     </Grid>
