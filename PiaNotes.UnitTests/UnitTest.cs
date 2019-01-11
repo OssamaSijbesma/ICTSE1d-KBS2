@@ -43,7 +43,7 @@ namespace PianNotes.UnitTests
             var db = new PiaNotes.ViewModels.Databaser();
 
             //Act
-            var result = db.Search("Id,Title,FileName", "Id", "14", 0, 0);
+            var result = db.Search("Id,Title,FileName", "Id", "1", 0, 0);
 
             //Assert
             Assert.IsTrue(result.Count == 1);
@@ -93,13 +93,13 @@ namespace PianNotes.UnitTests
 
         //Depends on database
         [TestMethod]
-        public void GetAFileAsync_SearchId14_IsStorageFile()
+        public void GetAFileAsync_SearchId1_IsStorageFile()
         {
             //Arange
             var db = new PiaNotes.ViewModels.Databaser();
 
             //Act
-            var result = db.GetAFileAsync(14);
+            var result = db.GetAFileAsync(1);
 
             //Assert
             Assert.IsInstanceOfType(result, typeof(Task<StorageFile>));
