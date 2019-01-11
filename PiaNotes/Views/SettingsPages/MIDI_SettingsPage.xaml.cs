@@ -37,7 +37,7 @@ namespace PiaNotes.Views.SettingsPages
 
         //Octave Settings
         //OctaveStart is the starting location of the octaves frequenty
-        private static int DefaultStartingOctave = 6;
+        private static int DefaultStartingOctave = 3;
         public static int StartingOctave
         {
             get
@@ -61,7 +61,7 @@ namespace PiaNotes.Views.SettingsPages
 
 
         //OctaveAmount is the amount of octaves on your screen at once
-        private static int DefaultOctaveAmount = 4;
+        private static int DefaultOctaveAmount = 5;
         public static int OctaveAmount
         {
             get
@@ -91,7 +91,7 @@ namespace PiaNotes.Views.SettingsPages
 
             CMB_OctaveAmount.IsEnabled = false;
 
-            
+
             if (localSettings.Values["StartingOctave"] != null)
             {
                 if ((int)localSettings.Values["StartingOctave"] >= 0 || (int)localSettings.Values["StartingOctave"] < 9)
@@ -109,10 +109,6 @@ namespace PiaNotes.Views.SettingsPages
                 {
                     CMB_OctaveAmount.SelectedIndex = (int)localSettings.Values["OctaveAmount"] - 1;
                 } 
-            }
-            else
-            {
-                CMB_OctaveAmount.SelectedIndex = Settings.octaveAmount;
             }
 
 
