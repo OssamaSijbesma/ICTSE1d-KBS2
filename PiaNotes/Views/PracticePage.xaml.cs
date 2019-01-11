@@ -520,17 +520,7 @@ namespace PiaNotes.Views
                     lines.Add(new Models.Line(staffStart, y, staffEnd, y));
             }
 
-            // Create Guidelines
-            lines.Add(new Models.Line(staffWidth / 4,
-                    staffSpacing * 2 + staffMargin * 2,
-                    staffWidth / 4,
-                    staffSpacing * 12 + staffMargin * 2));
-
-            lines.Add(new Models.Line(staffWidth / 4,
-                    staffSpacing * 14 + staffMargin * 2,
-                    staffWidth / 4,
-                    staffSpacing * 25 + staffMargin * 2));
-
+            // Add the clefs
             clefs[0] = new Clef(new Point(staffMargin*2, staffSpacing * 4 + staffMargin),staffSpacing*7-3);
             clefs[1] = new Clef(new Point(staffMargin*2, staffSpacing * 18 + staffMargin ),staffSpacing*7);
 
@@ -538,7 +528,7 @@ namespace PiaNotes.Views
             args.TrackAsyncAction(CreateResourcesAsync(sender).AsAsyncAction());
 
             //Set cursor position
-            Cursor.Margin = new Thickness(guidlinePos, 0, 0, guidlinePos);
+            Cursor.Margin = new Thickness(guidlinePos, staffSpacing * 2 + staffMargin * 2, 0, staffSpacing * 25 + staffMargin * 2);
         }
 
         private async Task CreateResourcesAsync(CanvasControl sender)
