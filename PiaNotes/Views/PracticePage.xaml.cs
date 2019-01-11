@@ -131,6 +131,7 @@ namespace PiaNotes.Views
                 {
                     durationTimer.Stop();
                     waitingTimer.Start();
+                    BtnStop.IsEnabled = false;
                 }
 
                 current++;
@@ -210,7 +211,7 @@ namespace PiaNotes.Views
                         await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
                             () =>
                             {
-                                TXTBlock_Score.Text = "" + score;
+                                TXTBlock_Score.Text = "Score: " + score;
                             }
                             ); 
                     }
