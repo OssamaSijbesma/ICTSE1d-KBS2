@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace PiaNotes.UnitTests
 {
     [TestClass]
-    class MidiParserTests
+    public class MidiParserTests
     {
         [TestMethod]
         public void MidiParserTest()

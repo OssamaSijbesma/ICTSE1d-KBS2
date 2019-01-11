@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace PiaNotes.UnitTests
 {
     [TestClass]
-    class UtilitiesTests
+    public class UtilitiesTests
     {
         [TestMethod]
         public void DoubleToByteReturnsValue()
