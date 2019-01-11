@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Windows.Storage;
 
-namespace PianNotes.UnitTests
+namespace PiaNotes.UnitTests
 {
     [TestClass]
     public class DatabaserTests

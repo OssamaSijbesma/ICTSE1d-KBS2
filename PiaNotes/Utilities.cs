@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PiaNotes
 {
-    static class Utilities
+    static public class Utilities
     {
         // Method for converting a double to byte.
         public static byte DoubleToByte(double doubleVal)
