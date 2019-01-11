@@ -18,6 +18,7 @@ using Windows.UI.Xaml.Shapes;
 using PiaNotes.Models;
 using System.Numerics;
 using Windows.Foundation;
+using System.Linq;
 
 namespace PiaNotes.Views
 {
@@ -31,6 +32,7 @@ namespace PiaNotes.Views
         private static Timer timerGameLogic;
         
         private DispatcherTimer durationTimer = new DispatcherTimer();
+        private DispatcherTimer waitingTimer = new DispatcherTimer();
 
         private SheetMusic SM;
 
@@ -63,18 +65,22 @@ namespace PiaNotes.Views
 
         private double gameCanvasWidth;
         private double gameCanvasHeight;
-        
-        private int current = 0, pre = 0;
+
+        private int current = 0;
+        private int waiting = 0;
+        private int score = 0;
+        private int notesHit = 0;
 
         // UI Assets
         List<Models.Line> lines = new List<Models.Line>();
         List<Note> notes = new List<Note>();
         Clef[] clefs = new Clef[2];
-        private int correctCounter;
 
         public PracticePage()
         {
             this.InitializeComponent();
+
+            
 
             // Initialize the page.
             var appView = ApplicationView.GetForCurrentView();
@@ -94,7 +100,7 @@ namespace PiaNotes.Views
             windowHeight = Convert.ToInt32(Window.Current.Bounds.Height);
 
             // Subscribes a handler for the MessageReceived event.
-            Settings.midiInPort.MessageReceived += MidiInPort_MessageReceived;
+            Settings.midiInPort.MessageReceived += MidiInPort_MessageReceivedAsync;
 
             //Generate the amount of Keys
             Keys = (SettingsPages.MIDI_SettingsPage.OctaveAmount != 0) ? Settings.octaveAmount * 12 : Settings.octaveAmount * 12;
@@ -109,6 +115,11 @@ namespace PiaNotes.Views
             durationTimer.Tick += DurationTimer_Tick;
             durationTimer.Interval = new TimeSpan(0, 0, 1);
             durationTimer.Start();
+
+            // WaitingTimer info
+            DataContext = this;
+            waitingTimer.Tick += WaitingTimer_Tick;
+            waitingTimer.Interval = new TimeSpan(0, 0, 1);
         }
         
         private void DurationTimer_Tick(object sender, object e)
@@ -119,6 +130,7 @@ namespace PiaNotes.Views
                 if (current >= Progress.Maximum)
                 {
                     durationTimer.Stop();
+                    waitingTimer.Start();
                 }
 
                 current++;
@@ -133,8 +145,34 @@ namespace PiaNotes.Views
                 Progress.Value = current;
             }
         }
-        
-        private void MidiInPort_MessageReceived(MidiInPort sender, MidiMessageReceivedEventArgs args)
+
+        private void WaitingTimer_Tick(object sender, object e)
+        {
+            if (StartTimer)
+            {
+                // Check if user has been waiting for longer than 3 seconds after completing the objective.
+                if (waiting >= 2)
+                {
+                    waitingTimer.Stop();
+                    Scores.score = score;
+                    Scores.notesHit = notesHit;
+                    this.Frame.Navigate(typeof(ScorePage));
+                }
+
+                waiting++;
+                TimeSpan waitingTime = TimeSpan.FromSeconds(waiting);
+
+                // Reset current after an hour.
+                if (waiting == 3600)
+                {
+                    waiting = 0;
+                }
+            }
+        }
+
+
+
+        private async void MidiInPort_MessageReceivedAsync(MidiInPort sender, MidiMessageReceivedEventArgs args)
         {
             // Converts received message into IMidiMessage.
             IMidiMessage receivedMidiMessage = args.Message;
@@ -146,6 +184,8 @@ namespace PiaNotes.Views
                 byte channel = ((MidiNoteOnMessage)receivedMidiMessage).Channel;
                 byte note = ((MidiNoteOnMessage)receivedMidiMessage).Note;
                 byte velocity = ((MidiNoteOnMessage)receivedMidiMessage).Velocity;
+
+                
 
                 if (Settings.disableUserFeedback)
                 {
@@ -163,8 +203,16 @@ namespace PiaNotes.Views
                     {
                         notes[i].Played = true;
                         notes[i].Active = false;
-                        System.Diagnostics.Debug.WriteLine("Correct: " + note);
                         notes[i].SetBitmap("c" + notes[i].NoteType.ToString());
+                        score += 50;
+                        notesHit++;
+
+                        await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
+                            () =>
+                            {
+                                TXTBlock_Score.Text = "" + score;
+                            }
+                            ); 
                     }
                 }
                 
@@ -262,7 +310,6 @@ namespace PiaNotes.Views
                     if (i == 0) Notes[j] = (keyWhiteRect);
                     else Notes[(j + (i * 12))] = (keyWhiteRect);
                 }
-                System.Diagnostics.Debug.WriteLine(keyWhiteRect.Name);
             }
             else
             {
@@ -277,7 +324,6 @@ namespace PiaNotes.Views
                 KeysBlackSP.Children.Add(keyBlackRect);
                 if (i == 0) Notes[j] = (keyBlackRect);
                 else Notes[(j + (i * 12))] = (keyBlackRect);
-                System.Diagnostics.Debug.WriteLine(keyBlackRect.Name);
             }
         }
 
@@ -369,7 +415,7 @@ namespace PiaNotes.Views
         private void GameTickLogic(Object source, ElapsedEventArgs e)
         {
             tickCount += 15625;
-
+            
             for (int i = 0; i < SM.notes.Count && i < 6; i++)
             {
                 if (tickCount >= SM.notes[i].MetricTiming.TotalMicroseconds)
@@ -583,6 +629,7 @@ namespace PiaNotes.Views
             base.OnNavigatedTo(e);
 
             SM = (SheetMusic)e.Parameter;
+            Scores.notesAmount = SM.notes.Count();
         }
 
         // Handler for when the page is unloaded
@@ -593,7 +640,7 @@ namespace PiaNotes.Views
             timerGameUI.Stop();
 
             // Unsubscribe the MidiInPort_MessageReceived
-            Settings.midiInPort.MessageReceived -= MidiInPort_MessageReceived;
+            Settings.midiInPort.MessageReceived -= MidiInPort_MessageReceivedAsync;
 
             // Dispose of the Win2D resources
             this.GameCanvas.RemoveFromVisualTree();
